@@ -1,0 +1,438 @@
+:root {
+  /* 
+        FIRST WE'LL DEFINE OUR SWATCHES, i.e. THE COMPLEMENTARY
+        COLORS THAT WE'LL USE TOGETHER IN MULTIPLE PLACES THAT
+        TOGETHER WILL MAKE UP A GIVEN THEME
+    
+        @author McKilla Gorilla
+    */
+  --swatch-foundation: #eeeedd;
+  --swatch-primary: #e6e6e6;
+  --swatch-complement: #e1e4cb;
+  --swatch-contrast: #111111;
+  --swatch-accent: #669966;
+  --swatch-status: #123456;
+  --my-font-family: "Robaaaoto";
+  --bounceEasing: cubic-bezier(0.51, 0.92, 0.24, 1.15);
+}
+
+body {
+  background-color: var(--swatch-foundation);
+}
+
+#root {
+  background-color: var(--swatch-primary);
+  font-family: "Lexend Exa";
+  position: absolute;
+  width: 80%;
+  left: 10%;
+  height: 90%;
+  top: 5%;
+}
+
+#app-root {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0%;
+  left: 0%;
+}
+
+#top5-banner {
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  width: 100%;
+  height: 10%;
+  float: left;
+  background-image: linear-gradient(to bottom, #b8b808, #636723);
+  color: white;
+  font-size: 48pt;
+  border-color: black;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 10px;
+}
+#splash-screen {
+  background-image: linear-gradient(to bottom, #b8b808, #636723);
+  color: white;
+  font-size: 5vw;
+  border-color: black;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 10px;
+  padding-left: 10%;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  height:70%;
+  text-align: center;
+  vertical-align: center;
+}
+
+#edit-toolbar {
+  background-color: transparent;
+  float: right;
+}
+
+.top5-button,
+.top5-button-disabled {
+  font-size: 36pt;
+  border-width: 0px;
+  float: left;
+  color: black;
+  cursor: pointer;
+  opacity: 100%;
+}
+
+.top5-button:hover {
+  cursor: pointer;
+  color: black;
+}
+
+.top5-button-disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+#top5-list-selector {
+  position: absolute;
+  left: 0%;
+  top: 10%;
+  width: 100%;
+  height: 80%;
+  background-color: var(--swatch-primary);
+}
+
+#top5-workspace {
+  position: absolute;
+  left: 0%;
+  top: 10%;
+  width: 100%;
+  height: 80%;
+  background-color: var(--swatch-accent);
+}
+
+#top5-statusbar {
+  position: absolute;
+  left: 0%;
+  top: 90%;
+  width: 100%;
+  height: 10%;
+  background-color: lightsalmon;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36pt;
+}
+
+#list-selector-heading {
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  width: 100%;
+  height: 10%;
+  text-align: center;
+  font-size: 24pt;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#add-list-button {
+  float: left;
+}
+
+#list-selector-list {
+  position: absolute;
+  left: 0%;
+  top: 10%;
+  width: 100%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+}
+
+.list-card,
+.selected-list-card,
+.unselected-list-card {
+  font-size: 18pt;
+  margin: 10px;
+  padding: 20px;
+  border-radius: 25px;
+}
+
+.list-card:aria-disabled,
+.list-card[aria-disabled] {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+  pointer-events: none;
+}
+
+.unselected-list-card:hover {
+  cursor: pointer;
+  background-color: var(--swatch-contrast);
+  color: white;
+}
+
+.selected-list-card {
+  background-color: var(--swatch-accent);
+  color: white;
+}
+
+.unselected-list-card {
+  background-color: var(--swatch-complement);
+}
+
+.list-card-button {
+  float: right;
+  transform: scale(2);
+}
+
+#workspace-home,
+#workspace-edit {
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  width: 100%;
+  height: 100%;
+}
+
+#edit-numbering {
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  width: 20%;
+  height: 100%;
+  background-color: var(--swatch-status);
+}
+
+#edit-items {
+  position: absolute;
+  left: 20%;
+  top: 0%;
+  width: 80%;
+  height: 100%;
+  background-color: var(--swatch-primary);
+}
+
+.item-number,
+.top5-item,
+.top5-item-dragged-to {
+  display: flex;
+  align-items: center;
+  font-size: 48pt;
+  height: 20%;
+}
+
+.item-number {
+  justify-content: center;
+  width: 100%;
+  border: 1px 0px 1px 1px;
+  border-color: black;
+  background-color: linen;
+  color: black;
+}
+
+input {
+  font-size: 20pt;
+}
+
+.top5-item,
+.top5-item-dragged-to {
+  text-align: left;
+  width: 95%;
+  padding-left: 5%;
+}
+.top5-item {
+  background-color: var(--swatch-complement);
+}
+.top5-item-dragged-to {
+  background-color: var(--swatch-accent);
+}
+
+.disabled {
+  background-color: lightgray;
+}
+
+.disabled:hover {
+  color: var(--swatch-neutral);
+}
+
+/* THIS STYLE SHEET MANAGES STYLE FOR OUR MODAL, i.e. DIALOG BOX */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: var(--black);
+  color: var(--swatch-text);
+  cursor: pointer;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.35s ease-in;
+  font-family: var(--font-primary);
+}
+
+.modal.is-visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.modal-dialog {
+  position: relative;
+  max-width: 800px;
+  max-height: 80vh;
+  background: var(--swatch-complement);
+  overflow: auto;
+  cursor: default;
+  border-width: 5px;
+  border-radius: 10px;
+  border-style: groove;
+}
+
+.modal-dialog > * {
+  padding: 1rem;
+}
+
+.modal-header,
+.modal-footer {
+  background: var(--lightgray);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: dotted;
+}
+
+.modal-header,
+.modal-close {
+  font-size: 1.5rem;
+}
+
+.modal p + p {
+  margin-top: 1rem;
+}
+
+.modal-control {
+  cursor: pointer;
+  width: 20%;
+}
+
+.dialog-header {
+  font-size: 24pt;
+}
+
+#close-modal-button {
+  float: right;
+}
+
+#confirm-cancel-container {
+  text-align: center;
+}
+
+/* ANIMATIONS
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+[data-animation] .modal-dialog {
+  opacity: 0;
+  transition: all 0.5s var(--bounceEasing);
+}
+
+[data-animation].is-visible .modal-dialog {
+  opacity: 1;
+  transition-delay: 0.2s;
+}
+
+[data-animation="slideInOutDown"] .modal-dialog {
+  transform: translateY(100%);
+}
+
+[data-animation="slideInOutTop"] .modal-dialog {
+  transform: translateY(-100%);
+}
+
+[data-animation="slideInOutLeft"] .modal-dialog {
+  transform: translateX(-100%);
+}
+
+[data-animation="slideInOutRight"] .modal-dialog {
+  transform: translateX(100%);
+}
+
+[data-animation="zoomInOut"] .modal-dialog {
+  transform: scale(0.2);
+}
+
+[data-animation="rotateInOutDown"] .modal-dialog {
+  transform-origin: top left;
+  transform: rotate(-1turn);
+}
+
+[data-animation="mixInAnimations"].is-visible .modal-dialog {
+  animation: mixInAnimations 2s 0.2s linear forwards;
+}
+
+[data-animation="slideInOutDown"].is-visible .modal-dialog,
+[data-animation="slideInOutTop"].is-visible .modal-dialog,
+[data-animation="slideInOutLeft"].is-visible .modal-dialog,
+[data-animation="slideInOutRight"].is-visible .modal-dialog,
+[data-animation="zoomInOut"].is-visible .modal-dialog,
+[data-animation="rotateInOutDown"].is-visible .modal-dialog {
+  transform: none;
+}
+
+@keyframes mixInAnimations {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  10% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: rotate(20deg);
+  }
+
+  30% {
+    transform: rotate(-20deg);
+  }
+
+  40% {
+    transform: rotate(15deg);
+  }
+
+  50% {
+    transform: rotate(-15deg);
+  }
+
+  60% {
+    transform: rotate(10deg);
+  }
+
+  70% {
+    transform: rotate(-10deg);
+  }
+
+  80% {
+    transform: rotate(5deg);
+  }
+
+  90% {
+    transform: rotate(-5deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}

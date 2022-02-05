@@ -1,0 +1,52 @@
+{
+    "top5Lists": [
+        {
+            "key": "0",
+            "name": "Games",
+            "likes": 2150,
+            "dislikes": 114,
+            "created": "Thu, 22 Oct 2020 01:10:53 GMT",
+            "modified": "Wed, 23 Jun 2021 03:21:31 GMT",
+            "accessed": "Thu, 26 Aug 2021 03:23:31 GMT",
+            "items": [
+                "StarCraft",
+                "Fallout 3",
+                "Katamari Damacy",
+                "Civilization II",
+                "Super Mario World"
+            ]
+        },
+        {
+            "key": "1",
+            "name": "Movies",
+            "likes": 50,
+            "dislikes": 4,
+            "created": "Mon, 23 Aug 2021 03:12:53 GMT",
+            "modified": "Mon, 23 Aug 2021 03:14:31 GMT",
+            "accessed": "Mon, 23 Aug 2021 03:16:31 GMT",
+            "items": [
+                "Raiders of the Lost Ark",
+                "Goodfellas",
+                "Lord of the Rings",
+                "Airplane!",
+                "Lawrence of Arabia"
+            ]
+        },
+        {
+            "key": "2",
+            "name": "Pink Floyd Songs",
+            "likes": 520,
+            "dislikes": 14,
+            "created": "Sun, 22 Aug 2021 03:19:53 GMT",
+            "modified": "Mon, 24 Aug 2021 03:21:31 GMT",
+            "accessed": "Wed, 26 Aug 2021 03:23:31 GMT",
+            "items": [
+                "Shine On You Crazy Diamond",
+                "Comfortably Numb",
+                "Pigs (Three Different Ones)",
+                "Echoes (Live at Pompeii)",
+                "Time"
+            ]
+        }
+    ]
+}
