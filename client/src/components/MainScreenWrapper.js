@@ -4,10 +4,10 @@ import WelcomeScreen from "./WelcomeScreen";
 import AuthContext from "../auth";
 import GlobalStoreContext from "../store";
 
-export default function HomeWrapper() {
+export default function MainScreenWrapper() {
   const { auth } = useContext(AuthContext);
   console.log("HomeWrapper auth.loggedIn: " + auth.loggedIn);
-  const { store } = useContext(GlobalStoreContext);
+  const { community } = useContext(GlobalCommunityContext);
 
   if (store.isGuest) {
     return <HomeScreen />;
