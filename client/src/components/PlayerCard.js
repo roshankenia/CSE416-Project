@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { GlobalCommunityContext } from "../store";
+import { GlobalCommunityContext } from "../community";
 
 export default function PlayerCard(){
     

@@ -2,7 +2,7 @@ import { useContext } from "react";
 import HomeScreen from "./HomeScreen";
 import WelcomeScreen from "./WelcomeScreen";
 import AuthContext from "../auth";
-import GlobalStoreContext from "../store";
+import GlobalStoreContext from "../community";
 
 export default function MainScreenWrapper() {
   const { auth } = useContext(AuthContext);

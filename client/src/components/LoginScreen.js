@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { GlobalStoreContext } from "../store";
+import { GlobalStoreContext } from "../community";
 
 import AuthContext from "../auth";
 
