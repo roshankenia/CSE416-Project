@@ -2,14 +2,9 @@ import "./App.css";
 import { React } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { AuthContextProvider } from "./auth";
-import { GlobalStoreContextProvider } from "./store";
+import { GlobalCommunityContextProvider } from "./community";
 import {
-  AppBanner,
-  HomeWrapper,
-  LoginScreen,
-  RegisterScreen,
-  Statusbar,
-  WorkspaceScreen,
+  WelcomeScreen
 } from "./components";
 /*
     This is our application's top-level component.
@@ -26,15 +21,9 @@ const App = () => {
   return (
     <BrowserRouter>
       <AuthContextProvider>
-        <GlobalStoreContextProvider>
-          <AppBanner />
-          <Switch>
-            <Route path="/" exact component={HomeWrapper} />
-            <Route path="/login/" exact component={LoginScreen} />
-            <Route path="/register/" exact component={RegisterScreen} />
-            <Route path="/top5list/:id" exact component={WorkspaceScreen} />
-          </Switch>
-        </GlobalStoreContextProvider>
+        <GlobalCommunityContextProvider>
+          <WelcomeScreen />
+        </GlobalCommunityContextProvider>
       </AuthContextProvider>
     </BrowserRouter>
   );

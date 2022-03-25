@@ -35,7 +35,7 @@ export const GlobalCommunityActionType = {
 // AVAILABLE TO THE REST OF THE APPLICATION
 function GlobalCommunityContextProvider(props) {
   // THESE ARE ALL THE THINGS OUR DATA Community WILL MANAGE
-  const [Community, setCommunity] = useState({
+  const [community, setCommunity] = useState({
     idNamePairs: [],
     currentList: null,
     newListCounter: 0,
@@ -64,7 +64,7 @@ function GlobalCommunityContextProvider(props) {
     switch (type) {
       // LIST UPDATE OF ITS NAME
       default:
-        return Community;
+        return community;
     }
   };
 

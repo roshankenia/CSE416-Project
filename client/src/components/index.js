@@ -25,6 +25,7 @@ import UserInviteCard from './UserInviteCard'
 import VoteToPublishScreen from './VoteToPublishScreen'
 import WaitingScreen from './WaitingScreen'
 import WritePanelScreen from './WritePanelScreen'
+import WelcomeScreen from './WelcomeScreen'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -58,4 +59,6 @@ export {
     UserInviteCard,
     VoteToPublishScreen,
     WaitingScreen,
-    WritePanelScreen }
+    WritePanelScreen,
+    WelcomeScreen
+    }
