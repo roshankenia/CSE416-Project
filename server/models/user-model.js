@@ -1,15 +1,20 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const ObjectId = Schema.Types.ObjectId
+const Comment = require("comment-model");
 
 const UserSchema = new Schema(
     {
-        firstName: { type: String, required: true },
-        lastName: { type: String, required: true },
-        email: { type: String, required: true },
-        passwordHash: { type: String, required: true },
-        top5Lists: [{type: ObjectId, ref: 'Top5List'}],
+        guest: {type: Boolean, required:true},
+        firstName: { type: String, required: false },
+        lastName: { type: String, required: false },
         username: {type: String, required: true},
+        email: { type: String, required: false },
+        passwordHash: { type: String, required: false },
+        likedPosts: {type: [String], required: false},
+        dislikedPosts: {type: [String], required: false},
+        likedComments: {type: [String], required: false},
+        dislikedComments: {type: [String], required: false},
+        comments: {type: [Comment], required:false}
     },
     { timestamps: true },
 )
