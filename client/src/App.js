@@ -4,7 +4,10 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { AuthContextProvider } from "./auth";
 import { GlobalCommunityContextProvider } from "./community";
 import {
-  WelcomeScreen
+  AppBanner,
+  WelcomeScreen,
+  LoginScreen,
+  RegisterScreen
 } from "./components";
 /*
     This is our application's top-level component.
@@ -22,7 +25,12 @@ const App = () => {
     <BrowserRouter>
       <AuthContextProvider>
         <GlobalCommunityContextProvider>
-          <WelcomeScreen />
+          <AppBanner/>
+          <Switch>
+            <Route path="/" exact component={WelcomeScreen} />
+            <Route path="/register/" exact component={RegisterScreen} />
+            <Route path="/login/" exact component={LoginScreen} /> 
+          </Switch>
         </GlobalCommunityContextProvider>
       </AuthContextProvider>
     </BrowserRouter>
