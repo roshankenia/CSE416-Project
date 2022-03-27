@@ -1,3 +1,7 @@
+/* Theses are all legacy stuff
+   Remove them when they are no longer need (not crashing the backend)
+   @Terran
+*/
 const express = require("express");
 const router = express.Router();
 const auth = require("../auth");

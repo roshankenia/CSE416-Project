@@ -74,11 +74,18 @@ export default function AppBanner() {
 
     let menu = loggedOutMenu;
 
+    let test = <Box></Box> 
+
     if (auth.loggedIn) {
         menu = loggedInMenu;
-        // if (store.currentList) {
-        //     editToolbar = <EditToolbar />;
-        // }
+        test = <Typography                        
+                    variant="h4"
+                    noWrap
+                    component="div"
+                    sx={{ display: { xs: 'none', sm: 'block' } }}                        
+                >
+                    <Link style={{ textDecoration: 'none', color: 'white' }} to='/test'>TEST</Link>
+                </Typography>
     }
     
     function getAccountMenu(loggedIn) {
@@ -93,7 +100,7 @@ export default function AppBanner() {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
-                <Toolbar>
+                <Toolbar sx={{flexDirection:'row',justifyContent : 'space-between'}}>
                     <Typography                        
                         variant="h4"
                         noWrap
@@ -115,6 +122,7 @@ export default function AppBanner() {
                             { getAccountMenu(auth.loggedIn) }
                         </IconButton>
                     </Box>
+                    {test}
                 </Toolbar>
             </AppBar>
             {

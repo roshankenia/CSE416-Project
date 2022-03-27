@@ -20,6 +20,7 @@ function AuthContextProvider(props) {
     user: null,
     loggedIn: false,
     errorMessage:null,
+    isGuest: false
   });
   const history = useHistory();
 

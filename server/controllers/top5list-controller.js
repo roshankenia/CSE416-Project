@@ -1,3 +1,8 @@
+/* Theses are all legacy stuff
+   Remove them when they are no longer need (not crashing the backend)
+   @Terran
+*/
+
 const Top5List = require("../models/top5list-model");
 //const CommunityList = require("../models/communitylist-model");
 const User = require("../models/user-model");

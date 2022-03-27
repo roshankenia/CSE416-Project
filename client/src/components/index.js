@@ -26,6 +26,8 @@ import VoteToPublishScreen from './VoteToPublishScreen'
 import WaitingScreen from './WaitingScreen'
 import WritePanelScreen from './WritePanelScreen'
 import WelcomeScreen from './WelcomeScreen'
+import HomeWrapper from './HomeWrapper'
+import Test from './Test'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -60,5 +62,7 @@ export {
     VoteToPublishScreen,
     WaitingScreen,
     WritePanelScreen,
-    WelcomeScreen
+    WelcomeScreen,
+    HomeWrapper,
+    Test
     }
