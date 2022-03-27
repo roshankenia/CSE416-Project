@@ -1,5 +1,5 @@
 const Top5List = require("../models/top5list-model");
-const CommunityList = require("../models/communitylist-model");
+//const CommunityList = require("../models/communitylist-model");
 const User = require("../models/user-model");
 
 createCommunityList = (req, res) => {
