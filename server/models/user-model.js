@@ -1,25 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-//const Comment = require("./comment-model");
-
-const Reply = new Schema({
-    commentID: { type: String, required: true },
-    username: { type: String, required: true },
-    likes: { type: [String], required: true },
-    dislikes: { type: [String], required: true }
-})
-
-const Comment = new Schema(
-    {   
-        commentID: { type: String, required: true },
-        username: { type: String, required: true },
-        likes: { type: [String], required: true },
-        dislikes: { type: [String], required: true },
-        authors: {type: [String], required: true},
-        reply: {type: [Reply], required: false}
-    },
-    { timestamps: true },
-)
+const Comment = require("./comment-model");
+const Post = require("./post-model");
 
 const UserSchema = new Schema(
     {
@@ -33,7 +15,8 @@ const UserSchema = new Schema(
         dislikedPosts: {type: [String], required: false},
         likedComments: {type: [String], required: false},
         dislikedComments: {type: [String], required: false},
-        comments: {type: [Comment], required:false}
+        comments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}],
+        contributedPosts : [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
     },
     { timestamps: true },
 )

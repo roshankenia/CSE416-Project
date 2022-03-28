@@ -29,12 +29,11 @@ export const GlobalCommunityActionType = {
   SET_CURRENT_LISTS: "SET_CURRENT_LISTS",
   SET_LIST_VIEW: "SET_LIST_VIEW",
   SET_SORT: "SET_SORT",
+  //For testing purpose only
+  DELETE_COMMUNITY: "DELETE_COMMUNITY"
 };
 
-// WITH THIS WE'RE MAKING OUR GLOBAL DATA Community
-// AVAILABLE TO THE REST OF THE APPLICATION
 function GlobalCommunityContextProvider(props) {
-  // THESE ARE ALL THE THINGS OUR DATA Community WILL MANAGE
   const [community, setCommunity] = useState({
     communityList: null,
     currentCommunity: null,
@@ -64,17 +63,22 @@ function GlobalCommunityContextProvider(props) {
           currentCommunity: payload
         });
       }
+      //For testing purpose only
+      case GlobalCommunityActionType.DELETE_COMMUNITY: {
+        return setCommunity({
+          communityList: null,
+          currentCommunity: null
+        });
+      }
       default:
         return community;
     }
   };
 
-  community.createNewCommunity = async function () {
+  community.createNewCommunity = async function (name) {
     try{
-      // hard coded community name
-      let communityName = "Untitled";
       const response = await api.createCommunity(
-        communityName,
+        name,
         [auth.user.username]
         );
       console.log("createNewCommunity response: " + response);
@@ -90,6 +94,26 @@ function GlobalCommunityContextProvider(props) {
       console.log("API FAILED TO CREATE A NEW COMMUNITY");
     }
   };
+
+  /* This will probably never make into the app
+     just for testing purposes
+     -@Terran
+  */
+  community.deleteCommunity = async function(name){
+    //try{
+      const response = await api.deleteCommunity(name);
+      console.log("deleteCommunity response: " + response);
+      if (response.status === 201) {
+        communityReducer({
+          type: GlobalCommunityActionType.DELETE_COMMUNITY,
+          payload: null,
+        });
+        history.push("/");
+      } 
+    // }catch{
+    //   console.log("API FAILED TO DELETE THE COMMUNITY");
+    // }
+  }
 
   // THESE ARE THE FUNCTIONS THAT WILL UPDATE OUR Community AND
   // DRIVE THE STATE OF THE APPLICATION. WE'LL CALL THESE IN

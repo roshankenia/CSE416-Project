@@ -23,21 +23,16 @@ export const createCommunity = (name, members) => {
   });
 };
 
+export const deleteCommunity = (name) => {
+  return api.post(`/deletecommunity`, {
+    communityName: name
+  });
+};
+
 const apis = {
   createCommunity,
-  // deleteTop5ListById,
-  // getTop5ListById,
-  // getTop5ListPairs,
-  // updateTop5ListById,
-  // searchTop5List,
-  // updateTop5ListByIdWithoutUser,
-  // updateCommunityList,
-  // createCommunityList,
-  // deleteCommunityList,
-  // searchCommunityListByExactName,
-  // searchCommunityListByStart,
-  // searchCommunityListByStartGuest,
-  // searchTop5ListGuest,
+  // for testing purpose
+  deleteCommunity
 };
 
 export default apis;
