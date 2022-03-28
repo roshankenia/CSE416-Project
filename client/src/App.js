@@ -3,7 +3,13 @@ import { React } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { AuthContextProvider } from "./auth";
 import { GlobalCommunityContextProvider } from "./community";
-import { AppBanner, HomeWrapper, RegisterScreen, LoginScreen, Test } from "./components";
+import {
+  AppBanner,
+  HomeWrapper,
+  RegisterScreen,
+  LoginScreen,
+  Test,
+} from "./components";
 /*
     This is our application's top-level component.
     
@@ -15,11 +21,20 @@ import { AppBanner, HomeWrapper, RegisterScreen, LoginScreen, Test } from "./com
   
   @author McKilla Gorilla
 */
-import { ThemeProvider, createMuiTheme } from "@mui/material/styles";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
-const theme = createMuiTheme({
+const theme = createTheme({
   typography: {
-    fontFamily: ["Poor Story"].join(","),
+    fontFamily: "Poor Story",
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 40,
+        },
+      },
+    },
   },
 });
 
@@ -31,11 +46,11 @@ const App = () => {
           <ThemeProvider theme={theme}>
             <AppBanner />
             <Switch>
-                {/* if loggedin, redirect user to homescreen, else redirect to welcome screen */}
-                <Route path="/" exact component={HomeWrapper} />  
-                <Route path="/register/" exact component={RegisterScreen} />
-                <Route path="/login/" exact component={LoginScreen} />
-                <Route path="/test/" exact component={Test} />
+              {/* if loggedin, redirect user to homescreen, else redirect to welcome screen */}
+              <Route path="/" exact component={HomeWrapper} />
+              <Route path="/register/" exact component={RegisterScreen} />
+              <Route path="/login/" exact component={LoginScreen} />
+              <Route path="/test/" exact component={Test} />
             </Switch>
           </ThemeProvider>
         </GlobalCommunityContextProvider>
