@@ -33,6 +33,11 @@ app.use('/api', communityRouter)
 const db = require('./db')
 db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
+// Right before your app.listen(), add this:
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
+
 // PUT THE SERVER IN LISTENING MODE
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
 
