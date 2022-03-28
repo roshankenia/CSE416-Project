@@ -55,3 +55,4 @@ function authManager() {
 
 const auth = authManager();
 module.exports = auth;
+//test
