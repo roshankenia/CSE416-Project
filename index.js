@@ -32,8 +32,8 @@ app.use('/api', communityRouter)
 */
 
 // INITIALIZE OUR DATABASE OBJECT
-// const db = require('./db')
-// db.on('error', console.error.bind(console, 'MongoDB connection error:'))
+const db = require('./db')
+db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 
 // Right before your app.listen(), add this:
 app.get("*", (req, res) => {
