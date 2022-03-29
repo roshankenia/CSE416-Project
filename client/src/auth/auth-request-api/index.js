@@ -41,11 +41,21 @@ export const registerUser = (firstName, lastName, email, password, passwordVerif
         username : username
     })
 }
+
+// @Jeff Hu front end request auth apis TO DO
+// export const changePassword = (username, currPassword, newPassword, newPassVerify) => api.get('/changePassword/');
+// export const resetPassword = (email) => api.get('/resetPassword/');
+// export const deleteAccount = (username, password) => api.get('/deleteAccount/');
+
 const apis = {
     getLoggedIn,
     registerUser,
     loginUser,
     logoutUser
+    // ,
+    // changePassword,
+    // resetPassword,
+    // deleteAccount
 }
 
 export default apis
