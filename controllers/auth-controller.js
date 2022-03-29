@@ -216,7 +216,7 @@ changePassword = async (req, res) => {
     if (!passwordCorrect) {
       console.log("Incorrect password");
       return res.status(401).json({
-        errorMessage: "Wrong username or password provided.",
+        errorMessage: "Wrong password provided.",
       });
     }
 
@@ -234,9 +234,17 @@ changePassword = async (req, res) => {
     console.log("passwordHash: " + newPasswordHash);
 
     // ***I'm not sure if this is the proper way to set the new password hash
-    // potential problems here
-    currentUser.passwordHash = newPasswordHash;
+    currentUser.set({passwordHash: newPasswordHash});
+    await currentUser.save();
 
+    res
+      .status(200)
+      .json({
+        success: true,
+        user: {
+          username: currentUser.username
+        }
+      });
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -250,7 +258,49 @@ resetPassword = async (req, res) => {
 
 // @Jeff Hu - user wants to delete their account
 deleteAccount = async (req, res) => {
-  
+  const {username, password} = req.body;
+
+  const currentUser = await User.findOne({ username: username });
+    console.log("currentUser: " + currentUser);
+    if (!currentUser) {
+      return res.status(401).json({
+        errorMessage: "Current User's username not found in database.",
+      });
+    }
+
+    // Checking to see if user entered their correct current password
+    console.log("provided verification password: " + currPassword);
+    const passwordCorrect = await bcrypt.compare(
+      password,
+      currentUser.passwordHash
+    );
+    if (!passwordCorrect) {
+      console.log("Incorrect password");
+      return res.status(401).json({
+        errorMessage: "Wrong password provided.",
+      });
+    }
+
+  // mongoose finds user by username and deletes user from database
+  // not sure if this is the best way to delete from database
+  const deletedUser = await findOneAndDelete({username: username})
+  if (!deletedUser) {
+    return res.status(401).json({
+      errorMessage: "Current User's username not found in database and user could not be deleted.",
+    });
+  }
+
+  res
+      .status(200)
+      .json({
+        success: true,
+        user: {
+          firstName: deletedUser.firstName,
+          lastName: deletedUser.lastName,
+          email: deletedUser.email,
+          username: deletedUser.username,
+        },
+      });
 };
 
 module.exports = {
