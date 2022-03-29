@@ -9,6 +9,7 @@ import {
   RegisterScreen,
   LoginScreen,
   Test,
+  GuestScreen
 } from "./components";
 /*
     This is our application's top-level component.
@@ -50,6 +51,7 @@ const App = () => {
               <Route path="/" exact component={HomeWrapper} />
               <Route path="/register/" exact component={RegisterScreen} />
               <Route path="/login/" exact component={LoginScreen} />
+              <Route path="/guest/" exact component={GuestScreen} />
               <Route path="/test/" exact component={Test} />
             </Switch>
           </ThemeProvider>

@@ -30,113 +30,274 @@ export default function RegisterScreen() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign up
-        </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                style={{
-                  border: "3px solid",
-                  borderColor: "black",
-                  color: "black",
-                  fontSize: "32px",
-                  borderRadius: 40
-                }}
-                autoComplete="fname"
-                name="firstName"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="passwordVerify"
-                label="Password Verify"
-                type="password"
-                id="passwordVerify"
-                autoComplete="new-password"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="username"
-                label="Username"
-                type="username"
-                id="username"
-                autoComplete="username"
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+    <Box style={{ backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')" }}>
+      <Container component="main" maxWidth="md">
+        <CssBaseline />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h1" component="div" align="center">
+            JART
+          </Typography>
+          <Typography component="h1" variant="h5">
+            Register
+          </Typography>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
           >
-            Sign Up
-          </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="/login/" variant="body2">
-                Already have an account? Sign in
-              </Link>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Box
+                  style={{
+                    border: "3px solid",
+                    borderColor: "black",
+                    color: "black",
+                    backgroundColor: "white",
+                    fontSize: "32px",
+                    borderRadius: 40,
+                    outline: "none",
+                  }}
+                >
+                  <TextField
+                    autoComplete="fname"
+                    name="firstName"
+                    required
+                    fullWidth
+                    id="firstName"
+                    label="First Name:"
+                    autoFocus
+                    variant="standard"
+                    InputProps={{
+                      disableUnderline: true,
+                      style: {
+                        fontSize: 30,
+                        paddingLeft: 20,
+                        paddingBottom: 10,
+                      },
+                    }}
+                    InputLabelProps={{
+                      style: { fontSize: 30, paddingLeft: 20 },
+                      shrink: true,
+                    }}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Box
+                  style={{
+                    border: "3px solid",
+                    borderColor: "black",
+                    color: "black",
+                    backgroundColor: "white",
+                    fontSize: "32px",
+                    borderRadius: 40,
+                    outline: "none",
+                  }}
+                >
+                  <TextField
+                    required
+                    fullWidth
+                    variant="standard"
+                    id="lastName"
+                    label="Last Name:"
+                    name="lastName"
+                    autoComplete="lname"
+                    variant="standard"
+                    InputProps={{
+                      disableUnderline: true,
+                      style: {
+                        fontSize: 30,
+                        paddingLeft: 20,
+                        paddingBottom: 10,
+                      },
+                    }}
+                    InputLabelProps={{
+                      style: { fontSize: 30, paddingLeft: 20 },
+                      shrink: true,
+                    }}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12}>
+                <Box
+                  style={{
+                    border: "3px solid",
+                    borderColor: "black",
+                    color: "black",
+                    backgroundColor: "white",
+                    fontSize: "32px",
+                    borderRadius: 40,
+                    outline: "none",
+                  }}
+                >
+                  <TextField
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    variant="standard"
+                    InputProps={{
+                      disableUnderline: true,
+                      style: {
+                        fontSize: 30,
+                        paddingLeft: 20,
+                        paddingBottom: 10,
+                      },
+                    }}
+                    InputLabelProps={{
+                      style: { fontSize: 30, paddingLeft: 20 },
+                      shrink: true,
+                    }}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12}>
+                <Box
+                  style={{
+                    border: "3px solid",
+                    borderColor: "black",
+                    color: "black",
+                    backgroundColor: "white",
+                    fontSize: "32px",
+                    borderRadius: 40,
+                    outline: "none",
+                  }}
+                >
+                  <TextField
+                    required
+                    fullWidth
+                    name="username"
+                    label="Username"
+                    type="username"
+                    id="username"
+                    autoComplete="username"
+                    variant="standard"
+                    InputProps={{
+                      disableUnderline: true,
+                      style: {
+                        fontSize: 30,
+                        paddingLeft: 20,
+                        paddingBottom: 10,
+                      },
+                    }}
+                    InputLabelProps={{
+                      style: { fontSize: 30, paddingLeft: 20 },
+                      shrink: true,
+                    }}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12}>
+                <Box
+                  style={{
+                    border: "3px solid",
+                    borderColor: "black",
+                    color: "black",
+                    backgroundColor: "white",
+                    fontSize: "32px",
+                    borderRadius: 40,
+                    outline: "none",
+                  }}
+                >
+                  <TextField
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="new-password"
+                    variant="standard"
+                    InputProps={{
+                      disableUnderline: true,
+                      style: {
+                        fontSize: 30,
+                        paddingLeft: 20,
+                        paddingBottom: 10,
+                      },
+                    }}
+                    InputLabelProps={{
+                      style: { fontSize: 30, paddingLeft: 20 },
+                      shrink: true,
+                    }}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12}>
+                <Box
+                  style={{
+                    border: "3px solid",
+                    borderColor: "black",
+                    color: "black",
+                    backgroundColor: "white",
+                    fontSize: "32px",
+                    borderRadius: 40,
+                    outline: "none",
+                  }}
+                >
+                  <TextField
+                    required
+                    fullWidth
+                    name="passwordVerify"
+                    label="Password Verify"
+                    type="password"
+                    id="passwordVerify"
+                    autoComplete="new-password"
+                    variant="standard"
+                    InputProps={{
+                      disableUnderline: true,
+                      style: {
+                        fontSize: 30,
+                        paddingLeft: 20,
+                        paddingBottom: 10,
+                      },
+                    }}
+                    InputLabelProps={{
+                      style: { fontSize: 30, paddingLeft: 20 },
+                      shrink: true,
+                    }}
+                  />
+                </Box>
+              </Grid>
             </Grid>
-          </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="success"
+              size="large"
+              href="/register/"
+              style={{
+                fontWeight: 600,
+                border: "3px solid",
+                borderColor: "black",
+                backgroundColor: "#92C77F",
+                color: "black",
+                fontSize: "32px",
+              }}
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Create New Account
+            </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link href="/login/" variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+    </Box>
   );
 }

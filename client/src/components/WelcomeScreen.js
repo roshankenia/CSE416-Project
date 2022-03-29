@@ -63,6 +63,7 @@ export default function WelcomeScreen() {
             variant="contained"
             color="success"
             size="large"
+            href="/guest/"
             style={{
               fontWeight: 600,
               border: "3px solid",

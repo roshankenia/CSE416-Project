@@ -18,7 +18,7 @@ import { GlobalCommunityContext } from "../community";
 
 const theme = createTheme();
 
-export default function LoginScreen() {
+export default function GuestScreen() {
   const { auth } = useContext(AuthContext);
   const { community } = useContext(GlobalCommunityContext);
 
@@ -27,7 +27,7 @@ export default function LoginScreen() {
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
 
-    auth.loginUser(data.get("username"), data.get("password"));
+    auth.loginUser(data.get("username"), data.get("lobbyCode"));
   };
 
   return (
@@ -45,7 +45,7 @@ export default function LoginScreen() {
             JART
           </Typography>
           <Typography component="h1" variant="h5">
-            Login
+            Guest
           </Typography>
           <Box
             component="form"
@@ -72,7 +72,7 @@ export default function LoginScreen() {
                       fullWidth
                       variant="standard"
                       id="username"
-                      label="Username:"
+                      label="Temporary Username:"
                       name="username"
                       variant="standard"
                       InputProps={{
@@ -109,11 +109,11 @@ export default function LoginScreen() {
                       margin="normal"
                       required
                       fullWidth
-                      name="password"
-                      label="Password:"
-                      type="password"
-                      id="password"
-                      autoComplete="current-password"
+                      name="lobbyCode"
+                      label="Lobby Code:"
+                      type="lobbyCode"
+                      id="lobbyCode"
+                      autoComplete="current-lobbyCode"
                       variant="standard"
                       InputProps={{
                         disableUnderline: true,
@@ -131,14 +131,6 @@ export default function LoginScreen() {
                     />
                   </Box>
                 </Box>
-              </Grid>
-              <Grid item xs={5}></Grid>
-              <Grid item xs={7}>
-                <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label="Remember me"
-                  sx={{ color: "gray", textDecoration: "line-through" }}
-                />
               </Grid>
               <Grid item xs={12}>
                 <Button
@@ -158,22 +150,13 @@ export default function LoginScreen() {
                   }}
                   sx={{ mt: 3, mb: 2 }}
                 >
-                  Sign In
+                  Join Lobby
                 </Button>
               </Grid>
               <Grid container justifyContent="flex-end">
-                <Grid item xs>
-                  <Link
-                    href="#"
-                    variant="body2"
-                    sx={{ color: "gray", textDecoration: "line-through" }}
-                  >
-                    Forgot password?
-                  </Link>
-                </Grid>
                 <Grid item>
-                  <Link href="/register/" variant="body2">
-                    {"Don't have an account? Sign Up"}
+                  <Link href="/login/" variant="body2">
+                    {"Have an account? Sign In"}
                   </Link>
                 </Grid>
               </Grid>

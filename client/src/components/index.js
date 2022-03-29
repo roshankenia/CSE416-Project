@@ -28,6 +28,7 @@ import WritePanelScreen from './WritePanelScreen'
 import WelcomeScreen from './WelcomeScreen'
 import HomeWrapper from './HomeWrapper'
 import Test from './Test'
+import GuestScreen from './GuestScreen'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -64,5 +65,6 @@ export {
     WritePanelScreen,
     WelcomeScreen,
     HomeWrapper,
-    Test
+    Test,
+    GuestScreen
     }
