@@ -51,12 +51,11 @@ export default function RegisterScreen() {
             <Grid item xs={12} sm={6}>
               <TextField
                 style={{
-                  fontWeight: 600,
                   border: "3px solid",
                   borderColor: "black",
-                  backgroundColor: "#92C77F",
                   color: "black",
                   fontSize: "32px",
+                  borderRadius: 40
                 }}
                 autoComplete="fname"
                 name="firstName"
