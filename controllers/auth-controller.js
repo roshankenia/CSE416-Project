@@ -194,9 +194,71 @@ registerUser = async (req, res) => {
   }
 };
 
+// @Jeff Hu - user knows current password and wants to change their password
+changePassword = async (req, res) => {
+  try{
+    const {username, currPassword, newPassword, newPassVerify} = req.body;
+
+    const currentUser = await User.findOne({ username: username });
+    console.log("currentUser: " + currentUser);
+    if (!currentUser) {
+      return res.status(401).json({
+        errorMessage: "Current User's username not found in database.",
+      });
+    }
+
+    // Checking to see if user entered their correct current password
+    console.log("provided verification password: " + currPassword);
+    const passwordCorrect = await bcrypt.compare(
+      currPassword,
+      currentUser.passwordHash
+    );
+    if (!passwordCorrect) {
+      console.log("Incorrect password");
+      return res.status(401).json({
+        errorMessage: "Wrong username or password provided.",
+      });
+    }
+
+    // Checking to see if the new password was entered twice correctly
+    if (newPassword !== newPassVerify) {
+      return res.status(400).json({
+        errorMessage: "Please enter the same password twice.",
+      });
+    }
+
+    // Hashing the new password and changing the user's password to the new password
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const newPasswordHash = await bcrypt.hash(newPassword, salt);
+    console.log("passwordHash: " + newPasswordHash);
+
+    // ***I'm not sure if this is the proper way to set the new password hash
+    // potential problems here
+    currentUser.passwordHash = newPasswordHash;
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
+// @Jeff Hu - user does not know current password and needs to recover account by resetting password
+resetPassword = async (req, res) => {
+  
+};
+
+// @Jeff Hu - user wants to delete their account
+deleteAccount = async (req, res) => {
+  
+};
+
 module.exports = {
   getLoggedIn,
   registerUser,
   loginUser,
   logoutUser,
+  changePassword,
+  resetPassword,
+  deleteAccount
 };
