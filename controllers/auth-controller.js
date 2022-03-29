@@ -242,7 +242,10 @@ changePassword = async (req, res) => {
       .json({
         success: true,
         user: {
-          username: currentUser.username
+          firstName: currentUser.firstName,
+          lastName: currentUser.lastName,
+          email: currentUser.email,
+          username: currentUser.username,
         }
       });
   } catch (err) {
@@ -253,54 +256,98 @@ changePassword = async (req, res) => {
 
 // @Jeff Hu - user does not know current password and needs to recover account by resetting password
 resetPassword = async (req, res) => {
-  
-};
+  try {
+    const {email} = req.body;
 
-// @Jeff Hu - user wants to delete their account
-deleteAccount = async (req, res) => {
-  const {username, password} = req.body;
-
-  const currentUser = await User.findOne({ username: username });
-    console.log("currentUser: " + currentUser);
-    if (!currentUser) {
+    const existingUser = await User.findOne({email: email})
+    if (!existingUser) {
       return res.status(401).json({
-        errorMessage: "Current User's username not found in database.",
+        errorMessage: "Current User's email not found in database.",
       });
     }
 
-    // Checking to see if user entered their correct current password
-    console.log("provided verification password: " + currPassword);
-    const passwordCorrect = await bcrypt.compare(
-      password,
-      currentUser.passwordHash
-    );
-    if (!passwordCorrect) {
-      console.log("Incorrect password");
-      return res.status(401).json({
-        errorMessage: "Wrong password provided.",
-      });
-    }
+    //We should generate a random password here but for now it is hardcoded
+    const tempPassword = '12345678'
+    //We would then email the generated password to the given email address here
 
-  // mongoose finds user by username and deletes user from database
-  // not sure if this is the best way to delete from database
-  const deletedUser = await findOneAndDelete({username: username})
-  if (!deletedUser) {
-    return res.status(401).json({
-      errorMessage: "Current User's username not found in database and user could not be deleted.",
-    });
-  }
+    // Hashing the new password and changing the user's password to the new password
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const newPasswordHash = await bcrypt.hash(tempPassword, salt);
+    console.log("passwordHash: " + newPasswordHash);
 
-  res
+    // ***I'm not sure if this is the proper way to set the new password hash
+    existingUser.set({passwordHash: newPasswordHash});
+    await existingUser.save();
+
+    res
       .status(200)
       .json({
         success: true,
         user: {
-          firstName: deletedUser.firstName,
-          lastName: deletedUser.lastName,
-          email: deletedUser.email,
-          username: deletedUser.username,
-        },
+          firstName: existingUser.firstName,
+          lastName: existingUser.lastName,
+          email: existingUser.email,
+          username: existingUser.username,
+        }
       });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
+// @Jeff Hu - user wants to delete their account
+deleteAccount = async (req, res) => {
+  try{
+    const {username, password} = req.body;
+
+    const currentUser = await User.findOne({ username: username });
+      console.log("currentUser: " + currentUser);
+      if (!currentUser) {
+        return res.status(401).json({
+          errorMessage: "Current User's username not found in database.",
+        });
+      }
+  
+      // Checking to see if user entered their correct current password
+      console.log("provided verification password: " + currPassword);
+      const passwordCorrect = await bcrypt.compare(
+        password,
+        currentUser.passwordHash
+      );
+      if (!passwordCorrect) {
+        console.log("Incorrect password");
+        return res.status(401).json({
+          errorMessage: "Wrong password provided.",
+        });
+      }
+  
+    // mongoose finds user by username and deletes user from database
+    // not sure if this is the best way to delete from database
+    const deletedUser = await findOneAndDelete({username: username})
+    if (!deletedUser) {
+      return res.status(401).json({
+        errorMessage: "Current User's username not found in database and user could not be deleted.",
+      });
+    }
+  
+    res
+        .status(200)
+        .json({
+          success: true,
+          user: {
+            firstName: deletedUser.firstName,
+            lastName: deletedUser.lastName,
+            email: deletedUser.email,
+            username: deletedUser.username,
+          },
+        });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
 };
 
 module.exports = {
