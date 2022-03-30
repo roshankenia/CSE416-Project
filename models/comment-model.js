@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-//const Comment = require("comment-model");
+//const Comment = require("./comment-model");
 
 const Reply = new Schema({
     commentID: { type: String, required: true },

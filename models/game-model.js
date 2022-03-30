@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const Comic = require("comic-model");
-const Story = require("story-model");
+const Comic = require("./comic-model");
+const Story = require("./story-model");
 
 const GameSchema = new Schema(
     {   
