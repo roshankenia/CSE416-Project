@@ -1,10 +1,15 @@
-const express = require('express');
-const app = express();
-const https = require('https');
-const server = https.createServer(app);          //Create server per room? 
-const { Server } = require("socket.io");
-const io = new Server(server);
+// const express = require('express');
+// const app = express();
+// const https = require('https');
+// const server = https.createServer(app);          //Create server per room? 
+// const { Server } = require("socket.io");
+// const io = new Server(server);
 // const io = new Server(GameRoomID); Server side room?
+const io = require("socket.io")({
+  cors: {
+    origin:["https://cse-416-jart.herokuapp.com"]
+  }
+})
 
 
 // runs everytime a client connects to the server
@@ -15,12 +20,13 @@ io.on('connection', (socket) => {
 
 //From the client, listens whenever join-Gameroom is called
     socket.on('join-Gameroom',GameRoomID => { 
+      console.log('joined game room with GameRoomid: ' + GameRoomID)
         socket.join(GameRoomID)
     })
   });
 
-server.listen(3000, () => {
-  console.log('listening on *:3000');
-});
+// server.listen(3000, () => {
+//   console.log('listening on *:3000');
+// });
 
 
