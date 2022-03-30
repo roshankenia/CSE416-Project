@@ -39,8 +39,8 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
-
+app.set('trust proxy', true);
 // PUT THE SERVER IN LISTENING MODE
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+app.listen(PORT, () => console.log(`Server running on port ${PORT} and on IP ${req.ip}`));
 
 
