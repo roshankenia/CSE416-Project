@@ -9,13 +9,9 @@ const path = require("path")
 dotenv.config()
 const PORT = process.env.PORT || 4000;
 const app = express()
-
 // SETUP THE MIDDLEWARE
+app.use(cors())
 app.use(express.urlencoded({ extended: true }))
-app.use(cors({
-    origin: ["http://localhost:3000"],
-    credentials: true
-}))
 app.use(express.json())
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, "client", "build")))
@@ -39,7 +35,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'))
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
-
+console.log(app);
 // PUT THE SERVER IN LISTENING MODE
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
 
