@@ -5,7 +5,7 @@
 // const { Server } = require("socket.io");
 // const io = new Server(server);
 // const io = new Server(GameRoomID); Server side room?
-const io = require("socket.io")({
+const io = require("socket.io")(4000,{
   cors: {
     origin:["https://cse-416-jart.herokuapp.com"]
   }
