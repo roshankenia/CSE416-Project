@@ -1,7 +1,7 @@
 const Community = require("../models/community-model");
 const User = require("../models/user-model");
 
-createCommunity = (req, res) => {
+createCommunity = async (req, res) => {
     const body = req.body;
     if (!body) {
       return res.status(400).json({
@@ -46,7 +46,7 @@ createCommunity = (req, res) => {
   };
 
 // For testing purpose
-deleteCommunity = (req, res) => {
+deleteCommunity = async (req, res) => {
   const body = req.body;
   if (!body) {
     return res.status(400).json({
@@ -70,7 +70,7 @@ deleteCommunity = (req, res) => {
 };
 
 // @Jeff Hu copied getGameByID method from game-controller
-getCommunityById = (req, res) => {
+getCommunityById = async (req, res) => {
   try {
     const id = req.params.id;
     if (!id){
@@ -94,7 +94,7 @@ getCommunityById = (req, res) => {
 }
 
 // @Jeff Hu INCOMPLETE
-updateCommunity = (req, res) => {
+updateCommunity = async (req, res) => {
   try{
     const {communityMembers, communityPosts} = req.body;
     const id = req.params.id;
@@ -114,6 +114,42 @@ updateCommunity = (req, res) => {
       });
     }
 
+    Community.findOne({ _id: id }, (err, community) => {
+      console.log("Community found: " + JSON.stringify(community));
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "Community not found!",
+        });
+      }
+  
+      // community.set({})
+      // game.uploadedPictures = body.game.uploadedPictures;
+      // game.gamemode = body.game.gamemode;
+      // game.comic = body.game.comic;
+      // game.story = body.game.story;
+      // game.lobbyID = body.game.lobbyID;
+      // game.chatMessages = body.game.chatMessages;
+      // game.communityID = body.game.communityID;
+  
+      community
+        .save()
+        .then(() => {
+          console.log("SUCCESS!!!");
+          return res.status(200).json({
+            success: true,
+            id: community.communityID,
+            message: "Community updated!",
+          });
+        })
+        .catch((error) => {
+          console.log("FAILURE: " + JSON.stringify(error));
+          return res.status(404).json({
+            error,
+            message: "Community not updated!",
+          });
+        });
+    });
 
 
   } catch (err){
@@ -122,7 +158,7 @@ updateCommunity = (req, res) => {
   }
 }
 
-createStory = (req, res) =>{
+createStory = async (req, res) =>{
   try {
     
   } catch (err){
@@ -132,7 +168,7 @@ createStory = (req, res) =>{
 }
 
 // @Jeff Hu copied getGameByID method from game-controller
-getStoryById = (req, res) =>{
+getStoryById = async (req, res) =>{
   try {
     const id = req.params.id;
     if (!id){
@@ -155,7 +191,7 @@ getStoryById = (req, res) =>{
   }
 }
 
-deleteStory = (req, res) =>{
+deleteStory = async (req, res) =>{
   try {
     
   } catch (err){
@@ -164,7 +200,7 @@ deleteStory = (req, res) =>{
   }
 }
 
-createComic = (req, res) =>{
+createComic = async (req, res) =>{
   try {
     
   } catch (err){
@@ -174,7 +210,7 @@ createComic = (req, res) =>{
 }
 
 // @Jeff Hu copied getGameByID method from game-controller
-getComicById = (req, res) =>{
+getComicById = async (req, res) =>{
   try {
     const id = req.params.id;
     if (!id){
@@ -197,7 +233,7 @@ getComicById = (req, res) =>{
   }
 }
 
-deleteComic = (req, res) =>{
+deleteComic = async (req, res) =>{
   try {
     
   } catch (err){
@@ -206,7 +242,7 @@ deleteComic = (req, res) =>{
   }
 }
 
-createPost = (req, res) =>{
+createPost = async (req, res) =>{
   try {
     
   } catch (err){
@@ -216,7 +252,7 @@ createPost = (req, res) =>{
 }
 
 // @Jeff Hu copied getGameByID method from game-controller
-getPostById = (req, res) =>{
+getPostById = async (req, res) =>{
   try {
     const id = req.params.id;
     if (!id){
@@ -239,7 +275,7 @@ getPostById = (req, res) =>{
   }
 }
 
-updatePost = (req, res) =>{
+updatePost = async (req, res) =>{
   try {
     
   } catch (err){
@@ -248,7 +284,7 @@ updatePost = (req, res) =>{
   }
 }
 
-createComment = (req, res) =>{
+createComment = async (req, res) =>{
   try {
     
   } catch (err){
@@ -258,7 +294,7 @@ createComment = (req, res) =>{
 }
 
 // @Jeff Hu copied getGameByID method from game-controller
-getCommentById = (req, res) =>{
+getCommentById = async (req, res) =>{
   try {
     const id = req.params.id;
     if (!id){
@@ -281,7 +317,7 @@ getCommentById = (req, res) =>{
   }
 }
 
-updateComment = (req, res) =>{
+updateComment = async (req, res) =>{
   try {
     
   } catch (err){
@@ -290,7 +326,7 @@ updateComment = (req, res) =>{
   }
 }
 
-searchCommunity = (req, res) =>{
+searchCommunity = async (req, res) =>{
   try {
     
   } catch (err){
