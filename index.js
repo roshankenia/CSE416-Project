@@ -47,3 +47,18 @@ var server = app.listen(PORT, function () {
   var port = server.address().port;
   console.log("running at http://" + host + ":" + port);
 });
+
+//websocket server
+
+// const io = require("socket.io")(3000)
+const io = require("socket.io")(3000,{
+  cors: {
+    // origin:["https://cse-416-jart.herokuapp.com"]
+    origin:["http://localhost:3001"]
+  }
+})
+
+
+io.on('connection', (socket) => {
+  console.log("CONNECTION TO WEBSOCKET" + socket.id);
+});

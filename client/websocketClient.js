@@ -1,14 +1,15 @@
 import { io} from "socket.io-client"
 
 //gets a new socket connection, make it so whenever anyone comes to site they will connect to websocketServer
-const socket = io('https://cse-416-jart.herokuapp.com') //Name of the server
+// const socket = io('https://cse-416-jart.herokuapp.com') //Name of the server
+const socket = io('http://localhost:3000')
 
 // an event that runs everytime we connect to the server
-socket.on('connect', () =>{
-    console.log('you connected with id:' + socket.id)
-})
+// socket.on('connection', () =>{
+//     console.log('you connected with id:' + socket.id)
+// })
  
-// Proably not needed
+// Proably not needednpm s
 function getSocket(){
     return socket
 }
