@@ -25,8 +25,6 @@ export default function LoginScreen() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-
     auth.loginUser(data.get("username"), data.get("password"));
   };
 
@@ -50,7 +48,7 @@ export default function LoginScreen() {
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            onClick={handleSubmit}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
@@ -74,7 +72,6 @@ export default function LoginScreen() {
                       id="username"
                       label="Username:"
                       name="username"
-                      variant="standard"
                       InputProps={{
                         disableUnderline: true,
                         style: {

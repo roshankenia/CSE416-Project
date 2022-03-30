@@ -144,8 +144,8 @@ function AuthContextProvider(props) {
         history.push("/");
       }
     } catch (error) {
-      console.log(error.response.data.errorMessage);
-      auth.setErrorMessage(error.response.data.errorMessage);
+      //console.log(error.response.data.errorMessage);
+      //auth.setErrorMessage(error.response.data.errorMessage);
     }
   };
 

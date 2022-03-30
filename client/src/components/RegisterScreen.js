@@ -109,7 +109,6 @@ export default function RegisterScreen() {
                     label="Last Name:"
                     name="lastName"
                     autoComplete="lname"
-                    variant="standard"
                     InputProps={{
                       disableUnderline: true,
                       style: {
