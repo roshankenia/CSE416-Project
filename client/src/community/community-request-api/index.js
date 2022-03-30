@@ -13,8 +13,7 @@
 import axios from "axios";
 axios.defaults.withCredentials = true;
 const api = axios.create({
-  baseURL: "https://cse-416-jart.herokuapp.com:4000/api",
-  //baseURL: "http://localhost:4000/api",
+  baseURL: "http://localhost:4000/api",
 });
 
 export const createCommunity = (name, members) => {
