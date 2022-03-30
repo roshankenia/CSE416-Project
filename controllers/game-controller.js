@@ -102,7 +102,7 @@ createDefaultImages = (req, res) => {
     });
   }
 
-  const defaultImages = new DefaultImage(body);
+  const defaultImages = new DefaultImages(body);
   console.log("creating default images: " + JSON.stringify(defaultImages));
   if (!defaultImages) {
     return res.status(400).json({
