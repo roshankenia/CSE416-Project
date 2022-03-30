@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const Comic = require("./comic-model");
-const Story = require("./story-model");
-const Comment = require("./comment-model");
+const Comic = require("./comic-model").schema;
+const Story = require("./story-model").schema;
+const Comment = require("./comment-model").schema;
 
 
 const PostSchema = new Schema(
