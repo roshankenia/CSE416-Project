@@ -7,9 +7,14 @@ const socket = io('LOCALHOST???') //Name of the server
 socket.on('connect', () =>{
     console.log('you connected with id:' + socket.id)
 })
-
+ 
+// Proably not needed
 function getSocket(){
     return socket
+}
+
+function getSocketId(){
+    return socket.id
 }
 
 //Emit function talks to server, 'join-Gameroom' is the function
