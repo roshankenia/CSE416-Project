@@ -10,11 +10,11 @@
     @author McKilla Gorilla
 */
 
-import axios from 'axios'
+import axios from "axios";
 axios.defaults.withCredentials = true;
 const api = axios.create({
-    baseURL: 'http://localhost:4000/auth',
-})
+  baseURL: "http://localhost:4000/auth",
+});
 
 // THESE ARE ALL THE REQUESTS WE`LL BE MAKING, ALL REQUESTS HAVE A
 // REQUEST METHOD (like get) AND PATH (like /register). SOME ALSO
@@ -25,22 +25,30 @@ const api = axios.create({
 
 export const getLoggedIn = () => api.get(`/loggedIn/`);
 export const loginUser = (username, password) => {
-    return api.post(`/login/`, {
-        username : username,
-        password : password
-    })
-}
-export const logoutUser = () => api.get(`/logout/`)
-export const registerUser = (firstName, lastName, email, password, passwordVerify, username) => {
-    return api.post(`/register/`, {
-        firstName : firstName,
-        lastName : lastName,
-        email : email,
-        password : password,
-        passwordVerify : passwordVerify,
-        username : username
-    })
-}
+  return api.post(`/login/`, {
+    username: username,
+    password: password,
+  });
+};
+export const logoutUser = () => api.get(`/logout/`);
+export const registerUser = (
+  firstName,
+  lastName,
+  email,
+  password,
+  passwordVerify,
+  username
+) => {
+  console.log(process.env.PORT);
+  return api.post(`/register/`, {
+    firstName: firstName,
+    lastName: lastName,
+    email: email,
+    password: password,
+    passwordVerify: passwordVerify,
+    username: username,
+  });
+};
 
 // @Jeff Hu front end request auth apis TO DO
 // export const changePassword = (username, currPassword, newPassword, newPassVerify) => api.get('/changePassword/');
@@ -48,14 +56,14 @@ export const registerUser = (firstName, lastName, email, password, passwordVerif
 // export const deleteAccount = (username, password) => api.get('/deleteAccount/');
 
 const apis = {
-    getLoggedIn,
-    registerUser,
-    loginUser,
-    logoutUser
-    // ,
-    // changePassword,
-    // resetPassword,
-    // deleteAccount
-}
+  getLoggedIn,
+  registerUser,
+  loginUser,
+  logoutUser,
+  // ,
+  // changePassword,
+  // resetPassword,
+  // deleteAccount
+};
 
-export default apis
+export default apis;
