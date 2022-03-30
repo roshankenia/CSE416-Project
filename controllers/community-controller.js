@@ -93,7 +93,7 @@ getCommunityById = async (req, res) => {
   }
 }
 
-// @Jeff Hu INCOMPLETE
+// @Jeff Hu Completed but Untested
 updateCommunity = async (req, res) => {
   try{
     const {communityMembers, communityPosts} = req.body;
@@ -123,14 +123,8 @@ updateCommunity = async (req, res) => {
         });
       }
   
-      // community.set({})
-      // game.uploadedPictures = body.game.uploadedPictures;
-      // game.gamemode = body.game.gamemode;
-      // game.comic = body.game.comic;
-      // game.story = body.game.story;
-      // game.lobbyID = body.game.lobbyID;
-      // game.chatMessages = body.game.chatMessages;
-      // game.communityID = body.game.communityID;
+      community.communityMembers = communityMembers;
+      community.communityPosts = communityPosts;
   
       community
         .save()
@@ -150,8 +144,6 @@ updateCommunity = async (req, res) => {
           });
         });
     });
-
-
   } catch (err){
     console.error(err);
     res.status(500).send();
@@ -275,9 +267,101 @@ getPostById = async (req, res) =>{
   }
 }
 
+// @Jeff Hu Completed but UNTESTED
 updatePost = async (req, res) =>{
   try {
-    
+    const {postTitle, postComic, postStory, likeCount, dislikeCount, comments, 
+    communityPublished, discoveryPublished, dateAndTime} = req.body;
+    const id = req.params.id;
+    if (!postTitle) {
+      return res.status(400).json({
+        errorMessage: "Missing postTitle parameter",
+      });
+    }
+    if (!postComic) {
+      return res.status(400).json({
+        errorMessage: "Missing postComic parameter",
+      });
+    }
+    if (!postStory) {
+      return res.status(400).json({
+        errorMessage: "Missing postStory parameter",
+      });
+    }
+    if (!likeCount) {
+      return res.status(400).json({
+        errorMessage: "Missing likeCount parameter",
+      });
+    }
+    if (!dislikeCount) {
+      return res.status(400).json({
+        errorMessage: "Missing dislikeCount parameter",
+      });
+    }
+    if (!comments) {
+      return res.status(400).json({
+        errorMessage: "Missing comments parameter",
+      });
+    }
+    //not sure how boolean values work with this conditional statement
+    if (!communityPublished) {
+      return res.status(400).json({
+        errorMessage: "Missing communityPublished parameter",
+      });
+    }
+    if (!discoveryPublished) {
+      return res.status(400).json({
+        errorMessage: "Missing discoveryPublished parameter",
+      });
+    }
+    if (!dateAndTime) {
+      return res.status(400).json({
+        errorMessage: "Missing dateAndTime parameter",
+      });
+    }
+    if (!id){
+      return res.status(400).json({
+        errorMessage: "Missing id parameter",
+      });
+    }
+
+    Post.findOne({ _id: id }, (err, post) => {
+      console.log("Post found: " + JSON.stringify(post));
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "Post not found!",
+        });
+      }
+  
+      post.postTitle = postTitle;
+      post.postComic = postComic;
+      post.postStory = postStory;
+      post.likeCount = likeCount;
+      post.dislikeCount = dislikeCount;
+      post.comments = comments;
+      post.communityPublished = communityPublished;
+      post.discoveryPublished = discoveryPublished;
+      post.dateAndTime = dateAndTime;
+  
+      post
+        .save()
+        .then(() => {
+          console.log("SUCCESS!!!");
+          return res.status(200).json({
+            success: true,
+            id: post.postID,
+            message: "Post updated!",
+          });
+        })
+        .catch((error) => {
+          console.log("FAILURE: " + JSON.stringify(error));
+          return res.status(404).json({
+            error,
+            message: "Post not updated!",
+          });
+        });
+    });
   } catch (err){
     console.error(err);
     res.status(500).send();
@@ -317,9 +401,57 @@ getCommentById = async (req, res) =>{
   }
 }
 
+// @Jeff Hu Completed but UNTESTED
+// BEWARE!!! Double check what is being passed down in the request, it is possible that we have
+// a naming problem. The object name is comment and the parameter passed down is also comment. 
 updateComment = async (req, res) =>{
   try {
+    const body = req.body;
+    const id = req.params.id;
+    if (!body) {
+      return res.status(400).json({
+        errorMessage: "Missing a parameter",
+      });
+    }
     
+    if (!id){
+      return res.status(400).json({
+        errorMessage: "Missing id parameter",
+      });
+    }
+
+    Comment.findOne({ _id: id }, (err, comment) => {
+      console.log("Comment found: " + JSON.stringify(comment));
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "Comment not found!",
+        });
+      }
+  
+      //This line could be wrong here
+      comment.comment = body.comment;
+      comment.likeCount = body.likeCount;
+      comment.dislikeCount = body.dislikeCount;
+  
+      comment
+        .save()
+        .then(() => {
+          console.log("SUCCESS!!!");
+          return res.status(200).json({
+            success: true,
+            id: comment.commentID,
+            message: "Comment updated!",
+          });
+        })
+        .catch((error) => {
+          console.log("FAILURE: " + JSON.stringify(error));
+          return res.status(404).json({
+            error,
+            message: "Comment not updated!",
+          });
+        });
+    });
   } catch (err){
     console.error(err);
     res.status(500).send();
