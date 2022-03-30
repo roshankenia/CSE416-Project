@@ -25,6 +25,8 @@ const authRouter = require("./routes/auth-router");
 app.use("/auth", authRouter);
 const communityRouter = require("./routes/community-router");
 app.use("/api", communityRouter);
+const gameRouter = require("./routes/game-router");
+app.use("/play", gameRouter);
 
 /* Will not need this in the future @Terran
  const top5listsRouter = require('./routes/top5lists-router')
