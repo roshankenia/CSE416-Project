@@ -1,6 +1,7 @@
 const Community = require("../models/community-model");
 const User = require("../models/user-model");
 
+//#region front-end payload: response.data.community
 createCommunity = async (req, res) => {
     const body = req.body;
     if (!body) {
@@ -10,9 +11,12 @@ createCommunity = async (req, res) => {
     }
 
     //check for duplicate community
-    Community.find({ communityName: body.communityName}, function (err, docs) {
+    await Community.find({ communityName: body.communityName}, function (err, docs) {
       if (err){
           console.log(err);
+          return res.status(400).json({
+            errorMessage: err,
+          });
       }
       else if(docs.length != 0){
           console.log("Duplicate communities found! : ", docs);
@@ -45,6 +49,57 @@ createCommunity = async (req, res) => {
     });    
   };
 
+  //very resource intensive, not scalable
+updateCommunityById = async (req, res) => {
+  try{
+    const id = req.params.id;
+    if (!id){
+      return res.status(400).json({
+        errorMessage: "Missing id parameter",
+      });
+    }
+    await Community.findOne({ _id: id }, (err, community) => {
+      console.log("Community found: " + JSON.stringify(community));
+      if (err) {
+        return res.status(404).json({
+          err,
+          message: "Community not found!",
+        });
+      }
+  
+      community.communityName = req.body.community.communityName
+      community.communityMembers = req.body.community.communityMembers
+      community.communityPosts = req.body.community.communityPosts
+
+      community.save().then(()=>{
+      return res.status(201).json({
+        success: true,
+        community: community,
+        message: "Community updated!",
+      });})
+    });
+  } catch (err){
+    console.error(err);
+    res.status(500).send();
+  }
+}
+//#endregion
+
+//front-end payload: response.data.communityList
+getCommunityList = async (req, res) =>{
+  await Community.find({}, (err, communities) => {
+    if (err) {
+        return res.status(400).json({ success: false, error: err })
+    }
+    if (!communities.length) {
+        return res
+            .status(404)
+            .json({ success: false, error: `no communities found` })
+    }
+    return res.status(201).json({ success: true, communityList: communities })
+  }).catch(err => console.log(err))
+}
+
 // For testing purpose
 deleteCommunity = async (req, res) => {
   const body = req.body;
@@ -53,7 +108,7 @@ deleteCommunity = async (req, res) => {
       errorMessage: "Improperly formatted request",
     });
   }
-  Community.findOneAndDelete({communityName : body.communityName}, function (err, docs) {
+  await Community.findOneAndDelete({communityName : body.communityName}, function (err, docs) {
     if (err){
         console.log(err)
         return res.status(400).json({
@@ -87,63 +142,6 @@ getCommunityById = async (req, res) => {
       console.log("Found community: " + JSON.stringify(community));
       return res.status(200).json({ success: true, community: community });
     }).catch((err) => console.log(err));
-  } catch (err){
-    console.error(err);
-    res.status(500).send();
-  }
-}
-
-// @Jeff Hu Completed but Untested
-updateCommunity = async (req, res) => {
-  try{
-    const {communityMembers, communityPosts} = req.body;
-    const id = req.params.id;
-    if (!communityMembers) {
-      return res.status(400).json({
-        errorMessage: "Missing communityMembers parameter",
-      });
-    }
-    if (!communityPosts) {
-      return res.status(400).json({
-        errorMessage: "Missing communityPosts parameter",
-      });
-    }
-    if (!id){
-      return res.status(400).json({
-        errorMessage: "Missing id parameter",
-      });
-    }
-
-    Community.findOne({ _id: id }, (err, community) => {
-      console.log("Community found: " + JSON.stringify(community));
-      if (err) {
-        return res.status(404).json({
-          err,
-          message: "Community not found!",
-        });
-      }
-  
-      community.communityMembers = communityMembers;
-      community.communityPosts = communityPosts;
-  
-      community
-        .save()
-        .then(() => {
-          console.log("SUCCESS!!!");
-          return res.status(200).json({
-            success: true,
-            id: community.communityID,
-            message: "Community updated!",
-          });
-        })
-        .catch((error) => {
-          console.log("FAILURE: " + JSON.stringify(error));
-          return res.status(404).json({
-            error,
-            message: "Community not updated!",
-          });
-        });
-    });
   } catch (err){
     console.error(err);
     res.status(500).send();
@@ -469,10 +467,11 @@ searchCommunity = async (req, res) =>{
 
 module.exports = {
     createCommunity,
+    getCommunityList,
+    updateCommunityById,
     //for testing purpose only
     deleteCommunity,
     getCommunityById,
-    updateCommunity,
     createStory,
     getStoryById,
     deleteStory,

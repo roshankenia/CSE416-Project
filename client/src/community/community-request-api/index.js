@@ -23,6 +23,17 @@ export const createCommunity = (name, members) => {
   });
 };
 
+export const getCommunityList = () => {
+  return api.get(`/communities`, {
+  });
+};
+
+export const updateCommunityById = (id, community) => {
+  return api.put(`/community/${id}`, {
+    community: community
+  })
+}
+
 export const deleteCommunity = (name) => {
   return api.post(`/deletecommunity`, {
     communityName: name
@@ -31,6 +42,8 @@ export const deleteCommunity = (name) => {
 
 const apis = {
   createCommunity,
+  getCommunityList,
+  updateCommunityById,
   // for testing purpose
   deleteCommunity
 };
