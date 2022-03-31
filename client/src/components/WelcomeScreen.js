@@ -3,11 +3,11 @@ import { GlobalCommunityContext } from "../community";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { io} from "socket.io-client"
+//import { io} from "socket.io-client"
 
 //Testing websockets please leave
 //@Alan
-const socket = io('http://localhost:3000')
+//const socket = io('http://localhost:3000')
 
 
 export default function WelcomeScreen() {
