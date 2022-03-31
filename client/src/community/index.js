@@ -19,8 +19,7 @@ export const GlobalCommunityActionType = {
   CREATE_NEW_COMMUNITY: "CREATE_NEW_COMMUNITY",
   GET_COMMUNITYLIST: "GET_COMMUNITYLIST",
   UPDATE_COMMUNITYLIST: "UPDATE_COMMUNITYLIST",
-  //For testing purpose only
-  DELETE_COMMUNITY: "DELETE_COMMUNITY"
+  RESET: "RESET"
 };
 
 function GlobalCommunityContextProvider(props) {
@@ -65,7 +64,7 @@ function GlobalCommunityContextProvider(props) {
         });
       }
       //For testing purpose only
-      case GlobalCommunityActionType.DELETE_COMMUNITY: {
+      case GlobalCommunityActionType.RESET: {
         return setCommunity({
           communityList: null,
           currentCommunity: null
@@ -112,6 +111,12 @@ function GlobalCommunityContextProvider(props) {
     }
   }
 
+  community.reset = function(){
+    communityReducer({
+      type: GlobalCommunityActionType.RESET,
+      payload: community,
+    });
+  }
   //#region join/leave
   /* Both Join and Leave function require you to pass an id to the param
    * @Terran
@@ -166,7 +171,7 @@ function GlobalCommunityContextProvider(props) {
       console.log("deleteCommunity response: " + response);
       if (response.status === 201) {
         communityReducer({
-          type: GlobalCommunityActionType.DELETE_COMMUNITY,
+          type: GlobalCommunityActionType.RESET,
           payload: null,
         });
         history.push("/");
