@@ -159,6 +159,7 @@ function AuthContextProvider(props) {
         type: AuthActionType.LOGOUT_USER,
         payload: {
           loggedIn: response.data.loggedIn,
+          user: response.data.user,
         },
       });
     }
