@@ -43,6 +43,9 @@ getGameById = async (req, res) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
+    else if (game === []){
+      return res.status(400).json({ success: false, error: "No Game with that ID found"});
+    }
     console.log("Found game: " + JSON.stringify(game));
     return res.status(200).json({ success: true, game: game });
   }).catch((err) => console.log(err));
@@ -57,7 +60,7 @@ updateGame = async (req, res) => {
     });
   }
 
-  Game.findOne({ _id: req.params.id }, (err, game) => {
+  Game.findOne({ lobbyID: req.params.id }, (err, game) => {
     console.log("Game found: " + JSON.stringify(game));
     if (err) {
       return res.status(404).json({
@@ -101,7 +104,8 @@ createDefaultImages = (req, res) => {
       errorMessage: "Improperly formatted request",
     });
   }
-
+  console.log('PRINTING DEFAULT IMAGES');
+  console.log(body);
   const defaultImages = new DefaultImages(body);
   console.log("creating default images: " + JSON.stringify(defaultImages));
   if (!defaultImages) {
@@ -218,6 +222,9 @@ getLobbyById = async (req, res) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     }
+    else if (lobby === []){
+      return res.status(400).json({ success: false, error: "No Lobby with that ID found"});
+    }
     console.log("Found lobby: " + JSON.stringify(lobby));
     return res.status(200).json({ success: true, lobby: lobby });
   }).catch((err) => console.log(err));
@@ -232,7 +239,7 @@ updateLobby = async (req, res) => {
     });
   }
 
-  Lobby.findOne({ _id: req.params.id }, (err, lobby) => {
+  Lobby.findOne({ lobbyID: req.params.id }, (err, lobby) => {
     console.log("Lobby found: " + JSON.stringify(lobby));
     if (err) {
       return res.status(404).json({
