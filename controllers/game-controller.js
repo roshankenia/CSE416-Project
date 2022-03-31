@@ -68,14 +68,28 @@ updateGame = async (req, res) => {
         message: "Game not found!",
       });
     }
-
-    game.uploadedPictures = body.game.uploadedPictures;
-    game.gamemode = body.game.gamemode;
-    game.comic = body.game.comic;
-    game.story = body.game.story;
-    game.lobbyID = body.game.lobbyID;
-    game.chatMessages = body.game.chatMessages;
-    game.communityID = body.game.communityID;
+    if(body.uploadedPictures){
+      game.uploadedPictures = body.uploadedPictures;
+    }
+    if(body.gamemode){
+      game.gamemode = body.gamemode;
+    }
+    if(body.comic){
+      game.comic = body.comic;
+    }
+    if(body.story){
+      game.story = body.story;
+    }
+    if(body.lobbyID){
+      game.lobbyID = body.lobbyID;
+    }
+    if(body.chatMessages){
+      game.chatMessages = body.chatMessages;
+    }
+    if(body.communityID){
+      game.communityID = body.communityID;
+    }
+    
 
     game
       .save()
@@ -105,7 +119,7 @@ createDefaultImages = (req, res) => {
     });
   }
   console.log('PRINTING DEFAULT IMAGES');
-  console.log(body);
+  console.log(body.size);
   const defaultImages = new DefaultImages(body);
   console.log("creating default images: " + JSON.stringify(defaultImages));
   if (!defaultImages) {
