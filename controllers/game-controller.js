@@ -42,6 +42,10 @@ getGameById = async (req, res) => {
   await Game.find({ lobbyID: req.params.id }, (err, game) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
+    } else if (!game) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Game with that ID found" });
     } else if (game.length === 0) {
       return res
         .status(400)
@@ -158,6 +162,14 @@ getDefaultImages = async (req, res) => {
   await Game.find({}, (err, defaultImages) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
+    } else if (!defaultImages) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Default Images created" });
+    } else if (defaultImages.length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Default Images created" });
     }
     console.log("Found game: " + JSON.stringify(defaultImages));
     return res
@@ -260,6 +272,10 @@ getLobbyById = async (req, res) => {
   await Lobby.find({ lobbyID: req.params.id }, (err, lobby) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
+    } else if (!lobby) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Lobby with that ID found" });
     } else if (lobby.length === 0) {
       return res
         .status(400)
