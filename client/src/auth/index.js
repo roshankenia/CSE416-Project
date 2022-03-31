@@ -154,7 +154,9 @@ function AuthContextProvider(props) {
     if (response.status === 200) {
       authReducer({
         type: AuthActionType.LOGOUT_USER,
-        payload: null,
+        payload: {
+          loggedIn: response.data.loggedIn,
+        },
       });
       history.push("/");
     }
