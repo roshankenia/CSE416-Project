@@ -122,8 +122,11 @@ createDefaultImages = (req, res) => {
       errorMessage: "Improperly formatted request",
     });
   }
-  console.log("PRINTING DEFAULT IMAGES");
-  console.log(Object.keys(body).length);
+  if (Object.keys(body).length !== 3) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
   const defaultImages = new DefaultImages(body);
   console.log("creating default images: " + JSON.stringify(defaultImages));
   if (!defaultImages) {

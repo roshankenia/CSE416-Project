@@ -7,7 +7,7 @@ mongoose.connect(uri, {
   }).catch(err => console.log(err.reason));
 
 const db = mongoose.connection
-console.log('CONNECTED TO DB');
-console.log(db);
+// console.log('CONNECTED TO DB');
+// console.log(db);
 module.exports = db
 
