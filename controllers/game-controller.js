@@ -280,22 +280,22 @@ updateLobby = async (req, res) => {
         .json({ success: false, error: "No Lobby with that ID found" });
     }
     if (body.communityID) {
-      lobby.communityID = body.game.communityID;
+      lobby.communityID = body.communityID;
     }
     if (body.gamemode) {
-      lobby.gamemode = body.game.gamemode;
+      lobby.gamemode = body.gamemode;
     }
     if (body.users) {
-      lobby.users = body.game.users;
+      lobby.users = body.users;
     }
     if (body.readyUsers) {
-      lobby.readyUsers = body.game.readyUsers;
+      lobby.readyUsers = body.readyUsers;
     }
     if (body.lobbyID) {
-      lobby.lobbyID = body.game.lobbyID;
+      lobby.lobbyID = body.lobbyID;
     }
     if (body.numberOfPlayers) {
-      lobby.numberOfPlayers = body.game.numberOfPlayers;
+      lobby.numberOfPlayers = body.numberOfPlayers;
     }
 
     lobby
