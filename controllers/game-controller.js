@@ -42,9 +42,10 @@ getGameById = async (req, res) => {
   await Game.find({ lobbyID: req.params.id }, (err, game) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
-    }
-    else if (game === []){
-      return res.status(400).json({ success: false, error: "No Game with that ID found"});
+    } else if (game.length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Game with that ID found" });
     }
     console.log("Found game: " + JSON.stringify(game));
     return res.status(200).json({ success: true, game: game });
@@ -68,28 +69,27 @@ updateGame = async (req, res) => {
         message: "Game not found!",
       });
     }
-    if(body.uploadedPictures){
+    if (body.uploadedPictures) {
       game.uploadedPictures = body.uploadedPictures;
     }
-    if(body.gamemode){
+    if (body.gamemode) {
       game.gamemode = body.gamemode;
     }
-    if(body.comic){
+    if (body.comic) {
       game.comic = body.comic;
     }
-    if(body.story){
+    if (body.story) {
       game.story = body.story;
     }
-    if(body.lobbyID){
+    if (body.lobbyID) {
       game.lobbyID = body.lobbyID;
     }
-    if(body.chatMessages){
+    if (body.chatMessages) {
       game.chatMessages = body.chatMessages;
     }
-    if(body.communityID){
+    if (body.communityID) {
       game.communityID = body.communityID;
     }
-    
 
     game
       .save()
@@ -118,8 +118,8 @@ createDefaultImages = (req, res) => {
       errorMessage: "Improperly formatted request",
     });
   }
-  console.log('PRINTING DEFAULT IMAGES');
-  console.log(body.size);
+  console.log("PRINTING DEFAULT IMAGES");
+  console.log(body.length);
   const defaultImages = new DefaultImages(body);
   console.log("creating default images: " + JSON.stringify(defaultImages));
   if (!defaultImages) {
@@ -235,9 +235,10 @@ getLobbyById = async (req, res) => {
   await Lobby.find({ lobbyID: req.params.id }, (err, lobby) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
-    }
-    else if (lobby === []){
-      return res.status(400).json({ success: false, error: "No Lobby with that ID found"});
+    } else if (lobby.length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Lobby with that ID found" });
     }
     console.log("Found lobby: " + JSON.stringify(lobby));
     return res.status(200).json({ success: true, lobby: lobby });
@@ -261,13 +262,24 @@ updateLobby = async (req, res) => {
         message: "Lobby not found!",
       });
     }
-
-    lobby.communityID = body.game.communityID;
-    lobby.gamemode = body.game.gamemode;
-    lobby.users = body.game.users;
-    lobby.readyUsers = body.game.readyUsers;
-    lobby.lobbyID = body.game.lobbyID;
-    lobby.numberOfPlayers = body.game.numberOfPlayers;
+    if (body.communityID) {
+      lobby.communityID = body.game.communityID;
+    }
+    if (body.gamemode) {
+      lobby.gamemode = body.game.gamemode;
+    }
+    if (body.users) {
+      lobby.users = body.game.users;
+    }
+    if (body.readyUsers) {
+      lobby.readyUsers = body.game.readyUsers;
+    }
+    if (body.lobbyID) {
+      lobby.lobbyID = body.game.lobbyID;
+    }
+    if (body.numberOfPlayers) {
+      lobby.numberOfPlayers = body.game.numberOfPlayers;
+    }
 
     lobby
       .save()
