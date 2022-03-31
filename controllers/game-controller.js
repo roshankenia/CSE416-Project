@@ -274,6 +274,10 @@ updateLobby = async (req, res) => {
         err,
         message: "Lobby not found!",
       });
+    } else if (!lobby) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Lobby with that ID found" });
     } else if (lobby.length === 0) {
       return res
         .status(400)
