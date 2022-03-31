@@ -68,6 +68,10 @@ updateGame = async (req, res) => {
         err,
         message: "Game not found!",
       });
+    } else if (!game) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Game with that ID found" });
     } else if (game.length === 0) {
       return res
         .status(400)
@@ -178,6 +182,14 @@ updateDefaultImages = async (req, res) => {
         err,
         message: "DefaultImages not found!",
       });
+    } else if (!defaultImages) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Default Images created" });
+    } else if (defaultImages.length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Default Images created" });
     }
 
     defaultImages = defaultImages[0];
