@@ -95,7 +95,10 @@ logoutUser = async (req, res) => {
       expires: new Date(0),
       secure: true,
       sameSite: "none",
-    })
+    }).status(200)
+    .json({
+      success: true,
+      })
     .send();
 };
 
