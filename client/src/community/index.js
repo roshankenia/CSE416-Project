@@ -17,20 +17,9 @@ console.log("create GlobalCommunityContext");
 // DATA Community STATE THAT CAN BE PROCESSED
 export const GlobalCommunityActionType = {
   CREATE_NEW_COMMUNITY: "CREATE_NEW_COMMUNITY",
-  CHANGE_LIST_NAME: "CHANGE_LIST_NAME",
-  CLOSE_CURRENT_LIST: "CLOSE_CURRENT_LIST",
-  LOAD_ID_NAME_PAIRS: "LOAD_ID_NAME_PAIRS",
-  MARK_LIST_FOR_DELETION: "MARK_LIST_FOR_DELETION",
-  UNMARK_LIST_FOR_DELETION: "UNMARK_LIST_FOR_DELETION",
-  SET_CURRENT_LIST: "SET_CURRENT_LIST",
-  SET_ITEM_EDIT_ACTIVE: "SET_ITEM_EDIT_ACTIVE",
-  SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
-  SET_IS_GUEST: "SET_IS_GUEST",
-  SET_CURRENT_LISTS: "SET_CURRENT_LISTS",
-  SET_LIST_VIEW: "SET_LIST_VIEW",
-  SET_SORT: "SET_SORT",
-  //For testing purpose only
-  DELETE_COMMUNITY: "DELETE_COMMUNITY"
+  GET_COMMUNITYLIST: "GET_COMMUNITYLIST",
+  UPDATE_COMMUNITYLIST: "UPDATE_COMMUNITYLIST",
+  RESET: "RESET"
 };
 
 function GlobalCommunityContextProvider(props) {
@@ -52,7 +41,6 @@ function GlobalCommunityContextProvider(props) {
   const history = useHistory();
 
   const { auth } = useContext(AuthContext);
-  console.log("auth: " + auth);
 
   const communityReducer = (action) => {
     const { type, payload } = action;
@@ -63,8 +51,20 @@ function GlobalCommunityContextProvider(props) {
           currentCommunity: payload
         });
       }
+      case GlobalCommunityActionType.GET_COMMUNITYLIST: {
+        return setCommunity({
+          communityList: payload,
+          currentCommunity: null
+        });
+      }
+      case GlobalCommunityActionType.UPDATE_COMMUNITYLIST: {
+        return setCommunity({
+          communityList: payload,
+          currentCommunity: null
+        });
+      }
       //For testing purpose only
-      case GlobalCommunityActionType.DELETE_COMMUNITY: {
+      case GlobalCommunityActionType.RESET: {
         return setCommunity({
           communityList: null,
           currentCommunity: null
@@ -95,29 +95,93 @@ function GlobalCommunityContextProvider(props) {
     }
   };
 
+  community.getCommunities = async function(){
+    try{
+      const response = await api.getCommunityList();
+      console.log("getCommunities response: " + response.data.communityList);
+      if (response.status === 201) {
+        communityReducer({
+          type: GlobalCommunityActionType.GET_COMMUNITYLIST,
+          payload: response.data.communityList,
+        });
+        console.log(community.communityList)
+      } 
+    }catch{
+      console.log("API FAILED TO GET ALL THE COMMUNITIES");
+    }
+  }
+
+  community.reset = function(){
+    communityReducer({
+      type: GlobalCommunityActionType.RESET,
+      payload: community,
+    });
+  }
+  //#region join/leave
+  /* Both Join and Leave function require you to pass an id to the param
+   * @Terran
+   */
+  community.join= async function(id){
+    try{
+      let target = community.communityList.filter(c => c._id === id)
+      let index = community.communityList.indexOf(target)
+      target[0].communityMembers.push(auth.user.username)
+      community.communityList[index]=target[0]
+      //trigger immediate re-render
+      setCommunity({
+        communityList: community.communityList,
+        currentCommunity: null
+      });
+      const response = await api.updateCommunityById(id,target[0]);
+      if (response.status === 201) {
+        console.log("JOIN SUCCESS")
+      } 
+    }catch{
+      console.log("FAILED TO JOIN THE COMMUNITIES");
+    }
+  }
+  community.leave= async function(id){
+    try{
+      let target = community.communityList.filter(c => c._id === id)
+      let index = community.communityList.indexOf(target)
+      target[0].communityMembers = target[0].communityMembers.filter(n => n !== auth.user.username)
+      community.communityList[index]=target[0]
+      //trigger immediate re-render
+      setCommunity({
+        communityList: community.communityList,
+        currentCommunity: null
+      });
+      const response = await api.updateCommunityById(id,target[0]);
+      if (response.status === 201) {
+        console.log("LEAVE SUCCESS")
+      } 
+    }catch{
+      console.log("FAILED TO LEAVE THE COMMUNITIES");
+    }
+  }
+  //#endregion
+
   /* This will probably never make into the app
      just for testing purposes
      -@Terran
   */
   community.deleteCommunity = async function(name){
-    //try{
+    try{
       const response = await api.deleteCommunity(name);
       console.log("deleteCommunity response: " + response);
       if (response.status === 201) {
         communityReducer({
-          type: GlobalCommunityActionType.DELETE_COMMUNITY,
+          type: GlobalCommunityActionType.RESET,
           payload: null,
         });
         history.push("/");
       } 
-    // }catch{
-    //   console.log("API FAILED TO DELETE THE COMMUNITY");
-    // }
+    }catch{
+      console.log("API FAILED TO DELETE THE COMMUNITY");
+    }
   }
 
-  // THESE ARE THE FUNCTIONS THAT WILL UPDATE OUR Community AND
-  // DRIVE THE STATE OF THE APPLICATION. WE'LL CALL THESE IN
-  // RESPONSE TO EVENTS INSIDE OUR COMPONENTS.
+
   return (
     <GlobalCommunityContext.Provider
       value={{

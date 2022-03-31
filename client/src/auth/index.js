@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import api from "./auth-request-api";
+import { GlobalCommunityContext } from "../community";
 
 const AuthContext = createContext();
 console.log("create AuthContext: " + AuthContext);
@@ -23,6 +24,7 @@ function AuthContextProvider(props) {
     isGuest: false
   });
   const history = useHistory();
+  const { community } = useContext(GlobalCommunityContext);
 
   useEffect(() => {
     auth.getLoggedIn();
@@ -151,6 +153,7 @@ function AuthContextProvider(props) {
 
   auth.logoutUser = async function () {
     const response = await api.logoutUser();
+    history.push("/");
     if (response.status === 200) {
       authReducer({
         type: AuthActionType.LOGOUT_USER,
@@ -158,7 +161,6 @@ function AuthContextProvider(props) {
           loggedIn: response.data.loggedIn,
         },
       });
-      history.push("/");
     }
   };
 

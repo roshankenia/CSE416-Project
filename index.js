@@ -25,6 +25,8 @@ const authRouter = require("./routes/auth-router");
 app.use("/auth", authRouter);
 const communityRouter = require("./routes/community-router");
 app.use("/api", communityRouter);
+const gameRouter = require("./routes/game-router");
+app.use("/play", gameRouter);
 
 /* Will not need this in the future @Terran
  const top5listsRouter = require('./routes/top5lists-router')
@@ -51,14 +53,14 @@ var server = app.listen(PORT, function () {
 //websocket server
 
 // const io = require("socket.io")(3000)
-const io = require("socket.io")(8000,{
-  cors: {
-    // origin:["https://cse-416-jart.herokuapp.com"]
-    origin:["http://localhost:3001"]
-  }
-})
+// const io = require("socket.io")(8000,{
+//   cors: {
+//     // origin:["https://cse-416-jart.herokuapp.com"]
+//     origin:["http://localhost:3001"]
+//   }
+// })
 
 
-io.on('connection', (socket) => {
-  console.log("CONNECTION TO WEBSOCKET" + socket.id);
-});
+// io.on('connection', (socket) => {
+//   console.log("CONNECTION TO WEBSOCKET" + socket.id);
+// });

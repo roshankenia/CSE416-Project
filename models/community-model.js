@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
-const Post = require("./post-model");
+const Post = require("./post-model").schema;
 
 const CommunitySchema = new Schema(
     {   

@@ -42,6 +42,14 @@ getGameById = async (req, res) => {
   await Game.find({ lobbyID: req.params.id }, (err, game) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
+    } else if (!game) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Game with that ID found" });
+    } else if (game.length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Game with that ID found" });
     }
     console.log("Found game: " + JSON.stringify(game));
     return res.status(200).json({ success: true, game: game });
@@ -57,22 +65,43 @@ updateGame = async (req, res) => {
     });
   }
 
-  Game.findOne({ _id: req.params.id }, (err, game) => {
+  Game.findOne({ lobbyID: req.params.id }, (err, game) => {
     console.log("Game found: " + JSON.stringify(game));
     if (err) {
       return res.status(404).json({
         err,
         message: "Game not found!",
       });
+    } else if (!game) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Game with that ID found" });
+    } else if (game.length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Game with that ID found" });
     }
-
-    game.uploadedPictures = body.game.uploadedPictures;
-    game.gamemode = body.game.gamemode;
-    game.comic = body.game.comic;
-    game.story = body.game.story;
-    game.lobbyID = body.game.lobbyID;
-    game.chatMessages = body.game.chatMessages;
-    game.communityID = body.game.communityID;
+    if (body.uploadedPictures) {
+      game.uploadedPictures = body.uploadedPictures;
+    }
+    if (body.gamemode) {
+      game.gamemode = body.gamemode;
+    }
+    if (body.comic) {
+      game.comic = body.comic;
+    }
+    if (body.story) {
+      game.story = body.story;
+    }
+    if (body.lobbyID) {
+      game.lobbyID = body.lobbyID;
+    }
+    if (body.chatMessages) {
+      game.chatMessages = body.chatMessages;
+    }
+    if (body.communityID) {
+      game.communityID = body.communityID;
+    }
 
     game
       .save()
@@ -101,8 +130,12 @@ createDefaultImages = (req, res) => {
       errorMessage: "Improperly formatted request",
     });
   }
-
-  const defaultImages = new DefaultImage(body);
+  if (Object.keys(body).length !== 3) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
+  const defaultImages = new DefaultImages(body);
   console.log("creating default images: " + JSON.stringify(defaultImages));
   if (!defaultImages) {
     return res.status(400).json({
@@ -126,11 +159,19 @@ createDefaultImages = (req, res) => {
 };
 
 getDefaultImages = async (req, res) => {
-  await Game.find({}, (err, defaultImages) => {
+  await DefaultImages.find({}, (err, defaultImages) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
+    } else if (!defaultImages) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Default Images created" });
+    } else if (defaultImages.length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Default Images created" });
     }
-    console.log("Found game: " + JSON.stringify(defaultImages));
+    console.log("Found DefaultImages: " + JSON.stringify(defaultImages));
     return res
       .status(200)
       .json({ success: true, defaultImages: defaultImages });
@@ -153,12 +194,26 @@ updateDefaultImages = async (req, res) => {
         err,
         message: "DefaultImages not found!",
       });
+    } else if (!defaultImages) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Default Images created" });
+    } else if (defaultImages.length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Default Images created" });
     }
 
     defaultImages = defaultImages[0];
-    defaultImages.themes = body.defaultImages.themes;
-    defaultImages.characters = body.defaultImages.characters;
-    defaultImages.speechBubbles = body.defaultImages.speechBubbles;
+    if (body.themes) {
+      defaultImages.themes = body.themes;
+    }
+    if (body.characters) {
+      defaultImages.characters = body.characters;
+    }
+    if (body.speechBubbles) {
+      defaultImages.speechBubbles = body.speechBubbles;
+    }
 
     defaultImages
       .save()
@@ -217,6 +272,14 @@ getLobbyById = async (req, res) => {
   await Lobby.find({ lobbyID: req.params.id }, (err, lobby) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
+    } else if (!lobby) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Lobby with that ID found" });
+    } else if (lobby.length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Lobby with that ID found" });
     }
     console.log("Found lobby: " + JSON.stringify(lobby));
     return res.status(200).json({ success: true, lobby: lobby });
@@ -232,21 +295,40 @@ updateLobby = async (req, res) => {
     });
   }
 
-  Lobby.findOne({ _id: req.params.id }, (err, lobby) => {
+  Lobby.findOne({ lobbyID: req.params.id }, (err, lobby) => {
     console.log("Lobby found: " + JSON.stringify(lobby));
     if (err) {
       return res.status(404).json({
         err,
         message: "Lobby not found!",
       });
+    } else if (!lobby) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Lobby with that ID found" });
+    } else if (lobby.length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Lobby with that ID found" });
     }
-
-    lobby.communityID = body.game.communityID;
-    lobby.gamemode = body.game.gamemode;
-    lobby.users = body.game.users;
-    lobby.readyUsers = body.game.readyUsers;
-    lobby.lobbyID = body.game.lobbyID;
-    lobby.numberOfPlayers = body.game.numberOfPlayers;
+    if (body.communityID) {
+      lobby.communityID = body.communityID;
+    }
+    if (body.gamemode) {
+      lobby.gamemode = body.gamemode;
+    }
+    if (body.users) {
+      lobby.users = body.users;
+    }
+    if (body.readyUsers) {
+      lobby.readyUsers = body.readyUsers;
+    }
+    if (body.lobbyID) {
+      lobby.lobbyID = body.lobbyID;
+    }
+    if (body.numberOfPlayers) {
+      lobby.numberOfPlayers = body.numberOfPlayers;
+    }
 
     lobby
       .save()

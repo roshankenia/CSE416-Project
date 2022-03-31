@@ -86,10 +86,36 @@ const HomeScreen = () => {
                           </Box>
   //#endregion *************** delete community module ***************/
 
+  //#region ************* Retrieve community module ***************/
+  /* get all existing communities" 
+   * -@Terran */ 
+  function handleGetCommunities() {
+    community.getCommunities()
+  }
+  let communityCards = "";
+  if (community.communityList) {
+    communityCards = 
+          <List sx={{ width: '90%', left: '5%', bgcolor: 'light-gray' }}>
+          {
+              community.communityList.map((obj) => (
+                  <CommunityCard
+                      key={obj._id}
+                      Obj={obj}
+                  />
+              ))
+          }
+          </List>;
+  }
+  const getCommunitiesRender = <Box>    
+                            <Button variant="outlined" onClick={handleGetCommunities}>Get All Communities</Button>
+                            {communityCards}
+                          </Box>
+  //#endregion *************** delete community module ***************/
   return (
     <Grid container direction={'column'}>
     {createCommunityRender}
     {deleteCommunityRender}
+    {getCommunitiesRender}
     </Grid>
   );
 };
