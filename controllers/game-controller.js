@@ -68,6 +68,10 @@ updateGame = async (req, res) => {
         err,
         message: "Game not found!",
       });
+    } else if (game.length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Game with that ID found" });
     }
     if (body.uploadedPictures) {
       game.uploadedPictures = body.uploadedPictures;
@@ -119,7 +123,7 @@ createDefaultImages = (req, res) => {
     });
   }
   console.log("PRINTING DEFAULT IMAGES");
-  console.log(body.length);
+  console.log(Object.keys(body).length);
   const defaultImages = new DefaultImages(body);
   console.log("creating default images: " + JSON.stringify(defaultImages));
   if (!defaultImages) {
@@ -174,9 +178,15 @@ updateDefaultImages = async (req, res) => {
     }
 
     defaultImages = defaultImages[0];
-    defaultImages.themes = body.defaultImages.themes;
-    defaultImages.characters = body.defaultImages.characters;
-    defaultImages.speechBubbles = body.defaultImages.speechBubbles;
+    if (body.themes) {
+      defaultImages.themes = body.themes;
+    }
+    if (body.characters) {
+      defaultImages.characters = body.characters;
+    }
+    if (body.speechBubbles) {
+      defaultImages.speechBubbles = body.speechBubbles;
+    }
 
     defaultImages
       .save()
@@ -261,6 +271,10 @@ updateLobby = async (req, res) => {
         err,
         message: "Lobby not found!",
       });
+    } else if (lobby.length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, error: "No Lobby with that ID found" });
     }
     if (body.communityID) {
       lobby.communityID = body.game.communityID;
