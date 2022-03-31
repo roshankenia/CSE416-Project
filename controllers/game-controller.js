@@ -159,7 +159,7 @@ createDefaultImages = (req, res) => {
 };
 
 getDefaultImages = async (req, res) => {
-  await Game.find({}, (err, defaultImages) => {
+  await DefaultImages.find({}, (err, defaultImages) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
     } else if (!defaultImages) {
@@ -171,7 +171,7 @@ getDefaultImages = async (req, res) => {
         .status(400)
         .json({ success: false, error: "No Default Images created" });
     }
-    console.log("Found game: " + JSON.stringify(defaultImages));
+    console.log("Found DefaultImages: " + JSON.stringify(defaultImages));
     return res
       .status(200)
       .json({ success: true, defaultImages: defaultImages });
