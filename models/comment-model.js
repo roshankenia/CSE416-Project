@@ -11,10 +11,10 @@ const Reply = new Schema({
 const CommentSchema = new Schema(
     {   
         username: { type: String, required: true },
+        comment: { type: String, required: true},
         likes: { type: [String], required: true },
         dislikes: { type: [String], required: true },
-        authors: {type: [String], required: true},
-        reply: [Reply]
+        reply: { type: [Reply], required: false}
     },
     { timestamps: true },
 )
