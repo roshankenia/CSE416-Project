@@ -417,60 +417,14 @@ updatePost = async (req, res) => {
       postTitle,
       postComic,
       postStory,
-      likeCount,
-      dislikeCount,
+      likes,
+      dislikes,
       comments,
       communityPublished,
       discoveryPublished,
       dateAndTime,
     } = req.body;
     const id = req.params.id;
-    if (!postTitle) {
-      return res.status(400).json({
-        errorMessage: "Missing postTitle parameter",
-      });
-    }
-    if (!postComic && !postStory) {
-      return res.status(400).json({
-        errorMessage: "Missing both postComic and postStory parameter",
-      });
-    }
-    if (!likeCount) {
-      return res.status(400).json({
-        errorMessage: "Missing likeCount parameter",
-      });
-    }
-    if (!dislikeCount) {
-      return res.status(400).json({
-        errorMessage: "Missing dislikeCount parameter",
-      });
-    }
-    if (!comments) {
-      return res.status(400).json({
-        errorMessage: "Missing comments parameter",
-      });
-    }
-    //not sure how boolean values work with this conditional statement
-    if (!communityPublished) {
-      return res.status(400).json({
-        errorMessage: "Missing communityPublished parameter",
-      });
-    }
-    if (!discoveryPublished) {
-      return res.status(400).json({
-        errorMessage: "Missing discoveryPublished parameter",
-      });
-    }
-    if (!dateAndTime) {
-      return res.status(400).json({
-        errorMessage: "Missing dateAndTime parameter",
-      });
-    }
-    if (!id) {
-      return res.status(400).json({
-        errorMessage: "Missing id parameter",
-      });
-    }
 
     Post.findOne({ _id: id }, (err, post) => {
       console.log("Post found: " + JSON.stringify(post));
@@ -481,15 +435,33 @@ updatePost = async (req, res) => {
         });
       }
 
-      post.postTitle = postTitle;
-      post.postComic = postComic;
-      post.postStory = postStory;
-      post.likeCount = likeCount;
-      post.dislikeCount = dislikeCount;
-      post.comments = comments;
-      post.communityPublished = communityPublished;
-      post.discoveryPublished = discoveryPublished;
-      post.dateAndTime = dateAndTime;
+      if (postTitle) {
+        post.postTitle = postTitle;
+      }
+      if (postComic){
+        post.postComic = postComic;
+      }
+      if (postStory) {
+        post.postStory = postStory;
+      }
+      if (likes) {
+        post.likes = likeCount;
+      }
+      if (dislikes) {
+        post.dislikes = dislikeCount;
+      }
+      if (comments) {
+        post.comment = comments;
+      }
+      if (communityPublished) {
+        post.communityPublished = communityPublished;
+      }
+      if (discoveryPublished) {
+        post.discoveryPublished = discoveryPublished;
+      }
+      if (dateAndTime) {
+        post.dateAndTime = dateAndTime;
+      }
 
       post
         .save()
