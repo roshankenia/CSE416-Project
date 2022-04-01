@@ -13,6 +13,7 @@ export const AuthActionType = {
   LOGOUT_USER: "LOGOUT_USER",
   REGISTER_USER: "REGISTER_USER",
   SET_ERROR_MESSAGE: "SET_ERROR_MESSAGE",
+  CHANGE_PASSWORD: "CHANGE_PASSWORD"
 };
 
 function AuthContextProvider(props) {
@@ -68,11 +69,35 @@ function AuthContextProvider(props) {
             errorMessage: payload
           });
       }
+      case AuthActionType.CHANGE_PASSWORD: {
+        return setAuth({
+          user: payload.user,
+          loggedIn: true,
+          errorMessage: auth.errorMessage
+        });
+      }
       default:
         return auth;
     }
   };
   
+  auth.changePassword = function(username, currPassword, newPassword, newPassVerify){
+    try {
+      const response = await api.changePassword(username, currPassword, newPassword, newPassVerify);
+      if (response.status === 200) {
+        authReducer({
+          type: AuthActionType.CHANGE_PASSWORD,
+          payload: {
+            user: response.data.user,
+          },
+        });
+        history.push("/");
+      }
+    } catch (error) {
+      console.log(error.response.data.errorMessage);
+      //auth.setErrorMessage(error.response.data.errorMessage);
+    }
+  }
 
   auth.setErrorMessage = function(message){
     authReducer({
@@ -157,10 +182,7 @@ function AuthContextProvider(props) {
     if (response.status === 200) {
       authReducer({
         type: AuthActionType.LOGOUT_USER,
-        payload: {
-          loggedIn: response.data.loggedIn,
-          user: response.data.user,
-        },
+        payload: null
       });
     }
   };
@@ -174,6 +196,8 @@ function AuthContextProvider(props) {
     console.log("user initials: " + initials);
     return initials;
   };
+
+  
 
   return (
     <AuthContext.Provider

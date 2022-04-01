@@ -51,7 +51,14 @@ export const registerUser = (
 };
 
 // @Jeff Hu front end request auth apis TO DO
-// export const changePassword = (username, currPassword, newPassword, newPassVerify) => api.get('/changePassword/');
+export const changePassword = (username, currentPassword, newPassword, newPassVerify) => {
+  return api.post('/changePassword/',{
+    username: username,
+    currentPassword: currentPassword,
+    newPassword: newPassword,
+    newPassVerify: newPassVerify
+  });
+};
 // export const resetPassword = (email) => api.get('/resetPassword/');
 // export const deleteAccount = (username, password) => api.get('/deleteAccount/');
 
@@ -60,6 +67,7 @@ const apis = {
   registerUser,
   loginUser,
   logoutUser,
+  changePassword,
   // ,
   // changePassword,
   // resetPassword,
