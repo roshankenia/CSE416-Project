@@ -238,7 +238,7 @@ changePassword = async (req, res) => {
     console.log("passwordHash: " + newPasswordHash);
 
     // ***I'm not sure if this is the proper way to set the new password hash
-    currentUser.set({passwordHash: newPasswordHash});
+    currentUser.passwordHash = newPasswordHash;
     await currentUser.save();
 
     res
