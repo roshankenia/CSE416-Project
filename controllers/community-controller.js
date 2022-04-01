@@ -164,6 +164,11 @@ createStory = async (req, res) => {
       errorMessage: "Improperly formatted request",
     });
   }
+  if (Object.keys(body).length !== 3) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
 
   const story = new Story(body);
   console.log("creating story: " + JSON.stringify(story));
@@ -223,6 +228,11 @@ deleteStory = async (req, res) => {
 createComic = async (req, res) => {
   const body = req.body;
   if (!body) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
+  if (Object.keys(body).length !== 3) {
     return res.status(400).json({
       errorMessage: "Improperly formatted request",
     });
