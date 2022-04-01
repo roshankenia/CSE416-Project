@@ -32,7 +32,7 @@ export const updateCommunityById = (id, community) => {
   return api.put(`/community/${id}`, {
     community: community
   })
-}
+};
 
 export const deleteCommunity = (name) => {
   return api.post(`/deletecommunity`, {

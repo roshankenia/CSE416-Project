@@ -491,6 +491,38 @@ updatePost = async (req, res) => {
 //#region comment
 createComment = async (req, res) => {
   try {
+    const body = req.body;
+    if (!body) {
+      return res.status(400).json({
+        errorMessage: "Improperly formatted request",
+      });
+    }
+    if (Object.keys(body).length < 4) {
+      return res.status(400).json({
+        errorMessage: "Improperly formatted request",
+      });
+    }
+    const comment = new Comment(body);
+    console.log("creating comment: " + JSON.stringify(comment));
+    if (!comment) {
+      return res.status(400).json({
+        errorMessage: "Improperly formatted request",
+      });
+    }
+
+    comment
+      .save()
+      .then(() => {
+        return res.status(200).json({
+          comment: comment,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        return res.status(400).json({
+          errorMessage: "Comment Not Created!",
+        });
+      });
   } catch (err) {
     console.error(err);
     res.status(500).send();
