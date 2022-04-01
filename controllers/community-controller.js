@@ -630,8 +630,18 @@ updateComment = async (req, res) => {
 };
 //#endregion comment
 
-searchCommunity = async (req, res) => {
+searchCommunityByName = async (req, res) => {
   try {
+    const name = req.params.name;
+    console.log("Finding Community with name: " + JSON.stringify(id));
+
+    await Community.find({ communityName : name }, (err, community) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+      console.log("Found community: " + JSON.stringify(community));
+      return res.status(200).json({ success: true, communityList: community });
+    }).catch((err) => console.log(err));
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -659,5 +669,5 @@ module.exports = {
   createComment,
   getCommentById,
   updateComment,
-  searchCommunity,
+  searchCommunityByName,
 };

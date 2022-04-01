@@ -61,7 +61,7 @@ router.get("/comment/:id", auth.verify, CommunityController.getCommentById);
 router.put("/comment/:id", auth.verify, CommunityController.updateComment);
 
 //handles a search community request
-router.get("/community/", auth.verify, CommunityController.searchCommunity);
+router.get("/community/?name=:name", auth.verify, CommunityController.searchCommunityByName);
 
 //for testing purpose only
 router.post(
