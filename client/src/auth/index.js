@@ -14,7 +14,8 @@ export const AuthActionType = {
   REGISTER_USER: "REGISTER_USER",
   SET_ERROR_MESSAGE: "SET_ERROR_MESSAGE",
   CHANGE_PASSWORD: "CHANGE_PASSWORD",
-  RESET_PASSWORD: "RESET_PASSWORD"
+  RESET_PASSWORD: "RESET_PASSWORD",
+  DELETE_ACCOUNT: "DELETE_ACCOUNT"
 };
 
 function AuthContextProvider(props) {
@@ -84,10 +85,36 @@ function AuthContextProvider(props) {
           errorMessage: auth.errorMessage
         });
       }
+      case AuthActionType.DELETE_ACCOUNT: {
+        return setAuth({
+          user: payload.user,
+          loggedIn: false,
+          errorMessage: auth.errorMessage
+        });
+      }
       default:
         return auth;
     }
   };
+
+  auth.deleteAccount = function(username, password){
+    try {
+      const response = api.deleteAccount(username, password);
+      if (response.status === 200) {
+        authReducer({
+          type: AuthActionType.DELETE_ACCOUNT,
+          payload: {
+            user: response.data.user,
+          },
+        });
+        history.push("/");
+      }
+    } catch (error) {
+      console.log(error.response.data.errorMessage);
+      //auth.setErrorMessage(error.response.data.errorMessage);
+    }
+  }
+
 
   auth.resetPassword = function(email){
     try {

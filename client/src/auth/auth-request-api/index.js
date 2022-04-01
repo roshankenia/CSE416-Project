@@ -65,7 +65,12 @@ export const resetPassword = (email) => {
   });
 };
 
-// export const deleteAccount = (username, password) => api.get('/deleteAccount/');
+export const deleteAccount = (username, password) => {
+  return api.post('/deleteAccount/',{
+    username: username,
+    password: password
+  });
+}
 
 const apis = {
   getLoggedIn,
@@ -73,7 +78,8 @@ const apis = {
   loginUser,
   logoutUser,
   changePassword,
-  resetPassword
+  resetPassword,
+  deleteAccount
   // ,
   // changePassword,
   // resetPassword,
