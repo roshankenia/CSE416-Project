@@ -707,7 +707,7 @@ searchPostByTitle = async (req, res) => {
     const title =  req.params.title;
     console.log("Finding Post with title: " + title);
 
-    await Post.find({ postTitle : { "$regex": title, "$options": "i" } }, (err, post) => {
+    await Post.find({ postTitle : { "$regex": title, "$options": "i" }, $or:[ {communityPublished : true} , {discoveryPublished:true}] }, (err, post) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
