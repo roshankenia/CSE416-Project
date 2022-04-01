@@ -21,14 +21,20 @@ router.post("/story", auth.verify, CommunityController.createStory);
 //handles a get story request
 router.get("/story/:id", auth.verify, CommunityController.getStoryById);
 
+//handles update story request
+router.put("/story/:id", auth.verify, CommunityController.updateStoryById);
+
 //handles a delete story request
-router.delete("/story/:id", auth.verify, CommunityController.deleteCommunity);
+router.delete("/story/:id", auth.verify, CommunityController.deleteStory);
 
 //handles creating a new comic in database request
 router.post("/comic", auth.verify, CommunityController.createComic);
 
 //handles a get comic request
 router.get("/comic/:id", auth.verify, CommunityController.getComicById);
+
+//handles update story request
+router.put("/comic/:id", auth.verify, CommunityController.updateComicById);
 
 //handles a delete comic request
 router.delete("/comic/:id", auth.verify, CommunityController.deleteComic);

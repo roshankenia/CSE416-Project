@@ -3,7 +3,6 @@ const Schema = mongoose.Schema
 //const Comment = require("./comment-model").schema;
 
 const Reply = new Schema({
-    commentID: { type: String, required: true },
     username: { type: String, required: true },
     likes: { type: [String], required: true },
     dislikes: { type: [String], required: true }
@@ -11,7 +10,6 @@ const Reply = new Schema({
 
 const CommentSchema = new Schema(
     {   
-        commentID: { type: String, required: true },
         username: { type: String, required: true },
         likes: { type: [String], required: true },
         dislikes: { type: [String], required: true },

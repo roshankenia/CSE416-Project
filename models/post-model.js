@@ -7,7 +7,6 @@ const Comment = require("./comment-model").schema;
 
 const PostSchema = new Schema(
     {   
-        postID: { type: String, required: true },
         postTitle: { type: String, required: true },
         postComic: {type: mongoose.Schema.Types.ObjectId, ref: 'Comic', required: false},
         postStory: {type: mongoose.Schema.Types.ObjectId, ref: 'Story', required: false},
