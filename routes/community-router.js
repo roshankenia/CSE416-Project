@@ -25,7 +25,7 @@ router.get("/story/:id", auth.verify, CommunityController.getStoryById);
 router.put("/story/:id", auth.verify, CommunityController.updateStoryById);
 
 //handles a delete story request
-router.delete("/story/:id", auth.verify, CommunityController.deleteStory);
+router.delete("/story/:id", auth.verify, CommunityController.deleteStoryById);
 
 //handles creating a new comic in database request
 router.post("/comic", auth.verify, CommunityController.createComic);
@@ -37,7 +37,7 @@ router.get("/comic/:id", auth.verify, CommunityController.getComicById);
 router.put("/comic/:id", auth.verify, CommunityController.updateComicById);
 
 //handles a delete comic request
-router.delete("/comic/:id", auth.verify, CommunityController.deleteComic);
+router.delete("/comic/:id", auth.verify, CommunityController.deleteComicById);
 
 //handles creating a new post in database request
 router.post("/post", auth.verify, CommunityController.createPost);
@@ -47,6 +47,9 @@ router.get("/post/:id", auth.verify, CommunityController.getPostById);
 
 //handles an update post request
 router.put("/post/:id", auth.verify, CommunityController.updatePost);
+
+//handles a delete post request
+router.delete("/post/:id", auth.verify, CommunityController.deletePostById);
 
 //handles creating a new comment in database request
 router.post("/comment", auth.verify, CommunityController.createComment);

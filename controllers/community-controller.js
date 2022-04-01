@@ -250,8 +250,24 @@ updateStoryById = async (req, res) => {
   }
 };
 
-deleteStory = async (req, res) => {
+deleteStoryById = async (req, res) => {
   try {
+    await Story.findOneAndDelete(
+      { _id : req.params.id },
+      function (err, story) {
+        if (err) {
+          console.log(err);
+          return res.status(400).json({
+            errorMessage: "Story Not Deleted!",
+          });
+        } else {
+          console.log("Deleted : ", story);
+          return res.status(201).json({
+            Message: "Story Successfully Deleted!",
+          });
+        }
+      }
+    );
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -348,8 +364,24 @@ getComicById = async (req, res) => {
   }
 };
 
-deleteComic = async (req, res) => {
+deleteComicById = async (req, res) => {
   try {
+    await Comic.findOneAndDelete(
+      { _id : req.params.id },
+      function (err, comic) {
+        if (err) {
+          console.log(err);
+          return res.status(400).json({
+            errorMessage: "Comic Not Deleted!",
+          });
+        } else {
+          console.log("Deleted : ", comic);
+          return res.status(201).json({
+            Message: "Comic Successfully Deleted!",
+          });
+        }
+      }
+    );
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -481,6 +513,30 @@ updatePost = async (req, res) => {
           });
         });
     });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
+deletePostById = async (req, res) => {
+  try {
+    await Post.findOneAndDelete(
+      { _id : req.params.id },
+      function (err, post) {
+        if (err) {
+          console.log(err);
+          return res.status(400).json({
+            errorMessage: "Post Not Deleted!",
+          });
+        } else {
+          console.log("Deleted : ", post);
+          return res.status(201).json({
+            Message: "Post Successfully Deleted!",
+          });
+        }
+      }
+    );
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -622,15 +678,16 @@ module.exports = {
   getCommunityById,
   createStory,
   getStoryById,
-  deleteStory,
+  deleteStoryById,
   updateStoryById,
   createComic,
   getComicById,
   updateComicById,
-  deleteComic,
+  deleteComicById,
   createPost,
   getPostById,
   updatePost,
+  deletePostById,
   createComment,
   getCommentById,
   updateComment,
