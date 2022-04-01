@@ -186,6 +186,11 @@ updateDefaultImages = async (req, res) => {
       error: "You must provide a body to update",
     });
   }
+  if (Object.keys(body).length !== 3) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
 
   DefaultImages.find({}, (err, defaultImages) => {
     console.log("defaultImages found: " + JSON.stringify(defaultImages));
