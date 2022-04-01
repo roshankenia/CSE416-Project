@@ -430,14 +430,9 @@ updatePost = async (req, res) => {
         errorMessage: "Missing postTitle parameter",
       });
     }
-    if (!postComic) {
+    if (!postComic && !postStory) {
       return res.status(400).json({
-        errorMessage: "Missing postComic parameter",
-      });
-    }
-    if (!postStory) {
-      return res.status(400).json({
-        errorMessage: "Missing postStory parameter",
+        errorMessage: "Missing both postComic and postStory parameter",
       });
     }
     if (!likeCount) {
