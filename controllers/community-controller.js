@@ -300,7 +300,7 @@ createPost = async (req, res) => {
       errorMessage: "Improperly formatted request",
     });
   }
-  if (Object.keys(body).length >= 7) {
+  if (Object.keys(body).length < 7) {
     return res.status(400).json({
       errorMessage: "Improperly formatted request",
     });
