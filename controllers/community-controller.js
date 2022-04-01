@@ -664,7 +664,7 @@ updateComment = async (req, res) => {
 
 searchCommunityByName = async (req, res) => {
   try {
-    const name = req.params.name;
+    const name =  req.query.name;
     console.log("Finding Community with name: " + JSON.stringify(id));
 
     await Community.find({ communityName : { "$regex": name, "$options": "i" } }, (err, community) => {
