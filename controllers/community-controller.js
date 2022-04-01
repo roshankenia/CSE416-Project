@@ -76,11 +76,6 @@ getCommunityList = async (req, res) => {
 updateCommunityById = async (req, res) => {
   try {
     const id = req.params.id;
-    if (!id) {
-      return res.status(400).json({
-        errorMessage: "Missing id parameter",
-      });
-    }
     await Community.findOne({ _id: id }, (err, community) => {
       console.log("Community found: " + JSON.stringify(community));
       if (err) {
@@ -221,6 +216,40 @@ getStoryById = async (req, res) => {
   }
 };
 
+updateStoryById = async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
+  try {
+    const id = req.params.id;
+    await Story.findOne({ _id: id }, (err, story) => {
+      console.log("Story found: " + JSON.stringify(story));
+      if (err) {
+        return res.status(404).json({
+          success: false,
+          message: "Story not found!",
+        });
+      }
+      story.authors = req.body.story.authors;
+      story.panels = req.body.story.panels;
+
+      story.save().then(() => {
+        return res.status(200).json({
+          success: true,
+          story: story,
+          message: "Story updated!",
+        });
+      });
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
 deleteStory = async (req, res) => {
   try {
   } catch (err) {
@@ -268,39 +297,37 @@ createComic = async (req, res) => {
 };
 
 updateComicById = async (req, res) => {
-  // const body = req.body;
-  // if (!body) {
-  //   return res.status(400).json({
-  //     errorMessage: "Improperly formatted request",
-  //   });
-  // }
-  // if (Object.keys(body).length !== 3) {
-  //   return res.status(400).json({
-  //     errorMessage: "Improperly formatted request",
-  //   });
-  // }
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
+  try {
+    const id = req.params.id;
+    await Comic.findOne({ _id: id }, (err, comic) => {
+      console.log("Comic found: " + JSON.stringify(comic));
+      if (err) {
+        return res.status(404).json({
+          success: false,
+          message: "Comic not found!",
+        });
+      }
+      comic.authors = req.body.comic.authors;
+      comic.panels = req.body.comic.panels;
 
-  // const comic = new Comic(body);
-  // console.log("creating comic: " + JSON.stringify(comic));
-  // if (!comic) {
-  //   return res.status(400).json({
-  //     errorMessage: "Improperly formatted request",
-  //   });
-  // }
-
-  // comic
-  //   .save()
-  //   .then(() => {
-  //     return res.status(200).json({
-  //       comic: comic,
-  //     });
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //     return res.status(400).json({
-  //       errorMessage: "Comic Not Created!",
-  //     });
-  //   });
+      comic.save().then(() => {
+        return res.status(200).json({
+          success: true,
+          comic: comic,
+          message: "Comic updated!",
+        });
+      });
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
 };
 
 getComicById = async (req, res) => {
@@ -592,14 +619,15 @@ module.exports = {
   createCommunity,
   getCommunityList,
   updateCommunityById,
-  //for testing purpose only
   deleteCommunity,
   getCommunityById,
   createStory,
   getStoryById,
   deleteStory,
+  updateStoryById,
   createComic,
   getComicById,
+  updateComicById,
   deleteComic,
   createPost,
   getPostById,
