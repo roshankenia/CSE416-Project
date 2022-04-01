@@ -104,7 +104,7 @@ logoutUser = async (req, res) => {
 
 registerUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, passwordVerify, username } =
+    const { firstName, lastName, email, password, passwordVerify, username, guest } =
       req.body;
     console.log(
       "create user: " +
@@ -160,6 +160,7 @@ registerUser = async (req, res) => {
     console.log("passwordHash: " + passwordHash);
 
     const newUser = new User({
+      guest,
       firstName,
       lastName,
       email,
