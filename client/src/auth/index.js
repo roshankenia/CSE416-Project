@@ -83,7 +83,7 @@ function AuthContextProvider(props) {
   
   auth.changePassword = function(username, currPassword, newPassword, newPassVerify){
     try {
-      const response = await api.changePassword(username, currPassword, newPassword, newPassVerify);
+      const response = api.changePassword(username, currPassword, newPassword, newPassVerify);
       if (response.status === 200) {
         authReducer({
           type: AuthActionType.CHANGE_PASSWORD,
