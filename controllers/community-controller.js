@@ -149,9 +149,9 @@ getCommunityById = async (req, res) => {
         errorMessage: "Missing id parameter",
       });
     }
-    console.log("Find Community with id: " + JSON.stringify(id));
+    console.log("Finding Community with id: " + JSON.stringify(id));
 
-    await Community.find({ communityID: id }, (err, community) => {
+    await Community.find({ _id : id }, (err, community) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
