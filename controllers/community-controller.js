@@ -115,7 +115,7 @@ getCommunityById = async (req, res) => {
     const id = req.params.id;
     console.log("Finding Community with id: " + JSON.stringify(id));
 
-    await Community.find({ _id : id }, (err, community) => {
+    await Community.findOne({ _id : id }, (err, community) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
@@ -203,7 +203,7 @@ getStoryById = async (req, res) => {
     }
     console.log("Find Story with id: " + JSON.stringify(id));
 
-    await Story.find({ _id: id }, (err, story) => {
+    await Story.findOne({ _id: id }, (err, story) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
@@ -335,7 +335,7 @@ getComicById = async (req, res) => {
     const id = req.params.id;
     console.log("Find Comic with id: " + JSON.stringify(id));
 
-    await Comic.find({ _id: id }, (err, comic) => {
+    await Comic.findOne({ _id: id }, (err, comic) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
@@ -398,7 +398,7 @@ getPostById = async (req, res) => {
     const id = req.params.id;
     console.log("Find Post with id: " + JSON.stringify(id));
 
-    await Post.find({ _id: id }, (err, post) => {
+    await Post.findOne({ _id: id }, (err, post) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
