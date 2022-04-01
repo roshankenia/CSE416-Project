@@ -6,7 +6,7 @@ getLoggedIn = async (req, res) => {
   try {
     let userId = auth.verifyUser(req);
     if (!userId) {
-      return res.status(200).json({
+      return res.status(400).json({
         loggedIn: false,
         user: null,
         errorMessage: "?",
