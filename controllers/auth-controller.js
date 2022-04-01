@@ -315,7 +315,7 @@ deleteAccount = async (req, res) => {
       }
   
       // Checking to see if user entered their correct current password
-      console.log("provided verification password: " + currPassword);
+      console.log("provided verification password: " + password);
       const passwordCorrect = await bcrypt.compare(
         password,
         currentUser.passwordHash
