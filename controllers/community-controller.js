@@ -294,11 +294,38 @@ deleteComic = async (req, res) => {
 };
 
 createPost = async (req, res) => {
-  try {
-  } catch (err) {
-    console.error(err);
-    res.status(500).send();
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
   }
+  if (Object.keys(body).length >= 7) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
+  const post = new Post(body);
+  console.log("creating post: " + JSON.stringify(post));
+  if (!post) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
+
+  post
+    .save()
+    .then(() => {
+      return res.status(200).json({
+        post: post,
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+      return res.status(400).json({
+        errorMessage: "Post Not Created!",
+      });
+    });
 };
 
 // @Jeff Hu copied getGameByID method from game-controller
