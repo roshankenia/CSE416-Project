@@ -76,7 +76,7 @@ updateCommunityById = async (req, res) => {
       community.communityName = req.body.community.communityName;
       // this line check if user already in the community
       if (req.body.community.communityMembers.length !== new Set(req.body.community.communityMembers).size) {
-        return res.status(201).json({
+        return res.status(401).json({
           success: false,
           message: "User is already in the community!",
         });
