@@ -144,11 +144,6 @@ deleteCommunity = async (req, res) => {
 getCommunityById = async (req, res) => {
   try {
     const id = req.params.id;
-    if (!id) {
-      return res.status(400).json({
-        errorMessage: "Missing id parameter",
-      });
-    }
     console.log("Finding Community with id: " + JSON.stringify(id));
 
     await Community.find({ _id : id }, (err, community) => {
@@ -272,11 +267,6 @@ createComic = async (req, res) => {
 getComicById = async (req, res) => {
   try {
     const id = req.params.id;
-    if (!id) {
-      return res.status(400).json({
-        errorMessage: "Missing id parameter",
-      });
-    }
     console.log("Find Comic with id: " + JSON.stringify(id));
 
     await Comic.find({ comicID: id }, (err, comic) => {
@@ -339,11 +329,6 @@ createPost = async (req, res) => {
 getPostById = async (req, res) => {
   try {
     const id = req.params.id;
-    if (!id) {
-      return res.status(400).json({
-        errorMessage: "Missing id parameter",
-      });
-    }
     console.log("Find Post with id: " + JSON.stringify(id));
 
     await Post.find({ postID: id }, (err, post) => {
@@ -481,11 +466,6 @@ createComment = async (req, res) => {
 getCommentById = async (req, res) => {
   try {
     const id = req.params.id;
-    if (!id) {
-      return res.status(400).json({
-        errorMessage: "Missing id parameter",
-      });
-    }
     console.log("Find Comment with id: " + JSON.stringify(id));
 
     await Comment.find({ commentID: id }, (err, comment) => {
