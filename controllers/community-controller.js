@@ -71,7 +71,7 @@ getCommunityList = async (req, res) => {
   }).catch((err) => console.log(err));
 };
 
-//not front-end payload for the next 3
+//no front-end payloads for the next 3
 //very resource intensive, not scalable
 updateCommunityById = async (req, res) => {
   try {
@@ -132,28 +132,33 @@ getCommunityById = async (req, res) => {
 
 // For testing purpose only
 deleteCommunity = async (req, res) => {
-  const body = req.body;
-  if (!body) {
-    return res.status(400).json({
-      errorMessage: "Improperly formatted request",
-    });
-  }
-  await Community.findOneAndDelete(
-    { communityName: body.communityName },
-    function (err, docs) {
-      if (err) {
-        console.log(err);
-        return res.status(400).json({
-          errorMessage: "Community Not Deleted!",
-        });
-      } else {
-        console.log("Deleted : ", docs);
-        return res.status(201).json({
-          Message: "Community Successfully Deleted!",
-        });
-      }
+  try {
+    const body = req.body;
+    if (!body) {
+      return res.status(400).json({
+        errorMessage: "Improperly formatted request",
+      });
     }
-  );
+    await Community.findOneAndDelete(
+      { communityName: body.communityName },
+      function (err, docs) {
+        if (err) {
+          console.log(err);
+          return res.status(400).json({
+            errorMessage: "Community Not Deleted!",
+          });
+        } else {
+          console.log("Deleted : ", docs);
+          return res.status(201).json({
+            Message: "Community Successfully Deleted!",
+          });
+        }
+      }
+    );
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
 };
 
 //#endregion community
