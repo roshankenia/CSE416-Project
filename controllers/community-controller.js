@@ -469,7 +469,7 @@ updatePost = async (req, res) => {
           console.log("SUCCESS!!!");
           return res.status(200).json({
             success: true,
-            id: post.postID,
+            post: post,
             message: "Post updated!",
           });
         })
