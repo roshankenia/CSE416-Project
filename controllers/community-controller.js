@@ -1,59 +1,65 @@
 const Community = require("../models/community-model");
 const User = require("../models/user-model");
+const Comic = require("../models/comic-model");
+const Story = require("../models/story-model");
+const Comment = require("../models/comment-model");
+const Post = require("../models/post-model");
 
 //#region front-end payload: response.data.community
 createCommunity = async (req, res) => {
-    const body = req.body;
-    if (!body) {
-      return res.status(400).json({
-        errorMessage: "Improperly formatted request",
-      });
-    }
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
 
-    //check for duplicate community
-    await Community.find({ communityName: body.communityName}, function (err, docs) {
-      if (err){
-          console.log(err);
+  //check for duplicate community
+  await Community.find(
+    { communityName: body.communityName },
+    function (err, docs) {
+      if (err) {
+        console.log(err);
+        return res.status(400).json({
+          errorMessage: err,
+        });
+      } else if (docs.length != 0) {
+        console.log("Duplicate communities found! : ", docs);
+        return res.status(400).json({
+          errorMessage: "A community with the same name already exists!",
+        });
+      } else {
+        //create new community
+        const community = new Community(body);
+        console.log("creating community: " + JSON.stringify(community));
+        if (!community) {
           return res.status(400).json({
-            errorMessage: err,
+            errorMessage: "Improperly formatted request",
+          });
+        }
+        community
+          .save()
+          .then(() => {
+            return res.status(201).json({
+              community: community,
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+            return res.status(400).json({
+              errorMessage: "Community Not Created!",
+            });
           });
       }
-      else if(docs.length != 0){
-          console.log("Duplicate communities found! : ", docs);
-          return res.status(400).json({
-            errorMessage: "A community with the same name already exists!",
-          });
-      }else{
-          //create new community
-          const community = new Community(body);
-          console.log("creating community: " + JSON.stringify(community));
-          if (!community) {
-            return res.status(400).json({
-              errorMessage: "Improperly formatted request",
-            });
-          }
-          community
-            .save()
-            .then(() => {
-              return res.status(201).json({
-                community: community,
-              });
-            })
-            .catch((error) => {
-              console.log(error);
-              return res.status(400).json({
-                errorMessage: "Community Not Created!",
-              });
-            });
-        }
-    });    
-  };
+    }
+  );
+};
 
-  //very resource intensive, not scalable
+//very resource intensive, not scalable
 updateCommunityById = async (req, res) => {
-  try{
+  try {
     const id = req.params.id;
-    if (!id){
+    if (!id) {
       return res.status(400).json({
         errorMessage: "Missing id parameter",
       });
@@ -66,39 +72,40 @@ updateCommunityById = async (req, res) => {
           message: "Community not found!",
         });
       }
-  
-      community.communityName = req.body.community.communityName
-      community.communityMembers = req.body.community.communityMembers
-      community.communityPosts = req.body.community.communityPosts
 
-      community.save().then(()=>{
-      return res.status(201).json({
-        success: true,
-        community: community,
-        message: "Community updated!",
-      });})
+      community.communityName = req.body.community.communityName;
+      community.communityMembers = req.body.community.communityMembers;
+      community.communityPosts = req.body.community.communityPosts;
+
+      community.save().then(() => {
+        return res.status(201).json({
+          success: true,
+          community: community,
+          message: "Community updated!",
+        });
+      });
     });
-  } catch (err){
+  } catch (err) {
     console.error(err);
     res.status(500).send();
   }
-}
+};
 //#endregion
 
 //front-end payload: response.data.communityList
-getCommunityList = async (req, res) =>{
+getCommunityList = async (req, res) => {
   await Community.find({}, (err, communities) => {
     if (err) {
-        return res.status(400).json({ success: false, error: err })
+      return res.status(400).json({ success: false, error: err });
     }
     if (!communities.length) {
-        return res
-            .status(404)
-            .json({ success: false, error: `no communities found` })
+      return res
+        .status(404)
+        .json({ success: false, error: `no communities found` });
     }
-    return res.status(201).json({ success: true, communityList: communities })
-  }).catch(err => console.log(err))
-}
+    return res.status(201).json({ success: true, communityList: communities });
+  }).catch((err) => console.log(err));
+};
 
 // For testing purpose
 deleteCommunity = async (req, res) => {
@@ -108,27 +115,29 @@ deleteCommunity = async (req, res) => {
       errorMessage: "Improperly formatted request",
     });
   }
-  await Community.findOneAndDelete({communityName : body.communityName}, function (err, docs) {
-    if (err){
-        console.log(err)
+  await Community.findOneAndDelete(
+    { communityName: body.communityName },
+    function (err, docs) {
+      if (err) {
+        console.log(err);
         return res.status(400).json({
           errorMessage: "Community Not Deleted!",
         });
-    }
-    else{
+      } else {
         console.log("Deleted : ", docs);
         return res.status(201).json({
           errorMessage: "Community Successfully Deleted!",
         });
+      }
     }
-  })
+  );
 };
 
 // @Jeff Hu copied getGameByID method from game-controller
 getCommunityById = async (req, res) => {
   try {
     const id = req.params.id;
-    if (!id){
+    if (!id) {
       return res.status(400).json({
         errorMessage: "Missing id parameter",
       });
@@ -142,26 +151,48 @@ getCommunityById = async (req, res) => {
       console.log("Found community: " + JSON.stringify(community));
       return res.status(200).json({ success: true, community: community });
     }).catch((err) => console.log(err));
-  } catch (err){
+  } catch (err) {
     console.error(err);
     res.status(500).send();
   }
-}
+};
 
-createStory = async (req, res) =>{
-  try {
-    
-  } catch (err){
-    console.error(err);
-    res.status(500).send();
+createStory = async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
   }
-}
+
+  const story = new Story(body);
+  console.log("creating story: " + JSON.stringify(story));
+  if (!story) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
+
+  story
+    .save()
+    .then(() => {
+      return res.status(200).json({
+        story: story,
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+      return res.status(400).json({
+        errorMessage: "Story Not Created!",
+      });
+    });
+};
 
 // @Jeff Hu copied getGameByID method from game-controller
-getStoryById = async (req, res) =>{
+getStoryById = async (req, res) => {
   try {
     const id = req.params.id;
-    if (!id){
+    if (!id) {
       return res.status(400).json({
         errorMessage: "Missing id parameter",
       });
@@ -175,35 +206,56 @@ getStoryById = async (req, res) =>{
       console.log("Found story: " + JSON.stringify(story));
       return res.status(200).json({ success: true, story: story });
     }).catch((err) => console.log(err));
-  } catch (err){
+  } catch (err) {
     console.error(err);
     res.status(500).send();
   }
-}
+};
 
-deleteStory = async (req, res) =>{
+deleteStory = async (req, res) => {
   try {
-    
-  } catch (err){
+  } catch (err) {
     console.error(err);
     res.status(500).send();
   }
-}
+};
 
-createComic = async (req, res) =>{
-  try {
-    
-  } catch (err){
-    console.error(err);
-    res.status(500).send();
+createComic = async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
   }
-}
+
+  const comic = new Comic(body);
+  console.log("creating comic: " + JSON.stringify(comic));
+  if (!comic) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
+
+  comic
+    .save()
+    .then(() => {
+      return res.status(200).json({
+        comic: comic,
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+      return res.status(400).json({
+        errorMessage: "Comic Not Created!",
+      });
+    });
+};
 
 // @Jeff Hu copied getGameByID method from game-controller
-getComicById = async (req, res) =>{
+getComicById = async (req, res) => {
   try {
     const id = req.params.id;
-    if (!id){
+    if (!id) {
       return res.status(400).json({
         errorMessage: "Missing id parameter",
       });
@@ -217,35 +269,33 @@ getComicById = async (req, res) =>{
       console.log("Found comic: " + JSON.stringify(comic));
       return res.status(200).json({ success: true, comic: comic });
     }).catch((err) => console.log(err));
-  } catch (err){
+  } catch (err) {
     console.error(err);
     res.status(500).send();
   }
-}
+};
 
-deleteComic = async (req, res) =>{
+deleteComic = async (req, res) => {
   try {
-    
-  } catch (err){
+  } catch (err) {
     console.error(err);
     res.status(500).send();
   }
-}
+};
 
-createPost = async (req, res) =>{
+createPost = async (req, res) => {
   try {
-    
-  } catch (err){
+  } catch (err) {
     console.error(err);
     res.status(500).send();
   }
-}
+};
 
 // @Jeff Hu copied getGameByID method from game-controller
-getPostById = async (req, res) =>{
+getPostById = async (req, res) => {
   try {
     const id = req.params.id;
-    if (!id){
+    if (!id) {
       return res.status(400).json({
         errorMessage: "Missing id parameter",
       });
@@ -259,17 +309,26 @@ getPostById = async (req, res) =>{
       console.log("Found post: " + JSON.stringify(post));
       return res.status(200).json({ success: true, post: post });
     }).catch((err) => console.log(err));
-  } catch (err){
+  } catch (err) {
     console.error(err);
     res.status(500).send();
   }
-}
+};
 
 // @Jeff Hu Completed but UNTESTED
-updatePost = async (req, res) =>{
+updatePost = async (req, res) => {
   try {
-    const {postTitle, postComic, postStory, likeCount, dislikeCount, comments, 
-    communityPublished, discoveryPublished, dateAndTime} = req.body;
+    const {
+      postTitle,
+      postComic,
+      postStory,
+      likeCount,
+      dislikeCount,
+      comments,
+      communityPublished,
+      discoveryPublished,
+      dateAndTime,
+    } = req.body;
     const id = req.params.id;
     if (!postTitle) {
       return res.status(400).json({
@@ -317,7 +376,7 @@ updatePost = async (req, res) =>{
         errorMessage: "Missing dateAndTime parameter",
       });
     }
-    if (!id){
+    if (!id) {
       return res.status(400).json({
         errorMessage: "Missing id parameter",
       });
@@ -331,7 +390,7 @@ updatePost = async (req, res) =>{
           message: "Post not found!",
         });
       }
-  
+
       post.postTitle = postTitle;
       post.postComic = postComic;
       post.postStory = postStory;
@@ -341,7 +400,7 @@ updatePost = async (req, res) =>{
       post.communityPublished = communityPublished;
       post.discoveryPublished = discoveryPublished;
       post.dateAndTime = dateAndTime;
-  
+
       post
         .save()
         .then(() => {
@@ -360,26 +419,25 @@ updatePost = async (req, res) =>{
           });
         });
     });
-  } catch (err){
+  } catch (err) {
     console.error(err);
     res.status(500).send();
   }
-}
+};
 
-createComment = async (req, res) =>{
+createComment = async (req, res) => {
   try {
-    
-  } catch (err){
+  } catch (err) {
     console.error(err);
     res.status(500).send();
   }
-}
+};
 
 // @Jeff Hu copied getGameByID method from game-controller
-getCommentById = async (req, res) =>{
+getCommentById = async (req, res) => {
   try {
     const id = req.params.id;
-    if (!id){
+    if (!id) {
       return res.status(400).json({
         errorMessage: "Missing id parameter",
       });
@@ -393,16 +451,16 @@ getCommentById = async (req, res) =>{
       console.log("Found comment: " + JSON.stringify(comment));
       return res.status(200).json({ success: true, comment: comment });
     }).catch((err) => console.log(err));
-  } catch (err){
+  } catch (err) {
     console.error(err);
     res.status(500).send();
   }
-}
+};
 
 // @Jeff Hu Completed but UNTESTED
 // BEWARE!!! Double check what is being passed down in the request, it is possible that we have
-// a naming problem. The object name is comment and the parameter passed down is also comment. 
-updateComment = async (req, res) =>{
+// a naming problem. The object name is comment and the parameter passed down is also comment.
+updateComment = async (req, res) => {
   try {
     const body = req.body;
     const id = req.params.id;
@@ -411,8 +469,8 @@ updateComment = async (req, res) =>{
         errorMessage: "Missing a parameter",
       });
     }
-    
-    if (!id){
+
+    if (!id) {
       return res.status(400).json({
         errorMessage: "Missing id parameter",
       });
@@ -426,12 +484,12 @@ updateComment = async (req, res) =>{
           message: "Comment not found!",
         });
       }
-  
+
       //This line could be wrong here
       comment.comment = body.comment;
       comment.likeCount = body.likeCount;
       comment.dislikeCount = body.dislikeCount;
-  
+
       comment
         .save()
         .then(() => {
@@ -450,40 +508,38 @@ updateComment = async (req, res) =>{
           });
         });
     });
-  } catch (err){
+  } catch (err) {
     console.error(err);
     res.status(500).send();
   }
-}
+};
 
-searchCommunity = async (req, res) =>{
+searchCommunity = async (req, res) => {
   try {
-    
-  } catch (err){
+  } catch (err) {
     console.error(err);
     res.status(500).send();
   }
-}
+};
 
 module.exports = {
-    createCommunity,
-    getCommunityList,
-    updateCommunityById,
-    //for testing purpose only
-    deleteCommunity,
-    getCommunityById,
-    createStory,
-    getStoryById,
-    deleteStory,
-    createComic,
-    getComicById,
-    deleteComic,
-    createPost,
-    getPostById,
-    updatePost,
-    createComment,
-    getCommentById,
-    updateComment,
-    searchCommunity
+  createCommunity,
+  getCommunityList,
+  updateCommunityById,
+  //for testing purpose only
+  deleteCommunity,
+  getCommunityById,
+  createStory,
+  getStoryById,
+  deleteStory,
+  createComic,
+  getComicById,
+  deleteComic,
+  createPost,
+  getPostById,
+  updatePost,
+  createComment,
+  getCommentById,
+  updateComment,
+  searchCommunity,
 };
-  
