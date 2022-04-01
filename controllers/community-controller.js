@@ -634,8 +634,8 @@ updateComment = async (req, res) => {
 
       //This line could be wrong here
       comment.comment = body.comment;
-      comment.likeCount = body.likeCount;
-      comment.dislikeCount = body.dislikeCount;
+      comment.likes = body.likes;
+      comment.dislikes = body.dislikes;
 
       comment
         .save()
