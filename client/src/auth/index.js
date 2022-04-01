@@ -89,9 +89,9 @@ function AuthContextProvider(props) {
     }
   };
 
-  auth.resetPassword = function(){
+  auth.resetPassword = function(email){
     try {
-      const response = api.resetPassword();
+      const response = api.resetPassword(email);
       if (response.status === 200) {
         authReducer({
           type: AuthActionType.RESET_PASSWORD,

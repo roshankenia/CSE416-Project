@@ -59,7 +59,11 @@ export const changePassword = (username, currentPassword, newPassword, newPassVe
     newPassVerify: newPassVerify
   });
 };
-export const resetPassword = (email) => api.post('/resetPassword/');
+export const resetPassword = (email) => {
+  return api.post('/resetPassword/',{
+    email: email
+  });
+};
 
 // export const deleteAccount = (username, password) => api.get('/deleteAccount/');
 
