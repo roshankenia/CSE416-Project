@@ -133,6 +133,10 @@ deleteGameById = async (req, res) => {
           return res.status(400).json({
             errorMessage: "Game Not Deleted!",
           });
+        } else if (!game) {
+          return res.status(400).json({
+            errorMessage: "No game with that ID exists",
+          });
         } else {
           console.log("Deleted : ", game);
           return res.status(201).json({
@@ -156,7 +160,7 @@ createDefaultImages = (req, res) => {
   }
   if (Object.keys(body).length !== 3) {
     return res.status(400).json({
-      errorMessage: "Improperly formatted request",
+      errorMessage: "You did not include all types of DefaultImages",
     });
   }
   const defaultImages = new DefaultImages(body);
@@ -189,11 +193,11 @@ getDefaultImages = async (req, res) => {
     } else if (!defaultImages) {
       return res
         .status(400)
-        .json({ success: false, error: "No Default Images created" });
+        .json({ success: false, error: "No Default Images found" });
     } else if (defaultImages.length === 0) {
       return res
         .status(400)
-        .json({ success: false, error: "No Default Images created" });
+        .json({ success: false, error: "No Default Images found" });
     }
     console.log("Found DefaultImages: " + JSON.stringify(defaultImages));
     return res
@@ -212,7 +216,7 @@ updateDefaultImages = async (req, res) => {
   }
   if (Object.keys(body).length !== 3) {
     return res.status(400).json({
-      errorMessage: "Improperly formatted request",
+      errorMessage: "You did not include all types of DefaultImages",
     });
   }
 
@@ -226,11 +230,11 @@ updateDefaultImages = async (req, res) => {
     } else if (!defaultImages) {
       return res
         .status(400)
-        .json({ success: false, error: "No Default Images created" });
+        .json({ success: false, error: "No Default Images updated" });
     } else if (defaultImages.length === 0) {
       return res
         .status(400)
-        .json({ success: false, error: "No Default Images created" });
+        .json({ success: false, error: "No Default Images updated" });
     }
 
     defaultImages = defaultImages[0];
@@ -389,7 +393,11 @@ deleteLobbyById = async (req, res) => {
           return res.status(400).json({
             errorMessage: "Lobby Not Deleted!",
           });
-        } else {
+        } else if (!lobby) {
+          return res.status(400).json({
+            errorMessage: "No lobby with that ID exists",
+          });
+        }else {
           console.log("Deleted : ", lobby);
           return res.status(201).json({
             Message: "Lobby Successfully Deleted!",
