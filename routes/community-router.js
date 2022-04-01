@@ -22,7 +22,7 @@ router.post("/story", auth.verify, CommunityController.createStory);
 router.get("/story/:id", auth.verify, CommunityController.getStoryById);
 
 //handles a delete story request
-router.delete("/story/:id", auth.verify, CommunityController.deleteCommunity);
+router.delete("/story/:id", auth.verify, CommunityController.deleteStory);
 
 //handles creating a new comic in database request
 router.post("/comic", auth.verify, CommunityController.createComic);

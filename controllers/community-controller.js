@@ -5,7 +5,8 @@ const Story = require("../models/story-model");
 const Comment = require("../models/comment-model");
 const Post = require("../models/post-model");
 
-//#region front-end payload: response.data.community
+//#region community
+//front-end payload: response.data.community
 createCommunity = async (req, res) => {
   const body = req.body;
   if (!body) {
@@ -55,6 +56,22 @@ createCommunity = async (req, res) => {
   );
 };
 
+//front-end payload: response.data.communityList
+getCommunityList = async (req, res) => {
+  await Community.find({}, (err, communities) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    if (!communities.length) {
+      return res
+        .status(404)
+        .json({ success: false, error: `no communities found` });
+    }
+    return res.status(201).json({ success: true, communityList: communities });
+  }).catch((err) => console.log(err));
+};
+
+//not front-end payload for the next 3
 //very resource intensive, not scalable
 updateCommunityById = async (req, res) => {
   try {
@@ -97,24 +114,26 @@ updateCommunityById = async (req, res) => {
     res.status(500).send();
   }
 };
-//#endregion
 
-//front-end payload: response.data.communityList
-getCommunityList = async (req, res) => {
-  await Community.find({}, (err, communities) => {
-    if (err) {
-      return res.status(400).json({ success: false, error: err });
-    }
-    if (!communities.length) {
-      return res
-        .status(404)
-        .json({ success: false, error: `no communities found` });
-    }
-    return res.status(201).json({ success: true, communityList: communities });
-  }).catch((err) => console.log(err));
+getCommunityById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    console.log("Finding Community with id: " + JSON.stringify(id));
+
+    await Community.find({ _id : id }, (err, community) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+      console.log("Found community: " + JSON.stringify(community));
+      return res.status(200).json({ success: true, community: community });
+    }).catch((err) => console.log(err));
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
 };
 
-// For testing purpose
+// For testing purpose only
 deleteCommunity = async (req, res) => {
   const body = req.body;
   if (!body) {
@@ -140,25 +159,9 @@ deleteCommunity = async (req, res) => {
   );
 };
 
-// @Jeff Hu copied getGameByID method from game-controller
-getCommunityById = async (req, res) => {
-  try {
-    const id = req.params.id;
-    console.log("Finding Community with id: " + JSON.stringify(id));
+//#endregion community
 
-    await Community.find({ _id : id }, (err, community) => {
-      if (err) {
-        return res.status(400).json({ success: false, error: err });
-      }
-      console.log("Found community: " + JSON.stringify(community));
-      return res.status(200).json({ success: true, community: community });
-    }).catch((err) => console.log(err));
-  } catch (err) {
-    console.error(err);
-    res.status(500).send();
-  }
-};
-
+//#region story
 createStory = async (req, res) => {
   const body = req.body;
   if (!body) {
@@ -166,7 +169,7 @@ createStory = async (req, res) => {
       errorMessage: "Improperly formatted request",
     });
   }
-  if (Object.keys(body).length !== 3) {
+  if (Object.keys(body).length !== 2) {
     return res.status(400).json({
       errorMessage: "Improperly formatted request",
     });
@@ -195,7 +198,6 @@ createStory = async (req, res) => {
     });
 };
 
-// @Jeff Hu copied getGameByID method from game-controller
 getStoryById = async (req, res) => {
   try {
     const id = req.params.id;
@@ -206,7 +208,7 @@ getStoryById = async (req, res) => {
     }
     console.log("Find Story with id: " + JSON.stringify(id));
 
-    await Story.find({ storyID: id }, (err, story) => {
+    await Story.find({ _id: id }, (err, story) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
@@ -226,7 +228,9 @@ deleteStory = async (req, res) => {
     res.status(500).send();
   }
 };
+//#endregion story
 
+//#region comic
 createComic = async (req, res) => {
   const body = req.body;
   if (!body) {
@@ -234,7 +238,7 @@ createComic = async (req, res) => {
       errorMessage: "Improperly formatted request",
     });
   }
-  if (Object.keys(body).length !== 3) {
+  if (Object.keys(body).length !== 2) {
     return res.status(400).json({
       errorMessage: "Improperly formatted request",
     });
@@ -263,13 +267,48 @@ createComic = async (req, res) => {
     });
 };
 
-// @Jeff Hu copied getGameByID method from game-controller
+updateComicById = async (req, res) => {
+  // const body = req.body;
+  // if (!body) {
+  //   return res.status(400).json({
+  //     errorMessage: "Improperly formatted request",
+  //   });
+  // }
+  // if (Object.keys(body).length !== 3) {
+  //   return res.status(400).json({
+  //     errorMessage: "Improperly formatted request",
+  //   });
+  // }
+
+  // const comic = new Comic(body);
+  // console.log("creating comic: " + JSON.stringify(comic));
+  // if (!comic) {
+  //   return res.status(400).json({
+  //     errorMessage: "Improperly formatted request",
+  //   });
+  // }
+
+  // comic
+  //   .save()
+  //   .then(() => {
+  //     return res.status(200).json({
+  //       comic: comic,
+  //     });
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //     return res.status(400).json({
+  //       errorMessage: "Comic Not Created!",
+  //     });
+  //   });
+};
+
 getComicById = async (req, res) => {
   try {
     const id = req.params.id;
     console.log("Find Comic with id: " + JSON.stringify(id));
 
-    await Comic.find({ comicID: id }, (err, comic) => {
+    await Comic.find({ _id: id }, (err, comic) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
@@ -289,7 +328,9 @@ deleteComic = async (req, res) => {
     res.status(500).send();
   }
 };
+//#endregion story
 
+//#region post
 createPost = async (req, res) => {
   const body = req.body;
   if (!body) {
@@ -297,7 +338,7 @@ createPost = async (req, res) => {
       errorMessage: "Improperly formatted request",
     });
   }
-  if (Object.keys(body).length < 7) {
+  if (Object.keys(body).length < 6) {
     return res.status(400).json({
       errorMessage: "Improperly formatted request",
     });
@@ -325,13 +366,12 @@ createPost = async (req, res) => {
     });
 };
 
-// @Jeff Hu copied getGameByID method from game-controller
 getPostById = async (req, res) => {
   try {
     const id = req.params.id;
     console.log("Find Post with id: " + JSON.stringify(id));
 
-    await Post.find({ postID: id }, (err, post) => {
+    await Post.find({ _id: id }, (err, post) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
@@ -344,7 +384,6 @@ getPostById = async (req, res) => {
   }
 };
 
-// @Jeff Hu Completed but UNTESTED
 updatePost = async (req, res) => {
   try {
     const {
@@ -453,7 +492,9 @@ updatePost = async (req, res) => {
     res.status(500).send();
   }
 };
+//#endregion post
 
+//#region comment
 createComment = async (req, res) => {
   try {
   } catch (err) {
@@ -537,6 +578,7 @@ updateComment = async (req, res) => {
     res.status(500).send();
   }
 };
+//#endregion comment
 
 searchCommunity = async (req, res) => {
   try {

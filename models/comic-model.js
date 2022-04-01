@@ -3,7 +3,6 @@ const Schema = mongoose.Schema
 
 const ComicSchema = new Schema(
     {   
-        comicID: { type: String, required: true },
         authors: {type: [String], required: true},
         panels: {type: [String], required:true}
     },
