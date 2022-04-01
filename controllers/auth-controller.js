@@ -201,7 +201,7 @@ registerUser = async (req, res) => {
 // @Jeff Hu - user knows current password and wants to change their password
 changePassword = async (req, res) => {
   try{
-    const {username, currPassword, newPassword, newPassVerify} = req.body;
+    const {username, currentPassword, newPassword, newPassVerify} = req.body;
 
     const currentUser = await User.findOne({ username: username });
     console.log("currentUser: " + currentUser);
@@ -212,9 +212,9 @@ changePassword = async (req, res) => {
     }
 
     // Checking to see if user entered their correct current password
-    console.log("provided verification password: " + currPassword);
+    console.log("provided verification password: " + currentPassword);
     const passwordCorrect = await bcrypt.compare(
-      currPassword,
+      currentPassword,
       currentUser.passwordHash
     );
     if (!passwordCorrect) {
