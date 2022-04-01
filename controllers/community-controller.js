@@ -643,7 +643,7 @@ updateComment = async (req, res) => {
           console.log("SUCCESS!!!");
           return res.status(200).json({
             success: true,
-            id: comment.commentID,
+            comment: comment,
             message: "Comment updated!",
           });
         })
