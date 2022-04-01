@@ -58,7 +58,10 @@ router.post("/comment", auth.verify, CommunityController.createComment);
 router.get("/comment/:id", auth.verify, CommunityController.getCommentById);
 
 //handles an update comment request
-router.put("/comment/:id", auth.verify, CommunityController.updateComment);
+router.put("/comment/:id", auth.verify, CommunityController.updateCommentById);
+
+//handles a delete post request
+router.delete("/comment/:id", auth.verify, CommunityController.deleteCommentById);
 
 //handles a search community request
 router.get("/searchcommunitybyname/:name", auth.verify, CommunityController.searchCommunityByName);

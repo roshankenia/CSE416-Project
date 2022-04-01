@@ -587,13 +587,12 @@ createComment = async (req, res) => {
   }
 };
 
-// @Jeff Hu copied getGameByID method from game-controller
 getCommentById = async (req, res) => {
   try {
     const id = req.params.id;
     console.log("Find Comment with id: " + JSON.stringify(id));
 
-    await Comment.find({ commentID: id }, (err, comment) => {
+    await Comment.find({ _id : id }, (err, comment) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
@@ -606,25 +605,15 @@ getCommentById = async (req, res) => {
   }
 };
 
-// @Jeff Hu Completed but UNTESTED
-// BEWARE!!! Double check what is being passed down in the request, it is possible that we have
-// a naming problem. The object name is comment and the parameter passed down is also comment.
-updateComment = async (req, res) => {
+updateCommentById = async (req, res) => {
   try {
     const body = req.body;
     const id = req.params.id;
     if (!body) {
       return res.status(400).json({
-        errorMessage: "Missing a parameter",
+        errorMessage: "Missing request body",
       });
     }
-
-    if (!id) {
-      return res.status(400).json({
-        errorMessage: "Missing id parameter",
-      });
-    }
-
     Comment.findOne({ _id: id }, (err, comment) => {
       console.log("Comment found: " + JSON.stringify(comment));
       if (err) {
@@ -635,9 +624,9 @@ updateComment = async (req, res) => {
       }
 
       //This line could be wrong here
-      comment.comment = body.comment;
-      comment.likes = body.likes;
-      comment.dislikes = body.dislikes;
+      comment.comment = body.comment.comment;
+      comment.likes = body.comment.likes;
+      comment.dislikes = body.comment.dislikes;
 
       comment
         .save()
@@ -662,6 +651,31 @@ updateComment = async (req, res) => {
     res.status(500).send();
   }
 };
+
+deleteCommentById = async (req, res) => {
+  try {
+    await Comment.findOneAndDelete(
+      { _id : req.params.id },
+      function (err, comment) {
+        if (err) {
+          console.log(err);
+          return res.status(400).json({
+            errorMessage: "Comment Not Deleted!",
+          });
+        } else {
+          console.log("Deleted : ", comment);
+          return res.status(201).json({
+            Message: "Comment Successfully Deleted!",
+          });
+        }
+      }
+    );
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+}
+
 //#endregion comment
 
 searchCommunityByName = async (req, res) => {
@@ -702,6 +716,7 @@ module.exports = {
   deletePostById,
   createComment,
   getCommentById,
-  updateComment,
+  updateCommentById,
+  deleteCommentById,
   searchCommunityByName,
 };
