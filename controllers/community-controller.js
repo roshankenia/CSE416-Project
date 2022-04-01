@@ -85,7 +85,9 @@ updateCommunityById = async (req, res) => {
         });
       }
 
-      community.communityName = req.body.community.communityName;
+      if(req.body.community.communityName){
+        community.communityName = req.body.community.communityName;
+      }
       // this line check if user already in the community
       if (req.body.community.communityMembers.length !== new Set(req.body.community.communityMembers).size) {
         return res.status(401).json({
