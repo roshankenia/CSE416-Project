@@ -70,7 +70,7 @@ router.get("/searchcommunitybyname/:name", auth.verify, CommunityController.sear
 router.get("/searchpostbytitle/:title", auth.verify, CommunityController.searchPostByTitle);
 
 //handles a search comic request
-router.get("/searchcommicbyauthor/:author", auth.verify, CommunityController.searchComicByAuthor);
+router.get("/searchcomicbyauthor/:author", auth.verify, CommunityController.searchComicByAuthor);
 
 //handles a search story request
 router.get("/searchstorybyauthor/:author", auth.verify, CommunityController.searchStoryByAuthor);
