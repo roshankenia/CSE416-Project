@@ -9,6 +9,9 @@ router.post("/community", auth.verify, CommunityController.createCommunity);
 //handles a get community request
 router.get("/community/:id", auth.verify, CommunityController.getCommunityById);
 
+//handles a get all communities
+router.get("/communitylist", auth.verify, CommunityController.getCommunityList);
+
 //handles an update community request
 router.put("/community/:id", auth.verify, CommunityController.updateCommunityById);
 

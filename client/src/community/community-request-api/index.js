@@ -24,7 +24,7 @@ export const createCommunity = (name, members) => {
 };
 
 export const getCommunityList = () => {
-  return api.get(`/communities`, {
+  return api.get(`/communitylist`, {
   });
 };
 

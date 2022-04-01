@@ -68,12 +68,19 @@ updateCommunityById = async (req, res) => {
       console.log("Community found: " + JSON.stringify(community));
       if (err) {
         return res.status(404).json({
-          err,
+          success: false,
           message: "Community not found!",
         });
       }
 
       community.communityName = req.body.community.communityName;
+      // this line check if user already in the community
+      if (req.body.community.communityMembers.length !== new Set(req.body.community.communityMembers).size) {
+        return res.status(201).json({
+          success: false,
+          message: "User is already in the community!",
+        });
+      }
       community.communityMembers = req.body.community.communityMembers;
       community.communityPosts = req.body.community.communityPosts;
 
@@ -126,7 +133,7 @@ deleteCommunity = async (req, res) => {
       } else {
         console.log("Deleted : ", docs);
         return res.status(201).json({
-          errorMessage: "Community Successfully Deleted!",
+          Message: "Community Successfully Deleted!",
         });
       }
     }
