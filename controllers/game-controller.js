@@ -123,6 +123,30 @@ updateGame = async (req, res) => {
   });
 };
 
+deleteGameById = async (req, res) => {
+  try {
+    await Game.findOneAndDelete(
+      { lobbyID: req.params.id },
+      function (err, game) {
+        if (err) {
+          console.log(err);
+          return res.status(400).json({
+            errorMessage: "Game Not Deleted!",
+          });
+        } else {
+          console.log("Deleted : ", game);
+          return res.status(201).json({
+            Message: "Game Successfully Deleted!",
+          });
+        }
+      }
+    );
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
 createDefaultImages = (req, res) => {
   const body = req.body;
   if (!body) {
@@ -355,14 +379,40 @@ updateLobby = async (req, res) => {
   });
 };
 
+deleteLobbyById = async (req, res) => {
+  try {
+    await Lobby.findOneAndDelete(
+      { lobbyID: req.params.id },
+      function (err, lobby) {
+        if (err) {
+          console.log(err);
+          return res.status(400).json({
+            errorMessage: "Lobby Not Deleted!",
+          });
+        } else {
+          console.log("Deleted : ", lobby);
+          return res.status(201).json({
+            Message: "Lobby Successfully Deleted!",
+          });
+        }
+      }
+    );
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
 module.exports = {
   createGame,
   getGameById,
   updateGame,
+  deleteGameById,
   createDefaultImages,
   getDefaultImages,
   updateDefaultImages,
   createLobby,
   getLobbyById,
   updateLobby,
+  deleteLobbyById,
 };

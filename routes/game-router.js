@@ -12,6 +12,9 @@ router.get('/game/:id', auth.verify, GameController.getGameById);
 //handles an update game request
 router.put('/game/:id', auth.verify, GameController.updateGame);
 
+//handles a delete game request
+router.delete("/game/:id", auth.verify, GameController.deleteGameById);
+
 //handles creating a new lobby in database request
 router.post('/lobby', auth.verify, GameController.createLobby);
 
@@ -20,6 +23,9 @@ router.get('/lobby/:id', auth.verify, GameController.getLobbyById);
 
 //handles an update lobby request
 router.put('/lobby/:id', auth.verify, GameController.updateLobby);
+
+//handles a delete lobby request
+router.delete("/lobby/:id", auth.verify, GameController.deleteLobbyById);
 
 //handles creating a new default images in database request
 router.post('/defaultimages', auth.verify, GameController.createDefaultImages);
