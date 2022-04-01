@@ -329,7 +329,7 @@ deleteAccount = async (req, res) => {
   
     // mongoose finds user by username and deletes user from database
     // not sure if this is the best way to delete from database
-    const deletedUser = await findOneAndDelete({username: username})
+    const deletedUser = await User.findOneAndDelete({username: username})
     if (!deletedUser) {
       return res.status(401).json({
         errorMessage: "Current User's username not found in database and user could not be deleted.",
