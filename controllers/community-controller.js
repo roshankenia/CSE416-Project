@@ -678,6 +678,7 @@ deleteCommentById = async (req, res) => {
 
 //#endregion comment
 
+//#region query
 searchCommunityByName = async (req, res) => {
   try {
     const name =  req.params.name;
@@ -695,6 +696,62 @@ searchCommunityByName = async (req, res) => {
     res.status(500).send();
   }
 };
+
+searchPostByTitle = async (req, res) => {
+  try {
+    const title =  req.params.title;
+    console.log("Finding Post with title: " + title);
+
+    await Post.find({ postTitle : { "$regex": title, "$options": "i" } }, (err, post) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+      console.log("Found post: " + JSON.stringify(post));
+      return res.status(200).json({ success: true, postList: post });
+    }).catch((err) => console.log(err));
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+}
+
+searchComicByAuthor = async (req, res) => {
+  try {
+    const author =  req.params.author;
+    console.log("Finding Comic with title: " + author);
+
+    await Comic.find({ authors : { "$regex": author, "$options": "i" } }, (err, comic) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+      console.log("Found comic: " + JSON.stringify(comic));
+      return res.status(200).json({ success: true, comicList: comic });
+    }).catch((err) => console.log(err));
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+}
+
+searchStoryByAuthor = async (req, res) => {
+  try {
+    const author =  req.params.author;
+    console.log("Finding Comic with title: " + author);
+
+    await Story.find({ authors : { "$regex": author, "$options": "i" } }, (err, story) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+      console.log("Found story: " + JSON.stringify(story));
+      return res.status(200).json({ success: true, storyList: story });
+    }).catch((err) => console.log(err));
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+}
+
+//#endregion query
 
 module.exports = {
   createCommunity,
@@ -719,4 +776,7 @@ module.exports = {
   updateCommentById,
   deleteCommentById,
   searchCommunityByName,
+  searchPostByTitle,
+  searchComicByAuthor,
+  searchStoryByAuthor
 };

@@ -66,6 +66,15 @@ router.delete("/comment/:id", auth.verify, CommunityController.deleteCommentById
 //handles a search community request
 router.get("/searchcommunitybyname/:name", auth.verify, CommunityController.searchCommunityByName);
 
+//handles a search post request
+router.get("/searchpostbytitle/:title", auth.verify, CommunityController.searchPostByTitle);
+
+//handles a search comic request
+router.get("/searchcommicbyauthor/:author", auth.verify, CommunityController.searchComicByAuthor);
+
+//handles a search story request
+router.get("/searchstorybyauthor/:author", auth.verify, CommunityController.searchStoryByAuthor);
+
 //for testing purpose only
 router.post(
   "/deletecommunity",
