@@ -280,8 +280,7 @@ resetPassword = async (req, res) => {
     const newPasswordHash = await bcrypt.hash(tempPassword, salt);
     console.log("passwordHash: " + newPasswordHash);
 
-    // ***I'm not sure if this is the proper way to set the new password hash
-    existingUser.set({passwordHash: newPasswordHash});
+    existingUser.passwordHash = newPasswordHash;
     await existingUser.save();
 
     res

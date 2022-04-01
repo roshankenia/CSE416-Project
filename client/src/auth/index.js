@@ -13,7 +13,8 @@ export const AuthActionType = {
   LOGOUT_USER: "LOGOUT_USER",
   REGISTER_USER: "REGISTER_USER",
   SET_ERROR_MESSAGE: "SET_ERROR_MESSAGE",
-  CHANGE_PASSWORD: "CHANGE_PASSWORD"
+  CHANGE_PASSWORD: "CHANGE_PASSWORD",
+  RESET_PASSWORD: "RESET_PASSWORD"
 };
 
 function AuthContextProvider(props) {
@@ -22,7 +23,7 @@ function AuthContextProvider(props) {
     user: null,
     loggedIn: false,
     errorMessage:null,
-    isGuest: false
+    isGuest: false  //Add this to the setAuth in the reducer
   });
   const history = useHistory();
   const { community } = useContext(GlobalCommunityContext);
@@ -38,7 +39,7 @@ function AuthContextProvider(props) {
         return setAuth({
           user: payload.user,
           loggedIn: payload.loggedIn,
-          errorMessage: auth.errorMessage
+          errorMessage: auth.errorMessage,
         });
       }
       case AuthActionType.LOGIN_USER: {
@@ -76,10 +77,36 @@ function AuthContextProvider(props) {
           errorMessage: auth.errorMessage
         });
       }
+      case AuthActionType.RESET_PASSWORD: {
+        return setAuth({
+          user: payload.user,
+          loggedIn: false,
+          errorMessage: auth.errorMessage
+        });
+      }
       default:
         return auth;
     }
   };
+
+  auth.resetPassword = function(){
+    try {
+      const response = api.resetPassword();
+      if (response.status === 200) {
+        authReducer({
+          type: AuthActionType.RESET_PASSWORD,
+          payload: {
+            user: response.data.user,
+          },
+        });
+        history.push("/");
+      }
+    } catch (error) {
+      console.log(error.response.data.errorMessage);
+      //auth.setErrorMessage(error.response.data.errorMessage);
+    }
+  }
+
   
   auth.changePassword = function(username, currPassword, newPassword, newPassVerify){
     try {
