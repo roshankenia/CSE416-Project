@@ -8,6 +8,6 @@ router.get('/logout', AuthController.logoutUser)
 router.get('/loggedIn', AuthController.getLoggedIn)
 router.post('/changePassword', AuthController.changePassword)
 router.post('/resetPassword', AuthController.resetPassword)
-router.post('/deleteAccount', AuthController.resetPassword)
+router.post('/deleteAccount', AuthController.deleteAccount)
 
 module.exports = router
