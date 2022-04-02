@@ -48,7 +48,7 @@ export default function LoginScreen() {
           <Box
             component="form"
             noValidate
-            onClick={this.handleSubmit}
+            onClick={handleSubmit}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
