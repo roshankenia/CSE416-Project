@@ -41,7 +41,13 @@ const theme = createTheme({
 
 const App = () => {
   return (
-    <box style={{ backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')" }}>
+    <box
+      style={{
+        minWidth: "100%",
+        height: "100vh",
+        backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
+      }}
+    >
       <BrowserRouter>
         <AuthContextProvider>
           <GlobalCommunityContextProvider>
