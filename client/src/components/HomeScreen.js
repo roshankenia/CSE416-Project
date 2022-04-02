@@ -79,7 +79,7 @@ const HomeScreen = () => {
   //   if(store.isGuest){
   //     yoursDisabled = true;
   //   }
-  communities = [
+  const communities = [
     "J/Stickman",
     "J/Rage Comics",
     "J/Memes",
