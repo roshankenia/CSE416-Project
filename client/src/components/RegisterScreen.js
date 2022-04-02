@@ -49,7 +49,6 @@ export default function RegisterScreen() {
           <Box
             component="form"
             noValidate
-            onClick={handleSubmit}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
@@ -274,6 +273,7 @@ export default function RegisterScreen() {
               variant="contained"
               color="success"
               size="large"
+              onClick={handleSubmit}
               style={{
                 fontWeight: 600,
                 border: "3px solid",
