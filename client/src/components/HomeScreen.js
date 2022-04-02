@@ -36,11 +36,11 @@ const HomeScreen = () => {
   const { innerWidth: width, innerHeight: height } = window;
   const { community } = useContext(GlobalCommunityContext);
 
-//   //Keeps track if a list is currently being edited
-//   const [editActive, setEditActive] = useState(false);
+  //   //Keeps track if a list is currently being edited
+  //   const [editActive, setEditActive] = useState(false);
 
-//   //Keeps track of current search
-//   const [search, setSearch] = useState("");
+  //   //Keeps track of current search
+  //   const [search, setSearch] = useState("");
 
   const { auth } = useContext(AuthContext);
 
@@ -53,51 +53,55 @@ const HomeScreen = () => {
     setAnchorEl(null);
   };
 
-//   function handleUpdateSearch(event) {
-//     setSearch(event.target.value);
-//   }
-//   function handleKeyPress(event) {
-//     if (event.code === "Enter") {
-//       let text = event.target.value;
-//       console.log(text);
-//       store.newSearch(text);
-//     }
-//   }
+  //   function handleUpdateSearch(event) {
+  //     setSearch(event.target.value);
+  //   }
+  //   function handleKeyPress(event) {
+  //     if (event.code === "Enter") {
+  //       let text = event.target.value;
+  //       console.log(text);
+  //       store.newSearch(text);
+  //     }
+  //   }
 
-//   function changeLists(event, view) {
-//     event.stopPropagation();
-//     store.updateView(view);
-//   }
+  //   function changeLists(event, view) {
+  //     event.stopPropagation();
+  //     store.updateView(view);
+  //   }
 
-//   function handleSort(event, sort) {
-//     event.stopPropagation();
-//     store.sortLists(sort);
-//     handleMenuClose();
-//   }
+  //   function handleSort(event, sort) {
+  //     event.stopPropagation();
+  //     store.sortLists(sort);
+  //     handleMenuClose();
+  //   }
 
-//   let yoursDisabled = false;
-//   if(store.isGuest){
-//     yoursDisabled = true;
-//   }
-
+  //   let yoursDisabled = false;
+  //   if(store.isGuest){
+  //     yoursDisabled = true;
+  //   }
+  communities = [
+    "J/Stickman",
+    "J/Rage Comics",
+    "J/Memes",
+    "J/Spiderman",
+    "J/Random",
+  ];
   let communityCard = <List></List>;
-  if (community.currentLists) {
-    communityCard = (
-      <List
-        sx={{
-          width: "100%",
-          background: 'linear-gradient(#f8f8fe, #9595f6)',
-          position: "relative",
-          overflow: "auto",
-          maxHeight: Math.round(height / 1.75),
-        }}
-      >
-        {community.currentLists.map((list) => (
-          <CommunityCard key={list._id} top5List={list} />
-        ))}
-      </List>
-    );
-  }
+  communityCard = (
+    <List
+      sx={{
+        width: "100%",
+        background: "linear-gradient(#f8f8fe, #9595f6)",
+        position: "relative",
+        overflow: "auto",
+        maxHeight: Math.round(height / 1.75),
+      }}
+    >
+      {communities.map((name) => (
+        <Button>{name}</Button>
+      ))}
+    </List>
+  );
   return (
     <Box>
       <Box>
@@ -141,7 +145,7 @@ const HomeScreen = () => {
                 changeLists(event, "users");
               }}
             > */}
-              {/* <PersonIcon
+            {/* <PersonIcon
                 sx={{
                   width: 60,
                   height: 60,

@@ -31,7 +31,7 @@ export default function GuestScreen() {
   };
 
   return (
-    <Box>
+    <Box style={{ backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')" }}>
       <Container component="main" maxWidth="md">
         <CssBaseline />
         <Box
