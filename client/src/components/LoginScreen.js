@@ -144,7 +144,7 @@ export default function LoginScreen() {
                   variant="contained"
                   color="success"
                   size="large"
-                  href="/register/"
+                  onClick={handleSubmit()}
                   style={{
                     fontWeight: 600,
                     border: "3px solid",

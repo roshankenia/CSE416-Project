@@ -49,7 +49,7 @@ export default function RegisterScreen() {
           <Box
             component="form"
             noValidate
-            onSubmit={handleSubmit}
+            onClick={handleSubmit}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
@@ -274,7 +274,6 @@ export default function RegisterScreen() {
               variant="contained"
               color="success"
               size="large"
-              href="/register/"
               style={{
                 fontWeight: 600,
                 border: "3px solid",
