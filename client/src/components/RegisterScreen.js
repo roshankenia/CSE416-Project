@@ -30,7 +30,7 @@ export default function RegisterScreen() {
   };
 
   return (
-    <Box style={{ backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')" }}>
+    <Box>
       <Container component="main" maxWidth="md">
         <CssBaseline />
         <Box

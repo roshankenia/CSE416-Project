@@ -9,7 +9,7 @@ import {
   RegisterScreen,
   LoginScreen,
   Test,
-  GuestScreen
+  GuestScreen,
 } from "./components";
 /*
     This is our application's top-level component.
@@ -41,23 +41,25 @@ const theme = createTheme({
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <AuthContextProvider>
-        <GlobalCommunityContextProvider>
-          <ThemeProvider theme={theme}>
-            <AppBanner />
-            <Switch>
-              {/* if loggedin, redirect user to homescreen, else redirect to welcome screen */}
-              <Route path="/" exact component={HomeWrapper} />
-              <Route path="/register/" exact component={RegisterScreen} />
-              <Route path="/login/" exact component={LoginScreen} />
-              <Route path="/guest/" exact component={GuestScreen} />
-              <Route path="/test/" exact component={Test} />
-            </Switch>
-          </ThemeProvider>
-        </GlobalCommunityContextProvider>
-      </AuthContextProvider>
-    </BrowserRouter>
+    <box style={{ backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')" }}>
+      <BrowserRouter>
+        <AuthContextProvider>
+          <GlobalCommunityContextProvider>
+            <ThemeProvider theme={theme}>
+              <AppBanner />
+              <Switch>
+                {/* if loggedin, redirect user to homescreen, else redirect to welcome screen */}
+                <Route path="/" exact component={HomeWrapper} />
+                <Route path="/register/" exact component={RegisterScreen} />
+                <Route path="/login/" exact component={LoginScreen} />
+                <Route path="/guest/" exact component={GuestScreen} />
+                <Route path="/test/" exact component={Test} />
+              </Switch>
+            </ThemeProvider>
+          </GlobalCommunityContextProvider>
+        </AuthContextProvider>
+      </BrowserRouter>
+    </box>
   );
 };
 
