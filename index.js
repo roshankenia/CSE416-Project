@@ -12,7 +12,7 @@ const app = express();
 // SETUP THE MIDDLEWARE
 // app.use(cors());
 app.use(cors({
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:3000", "https://cse-416-jart.herokuapp.com/"],
     credentials: true
 }))
 app.use(express.urlencoded({ extended: true }));
