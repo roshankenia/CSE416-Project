@@ -48,7 +48,7 @@ export default function LoginScreen() {
           <Box
             component="form"
             noValidate
-            onClick={handleSubmit}
+            onClick={this.handleSubmit}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
@@ -144,7 +144,6 @@ export default function LoginScreen() {
                   variant="contained"
                   color="success"
                   size="large"
-                  onClick={handleSubmit()}
                   style={{
                     fontWeight: 600,
                     border: "3px solid",
