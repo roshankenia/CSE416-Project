@@ -194,7 +194,8 @@ function AuthContextProvider(props) {
         email,
         password,
         passwordVerify,
-        username
+        username,
+        false
       );
       if (response.status === 200) {
         authReducer({

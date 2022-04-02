@@ -37,7 +37,8 @@ export const registerUser = (
   email,
   password,
   passwordVerify,
-  username
+  username,
+  guest
 ) => {
   console.log(process.env.PORT);
   return api.post(`/register/`, {
@@ -47,30 +48,36 @@ export const registerUser = (
     password: password,
     passwordVerify: passwordVerify,
     username: username,
+    guest: guest,
   });
 };
 
 // @Jeff Hu front end request auth apis TO DO
-export const changePassword = (username, currentPassword, newPassword, newPassVerify) => {
-  return api.post('/changePassword/',{
+export const changePassword = (
+  username,
+  currentPassword,
+  newPassword,
+  newPassVerify
+) => {
+  return api.post("/changePassword/", {
     username: username,
     currentPassword: currentPassword,
     newPassword: newPassword,
-    newPassVerify: newPassVerify
+    newPassVerify: newPassVerify,
   });
 };
 export const resetPassword = (email) => {
-  return api.post('/resetPassword/',{
-    email: email
+  return api.post("/resetPassword/", {
+    email: email,
   });
 };
 
 export const deleteAccount = (username, password) => {
-  return api.post('/deleteAccount/',{
+  return api.post("/deleteAccount/", {
     username: username,
-    password: password
+    password: password,
   });
-}
+};
 
 const apis = {
   getLoggedIn,
@@ -79,7 +86,7 @@ const apis = {
   logoutUser,
   changePassword,
   resetPassword,
-  deleteAccount
+  deleteAccount,
   // ,
   // changePassword,
   // resetPassword,
