@@ -161,7 +161,6 @@ export default function Sidebar() {
               align="center"
               id="communityName"
               label="Enter A Community Name:"
-              autoFocus
               variant="standard"
               InputProps={{
                 disableUnderline: true,
