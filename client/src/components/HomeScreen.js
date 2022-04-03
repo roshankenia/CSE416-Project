@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalCommunityContext } from "../community";
 import CommunityCard from "./CommunityCard.js";
+import Sidebar from "./Sidebar.js";
 //import MUIDeleteModal from "./MUIDeleteModal";
 //import Statusbar from "./Statusbar";
 
@@ -21,6 +22,7 @@ import SortIcon from "@mui/icons-material/Sort";
 import AddIcon from "@mui/icons-material/Add";
 import Fab from "@mui/material/Fab";
 import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
 
 import Grid from "@mui/material/Grid";
 
@@ -88,171 +90,71 @@ const HomeScreen = () => {
   ];
   let communityCard = <List></List>;
   communityCard = (
-    <List
-      sx={{
-        width: "100%",
-        background: "linear-gradient(#f8f8fe, #9595f6)",
-        position: "relative",
-        overflow: "auto",
-        maxHeight: Math.round(height / 1.75),
-      }}
-    >
+    <List>
       {communities.map((name) => (
-        <Button>{name}</Button>
+        <ListItem key={name}>
+          <Box
+            variant="contained"
+            color="success"
+            size="large"
+            style={{
+              fontWeight: 600,
+              border: "3px solid",
+              borderColor: "black",
+              backgroundColor: "white",
+              color: "black",
+              fontSize: "48px",
+              borderRadius: 20,
+            }}
+            sx={{ mt: 2, width: "100%" }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={8}>
+                <Typography align="center" style={{ fontSize: "48px" }}>
+                  {name}
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  align="center"
+                  style={{
+                    fontWeight: 600,
+                    border: "3px solid",
+                    borderColor: "black",
+                    backgroundColor: "red",
+                    color: "black",
+                    fontSize: "10px",
+                    borderRadius: 20,
+                  }}
+                  sx={{ mt: 2, width: "25%" }}
+                >
+                  Leave
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </ListItem>
       ))}
     </List>
   );
   return (
-    <Box>
-      <Box>
-        <Grid container spacing={2}>
-          <Grid item xs={10}>
-            {/* <IconButton
-              aria-label="yours"
-              color="primary"
-              disabled = {yoursDisabled}
-              onClick={(event) => {
-                changeLists(event, "yours");
-              }}
-            >
-              <HomeIcon
-                sx={{
-                  width: 60,
-                  height: 60,
-                }}
-              />
-            </IconButton> */}
-            {/* <IconButton
-              aria-label="all lists"
-              color="primary"
-              size="large"
-              onClick={(event) => {
-                changeLists(event, "all");
-              }}
-            >
-              <PeopleIcon
-                sx={{
-                  width: 60,
-                  height: 60,
-                }}
-              />
-            </IconButton>
-            <IconButton
-              aria-label="user lists"
-              color="primary"
-              size="large"
-              onClick={(event) => {
-                changeLists(event, "users");
-              }}
-            > */}
-            {/* <PersonIcon
-                sx={{
-                  width: 60,
-                  height: 60,
-                }}
-              />
-            </IconButton> */}
-            {/* <IconButton
-              aria-label="community lists"
-              color="primary"
-              size="large"
-              onClick={(event) => {
-                changeLists(event, "community");
-              }}
-            >
-              <FunctionsIcon
-                sx={{
-                  width: 60,
-                  height: 60,
-                }}
-              />
-            </IconButton>
-            <TextField
-              label="Search"
-              sx={{ width: "50%" }}
-              margin="normal"
-              id={"search"}
-              name="search"
-              onKeyPress={handleKeyPress}
-              onChange={handleUpdateSearch}
-              inputProps={{ style: { fontSize: 18 } }}
-              InputLabelProps={{ style: { fontSize: 18 } }}
-            /> */}
-          </Grid>
-          <Grid item xs={2} align="right">
-            {/* <Typography display="inline" variant="h4">
-              Sort by
-            </Typography>
-            <IconButton
-              aria-label="sort"
-              color="primary"
-              size="large"
-              aria-controls="basic-menu"
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleMenuClick}
-            >
-              <SortIcon
-                sx={{
-                  width: 60,
-                  height: 60,
-                }}
-              />
-            </IconButton>
-
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleMenuClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              <MenuItem
-                onClick={(event) => {
-                  handleSort(event, "newest date");
-                }}
-              >
-                Publish Date (Newest){" "}
-              </MenuItem>
-              <MenuItem
-                onClick={(event) => {
-                  handleSort(event, "oldest date");
-                }}
-              >
-                Publish Date (Oldest)
-              </MenuItem>
-              <MenuItem
-                onClick={(event) => {
-                  handleSort(event, "views");
-                }}
-              >
-                Views
-              </MenuItem>
-              <MenuItem
-                onClick={(event) => {
-                  handleSort(event, "likes");
-                }}
-              >
-                Likes
-              </MenuItem>
-              <MenuItem
-                onClick={(event) => {
-                  handleSort(event, "dislikes");
-                }}
-              >
-                Dislikes
-              </MenuItem>
-            </Menu> */}
-          </Grid>
-        </Grid>
-      </Box>
-      <Box>
+    <Grid
+      container
+      spacing={2}
+      justifyContent="center"
+      alignItems="center"
+      style={{ backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')" }}
+    >
+      <Grid item xs={8} align="center">
         {communityCard}
-        {/* <MUIDeleteModal /> */}
-      </Box>
-    </Box>
+      </Grid>
+      <Grid item xs={4} align="center">
+        <Sidebar />
+      </Grid>
+    </Grid>
   );
 };
 
