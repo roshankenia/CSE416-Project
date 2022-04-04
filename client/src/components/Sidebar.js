@@ -82,7 +82,6 @@ export default function Sidebar() {
             }}
           >
             <TextField
-              textAlign="center"
               align="center"
               id="lobbyCode"
               label="Enter Lobby Code:"
@@ -157,7 +156,6 @@ export default function Sidebar() {
             }}
           >
             <TextField
-              textAlign="center"
               align="center"
               id="communityName"
               label="Enter A Community Name:"

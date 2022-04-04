@@ -54,7 +54,10 @@ const HomeScreen = () => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
+  const handleOpenCommunity = (event, name) => {
+    event.preventDefault();
+    community.setCommunity(name);
+  };
   //   function handleUpdateSearch(event) {
   //     setSearch(event.target.value);
   //   }
@@ -114,7 +117,28 @@ const HomeScreen = () => {
                   {name}
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={2}>
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  align="center"
+                  onClick={(event) => handleOpenCommunity(event, name)}
+                  style={{
+                    fontWeight: 600,
+                    border: "3px solid",
+                    borderColor: "black",
+                    backgroundColor: "blue",
+                    color: "black",
+                    fontSize: "10px",
+                    borderRadius: 20,
+                  }}
+                  sx={{ mt: 2, width: "25%" }}
+                >
+                  Open
+                </Button>
+              </Grid>
+              <Grid item xs={2}>
                 <Button
                   variant="contained"
                   color="success"
