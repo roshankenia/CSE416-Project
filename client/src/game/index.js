@@ -4,14 +4,14 @@ import api from "./game-request-api";
 import { GlobalCommunityContext } from "../community";
 import AuthContext from "../auth";
 
-export const GlobalGameContext = createContext({});
-console.log("create GlobalGameContext");
+export const GameContext = createContext({});
+console.log("create GameContext");
 
 // THESE ARE ALL THE TYPES OF UPDATES TO OUR GLOBAL
 // DATA Community STATE THAT CAN BE PROCESSED
-export const GlobalGameActionType = {};
+export const GameActionType = {};
 
-function GlobalGameContextProvider(props) {
+function GameContextProvider(props) {
   const [game, setGame] = useState({});
   const history = useHistory();
 
@@ -27,15 +27,15 @@ function GlobalGameContextProvider(props) {
   };
 
   return (
-    <GlobalGameContext.Provider
+    <GameContext.Provider
       value={{
         game,
       }}
     >
       {props.children}
-    </GlobalGameContext.Provider>
+    </GameContext.Provider>
   );
 }
 
-export default GlobalGameContext;
-export { GlobalGameContextProvider };
+export default GameContext;
+export { GameContextProvider };
