@@ -9,7 +9,8 @@ import {
   RegisterScreen,
   LoginScreen,
   Test,
-  GuestScreen
+  GuestScreen,
+  GameWrapper
 } from "./components";
 /*
     This is our application's top-level component.
@@ -53,6 +54,7 @@ const App = () => {
               <Route path="/login/" exact component={LoginScreen} />
               <Route path="/guest/" exact component={GuestScreen} />
               <Route path="/test/" exact component={Test} />
+              <Route path="/game/:id" exact component={GameWrapper}/>
             </Switch>
           </ThemeProvider>
         </GlobalCommunityContextProvider>
