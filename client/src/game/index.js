@@ -1,7 +1,6 @@
 import React, { createContext, useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import api from "./game-request-api";
-import { GameContext } from "../community";
 import AuthContext from "../auth";
 
 export const GameContext = createContext({});
@@ -20,7 +19,7 @@ function GameContextProvider(props) {
     const { type, payload } = action;
     switch (type) {
       case GameActionType.CREATE_NEW_LOBBY: {
-        return setCommunity({
+        return setGame({
           game: payload
         });
       }
