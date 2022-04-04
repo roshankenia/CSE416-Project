@@ -32,6 +32,9 @@ export default function AppBanner() {
         auth.logoutUser();
     }
 
+    const handleChangePassword = () => {
+    }
+
     const menuId = 'primary-search-account-menu';
     const loggedOutMenu = (
         <Menu
@@ -57,7 +60,7 @@ export default function AppBanner() {
         <Menu
             anchorEl={anchorEl}
             anchorOrigin={{
-                vertical: 'top',
+                vertical: 'bottom',
                 horizontal: 'right',
             }}
             id={menuId}
@@ -69,6 +72,11 @@ export default function AppBanner() {
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
+            <Typography>  {'Hi <Insert UserName>'} </Typography>
+            <MenuItem onClick={handleLogout}>View Profile(need implementation)</MenuItem>
+            <MenuItem onClick={handleLogout}>Change Password(need implementation)</MenuItem>
+            <MenuItem onClick={handleLogout}>Delete Account(need implementation)</MenuItem>
+            <MenuItem onClick={handleLogout}>Send Feedback(need implementation)</MenuItem>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>        
 
