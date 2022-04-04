@@ -3,7 +3,7 @@ import { React } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { AuthContextProvider } from "./auth";
 import { GlobalCommunityContextProvider } from "./community";
-import { GlobalGameContextProvider } from "./game";
+import { GameContextProvider } from "./game";
 import Box from "@mui/material/Box";
 
 import {
@@ -48,7 +48,7 @@ const App = () => {
     <BrowserRouter>
       <AuthContextProvider>
         <GlobalCommunityContextProvider>
-          <GlobalGameContextProvider>
+          <GameContextProvider>
             <ThemeProvider theme={theme}>
               <Box>
                 {" "}
@@ -63,7 +63,7 @@ const App = () => {
                 </Switch>
               </Box>
             </ThemeProvider>
-          </GlobalGameContextProvider>
+          </GameContextProvider>
         </GlobalCommunityContextProvider>
       </AuthContextProvider>
     </BrowserRouter>

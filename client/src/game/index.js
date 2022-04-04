@@ -5,11 +5,10 @@ import { GameContext } from "../community";
 import AuthContext from "../auth";
 
 export const GameContext = createContext({});
-//console.log("create GlobalGameContext");
 
-export const GlobalGameActionType = {};
+export const GameActionType = {};
 
-function GlobalGameContextProvider(props) {
+function GameContextProvider(props) {
   const [game, setGame] = useState({});
   const history = useHistory();
 
@@ -30,13 +29,13 @@ function GlobalGameContextProvider(props) {
   };
 
   return (
-    <GlobalGameContext.Provider
+    <GameContext.Provider
       value={{
         game,
       }}
     >
       {props.children}
-    </GlobalGameContext.Provider>
+    </GameContext.Provider>
   );
 }
 
