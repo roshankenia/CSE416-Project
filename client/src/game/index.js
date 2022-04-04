@@ -1,22 +1,20 @@
-import { createContext, useContext, useState } from "react";
+import React, { createContext, useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
-import api from "./community-request-api";
+import api from "./game-request-api";
+import { GameContext } from "../community";
 import AuthContext from "../auth";
 
 export const GameContext = createContext({});
-//console.log("create GameContext");
+//console.log("create GlobalGameContext");
 
-export const GameActionType = {
-  CREATE_NEW_LOBBY: "CREATE_NEW_LOBBY",
-};
+export const GlobalGameActionType = {};
 
-function GameContextProvider(props) {
-  const [game, setGame] = useState({
-    game: null,
-  });
+function GlobalGameContextProvider(props) {
+  const [game, setGame] = useState({});
   const history = useHistory();
 
   const { auth } = useContext(AuthContext);
+  const { game } = useContext(GameContext);
 
   const gameReducer = (action) => {
     const { type, payload } = action;
@@ -31,21 +29,14 @@ function GameContextProvider(props) {
     }
   };
 
-  community.reset = function () {
-    communityReducer({
-      type: GlobalCommunityActionType.RESET,
-      payload: community,
-    });
-  };
-
   return (
-    <GameContext.Provider
+    <GlobalGameContext.Provider
       value={{
-        gameReducer,
+        game,
       }}
     >
       {props.children}
-    </GameContext.Provider>
+    </GlobalGameContext.Provider>
   );
 }
 
