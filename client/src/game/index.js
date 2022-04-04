@@ -9,11 +9,12 @@ export const GameContext = createContext({});
 export const GameActionType = {};
 
 function GameContextProvider(props) {
-  const [game, setGame] = useState({});
+  const [game, setGame] = useState({
+    game: null,
+  });
   const history = useHistory();
 
   const { auth } = useContext(AuthContext);
-  const { game } = useContext(GameContext);
 
   const gameReducer = (action) => {
     const { type, payload } = action;
