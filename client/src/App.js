@@ -3,13 +3,16 @@ import { React } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { AuthContextProvider } from "./auth";
 import { GlobalCommunityContextProvider } from "./community";
+import { GlobalGameContextProvider } from "./game";
+import Box from "@mui/material/Box";
+
 import {
   AppBanner,
   HomeWrapper,
   RegisterScreen,
   LoginScreen,
   Test,
-  GuestScreen
+  GuestScreen,
 } from "./components";
 /*
     This is our application's top-level component.
@@ -44,17 +47,22 @@ const App = () => {
     <BrowserRouter>
       <AuthContextProvider>
         <GlobalCommunityContextProvider>
-          <ThemeProvider theme={theme}>
-            <AppBanner />
-            <Switch>
-              {/* if loggedin, redirect user to homescreen, else redirect to welcome screen */}
-              <Route path="/" exact component={HomeWrapper} />
-              <Route path="/register/" exact component={RegisterScreen} />
-              <Route path="/login/" exact component={LoginScreen} />
-              <Route path="/guest/" exact component={GuestScreen} />
-              <Route path="/test/" exact component={Test} />
-            </Switch>
-          </ThemeProvider>
+          <GlobalGameContextProvider>
+            <ThemeProvider theme={theme}>
+              <Box>
+                {" "}
+                <AppBanner />
+                <Switch>
+                  {/* if loggedin, redirect user to homescreen, else redirect to welcome screen */}
+                  <Route path="/" exact component={HomeWrapper} />
+                  <Route path="/register/" exact component={RegisterScreen} />
+                  <Route path="/login/" exact component={LoginScreen} />
+                  <Route path="/guest/" exact component={GuestScreen} />
+                  <Route path="/test/" exact component={Test} />
+                </Switch>
+              </Box>
+            </ThemeProvider>
+          </GlobalGameContextProvider>
         </GlobalCommunityContextProvider>
       </AuthContextProvider>
     </BrowserRouter>
