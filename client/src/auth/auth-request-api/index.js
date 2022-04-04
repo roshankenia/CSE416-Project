@@ -31,6 +31,15 @@ export const loginUser = (username, password) => {
   });
 };
 export const logoutUser = () => api.get(`/logout/`);
+
+export const createGuest = (username, guest) => {
+  console.log(process.env.PORT);
+  return api.post(`/guest/`, {
+    username: username,
+    guest: guest,
+  });
+};
+
 export const registerUser = (
   firstName,
   lastName,

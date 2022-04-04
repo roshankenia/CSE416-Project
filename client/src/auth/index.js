@@ -15,16 +15,15 @@ export const AuthActionType = {
   SET_ERROR_MESSAGE: "SET_ERROR_MESSAGE",
   CHANGE_PASSWORD: "CHANGE_PASSWORD",
   RESET_PASSWORD: "RESET_PASSWORD",
-  DELETE_ACCOUNT: "DELETE_ACCOUNT"
+  DELETE_ACCOUNT: "DELETE_ACCOUNT",
 };
 
 function AuthContextProvider(props) {
-
   const [auth, setAuth] = useState({
     user: null,
     loggedIn: false,
-    errorMessage:null,
-    isGuest: false  //Add this to the setAuth in the reducer
+    errorMessage: null,
+    isGuest: false, //Add this to the setAuth in the reducer
   });
   const history = useHistory();
   const { community } = useContext(GlobalCommunityContext);
@@ -47,49 +46,49 @@ function AuthContextProvider(props) {
         return setAuth({
           user: payload.user,
           loggedIn: true,
-          errorMessage: auth.errorMessage
+          errorMessage: auth.errorMessage,
         });
       }
       case AuthActionType.LOGOUT_USER: {
         return setAuth({
           user: null,
           loggedIn: false,
-          errorMessage: auth.errorMessage
+          errorMessage: auth.errorMessage,
         });
       }
       case AuthActionType.REGISTER_USER: {
         return setAuth({
           user: payload.user,
           loggedIn: true,
-          errorMessage: auth.errorMessage
+          errorMessage: auth.errorMessage,
         });
       }
-      case AuthActionType.SET_ERROR_MESSAGE:{
-          return setAuth({
-            user: auth.user,
-            loggedIn: auth.loggedIn,
-            errorMessage: payload
-          });
+      case AuthActionType.SET_ERROR_MESSAGE: {
+        return setAuth({
+          user: auth.user,
+          loggedIn: auth.loggedIn,
+          errorMessage: payload,
+        });
       }
       case AuthActionType.CHANGE_PASSWORD: {
         return setAuth({
           user: payload.user,
           loggedIn: true,
-          errorMessage: auth.errorMessage
+          errorMessage: auth.errorMessage,
         });
       }
       case AuthActionType.RESET_PASSWORD: {
         return setAuth({
           user: payload.user,
           loggedIn: false,
-          errorMessage: auth.errorMessage
+          errorMessage: auth.errorMessage,
         });
       }
       case AuthActionType.DELETE_ACCOUNT: {
         return setAuth({
           user: payload.user,
           loggedIn: false,
-          errorMessage: auth.errorMessage
+          errorMessage: auth.errorMessage,
         });
       }
       default:
@@ -97,7 +96,7 @@ function AuthContextProvider(props) {
     }
   };
 
-  auth.deleteAccount = function(username, password){
+  auth.deleteAccount = function (username, password) {
     try {
       const response = api.deleteAccount(username, password);
       if (response.status === 200) {
@@ -113,10 +112,9 @@ function AuthContextProvider(props) {
       console.log(error.response.data.errorMessage);
       //auth.setErrorMessage(error.response.data.errorMessage);
     }
-  }
+  };
 
-
-  auth.resetPassword = function(email){
+  auth.resetPassword = function (email) {
     try {
       const response = api.resetPassword(email);
       if (response.status === 200) {
@@ -132,12 +130,21 @@ function AuthContextProvider(props) {
       console.log(error.response.data.errorMessage);
       //auth.setErrorMessage(error.response.data.errorMessage);
     }
-  }
+  };
 
-  
-  auth.changePassword = function(username, currPassword, newPassword, newPassVerify){
+  auth.changePassword = function (
+    username,
+    currPassword,
+    newPassword,
+    newPassVerify
+  ) {
     try {
-      const response = api.changePassword(username, currPassword, newPassword, newPassVerify);
+      const response = api.changePassword(
+        username,
+        currPassword,
+        newPassword,
+        newPassVerify
+      );
       if (response.status === 200) {
         authReducer({
           type: AuthActionType.CHANGE_PASSWORD,
@@ -151,20 +158,20 @@ function AuthContextProvider(props) {
       console.log(error.response.data.errorMessage);
       //auth.setErrorMessage(error.response.data.errorMessage);
     }
-  }
+  };
 
-  auth.setErrorMessage = function(message){
+  auth.setErrorMessage = function (message) {
     authReducer({
       type: AuthActionType.SET_ERROR_MESSAGE,
       payload: message,
     });
-  }
-  auth.removeErrorMessage = function(){
+  };
+  auth.removeErrorMessage = function () {
     authReducer({
       type: AuthActionType.SET_ERROR_MESSAGE,
       payload: null,
     });
-  }
+  };
 
   auth.getLoggedIn = async function () {
     const response = await api.getLoggedIn();
@@ -237,7 +244,7 @@ function AuthContextProvider(props) {
     if (response.status === 200) {
       authReducer({
         type: AuthActionType.LOGOUT_USER,
-        payload: null
+        payload: null,
       });
     }
   };
@@ -252,7 +259,25 @@ function AuthContextProvider(props) {
     return initials;
   };
 
-  
+  auth.createGuest = async function (username, lobbyCode) {
+    try {
+      const response = await api.createGuest(username, true);
+      if (response.status === 200) {
+        authReducer({
+          type: AuthActionType.REGISTER_USER,
+          payload: {
+            user: response.data.user,
+          },
+        });
+        //lobby push
+        // history.push("/lobby/"+lobbyCode);
+      }
+    } catch (error) {
+      console.log(error.response.data.errorMessage);
+      console.log(auth.errorMessage);
+      auth.setErrorMessage(error.response.data.errorMessage);
+    }
+  };
 
   return (
     <AuthContext.Provider
