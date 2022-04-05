@@ -95,17 +95,62 @@ logoutUser = async (req, res) => {
       expires: new Date(0),
       secure: true,
       sameSite: "none",
-    }).status(200)
+    })
+    .status(200)
     .json({
       success: true,
-      })
+    })
     .send();
+};
+
+createGuest = async (req, res) => {
+  try {
+    const { username, guest } = req.body;
+    console.log("create user: " + username);
+    if (!username) {
+      return res
+        .status(400)
+        .json({ errorMessage: "Please enter all required fields." });
+    }
+
+    const newUser = new User({
+      guest,
+      username,
+    });
+    const savedUser = await newUser
+      .save()
+      .then(() => {
+        console.log("SUCCESS!!!");
+        return res.status(200).json({
+          success: true,
+          newUser: newUser,
+          message: "Guest Created!",
+        });
+      })
+      .catch((error) => {
+        console.log("FAILURE: " + JSON.stringify(error));
+        return res.status(404).json({
+          error,
+          message: "Guest not created!",
+        });
+      });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
 };
 
 registerUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, passwordVerify, username, guest } =
-      req.body;
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      passwordVerify,
+      username,
+      guest,
+    } = req.body;
     console.log(
       "create user: " +
         firstName +
@@ -200,8 +245,8 @@ registerUser = async (req, res) => {
 
 // @Jeff Hu - user knows current password and wants to change their password
 changePassword = async (req, res) => {
-  try{
-    const {username, currentPassword, newPassword, newPassVerify} = req.body;
+  try {
+    const { username, currentPassword, newPassword, newPassVerify } = req.body;
 
     const currentUser = await User.findOne({ username: username });
     console.log("currentUser: " + currentUser);
@@ -241,17 +286,15 @@ changePassword = async (req, res) => {
     currentUser.passwordHash = newPasswordHash;
     await currentUser.save();
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        user: {
-          firstName: currentUser.firstName,
-          lastName: currentUser.lastName,
-          email: currentUser.email,
-          username: currentUser.username,
-        }
-      });
+    res.status(200).json({
+      success: true,
+      user: {
+        firstName: currentUser.firstName,
+        lastName: currentUser.lastName,
+        email: currentUser.email,
+        username: currentUser.username,
+      },
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -261,9 +304,9 @@ changePassword = async (req, res) => {
 // @Jeff Hu - user does not know current password and needs to recover account by resetting password
 resetPassword = async (req, res) => {
   try {
-    const {email} = req.body;
+    const { email } = req.body;
 
-    const existingUser = await User.findOne({email: email})
+    const existingUser = await User.findOne({ email: email });
     if (!existingUser) {
       return res.status(401).json({
         errorMessage: "Current User's email not found in database.",
@@ -271,7 +314,7 @@ resetPassword = async (req, res) => {
     }
 
     //We should generate a random password here but for now it is hardcoded
-    const tempPassword = '12345678'
+    const tempPassword = "12345678";
     //We would then email the generated password to the given email address here
 
     // Hashing the new password and changing the user's password to the new password
@@ -283,18 +326,15 @@ resetPassword = async (req, res) => {
     existingUser.passwordHash = newPasswordHash;
     await existingUser.save();
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        user: {
-          firstName: existingUser.firstName,
-          lastName: existingUser.lastName,
-          email: existingUser.email,
-          username: existingUser.username,
-        }
-      });
-
+    res.status(200).json({
+      success: true,
+      user: {
+        firstName: existingUser.firstName,
+        lastName: existingUser.lastName,
+        email: existingUser.email,
+        username: existingUser.username,
+      },
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -303,50 +343,49 @@ resetPassword = async (req, res) => {
 
 // @Jeff Hu - user wants to delete their account
 deleteAccount = async (req, res) => {
-  try{
-    const {username, password} = req.body;
+  try {
+    const { username, password } = req.body;
 
     const currentUser = await User.findOne({ username: username });
-      console.log("currentUser: " + currentUser);
-      if (!currentUser) {
-        return res.status(401).json({
-          errorMessage: "Current User's username not found in database.",
-        });
-      }
-  
-      // Checking to see if user entered their correct current password
-      console.log("provided verification password: " + password);
-      const passwordCorrect = await bcrypt.compare(
-        password,
-        currentUser.passwordHash
-      );
-      if (!passwordCorrect) {
-        console.log("Incorrect password");
-        return res.status(401).json({
-          errorMessage: "Wrong password provided.",
-        });
-      }
-  
-    // mongoose finds user by username and deletes user from database
-    // not sure if this is the best way to delete from database
-    const deletedUser = await User.findOneAndDelete({username: username})
-    if (!deletedUser) {
+    console.log("currentUser: " + currentUser);
+    if (!currentUser) {
       return res.status(401).json({
-        errorMessage: "Current User's username not found in database and user could not be deleted.",
+        errorMessage: "Current User's username not found in database.",
       });
     }
-  
-    res
-        .status(200)
-        .json({
-          success: true,
-          user: {
-            firstName: deletedUser.firstName,
-            lastName: deletedUser.lastName,
-            email: deletedUser.email,
-            username: deletedUser.username,
-          },
-        });
+
+    // Checking to see if user entered their correct current password
+    console.log("provided verification password: " + password);
+    const passwordCorrect = await bcrypt.compare(
+      password,
+      currentUser.passwordHash
+    );
+    if (!passwordCorrect) {
+      console.log("Incorrect password");
+      return res.status(401).json({
+        errorMessage: "Wrong password provided.",
+      });
+    }
+
+    // mongoose finds user by username and deletes user from database
+    // not sure if this is the best way to delete from database
+    const deletedUser = await User.findOneAndDelete({ username: username });
+    if (!deletedUser) {
+      return res.status(401).json({
+        errorMessage:
+          "Current User's username not found in database and user could not be deleted.",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      user: {
+        firstName: deletedUser.firstName,
+        lastName: deletedUser.lastName,
+        email: deletedUser.email,
+        username: deletedUser.username,
+      },
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -360,5 +399,5 @@ module.exports = {
   logoutUser,
   changePassword,
   resetPassword,
-  deleteAccount
+  deleteAccount,
 };
