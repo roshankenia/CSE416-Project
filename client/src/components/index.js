@@ -9,7 +9,8 @@ import DeletePostModal from './DeletePostModal'
 import DiscoveryScreen from './DiscoveryScreen'
 import DrawPanelScreen from './DrawPanelScreen'
 import FeedbackModal from './FeedbackModal'
-import GameLobby from './GameLobby'
+import GameScreen from './GameScreen'
+import LobbyScreen from './LobbyScreen'
 import GameWrapper from './GameWrapper'
 import LoginScreen from './LoginScreen'
 import MainScreenWrapper from './MainScreenWrapper'
@@ -47,7 +48,8 @@ export {
     DiscoveryScreen,
     DrawPanelScreen,
     FeedbackModal,
-    GameLobby,
+    LobbyScreen,
+    GameScreen,
     GameWrapper,
     LoginScreen,
     MainScreenWrapper,

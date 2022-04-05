@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalCommunityContext } from "../community";
+import { GameContext } from "../game";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -8,6 +9,14 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
 export default function Sidebar() {
+
+  const { game } = useContext(GameContext);
+
+  const handleHostNewGame = (event, name) => {
+    event.preventDefault();
+    game.hostNewLobby();
+  };
+
   return (
     <List>
       <ListItem key="host">
@@ -43,6 +52,7 @@ export default function Sidebar() {
                 borderRadius: 50,
               }}
               sx={{ mb: 0.5, width: "25%" }}
+              onClick={handleHostNewGame}
             >
               +
             </Button>
