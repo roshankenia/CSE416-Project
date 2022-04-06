@@ -30,9 +30,7 @@ export default function CommunityScreen() {
   return (
     <Grid
       container
-      spacing={2}
       justifyContent="center"
-      alignItems="center"
       style={{ backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')" }}
     >
       <Grid item xs={8}>
