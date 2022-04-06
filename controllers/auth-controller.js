@@ -400,4 +400,5 @@ module.exports = {
   changePassword,
   resetPassword,
   deleteAccount,
+  createGuest,
 };
