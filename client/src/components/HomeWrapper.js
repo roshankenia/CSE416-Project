@@ -2,6 +2,7 @@ import { useContext } from "react";
 import HomeScreen from "./HomeScreen";
 import WelcomeScreen from "./WelcomeScreen";
 import CommunityScreen from "./CommunityScreen";
+import DiscoveryScreen from "./DiscoveryScreen";
 import AuthContext from "../auth";
 import { GlobalCommunityContext } from "../community";
 
@@ -20,7 +21,11 @@ export default function HomeWrapper() {
       if (community.communityList) {
         return <CommunityScreen />;
       } else {
-        return <HomeScreen />;
+        if (community.screen == "communities") {
+          return <HomeScreen />;
+        } else if (community.screen == "discovery") {
+          return <DiscoveryScreen />;
+        }
       }
     } else return <WelcomeScreen />;
   }

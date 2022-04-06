@@ -21,6 +21,7 @@ export const GlobalCommunityActionType = {
   UPDATE_COMMUNITYLIST: "UPDATE_COMMUNITYLIST",
   RESET: "RESET",
   SET_COMMUNITY: "SET_COMMUNITY",
+  SET_SCREEN: "SET_SCREEN",
 };
 
 function GlobalCommunityContextProvider(props) {
@@ -30,6 +31,7 @@ function GlobalCommunityContextProvider(props) {
     search: null,
     errorMessage: null,
     sort: "newest date",
+    screen: "communities",
   });
   const history = useHistory();
 
@@ -68,11 +70,22 @@ function GlobalCommunityContextProvider(props) {
           communityList: payload,
         });
       }
+      case GlobalCommunityActionType.SET_SCREEN: {
+        return setCommunity({
+          screen: payload,
+        });
+      }
       default:
         return community;
     }
   };
   //hard coded for now
+  community.setScreen = async function (screen) {
+    communityReducer({
+      type: GlobalCommunityActionType.SET_SCREEN,
+      payload: screen,
+    });
+  };
   community.setCommunity = async function (name) {
     communityReducer({
       type: GlobalCommunityActionType.SET_COMMUNITY,

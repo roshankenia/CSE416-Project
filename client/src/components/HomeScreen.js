@@ -58,32 +58,57 @@ const HomeScreen = () => {
     event.preventDefault();
     community.setCommunity(name);
   };
-  //   function handleUpdateSearch(event) {
-  //     setSearch(event.target.value);
-  //   }
-  //   function handleKeyPress(event) {
-  //     if (event.code === "Enter") {
-  //       let text = event.target.value;
-  //       console.log(text);
-  //       store.newSearch(text);
-  //     }
-  //   }
+  const setScreen = (event, screen) => {
+    event.preventDefault();
+    community.setScreen(screen);
+  };
 
-  //   function changeLists(event, view) {
-  //     event.stopPropagation();
-  //     store.updateView(view);
-  //   }
+  const communitiesButton = (
+    <Button
+      onClick={(event) => setScreen(event, "communities")}
+      disabled="true"
+      variant="contained"
+      color="success"
+      size="small"
+      align="center"
+      style={{
+        fontWeight: 600,
+        border: "3px solid",
+        borderColor: "black",
+        backgroundColor: "orange",
+        color: "black",
+        fontSize: "10px",
+        borderRadius: 20,
+        opacity: 0.5,
+      }}
+      sx={{ mt: 2, width: "25%" }}
+    >
+      Communities
+    </Button>
+  );
 
-  //   function handleSort(event, sort) {
-  //     event.stopPropagation();
-  //     store.sortLists(sort);
-  //     handleMenuClose();
-  //   }
+  const discoveryButton = (
+    <Button
+      onClick={(event) => setScreen(event, "discovery")}
+      variant="contained"
+      color="success"
+      size="small"
+      align="center"
+      style={{
+        fontWeight: 600,
+        border: "3px solid",
+        borderColor: "black",
+        backgroundColor: "aqua",
+        color: "black",
+        fontSize: "10px",
+        borderRadius: 20,
+      }}
+      sx={{ mt: 2, width: "25%" }}
+    >
+      Discovery
+    </Button>
+  );
 
-  //   let yoursDisabled = false;
-  //   if(store.isGuest){
-  //     yoursDisabled = true;
-  //   }
   const communities = [
     "J/Stickman",
     "J/Rage Comics",
@@ -176,6 +201,11 @@ const HomeScreen = () => {
         backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
       }}
     >
+      <Grid item xs={6}>
+        {communitiesButton}
+        {discoveryButton}
+      </Grid>
+      <Grid item xs={6}></Grid>
       <Grid item xs={8} align="center">
         {communityCard}
       </Grid>
