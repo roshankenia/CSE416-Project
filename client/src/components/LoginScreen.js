@@ -29,7 +29,13 @@ export default function LoginScreen() {
   };
 
   return (
-    <Box style={{ backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')" }}>
+    <Box
+      style={{
+        width: "100vw",
+        height: "100vh",
+        backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
+      }}
+    >
       <Container component="main" maxWidth="md">
         <CssBaseline />
         <Box

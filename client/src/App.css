@@ -25,10 +25,8 @@ body {
   background-color: var(--swatch-primary);
   font-family: "Lexend Exa";
   position: absolute;
-  width: 80%;
-  left: 10%;
-  height: 90%;
-  top: 5%;
+  width: 100%;
+  height: 100%;
 }
 
 #app-root {

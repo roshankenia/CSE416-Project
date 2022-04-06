@@ -9,15 +9,13 @@ import Typography from "@mui/material/Typography";
 //@Alan
 //const socket = io('http://localhost:3000')
 
-
 export default function WelcomeScreen() {
   return (
     <Box
       style={{ backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')" }}
       sx={{
-        width: "100%",
-        height: "100%",
-        background: "linear-gradient(#f8f8fe, #9595f6)",
+        width: "100vw",
+        height: "100vh",
       }}
     >
       <Typography variant="h1" component="div" gutterBottom align="center">

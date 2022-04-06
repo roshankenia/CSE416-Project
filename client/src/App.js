@@ -5,6 +5,7 @@ import { AuthContextProvider } from "./auth";
 import { GlobalCommunityContextProvider } from "./community";
 import { GameContextProvider } from "./game";
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 
 import {
   AppBanner,
@@ -13,7 +14,7 @@ import {
   LoginScreen,
   Test,
   GuestScreen,
-  GameWrapper
+  GameWrapper,
 } from "./components";
 /*
     This is our application's top-level component.
@@ -51,17 +52,24 @@ const App = () => {
           <GameContextProvider>
             <ThemeProvider theme={theme}>
               <Box>
-                {" "}
                 <AppBanner />
-                <Switch>
-                  {/* if loggedin, redirect user to homescreen, else redirect to welcome screen */}
-                  <Route path="/" exact component={HomeWrapper} />
-                  <Route path="/register/" exact component={RegisterScreen} />
-                  <Route path="/login/" exact component={LoginScreen} />
-                  <Route path="/guest/" exact component={GuestScreen} />
-                  <Route path="/test/" exact component={Test} />
-                  <Route path="/game/:id" exact component={GameWrapper} />
-                </Switch>
+                <Box
+                  style={{
+                    marginTop: 50,
+                    width: "100vw",
+                    height: "100vh",
+                  }}
+                >
+                  <Switch>
+                    {/* if loggedin, redirect user to homescreen, else redirect to welcome screen */}
+                    <Route path="/" exact component={HomeWrapper} />
+                    <Route path="/register/" exact component={RegisterScreen} />
+                    <Route path="/login/" exact component={LoginScreen} />
+                    <Route path="/guest/" exact component={GuestScreen} />
+                    <Route path="/test/" exact component={Test} />
+                    <Route path="/game/:id" exact component={GameWrapper} />
+                  </Switch>
+                </Box>
               </Box>
             </ThemeProvider>
           </GameContextProvider>

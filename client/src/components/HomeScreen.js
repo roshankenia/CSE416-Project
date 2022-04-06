@@ -170,7 +170,11 @@ const HomeScreen = () => {
       spacing={2}
       justifyContent="center"
       alignItems="center"
-      style={{ backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')" }}
+      style={{
+        width: "100vw",
+        height: "100vh",
+        backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
+      }}
     >
       <Grid item xs={8} align="center">
         {communityCard}

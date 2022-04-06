@@ -107,7 +107,7 @@ export default function AppBanner() {
 
     return (
         <Box>
-            <AppBar position="static">
+            <AppBar>
                 <Toolbar sx={{flexDirection:'row',justifyContent : 'space-between'}}>
                     <Typography                        
                         variant="h4"
