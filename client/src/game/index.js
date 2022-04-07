@@ -5,7 +5,10 @@ import AuthContext from "../auth";
 
 export const GameContext = createContext({});
 
-export const GameActionType = {};
+export const GameActionType = {
+  CREATE_NEW_GAME: "CREATE_NEW_GAME",
+  CREATE_NEW_LOBBY: "CREATE_NEW_LOBBY",
+};
 
 function GameContextProvider(props) {
 
@@ -44,7 +47,7 @@ function GameContextProvider(props) {
   game.createNewGame = async function (){
     try {
         let id = 'madeupgameid'
-        let game = 'gameOBJ'
+        let newgame = 'gameOBJ'
         // backend stuff
         // const response = await api.createGame();
         // console.log("createNewGame response: " + response);
@@ -52,8 +55,10 @@ function GameContextProvider(props) {
         //   let game = response.data.game;
           gameReducer({
             type: GameActionType.CREATE_NEW_GAME,
-            payload: game,
+            payload: newgame,
           });
+          console.log('inside game.createNewGame')
+          console.log(game)
           history.push("/game/" + id);
         //}
       } catch {

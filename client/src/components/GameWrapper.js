@@ -8,7 +8,7 @@ import { GameScreen } from ".";
 export default function GameWrapper(){
   const { game } = useContext(GameContext);
 
-  console.log('Hi')
+  console.log(game)
 
   if (game.lobby) {
     console.log(game.lobby);
