@@ -105,9 +105,9 @@ export default function DiscoveryScreen() {
 
       {/* <Sticky> */}
       <div class="sticky">
-      <Sticky>
+      {/* <Sticky> */}
        <Sidebar />
-       </Sticky>
+       {/* </Sticky> */}
       </div>
         {/* <Grid class="sticky" item xs={4}><Sidebar /></Grid>  */}
       {/* </Sticky> */}
