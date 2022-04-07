@@ -103,9 +103,9 @@ export default function DiscoveryScreen() {
         <PostFeed />
       </Grid>
       <Sticky>
-      <Grid item xs={8} align="center">
-        <Sidebar />
-      </Grid>
+        <Grid container justifyContent="flex-end">
+          <Sidebar />
+        </Grid>
       </Sticky>
       
     </Grid>
