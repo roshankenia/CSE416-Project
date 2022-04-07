@@ -23,6 +23,7 @@ import ListItem from "@mui/material/ListItem";
 import Grid from "@mui/material/Grid";
 
 import AuthContext from "../auth";
+import PostFeed from "./PostFeed.js";
 
 export default function DiscoveryScreen() {
   const { community } = useContext(GlobalCommunityContext);
@@ -95,6 +96,12 @@ export default function DiscoveryScreen() {
         {discoveryButton}
       </Grid>
       <Grid item xs={6}></Grid>
+
+      <Grid item xs={8}>
+        <Typography style={{ fontSize: "32px" }}>{community.communityList}</Typography>
+        <PostFeed />
+      </Grid>
+      
     </Grid>
   );
 }
