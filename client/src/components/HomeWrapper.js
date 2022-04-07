@@ -5,6 +5,7 @@ import CommunityScreen from "./CommunityScreen";
 import DiscoveryScreen from "./DiscoveryScreen";
 import AuthContext from "../auth";
 import { GlobalCommunityContext } from "../community";
+import ProfileScreen from "./ProfileScreen";
 
 export default function HomeWrapper() {
   const { auth } = useContext(AuthContext);
@@ -25,6 +26,9 @@ export default function HomeWrapper() {
           return <HomeScreen />;
         } else if (community.screen == "discovery") {
           return <DiscoveryScreen />;
+        }
+        if (community.screen == "profile"){
+          return <ProfileScreen />
         }
       }
     } else return <WelcomeScreen />;

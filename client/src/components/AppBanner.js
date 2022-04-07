@@ -49,6 +49,14 @@ export default function AppBanner() {
     auth.logoutUser();
   };
 
+  const setScreen = (event, screen) =>{
+    event.preventDefault();
+    community.setScreen(screen)
+  };
+
+  const handleViewProfile =(event)=> {
+    setScreen(event, 'profile')
+  };
   const handleChangePassword = () => {};
 
   const menuId = "primary-search-account-menu";
@@ -97,8 +105,7 @@ export default function AppBanner() {
       onClose={handleMenuClose}
     >
       <Typography> {"Hi " + username} </Typography>
-      <MenuItem onClick={handleLogout}>
-        View Profile(need implementation)
+      <MenuItem onClick={handleViewProfile}> View Profile(need implementation)
       </MenuItem>
       <MenuItem onClick={handleOpenChangePassword}>Change Password</MenuItem>
       <MenuItem onClick={handleOpenDeleteAccount}>Delete Account</MenuItem>
