@@ -435,3 +435,11 @@ input {
     transform: rotate(0deg);
   }
 }
+
+.sticky {
+  position: sticky;
+  height: 20%;
+  width: 30%;
+  top: 30%;
+  /* bottom: 0;  */
+}

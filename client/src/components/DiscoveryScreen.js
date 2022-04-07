@@ -98,15 +98,19 @@ export default function DiscoveryScreen() {
       </Grid>
       {/* <Grid item xs={6}></Grid> */}
 
-      <Grid item xs={8}>
+      <Grid item xs={8} sm={8} md ={8} lg = {8} xl ={8}>
         <Typography style={{ fontSize: "32px" }}>{community.communityList}</Typography>
         <PostFeed />
       </Grid>
+
+      {/* <Sticky> */}
+      <div class="sticky">
       <Sticky>
-        <Grid container justifyContent="flex-end">
-          <Sidebar />
-        </Grid>
-      </Sticky>
+       <Sidebar />
+       </Sticky>
+      </div>
+        {/* <Grid class="sticky" item xs={4}><Sidebar /></Grid>  */}
+      {/* </Sticky> */}
       
     </Grid>
   );
