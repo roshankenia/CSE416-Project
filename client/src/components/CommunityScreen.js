@@ -27,11 +27,36 @@ import PostFeed from "./PostFeed.js";
 
 export default function CommunityScreen() {
   const { community } = useContext(GlobalCommunityContext);
+  const handleBackToCommunities = (event) => {
+    event.stopPropagation();
+    community.setCommunity(null);
+  }
   return (
     <Box style={{ backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')" }}>
       <Grid container justifyContent="center">
         <Grid item xs={12}>
-          <Typography display="inline" style={{ fontSize: "48px" }}>
+        <Button
+            variant="contained"
+            color="success"
+            size="small"
+            align="center"
+            onClick={handleBackToCommunities}
+            style={{
+              fontWeight: 600,
+              border: "3px solid",
+              borderColor: "black",
+              backgroundColor: "orange",
+              color: "black",
+              fontSize: "10px",
+              borderRadius: 20,
+            }}
+            sx={{ mt: 2 }}
+          >
+            Back to Communities
+          </Button>
+        </Grid>
+        <Grid item xs={8} textAlign="center">
+          <Typography display="inline" style={{ fontSize: "48px" }} sx={{ ml: 20}}>
             {community.communityList}
           </Typography>
           <Button
@@ -48,17 +73,21 @@ export default function CommunityScreen() {
               fontSize: "10px",
               borderRadius: 20,
             }}
-            sx={{ ml: 2, mb:2}}
+            sx={{ ml: 2, mb: 2 }}
           >
             Leave
           </Button>
         </Grid>
+        <Grid item xs={4}></Grid>
         <Grid item xs={8}>
           <PostFeed />
         </Grid>
-        <Grid item xs={4} align="center">
+
+        <div class="sticky">
+          {/* <Sticky> */}
           <Sidebar />
-        </Grid>
+          {/* </Sticky> */}
+        </div>
       </Grid>
     </Box>
   );

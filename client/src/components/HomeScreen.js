@@ -203,18 +203,20 @@ const HomeScreen = () => {
           {discoveryButton}
         </Grid>
         <Grid item xs={6}></Grid>
-        <Grid item xs={12}>
+        <Grid item xs={8}>
           <Typography align="center" style={{ fontSize: "48px" }}>
             {"Your Communities"}
           </Typography>
         </Grid>
-
+        <Grid item xs={4}></Grid>
         <Grid item xs={8} align="center">
           {communityCard}
         </Grid>
-        <Grid item xs={4} align="center">
-          <Sidebar />
-        </Grid>
+        <div class="sticky">
+      {/* <Sticky> */}
+       <Sidebar />
+       {/* </Sticky> */}
+      </div>
       </Grid>
     </Box>
   );
