@@ -22,6 +22,7 @@ import ListItem from "@mui/material/ListItem";
 
 import Grid from "@mui/material/Grid";
 
+import Sidebar from "./Sidebar.js";
 import AuthContext from "../auth";
 import PostFeed from "./PostFeed.js";
 
@@ -100,6 +101,9 @@ export default function DiscoveryScreen() {
       <Grid item xs={8}>
         <Typography style={{ fontSize: "32px" }}>{community.communityList}</Typography>
         <PostFeed />
+      </Grid>
+      <Grid item xs={4} align="center">
+        <Sidebar />
       </Grid>
       
     </Grid>
