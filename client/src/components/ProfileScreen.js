@@ -8,11 +8,24 @@ import PostFeed from "./PostFeed.js";
 import Sticky from 'react-stickynode';
 export default function ProfileScreen(){
     const { community } = useContext(GlobalCommunityContext);
-    
+    const { auth } = useContext(AuthContext);
+    const welcomeTag = (
+        <div
+          style={{
+            fontWeight: 600,
+            color: "Black",
+            fontSize: "140px",
+            borderRadius: 20,
+            opacity: 0.75,
+          }}
+          sx={{ mt: 2, width: "25%" }}
+        >
+        {auth.user.username}
+        </div>
+      );
     return(
         <Grid
         container
-        spacing={2}
         justifyContent="center"
         alignItems="center"
         style={{
@@ -20,22 +33,19 @@ export default function ProfileScreen(){
           backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
         }}
       >
+        <Grid item xs={5}
+        alignItems="flex-start">
+        {welcomeTag}
+        </Grid>
         
-  
         <Grid item xs={8} sm={8} md ={8} lg = {8} xl ={8}>
           <Typography style={{ fontSize: "32px" }}>{community.communityList}</Typography>
           <PostFeed />
         </Grid>
   
-        {/* <Sticky> */}
         <div class="sticky">
-        <Sticky>
          <Sidebar />
-         </Sticky>
         </div>
-          {/* <Grid class="sticky" item xs={4}><Sidebar /></Grid>  */}
-        {/* </Sticky> */}
-        
       </Grid>
     );
 }

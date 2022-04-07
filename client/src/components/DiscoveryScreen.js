@@ -103,15 +103,9 @@ export default function DiscoveryScreen() {
         <PostFeed />
       </Grid>
 
-      {/* <Sticky> */}
       <div class="sticky">
-      {/* <Sticky> */}
        <Sidebar />
-       {/* </Sticky> */}
       </div>
-        {/* <Grid class="sticky" item xs={4}><Sidebar /></Grid>  */}
-      {/* </Sticky> */}
-      
     </Grid>
   );
 }
