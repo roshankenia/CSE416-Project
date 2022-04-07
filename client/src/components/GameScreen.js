@@ -21,17 +21,42 @@ export default function GameScreen(){
     ]
     const currentPlayer = players[turnNumber%(players.length)]
 
-    return <Grid
-            container
-            spacing={2}
-            justifyContent="center"
-            alignItems="center"
-            style={{
-              width: "100vw",
-              height: "100vh",
-              backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
-            }}
-          >
-              {currentPlayer} + " is currently drawing..."
-          </Grid>
+    const flexContainer = {
+        display: 'flex',
+        flexDirection: 'row',
+        padding: 0,
+      };
+
+    return  <Grid
+                container
+                spacing={2}
+                justifyContent="center"
+                alignItems="center"
+                style={{
+                width: "100vw",
+                height: "100vh",
+                backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
+                }}
+            >
+                {currentPlayer} + " is currently drawing..."
+                <List style={flexContainer}>
+                    <ListItem
+                    primaryText="foo1"
+                    secondaryText="bar1"/>
+                    <ListItem
+                    primaryText="foo2"
+                    secondaryText="bar2"/>
+                </List>
+                <Box
+                    sx={{
+                        width: 300,
+                        height: 300,
+                        backgroundColor: 'primary.dark',
+                        '&:hover': {
+                        backgroundColor: 'primary.main',
+                        opacity: [0.9, 0.8, 0.7],
+                        },
+                    }}
+                />
+            </Grid>
 }
