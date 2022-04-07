@@ -28,18 +28,38 @@ import PostFeed from "./PostFeed.js";
 export default function CommunityScreen() {
   const { community } = useContext(GlobalCommunityContext);
   return (
-    <Grid
-      container
-      justifyContent="center"
-      style={{ backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')" }}
-    >
-      <Grid item xs={8}>
-        <Typography style={{ fontSize: "32px" }}>{community.communityList}</Typography>
-        <PostFeed />
+    <Box style={{ backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')" }}>
+      <Grid container justifyContent="center">
+        <Grid item xs={12}>
+          <Typography display="inline" style={{ fontSize: "48px" }}>
+            {community.communityList}
+          </Typography>
+          <Button
+            variant="contained"
+            color="success"
+            size="small"
+            align="center"
+            style={{
+              fontWeight: 600,
+              border: "3px solid",
+              borderColor: "black",
+              backgroundColor: "red",
+              color: "black",
+              fontSize: "10px",
+              borderRadius: 20,
+            }}
+            sx={{ ml: 2, mb:2}}
+          >
+            Leave
+          </Button>
+        </Grid>
+        <Grid item xs={8}>
+          <PostFeed />
+        </Grid>
+        <Grid item xs={4} align="center">
+          <Sidebar />
+        </Grid>
       </Grid>
-      <Grid item xs={4} align="center">
-        <Sidebar />
-      </Grid>
-    </Grid>
+    </Box>
   );
 }

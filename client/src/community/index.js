@@ -22,6 +22,9 @@ export const GlobalCommunityActionType = {
   RESET: "RESET",
   SET_COMMUNITY: "SET_COMMUNITY",
   SET_SCREEN: "SET_SCREEN",
+  SET_DELETE_ACCOUNT: "SET_DELETE_ACCOUNT",
+  SET_CHANGE_PASSWORD: "SET_CHANGE_PASSWORD",
+  SET_FEEDBACK: "SET_FEEDBACK",
 };
 
 function GlobalCommunityContextProvider(props) {
@@ -32,6 +35,9 @@ function GlobalCommunityContextProvider(props) {
     errorMessage: null,
     sort: "newest date",
     screen: "communities",
+    deleteAccountModal: false,
+    changePasswordModal: false,
+    feedbackModal: false,
   });
   const history = useHistory();
 
@@ -42,20 +48,41 @@ function GlobalCommunityContextProvider(props) {
     switch (type) {
       case GlobalCommunityActionType.CREATE_NEW_COMMUNITY: {
         return setCommunity({
-          communityList: null,
+          communityList: community.communityList,
           currentCommunity: payload,
+          search: community.search,
+          errorMessage: community.errorMessage,
+          sort: community.sort,
+          screen: community.screen,
+          deleteAccountModal: community.deleteAccountModal,
+          changePasswordModal: community.changePasswordModal,
+          feedbackModal: community.feedbackModal,
         });
       }
       case GlobalCommunityActionType.GET_COMMUNITYLIST: {
         return setCommunity({
           communityList: payload,
-          currentCommunity: null,
+          currentCommunity: community.currentCommunity,
+          search: community.search,
+          errorMessage: community.errorMessage,
+          sort: community.sort,
+          screen: community.screen,
+          deleteAccountModal: community.deleteAccountModal,
+          changePasswordModal: community.changePasswordModal,
+          feedbackModal: community.feedbackModal,
         });
       }
       case GlobalCommunityActionType.UPDATE_COMMUNITYLIST: {
         return setCommunity({
           communityList: payload,
-          currentCommunity: null,
+          currentCommunity: community.currentCommunity,
+          search: community.search,
+          errorMessage: community.errorMessage,
+          sort: community.sort,
+          screen: community.screen,
+          deleteAccountModal: community.deleteAccountModal,
+          changePasswordModal: community.changePasswordModal,
+          feedbackModal: community.feedbackModal,
         });
       }
       //For testing purpose only
@@ -63,16 +90,78 @@ function GlobalCommunityContextProvider(props) {
         return setCommunity({
           communityList: null,
           currentCommunity: null,
+          search: community.search,
+          errorMessage: community.errorMessage,
+          sort: community.sort,
+          screen: community.screen,
+          deleteAccountModal: community.deleteAccountModal,
+          changePasswordModal: community.changePasswordModal,
+          feedbackModal: community.feedbackModal,
         });
       }
       case GlobalCommunityActionType.SET_COMMUNITY: {
         return setCommunity({
           communityList: payload,
+          currentCommunity: community.currentCommunity,
+          search: community.search,
+          errorMessage: community.errorMessage,
+          sort: community.sort,
+          screen: community.screen,
+          deleteAccountModal: community.deleteAccountModal,
+          changePasswordModal: community.changePasswordModal,
+          feedbackModal: community.feedbackModal,
         });
       }
       case GlobalCommunityActionType.SET_SCREEN: {
         return setCommunity({
+          communityList: community.communityList,
+          currentCommunity: community.currentCommunity,
+          search: community.search,
+          errorMessage: community.errorMessage,
+          sort: community.sort,
           screen: payload,
+          deleteAccountModal: community.deleteAccountModal,
+          changePasswordModal: community.changePasswordModal,
+          feedbackModal: community.feedbackModal,
+        });
+      }
+      case GlobalCommunityActionType.SET_DELETE_ACCOUNT: {
+        return setCommunity({
+          communityList: community.communityList,
+          currentCommunity: community.currentCommunity,
+          search: community.search,
+          errorMessage: community.errorMessage,
+          sort: community.sort,
+          screen: community.screen,
+          deleteAccountModal: payload,
+          changePasswordModal: community.changePasswordModal,
+          feedbackModal: community.feedbackModal,
+        });
+      }
+      case GlobalCommunityActionType.SET_FEEDBACK: {
+        return setCommunity({
+          communityList: community.communityList,
+          currentCommunity: community.currentCommunity,
+          search: community.search,
+          errorMessage: community.errorMessage,
+          sort: community.sort,
+          screen: community.screen,
+          deleteAccountModal: community.deleteAccountModal,
+          changePasswordModal: community.changePasswordModal,
+          feedbackModal: payload,
+        });
+      }
+      case GlobalCommunityActionType.SET_CHANGE_PASSWORD: {
+        return setCommunity({
+          communityList: community.communityList,
+          currentCommunity: community.currentCommunity,
+          search: community.search,
+          errorMessage: community.errorMessage,
+          sort: community.sort,
+          screen: community.screen,
+          deleteAccountModal: community.deleteAccountModal,
+          changePasswordModal: payload,
+          feedbackModal: community.feedbackModal,
         });
       }
       default:
@@ -90,6 +179,24 @@ function GlobalCommunityContextProvider(props) {
     communityReducer({
       type: GlobalCommunityActionType.SET_COMMUNITY,
       payload: name,
+    });
+  };
+  community.setDeleteAccount = async function (deleteAccount) {
+    communityReducer({
+      type: GlobalCommunityActionType.SET_DELETE_ACCOUNT,
+      payload: deleteAccount,
+    });
+  };
+  community.setChangePassword = async function (changePassword) {
+    communityReducer({
+      type: GlobalCommunityActionType.SET_CHANGE_PASSWORD,
+      payload: changePassword,
+    });
+  };
+  community.setFeedback = async function (feedback) {
+    communityReducer({
+      type: GlobalCommunityActionType.SET_FEEDBACK,
+      payload: feedback,
     });
   };
   community.createNewCommunity = async function (name) {
