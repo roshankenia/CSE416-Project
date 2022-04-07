@@ -136,7 +136,7 @@ const HomeScreen = () => {
             }}
             sx={{ mt: 2, width: "100%" }}
           >
-            <Grid container spacing={2}>
+            <Grid container>
               <Grid item xs={8}>
                 <Typography align="center" style={{ fontSize: "48px" }}>
                   {name}
@@ -190,29 +190,33 @@ const HomeScreen = () => {
     </List>
   );
   return (
-    <Grid
-      container
-      spacing={2}
-      justifyContent="center"
-      alignItems="center"
+    <Box
       style={{
         width: "100vw",
         height: "100vh",
         backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
       }}
     >
-      <Grid item xs={6}>
-        {communitiesButton}
-        {discoveryButton}
+      <Grid container>
+        <Grid item xs={6}>
+          {communitiesButton}
+          {discoveryButton}
+        </Grid>
+        <Grid item xs={6}></Grid>
+        <Grid item xs={12}>
+          <Typography align="center" style={{ fontSize: "48px" }}>
+            {"Your Communities"}
+          </Typography>
+        </Grid>
+
+        <Grid item xs={8} align="center">
+          {communityCard}
+        </Grid>
+        <Grid item xs={4} align="center">
+          <Sidebar />
+        </Grid>
       </Grid>
-      <Grid item xs={6}></Grid>
-      <Grid item xs={8} align="center">
-        {communityCard}
-      </Grid>
-      <Grid item xs={4} align="center">
-        <Sidebar />
-      </Grid>
-    </Grid>
+    </Box>
   );
 };
 
