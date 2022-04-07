@@ -2,7 +2,7 @@ import { Grid, Typography } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalCommunityContext } from "../community";
 import { GameContext } from "../game";
-import { Typography, Box, Grid, Button, List, ListItem, TextField } from "@mui/material";
+import { Box, Button, List, ListItem, TextField } from "@mui/material";
 
 export default function GameScreen(){
     // return <Grid style={{fontSize:'420px'}}>Not implemented</Grid>
