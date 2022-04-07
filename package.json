@@ -8,6 +8,7 @@
     "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
   },
   "dependencies": {
+    "@types/react-stickynode": "^4.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
@@ -17,6 +18,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.5",
     "nodemon": "^2.0.15",
+    "react-stickynode": "^4.0.0",
     "socket.io": "^4.4.1",
     "socket.io-client": "^4.4.1"
   },
