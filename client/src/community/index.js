@@ -48,7 +48,7 @@ function GlobalCommunityContextProvider(props) {
     switch (type) {
       case GlobalCommunityActionType.CREATE_NEW_COMMUNITY: {
         return setCommunity({
-          communityList: null,
+          communityList: community.communityList,
           currentCommunity: payload,
           search: community.search,
           errorMessage: community.errorMessage,
@@ -62,7 +62,7 @@ function GlobalCommunityContextProvider(props) {
       case GlobalCommunityActionType.GET_COMMUNITYLIST: {
         return setCommunity({
           communityList: payload,
-          currentCommunity: null,
+          currentCommunity: community.currentCommunity,
           search: community.search,
           errorMessage: community.errorMessage,
           sort: community.sort,
@@ -75,7 +75,7 @@ function GlobalCommunityContextProvider(props) {
       case GlobalCommunityActionType.UPDATE_COMMUNITYLIST: {
         return setCommunity({
           communityList: payload,
-          currentCommunity: null,
+          currentCommunity: community.currentCommunity,
           search: community.search,
           errorMessage: community.errorMessage,
           sort: community.sort,
