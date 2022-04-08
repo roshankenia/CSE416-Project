@@ -37,14 +37,19 @@ export default function GameScreen(){
     const roomCode = 'imadethiscodeup'
 
     // ******* change gameMode as "story" or "comic" to get different game screens *******
-    const gameMode = "comic"
+    // const gameMode = "comic"
 
     // WILL NOT BE IMPLEMENTED IN FINAL PROJECT
     // SIMPLY USED FOR DEMONSTRATION PURPOSES
-    // const [gameMode, setGameMode] = useState('comic');
-    // const handleGameMode = (event, newGameMode) => {
-    //     setGameMode(newGameMode);
-    // }
+    const [gameMode, setGameMode] = useState(true);
+    const handleGameMode = (event) => {
+        event.stopPropagation();
+        if (gameMode){
+            setGameMode(false)
+        } else {
+            setGameMode(true)
+        }
+    }
 
     const timer = "0:11"
     const charactersLeft = 147
@@ -91,8 +96,8 @@ export default function GameScreen(){
           },
         },
       }));
-    
-    if (gameMode === "comic"){
+    console.log(gameMode)
+    if (gameMode){
         return  <Grid
                 container
                 spacing={2}
@@ -107,20 +112,20 @@ export default function GameScreen(){
                 
                 <Grid item xs="12" align="center">
                     <Button
-                    // onClick={handleGameMode("story")}
-                    sx={{
-                        width: 300,
-                        height: 50,
-                        margin: 1,
-                        backgroundColor: 'white',
-                        '&:hover': {
-                        backgroundColor: 'white',
-                        opacity: [0.9, 0.8, 0.7],
-                        },
-                        borderRadius: 5,
-                        border: 3,
-                        color: "black"
-                    }}
+                        onClick={handleGameMode}
+                        sx={{
+                            width: 300,
+                            height: 50,
+                            margin: 1,
+                            backgroundColor: 'white',
+                            '&:hover': {
+                            backgroundColor: 'white',
+                            opacity: [0.9, 0.8, 0.7],
+                            },
+                            borderRadius: 5,
+                            border: 3,
+                            color: "black"
+                        }}
                     >
                         <Typography>
                             Click me to switch to Story
@@ -424,7 +429,7 @@ export default function GameScreen(){
                     </List>   
                 </Grid> 
             </Grid>
-    } else if (gameMode === "story") {
+    } else if (!gameMode) {
         return  <Grid
                 container
                 spacing={2}
@@ -439,7 +444,7 @@ export default function GameScreen(){
                 
                 <Grid item xs="12" align="center">
                 <Button
-                    // onClick={handleGameMode("comic")}
+                    onClick={handleGameMode}
                     sx={{
                         width: 300,
                         height: 50,
