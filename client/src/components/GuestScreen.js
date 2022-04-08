@@ -30,6 +30,7 @@ export default function GuestScreen() {
     // eslint-disable-next-line no-console
 
     auth.createGuest(data.get("username"), data.get("lobbyCode"));
+    game.hostNewLobby();
     // game.hostNewLobby();
   };
 
