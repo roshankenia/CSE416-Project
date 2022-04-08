@@ -66,7 +66,7 @@ const HomeScreen = () => {
   const communitiesButton = (
     <Button
       onClick={(event) => setScreen(event, "communities")}
-      disabled="true"
+      disabled={true}
       variant="contained"
       color="success"
       size="small"
@@ -203,20 +203,56 @@ const HomeScreen = () => {
           {discoveryButton}
         </Grid>
         <Grid item xs={6}></Grid>
-        <Grid item xs={8}>
-          <Typography align="center" style={{ fontSize: "48px" }}>
+        <Grid item xs={3}>
+          <Typography display="inline" style={{ fontSize: "48px" }}>
             {"Your Communities"}
           </Typography>
+        </Grid>
+        <Grid item xs={5}>
+          {" "}
+          <Box
+            style={{
+              border: "3px solid",
+              borderColor: "black",
+              color: "black",
+              backgroundColor: "white",
+              fontSize: "32px",
+              borderRadius: 20,
+              outline: "none",
+              width: "96%",
+            }}
+          >
+            <Box style={{ width: "96%" }}>
+              <TextField
+                fullWidth
+                variant="standard"
+                id="search"
+                label="Search:"
+                name="search"
+                InputProps={{
+                  disableUnderline: true,
+                  style: {
+                    fontSize: 20,
+                    paddingLeft: 20,
+                  },
+                }}
+                InputLabelProps={{
+                  style: { fontSize: 24, paddingLeft: 20 },
+                  shrink: true,
+                }}
+              />
+            </Box>
+          </Box>
         </Grid>
         <Grid item xs={4}></Grid>
         <Grid item xs={8} align="center">
           {communityCard}
         </Grid>
         <div class="sticky">
-      {/* <Sticky> */}
-       <Sidebar />
-       {/* </Sticky> */}
-      </div>
+          {/* <Sticky> */}
+          <Sidebar />
+          {/* </Sticky> */}
+        </div>
       </Grid>
     </Box>
   );
