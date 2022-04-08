@@ -4,6 +4,15 @@ import { GlobalCommunityContext } from "../community";
 import { GameContext } from "../game";
 import { Box, Button, List, ListItem, TextField } from "@mui/material";
 
+import EditIcon from '@mui/icons-material/Edit';
+import BrushIcon from '@mui/icons-material/Brush';
+import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
+import ImageSearchIcon from '@mui/icons-material/ImageSearch';
+import OpenInFullIcon from '@mui/icons-material/OpenInFull';
+import TextFormatIcon from '@mui/icons-material/TextFormat';
+import ColorizeIcon from '@mui/icons-material/Colorize';
+import ClearIcon from '@mui/icons-material/Clear';
+
 export default function GameScreen(){
     // return <Grid style={{fontSize:'420px'}}>Not implemented</Grid>
     const { game } = useContext(GameContext);
@@ -13,6 +22,7 @@ export default function GameScreen(){
     // THIS DATA SHOULD BE TAKEN FROM THE GAME OBJECT PASSED IN GameContext
     const roomCode = 'imadethiscodeup'
     const gameMode = "comic"
+    const timer = "0:11"
     const turnNumber = 0
     const players = [
         "u/anon",
@@ -27,9 +37,10 @@ export default function GameScreen(){
         flexDirection: 'row',
         padding: 25,
         align: "center",
-        alignItems: "center"
-        
+        alignItems: "center",
+        justifyContent: "center"
       };
+    
     if (gameMode === "comic"){
         return  <Grid
                 container
@@ -44,12 +55,23 @@ export default function GameScreen(){
             >
                 
                 <Grid item xs="12" align="center">
-                    <Typography fontSize={"32px"}>
-                        {currentPlayer} + " is currently drawing..."
+                    <Typography fontSize={"64px"}>
+                        {currentPlayer} is currently drawing...
                     </Typography>
                 
-                    <List style={flexContainer} sx={{justifyContent:"center"}}>
+                    <List style={flexContainer}>
                         {/* List of current panels drawn goes here */}
+                        <Box sx={{
+                                width: 150,
+                                height: 150,
+                                margin: 1,
+                                backgroundColor: 'primary.dark',
+                                '&:hover': {
+                                backgroundColor: 'primary.main',
+                                opacity: [0.9, 0.8, 0.7],
+                                },
+                                border: 3
+                            }}/>
                         <Box
                             sx={{
                                 width: 150,
@@ -60,6 +82,7 @@ export default function GameScreen(){
                                 backgroundColor: 'primary.main',
                                 opacity: [0.9, 0.8, 0.7],
                                 },
+                                border: 3
                             }}
                         ></Box>
                         <Box
@@ -72,6 +95,7 @@ export default function GameScreen(){
                                 backgroundColor: 'primary.main',
                                 opacity: [0.9, 0.8, 0.7],
                                 },
+                                border: 3
                             }}
                         ></Box>
                         <Box
@@ -84,6 +108,7 @@ export default function GameScreen(){
                                 backgroundColor: 'primary.main',
                                 opacity: [0.9, 0.8, 0.7],
                                 },
+                                border: 3
                             }}
                         ></Box>
                         <Box
@@ -96,18 +121,7 @@ export default function GameScreen(){
                                 backgroundColor: 'primary.main',
                                 opacity: [0.9, 0.8, 0.7],
                                 },
-                            }}
-                        ></Box>
-                        <Box
-                            sx={{
-                                width: 150,
-                                height: 150,
-                                margin: 1,
-                                backgroundColor: 'primary.dark',
-                                '&:hover': {
-                                backgroundColor: 'primary.main',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
+                                border: 3
                             }}
                         ></Box>
                         
@@ -124,24 +138,73 @@ export default function GameScreen(){
                                         height: 600,
                                         margin: 1,
                                         backgroundColor: 'primary.dark',
-                                        '&:hover': {
-                                        backgroundColor: 'primary.main',
-                                        opacity: [0.9, 0.8, 0.7],
-                                        },
+                                        borderRadius: 5,
+                                        border: 3
                                     }}
-                                ></Box>
+                                >
+                                    <List>
+                                        <Typography fontSize={"32px"}>
+                                            Layers:
+                                        </Typography>
+                                        <Button
+                                            sx={{
+                                                width: 200,
+                                                height: 75,
+                                                margin: 1,
+                                                backgroundColor: 'white',
+                                                '&:hover': {
+                                                backgroundColor: 'white',
+                                                opacity: [0.9, 0.8, 0.7],
+                                                },
+                                                borderRadius: 5,
+                                                border: 3,
+                                                color: "black"
+                                            }}
+                                        >
+                                            <Typography fontSize={"32px"}>
+                                                Layer 1
+                                            </Typography>
+                                        </Button>
+                                        <Button
+                                            sx={{
+                                                width: 200,
+                                                height: 75,
+                                                margin: 1,
+                                                backgroundColor: 'white',
+                                                '&:hover': {
+                                                backgroundColor: 'white',
+                                                opacity: [0.9, 0.8, 0.7],
+                                                },
+                                                borderRadius: 5,
+                                                border: 3,
+                                                color: "black"
+                                            }}
+                                        >
+                                            <Typography fontSize={"32px"}>
+                                                Layer 2
+                                            </Typography>
+                                        </Button>
+                                    </List>
+                                </Box>
                                 <Box
                                     sx={{
                                         width: 150,
                                         height: 600,
                                         margin: 1,
                                         backgroundColor: 'primary.dark',
-                                        '&:hover': {
-                                        backgroundColor: 'primary.main',
-                                        opacity: [0.9, 0.8, 0.7],
-                                        },
+                                        borderRadius: 5,
+                                        border: 3
                                     }}
-                                ></Box>
+                                >
+                                    <EditIcon fontSize="large" />
+                                    <BrushIcon fontSize="large" />
+                                    <FormatColorFillIcon fontSize="large" />
+                                    <ImageSearchIcon fontSize="large" />
+                                    <OpenInFullIcon fontSize="large" />
+                                    <TextFormatIcon fontSize="large" />
+                                    <ColorizeIcon fontSize="large" />
+                                    <ClearIcon fontSize="large" />
+                                </Box>
                             </List>
                         </Grid>
                         {/* Drawing / Writing Canvas */}
@@ -151,87 +214,141 @@ export default function GameScreen(){
                                     width: 600,
                                     height: 600,
                                     backgroundColor: 'primary.dark',
-                                    '&:hover': {
-                                    backgroundColor: 'primary.main',
-                                    opacity: [0.9, 0.8, 0.7],
-                                    },
+                                    border: 3
                                 }}
                             ></Box>
                         </Grid>
                         {/* Right of Canvas */}
                         <Grid item xs="3" align="center">
-                            <Box
+                            <Button
                                 sx={{
-                                    width: 250,
-                                    height: 50,
+                                    width: 450,
+                                    height: 75,
+                                    margin: 1,
+                                    backgroundColor: '#FF7F7F',
+                                    borderRadius: 5,
+                                    border: 3,
+                                    color: "black"
+                                }}
+                            >
+                                <Typography fontSize={"32px"}>
+                                    Time Left: {timer}
+                                </Typography>
+                            </Button>
+                            <Button
+                                sx={{
+                                    width: 450,
+                                    height: 75,
                                     margin: 1,
                                     backgroundColor: 'primary.dark',
                                     '&:hover': {
                                     backgroundColor: 'primary.main',
                                     opacity: [0.9, 0.8, 0.7],
                                     },
+                                    borderRadius: 5,
+                                    border: 3,
+                                    color: "black"
                                 }}
-                            ></Box>
-                            <Box
+                            >
+                                <Typography fontSize={"32px"}>
+                                    Themes
+                                </Typography>
+                            </Button>
+                            <Button
                                 sx={{
-                                    width: 250,
-                                    height: 50,
+                                    width: 450,
+                                    height: 75,
                                     margin: 1,
                                     backgroundColor: 'primary.dark',
                                     '&:hover': {
                                     backgroundColor: 'primary.main',
                                     opacity: [0.9, 0.8, 0.7],
                                     },
+                                    borderRadius: 5,
+                                    border: 3,
+                                    color: "black"
                                 }}
-                            ></Box>
-                            <Box
+                            >
+                                <Typography fontSize={"32px"}>
+                                    Characters
+                                </Typography>
+                            </Button>
+                            <Button
                                 sx={{
-                                    width: 250,
-                                    height: 50,
+                                    width: 450,
+                                    height: 75,
                                     margin: 1,
                                     backgroundColor: 'primary.dark',
                                     '&:hover': {
                                     backgroundColor: 'primary.main',
                                     opacity: [0.9, 0.8, 0.7],
                                     },
+                                    borderRadius: 5,
+                                    border: 3,
+                                    color: "black"
                                 }}
-                            ></Box>
-                            <Box
+                            >
+                                <Typography fontSize={"32px"}>
+                                    Speech Bubbles
+                                </Typography>
+                            </Button>
+                            <Button
                                 sx={{
-                                    width: 250,
-                                    height: 50,
+                                    width: 450,
+                                    height: 75,
                                     margin: 1,
                                     backgroundColor: 'primary.dark',
                                     '&:hover': {
                                     backgroundColor: 'primary.main',
                                     opacity: [0.9, 0.8, 0.7],
                                     },
+                                    borderRadius: 5,
+                                    border: 3,
+                                    color: "black"
                                 }}
-                            ></Box>
-                            <Box
+                            >
+                                <Typography fontSize={"32px"}>
+                                    Your Recent Shapes
+                                </Typography>
+                            </Button>
+                            <Button
                                 sx={{
-                                    width: 250,
-                                    height: 50,
+                                    width: 450,
+                                    height: 75,
                                     margin: 1,
-                                    backgroundColor: 'primary.dark',
+                                    backgroundColor: 'yellow',
                                     '&:hover': {
-                                    backgroundColor: 'primary.main',
+                                    backgroundColor: 'yellow',
                                     opacity: [0.9, 0.8, 0.7],
                                     },
+                                    borderRadius: 5,
+                                    border: 3,
+                                    color: "black"
                                 }}
-                            ></Box>
-                            <Box
+                            >
+                                <Typography fontSize={"32px"}>
+                                    Save Selected As Shape
+                                </Typography>
+                            </Button>
+                            <Button
                                 sx={{
-                                    width: 250,
-                                    height: 50,
+                                    width: 450,
+                                    height: 75,
                                     margin: 1,
-                                    backgroundColor: 'primary.dark',
+                                    backgroundColor: 'green',
                                     '&:hover': {
-                                    backgroundColor: 'primary.main',
+                                    backgroundColor: 'green',
                                     opacity: [0.9, 0.8, 0.7],
                                     },
+                                    borderRadius: 5,
+                                    border: 3,
+                                    color: "black"
                                 }}
-                            ></Box>
+                            >
+                                <Typography fontSize={"32px"}>
+                                    Submit
+                                </Typography>
+                            </Button>
                         </Grid>
                     </List>   
                 </Grid> 
