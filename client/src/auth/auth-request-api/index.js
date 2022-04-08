@@ -91,6 +91,7 @@ export const deleteAccount = (username, password) => {
 const apis = {
   getLoggedIn,
   registerUser,
+  createGuest,
   loginUser,
   logoutUser,
   changePassword,

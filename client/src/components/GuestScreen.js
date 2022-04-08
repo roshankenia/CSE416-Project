@@ -15,19 +15,22 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { GlobalCommunityContext } from "../community";
+import { GameContext } from "../game";
 
 const theme = createTheme();
 
 export default function GuestScreen() {
   const { auth } = useContext(AuthContext);
   const { community } = useContext(GlobalCommunityContext);
+  const { game } = useContext(GameContext);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
 
-    auth.loginUser(data.get("username"), data.get("lobbyCode"));
+    auth.createGuest(data.get("username"), data.get("lobbyCode"));
+    // game.hostNewLobby();
   };
 
   return (
@@ -145,7 +148,6 @@ export default function GuestScreen() {
                   variant="contained"
                   color="success"
                   size="large"
-                  href="/register/"
                   style={{
                     fontWeight: 600,
                     border: "3px solid",

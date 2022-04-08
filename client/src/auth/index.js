@@ -16,6 +16,7 @@ export const AuthActionType = {
   CHANGE_PASSWORD: "CHANGE_PASSWORD",
   RESET_PASSWORD: "RESET_PASSWORD",
   DELETE_ACCOUNT: "DELETE_ACCOUNT",
+  CREATE_GUEST: "CREATE_GUEST",
 };
 
 function AuthContextProvider(props) {
@@ -40,6 +41,7 @@ function AuthContextProvider(props) {
           user: payload.user,
           loggedIn: payload.loggedIn,
           errorMessage: auth.errorMessage,
+          isGuest: auth.isGuest,
         });
       }
       case AuthActionType.LOGIN_USER: {
@@ -47,6 +49,7 @@ function AuthContextProvider(props) {
           user: payload.user,
           loggedIn: true,
           errorMessage: auth.errorMessage,
+          isGuest: auth.isGuest,
         });
       }
       case AuthActionType.LOGOUT_USER: {
@@ -54,6 +57,7 @@ function AuthContextProvider(props) {
           user: null,
           loggedIn: false,
           errorMessage: auth.errorMessage,
+          isGuest: auth.isGuest,
         });
       }
       case AuthActionType.REGISTER_USER: {
@@ -61,6 +65,15 @@ function AuthContextProvider(props) {
           user: payload.user,
           loggedIn: true,
           errorMessage: auth.errorMessage,
+          isGuest: auth.isGuest,
+        });
+      }
+      case AuthActionType.CREATE_GUEST: {
+        return setAuth({
+          user: payload.user,
+          loggedIn: true,
+          errorMessage: auth.errorMessage,
+          isGuest: true,
         });
       }
       case AuthActionType.SET_ERROR_MESSAGE: {
@@ -68,6 +81,7 @@ function AuthContextProvider(props) {
           user: auth.user,
           loggedIn: auth.loggedIn,
           errorMessage: payload,
+          isGuest: auth.isGuest,
         });
       }
       case AuthActionType.CHANGE_PASSWORD: {
@@ -75,6 +89,7 @@ function AuthContextProvider(props) {
           user: payload.user,
           loggedIn: true,
           errorMessage: auth.errorMessage,
+          isGuest: auth.isGuest,
         });
       }
       case AuthActionType.RESET_PASSWORD: {
@@ -82,6 +97,7 @@ function AuthContextProvider(props) {
           user: payload.user,
           loggedIn: false,
           errorMessage: auth.errorMessage,
+          isGuest: auth.isGuest,
         });
       }
       case AuthActionType.DELETE_ACCOUNT: {
@@ -89,6 +105,7 @@ function AuthContextProvider(props) {
           user: payload.user,
           loggedIn: false,
           errorMessage: auth.errorMessage,
+          isGuest: auth.isGuest,
         });
       }
       default:
@@ -260,22 +277,23 @@ function AuthContextProvider(props) {
   };
 
   auth.createGuest = async function (username, lobbyCode) {
+    console.log("making guest");
     try {
       const response = await api.createGuest(username, true);
       if (response.status === 200) {
+        let user = response.data.newUser;
         authReducer({
-          type: AuthActionType.REGISTER_USER,
+          type: AuthActionType.CREATE_GUEST,
           payload: {
-            user: response.data.user,
+            user: user,
           },
         });
         //lobby push
+        console.log(response.data.newUser);
         // history.push("/lobby/"+lobbyCode);
       }
     } catch (error) {
-      console.log(error.response.data.errorMessage);
-      console.log(auth.errorMessage);
-      auth.setErrorMessage(error.response.data.errorMessage);
+      console.log(error);
     }
   };
 
