@@ -469,70 +469,84 @@ export default function GameScreen(){
                 
                     <List style={flexContainer}>
                         {/* List of current panels drawn goes here */}
-                        <Box sx={{
-                                width: 150,
-                                height: 150,
-                                margin: 1,
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                backgroundColor: 'white',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                border: 3
-                            }}/>
-                        <Box
-                            sx={{
-                                width: 150,
-                                height: 150,
-                                margin: 1,
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                backgroundColor: 'white',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                border: 3
-                            }}
-                        ></Box>
-                        <Box
-                            sx={{
-                                width: 150,
-                                height: 150,
-                                margin: 1,
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                backgroundColor: 'white',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                border: 3
-                            }}
-                        ></Box>
-                        <Box
-                            sx={{
-                                width: 150,
-                                height: 150,
-                                margin: 1,
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                backgroundColor: 'white',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                border: 3
-                            }}
-                        ></Box>
-                        <Box
-                            sx={{
-                                width: 150,
-                                height: 150,
-                                margin: 1,
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                backgroundColor: 'white',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                border: 3
-                            }}
-                        ></Box>
-                        
+                        <Grid>
+                            <Typography>
+                                {players[0]}:
+                            </Typography>
+                            <Box
+                                sx={{
+                                    width: 150,
+                                    height: 150,
+                                    margin: 1,
+                                    backgroundColor: 'white',
+                                    '&:hover': {
+                                    backgroundColor: 'white',
+                                    opacity: [0.9, 0.8, 0.7],
+                                    },
+                                    border: 3
+                                }}
+                            >
+                                <Typography fontSize={"10px"}>
+                                    Fiona lived in her parents’ house, 
+                                    in the town where she and Grant went to university. 
+                                    It was a big, bay-windowed house that seemed to Grant 
+                                    both luxurious and disorderly, with rugs crooked on the floors 
+                                    and cup rings bitten into the table varnish.
+                                </Typography>
+                            </Box>
+                        </Grid>
+                        <Grid>
+                            <Typography>
+                                {players[1]}:
+                            </Typography>
+                            <Box
+                                sx={{
+                                    width: 150,
+                                    height: 150,
+                                    margin: 1,
+                                    backgroundColor: 'white',
+                                    '&:hover': {
+                                    backgroundColor: 'white',
+                                    opacity: [0.9, 0.8, 0.7],
+                                    },
+                                    border: 3
+                                }}
+                            >
+                                <Typography fontSize={"10px"}>
+                                    Her mother was Icelandic—a powerful woman with a froth of white hair 
+                                    and indignant far-left politics. The father was an important cardiologist, 
+                                    revered around the hospital but happily subservient at home, where he would 
+                                    listen to his wife’s strange tirades with an absentminded smile.
+                                </Typography>
+                            </Box>
+                        </Grid>
+                        <Grid>
+                            <Typography>
+                                {players[2]}:
+                            </Typography>
+                            <Box
+                                sx={{
+                                    width: 150,
+                                    height: 150,
+                                    margin: 1,
+                                    backgroundColor: 'white',
+                                    '&:hover': {
+                                    backgroundColor: 'white',
+                                    opacity: [0.9, 0.8, 0.7],
+                                    },
+                                    border: 3
+                                }}
+                            >
+                                <Typography fontSize={"10px"}>
+                                    Fiona had her own little car and a pile of cashmere sweaters, but she wasn’t 
+                                    in a sorority, and her mother’s political activity was probably the reason. 
+                                    Not that she cared. Sororities were a joke to her, and so was politics—though 
+                                    she liked to play “The Four Insurgent Generals” on the phonograph, and 
+                                    sometimes also the “Internationale,” very loud.
+                                </Typography>
+
+                            </Box>
+                        </Grid>
                     </List>
                     
                     
