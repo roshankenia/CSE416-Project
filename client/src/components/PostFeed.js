@@ -114,7 +114,164 @@ export default function PostFeed() {
     dateAndTime: "04-06-2022",
   };
 
-  const posts = [fakePost1, fakePost1, fakePost1];
+  const fakePost2 = {
+    postTitle: "This is a post title",
+    likes: [
+      "1",
+      "2",
+      "3",
+      "1",
+      "2",
+      "3",
+      "1",
+      "2",
+      "3",
+      "1",
+      "2",
+      "3",
+      "1",
+      "2",
+      "3",
+    ],
+    dislikes: ["1", "2", "3","1", "2", "3","1", "2", "3"],
+    comments: [
+      {
+        username: "RDK961",
+        comment: "this is so funny",
+        likes: ["1", "2", "3","1", "2", "3","1", "2", "3"],
+        dislikes: ["1", "2", "3"],
+        reply: [
+          {
+            username: "Roshan",
+            reply: "I disagree",
+            likes: [
+              "1",
+              "2",
+              "3",
+              "1",
+              "2",
+              "3",
+              "1",
+              "2",
+              "3",
+              "1",
+              "2",
+              "3",
+              "1",
+              "2",
+              "3",
+              "1",
+              "2",
+              "3",
+              "1",
+              "2",
+              "3",
+              "1",
+              "2",
+              "3",
+              "1",
+              "2",
+              "3",
+              "1",
+              "2",
+              "3",
+              "1",
+              "2",
+              "3",
+            ],
+            dislikes: ["1", "2", "3"],
+          },
+        ],
+      },
+      {
+        username: "Alan",
+        comment: "ratio",
+        likes: ["1", "2", "3", "1", "2", "3", "1", "2", "3", "1", "2", "3"],
+        dislikes: ["1", "2", "3"],
+        reply: [],
+      },
+    ],
+
+    dateAndTime: "04-07-2022",
+  };
+
+
+  const fakePost3 = {
+    postTitle: "A random title",
+    likes: [
+      "1",
+      "2",
+      "3",
+      "1",
+      "1",
+      "2",
+      "3",
+      "1",
+      "1",
+      "2",
+      "3",
+      "1",
+      "2",
+      "3",
+      "1",
+      "2",
+      "3",
+      "1",
+      "2",
+      "3",
+      "1",
+      "2",
+      "3",
+    ],
+    dislikes: ["1", "2", "3","1", "2",],
+    comments: [
+      {
+        username: "Terran",
+        comment: "this is a comment",
+        likes: ["1", "2", "3","1", "2", "3","1", "2", "3"],
+        dislikes: ["1", "2", "3"],
+        reply: [
+          {
+            username: "jeff",
+            reply: "this is a reply",
+            likes: [
+              "1",
+              "2",
+              "3",
+              "1",
+              "1",
+              "2",
+              "3",
+              "1",
+              "2",
+              "3",
+              "1",
+              "2",
+              "3",
+              "1",
+              "2",
+              "3",
+              "1",
+              "2",
+              "3",
+            ],
+            dislikes: ["1", "2"],
+          },
+        ],
+      },
+      {
+        username: "Alan",
+        comment: "ratio",
+        likes: ["1", "2", "3", "3", "1", "2", "3"],
+        dislikes: ["1", "2"],
+        reply: [],
+      },
+    ],
+
+    dateAndTime: "04-08-2022",
+  };
+
+  const posts = [fakePost1, fakePost2, fakePost3];
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleMenuClick = (event) => {
@@ -133,7 +290,7 @@ export default function PostFeed() {
     <List>
       {posts.map((post) => (
         <ListItem key={post}>
-          <PostCard post={post} />
+          <PostCard post={post} index={posts.indexOf(post)}/>
         </ListItem>
       ))}
     </List>
