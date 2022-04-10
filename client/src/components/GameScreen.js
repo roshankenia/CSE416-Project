@@ -2,6 +2,7 @@ import { Grid, Typography } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalCommunityContext } from "../community";
 import { GameContext } from "../game";
+import AuthContext from "../auth";
 import { Box, Button, List, ListItem, TextField } from "@mui/material";
 
 import EditIcon from '@mui/icons-material/Edit';
@@ -33,15 +34,16 @@ import { Stage, Layer, Rect, Text, Circle, Line, Star } from 'react-konva';
 
 export default function GameScreen(){
     const { game } = useContext(GameContext);
+    const { auth } = useContext(AuthContext)
+
+    //#region game control
 
     //We would get this data from our game context in actual implementation
     //This is just hardcoded for now
     // THIS DATA SHOULD BE TAKEN FROM THE GAME OBJECT PASSED IN GameContext
     const roomCode = 'imadethiscodeup'
-
     // ******* change gameMode as "story" or "comic" to get different game screens *******
     // const gameMode = "comic"
-
     // WILL NOT BE IMPLEMENTED IN FINAL PROJECT
     // SIMPLY USED FOR DEMONSTRATION PURPOSES
     const [gameMode, setGameMode] = useState(true);
@@ -54,7 +56,88 @@ export default function GameScreen(){
         }
     }
 
-    //#region KONVA hardcoded
+    const charactersLeft = 147
+    const players = [
+        auth.user.username,
+        "u/Terran",
+        "xx",
+        "zz"
+    ]
+
+    const flexContainer = {
+        display: 'flex',
+        flexDirection: 'row',
+        padding: 25,
+        align: "center",
+        alignItems: "center",
+        justifyContent: "center"
+    };
+
+    const [currentPlayer, setCurrentPlayer] = useState(players[0]);
+
+    //#region timer: some timer code i found online
+    const [seconds, setSeconds] = useState(30);
+    const [isActive, setIsActive] = useState(true);
+
+    // useEffect(() => {
+    //     let interval = null;
+    //     if (seconds === 0) {
+    //       setSeconds(500)
+    //     }
+    //     interval = setInterval(() => {
+    //         setSeconds(seconds => seconds - 1);
+    //     }, 1000);
+    // }, [seconds]);
+
+    // const [seconds, setSeconds] = React.useState(10);
+
+    React.useEffect(() => {
+        if (seconds > 0) {
+            setTimeout(() => setSeconds(seconds - 1), 1000);
+        } else {
+            if(players.indexOf(currentPlayer) == 3){
+                setSeconds('Vote To Publish!');
+                
+            }else{
+                setCurrentPlayer(players[players.indexOf(currentPlayer) + 1])
+                setSeconds(30);
+            }
+        }
+    });
+
+    //#endregion timer
+
+    const [alignment, setAlignment] = React.useState('left');
+    const [formats, setFormats] = React.useState(() => ['italic']);
+
+    const handleFormat = (event, newFormats) => {
+        setFormats(newFormats);
+    };
+
+    const handleAlignment = (event, newAlignment) => {
+        setAlignment(newAlignment);
+    };
+
+    const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
+        '& .MuiToggleButtonGroup-grouped': {
+          margin: theme.spacing(0.5),
+          border: 0,
+          '&.Mui-disabled': {
+            border: 0,
+          },
+          '&:not(:first-of-type)': {
+            borderRadius: theme.shape.borderRadius,
+          },
+          '&:first-of-type': {
+            borderRadius: theme.shape.borderRadius,
+          },
+        },
+      }));
+    console.log(gameMode)
+    //#endregion game control
+
+
+    //#region KONVA functions hardcoded
     const [tool, setTool] = React.useState('pen');
     const [lines, setLines] = React.useState([]);
     const isDrawing = React.useRef(false);
@@ -86,240 +169,195 @@ export default function GameScreen(){
     };
     //#endregion
 
-    const timer = "0:11"
-    const charactersLeft = 147
-    const players = [
-        "u/anon",
-        "u/Terran",
-        "xx",
-        "zz"
-    ]
-    const currentPlayer = players[0]
 
-    const flexContainer = {
-        display: 'flex',
-        flexDirection: 'row',
-        padding: 25,
-        align: "center",
-        alignItems: "center",
-        justifyContent: "center"
-    };
+    //list of game elements to render
+    //#region game elements to render
+    const gameModeButton = <Button
+        onClick={handleGameMode}
+        sx={{
+            width: 300,
+            height: 50,
+            margin: 1,
+            backgroundColor: 'white',
+            '&:hover': {
+            backgroundColor: 'white',
+            opacity: [0.9, 0.8, 0.7],
+            },
+            borderRadius: 5,
+            border: 3,
+            color: "black"
+        }}
+    >
+        <Typography>
+            {gameMode ? 'Click me to switch to Story' : 'Click me to switch to Comic'}
+        </Typography>
+    </Button>
 
-    const [alignment, setAlignment] = React.useState('left');
-    const [formats, setFormats] = React.useState(() => ['italic']);
+    const gameCurrentPlayer = <Typography fontSize={"64px"}>
+        {currentPlayer} is currently {gameMode ? 'Drawing' : 'Writing'}...
+    </Typography>
 
-    const handleFormat = (event, newFormats) => {
-        setFormats(newFormats);
-    };
+    {/* List of current panels drawn goes here */}
+    const gamePanels = <List style={flexContainer}>
+        <Box sx={{
+                width: 150,
+                height: 150,
+                margin: 1,
+                backgroundColor: 'white',
+                '&:hover': {
+                backgroundColor: 'white',
+                opacity: [0.9, 0.8, 0.7],
+                },
+                border: 3
+            }}/>
+        <Box
+            sx={{
+                width: 150,
+                height: 150,
+                margin: 1,
+                backgroundColor: 'white',
+                '&:hover': {
+                backgroundColor: 'white',
+                opacity: [0.9, 0.8, 0.7],
+                },
+                border: 3
+            }}
+        >{gameMode? '':<Typography fontSize={"10px"}>
+            Fiona lived in her parents’ house, 
+            in the town where she and Grant went to university. 
+            It was a big, bay-windowed house that seemed to Grant 
+            both luxurious and disorderly, with rugs crooked on the floors 
+            and cup rings bitten into the table varnish.
+        </Typography>}
+        </Box>
+        <Box
+            sx={{
+                width: 150,
+                height: 150,
+                margin: 1,
+                backgroundColor: 'white',
+                '&:hover': {
+                backgroundColor: 'white',
+                opacity: [0.9, 0.8, 0.7],
+                },
+                border: 3
+            }}
+        >
+        {gameMode? '': 
+            <Typography fontSize={"10px"}>Her mother was Icelandic—a powerful woman with a froth of white hair 
+                and indignant far-left politics. The father was an important cardiologist, 
+                revered around the hospital but happily subservient at home, where he would 
+                listen to his wife’s strange tirades with an absentminded smile.
+            </Typography>}
+        </Box>
+        <Box
+            sx={{
+                width: 150,
+                height: 150,
+                margin: 1,
+                backgroundColor: 'white',
+                '&:hover': {
+                backgroundColor: 'white',
+                opacity: [0.9, 0.8, 0.7],
+                },
+                border: 3
+            }}
+        >
+        {gameMode? '': 
+        <Typography fontSize={"10px"}>Fiona had her own little car and a pile of cashmere sweaters, but she wasn’t 
+                                         in a sorority, and her mother’s political activity was probably the reason. 
+                                         Not that she cared. Sororities were a joke to her, and so was politics—though 
+                                         she liked to play “The Four Insurgent Generals” on the phonograph, and 
+                                         sometimes also the “Internationale,” very loud.
+        </Typography>}
+        </Box>
+    </List>    
 
-    const handleAlignment = (event, newAlignment) => {
-        setAlignment(newAlignment);
-    };
-
-    const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
-        '& .MuiToggleButtonGroup-grouped': {
-          margin: theme.spacing(0.5),
-          border: 0,
-          '&.Mui-disabled': {
-            border: 0,
-          },
-          '&:not(:first-of-type)': {
-            borderRadius: theme.shape.borderRadius,
-          },
-          '&:first-of-type': {
-            borderRadius: theme.shape.borderRadius,
-          },
-        },
-      }));
-    console.log(gameMode)
-    if (gameMode){
-        return  <Grid
-                container
-                spacing={2}
-                justifyContent="center"
-                alignItems="center"
-                style={{
-                width: "100vw",
-                height: "100vh",
-                backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
-                }}
-            >
-                
-                <Grid item xs="12" align="center">
-                    <Button
-                        onClick={handleGameMode}
-                        sx={{
-                            width: 300,
-                            height: 50,
-                            margin: 1,
-                            backgroundColor: 'white',
-                            '&:hover': {
-                            backgroundColor: 'white',
-                            opacity: [0.9, 0.8, 0.7],
-                            },
-                            borderRadius: 5,
-                            border: 3,
-                            color: "black"
-                        }}
-                    >
-                        <Typography>
-                            Click me to switch to Story
-                        </Typography>
-                    </Button>
-                    <Typography fontSize={"64px"}>
-                        {currentPlayer} is currently drawing...
-                    </Typography>
-                
-                    <List style={flexContainer}>
-                        {/* List of current panels drawn goes here */}
-                        <Box sx={{
-                                width: 150,
-                                height: 150,
-                                margin: 1,
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                backgroundColor: 'white',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                border: 3
-                            }}/>
-                        <Box
-                            sx={{
-                                width: 150,
-                                height: 150,
-                                margin: 1,
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                backgroundColor: 'white',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                border: 3
-                            }}
-                        ></Box>
-                        <Box
-                            sx={{
-                                width: 150,
-                                height: 150,
-                                margin: 1,
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                backgroundColor: 'white',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                border: 3
-                            }}
-                        ></Box>
-                        <Box
-                            sx={{
-                                width: 150,
-                                height: 150,
-                                margin: 1,
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                backgroundColor: 'white',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                border: 3
-                            }}
-                        ></Box>
-                        <Box
-                            sx={{
-                                width: 150,
-                                height: 150,
-                                margin: 1,
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                backgroundColor: 'white',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                border: 3
-                            }}
-                        ></Box>
-                        
-                    </List>
-                    
-                    {/* Bottom half of screen */}
-                    <List style={flexContainer} sx={{justifyContent:"center"}}>
-                        {/* Left of Canvas */}
-                        <Grid item xs="3" align="center"> 
-                            <List style={flexContainer}>
-                                <Box
-                                    sx={{
-                                        width: 300,
-                                        height: 600,
-                                        margin: 1,
-                                        backgroundColor: 'primary.dark',
-                                        borderRadius: 5,
-                                        border: 3
-                                    }}
-                                >
-                                    <List>
+    const gameTools = <Grid item xs="3" align="center"> 
+                    {gameMode? 
+                        <List style={flexContainer}>
+                            <Box
+                                sx={{
+                                    width: 300,
+                                    height: 600,
+                                    margin: 1,
+                                    backgroundColor: 'primary.dark',
+                                    borderRadius: 5,
+                                    border: 3
+                                }}
+                            >
+                                <List>
+                                    <Typography fontSize={"32px"}>
+                                        Layers:
+                                    </Typography>
+                                    <Button
+                                        sx={{
+                                            width: 200,
+                                            height: 75,
+                                            margin: 1,
+                                            backgroundColor: 'white',
+                                            '&:hover': {
+                                            backgroundColor: 'white',
+                                            opacity: [0.9, 0.8, 0.7],
+                                            },
+                                            borderRadius: 5,
+                                            border: 3,
+                                            color: "black"
+                                        }}
+                                    >
                                         <Typography fontSize={"32px"}>
-                                            Layers:
+                                            Layer 1
                                         </Typography>
-                                        <Button
-                                            sx={{
-                                                width: 200,
-                                                height: 75,
-                                                margin: 1,
-                                                backgroundColor: 'white',
-                                                '&:hover': {
-                                                backgroundColor: 'white',
-                                                opacity: [0.9, 0.8, 0.7],
-                                                },
-                                                borderRadius: 5,
-                                                border: 3,
-                                                color: "black"
-                                            }}
-                                        >
-                                            <Typography fontSize={"32px"}>
-                                                Layer 1
-                                            </Typography>
-                                        </Button>
-                                        <Button
-                                            sx={{
-                                                width: 200,
-                                                height: 75,
-                                                margin: 1,
-                                                backgroundColor: 'white',
-                                                '&:hover': {
-                                                backgroundColor: 'white',
-                                                opacity: [0.9, 0.8, 0.7],
-                                                },
-                                                borderRadius: 5,
-                                                border: 3,
-                                                color: "black"
-                                            }}
-                                        >
-                                            <Typography fontSize={"32px"}>
-                                                Layer 2
-                                            </Typography>
-                                        </Button>
-                                    </List>
-                                </Box>
-                                <Box
-                                    sx={{
-                                        width: 150,
-                                        height: 600,
-                                        margin: 1,
-                                        backgroundColor: 'primary.dark',
-                                        borderRadius: 5,
-                                        border: 3
-                                    }}
-                                >
-                                    <EditIcon fontSize="large" />
-                                    <BrushIcon fontSize="large" />
-                                    <FormatColorFillIcon fontSize="large" />
-                                    <ImageSearchIcon fontSize="large" />
-                                    <OpenInFullIcon fontSize="large" />
-                                    <TextFormatIcon fontSize="large" />
-                                    <ColorizeIcon fontSize="large" />
-                                    <ClearIcon fontSize="large" />
-                                </Box>
-                            </List>
-                        </Grid>
-                        {/* Drawing Canvas */}
-                        <Grid item xs="6" align="center">
+                                    </Button>
+                                    <Button
+                                        sx={{
+                                            width: 200,
+                                            height: 75,
+                                            margin: 1,
+                                            backgroundColor: 'white',
+                                            '&:hover': {
+                                            backgroundColor: 'white',
+                                            opacity: [0.9, 0.8, 0.7],
+                                            },
+                                            borderRadius: 5,
+                                            border: 3,
+                                            color: "black"
+                                        }}
+                                    >
+                                        <Typography fontSize={"32px"}>
+                                            Layer 2
+                                        </Typography>
+                                    </Button>
+                                </List>
+                            </Box>
+                            <Box
+                                sx={{
+                                    width: 150,
+                                    height: 600,
+                                    margin: 1,
+                                    backgroundColor: 'primary.dark',
+                                    borderRadius: 5,
+                                    border: 3
+                                }}
+                            >
+                                <EditIcon fontSize="large" />
+                                <BrushIcon fontSize="large" />
+                                <FormatColorFillIcon fontSize="large" />
+                                <ImageSearchIcon fontSize="large" />
+                                <OpenInFullIcon fontSize="large" />
+                                <TextFormatIcon fontSize="large" />
+                                <ColorizeIcon fontSize="large" />
+                                <ClearIcon fontSize="large" />
+                            </Box>
+                        </List>
+                    : 
+                        <Grid item xs="3" align="center"> 
+                        </Grid>}   
+    </Grid>
+
+    {/* Drawing/Writing Canvas */}
+    let gameWorkSpace = ''
+    if(gameMode){ gameWorkSpace = <Grid item xs="6" align="center">
                             <Box
                                 sx={{
                                     width: 600,
@@ -365,272 +403,9 @@ export default function GameScreen(){
                             </div>
 
                             </Box>
-                        </Grid>
-                        {/* Right of Canvas */}
-                        <Grid item xs="3" align="center">
-                            <Button
-                                sx={{
-                                    width: 450,
-                                    height: 75,
-                                    margin: 1,
-                                    backgroundColor: '#FF7F7F',
-                                    borderRadius: 5,
-                                    border: 3,
-                                    color: "black"
-                                }}
-                            >
-                                <Typography fontSize={"32px"}>
-                                    Time Left: {timer}
-                                </Typography>
-                            </Button>
-                            <Button
-                                sx={{
-                                    width: 450,
-                                    height: 75,
-                                    margin: 1,
-                                    backgroundColor: 'primary.dark',
-                                    '&:hover': {
-                                    backgroundColor: 'primary.main',
-                                    opacity: [0.9, 0.8, 0.7],
-                                    },
-                                    borderRadius: 5,
-                                    border: 3,
-                                    color: "black"
-                                }}
-                            >
-                                <Typography fontSize={"32px"}>
-                                    Themes
-                                </Typography>
-                            </Button>
-                            <Button
-                                sx={{
-                                    width: 450,
-                                    height: 75,
-                                    margin: 1,
-                                    backgroundColor: 'primary.dark',
-                                    '&:hover': {
-                                    backgroundColor: 'primary.main',
-                                    opacity: [0.9, 0.8, 0.7],
-                                    },
-                                    borderRadius: 5,
-                                    border: 3,
-                                    color: "black"
-                                }}
-                            >
-                                <Typography fontSize={"32px"}>
-                                    Characters
-                                </Typography>
-                            </Button>
-                            <Button
-                                sx={{
-                                    width: 450,
-                                    height: 75,
-                                    margin: 1,
-                                    backgroundColor: 'primary.dark',
-                                    '&:hover': {
-                                    backgroundColor: 'primary.main',
-                                    opacity: [0.9, 0.8, 0.7],
-                                    },
-                                    borderRadius: 5,
-                                    border: 3,
-                                    color: "black"
-                                }}
-                            >
-                                <Typography fontSize={"32px"}>
-                                    Speech Bubbles
-                                </Typography>
-                            </Button>
-                            <Button
-                                sx={{
-                                    width: 450,
-                                    height: 75,
-                                    margin: 1,
-                                    backgroundColor: 'primary.dark',
-                                    '&:hover': {
-                                    backgroundColor: 'primary.main',
-                                    opacity: [0.9, 0.8, 0.7],
-                                    },
-                                    borderRadius: 5,
-                                    border: 3,
-                                    color: "black"
-                                }}
-                            >
-                                <Typography fontSize={"32px"}>
-                                    Your Recent Shapes
-                                </Typography>
-                            </Button>
-                            <Button
-                                sx={{
-                                    width: 450,
-                                    height: 75,
-                                    margin: 1,
-                                    backgroundColor: 'yellow',
-                                    '&:hover': {
-                                    backgroundColor: 'yellow',
-                                    opacity: [0.9, 0.8, 0.7],
-                                    },
-                                    borderRadius: 5,
-                                    border: 3,
-                                    color: "black"
-                                }}
-                            >
-                                <Typography fontSize={"32px"}>
-                                    Save Selected As Shape
-                                </Typography>
-                            </Button>
-                            <Button
-                                sx={{
-                                    width: 450,
-                                    height: 75,
-                                    margin: 1,
-                                    backgroundColor: 'green',
-                                    '&:hover': {
-                                    backgroundColor: 'green',
-                                    opacity: [0.9, 0.8, 0.7],
-                                    },
-                                    borderRadius: 5,
-                                    border: 3,
-                                    color: "black"
-                                }}
-                            >
-                                <Typography fontSize={"32px"}>
-                                    Submit
-                                </Typography>
-                            </Button>
-                        </Grid>
-                    </List>   
-                </Grid> 
-            </Grid>
-    } else if (!gameMode) {
-        return  <Grid
-                container
-                spacing={2}
-                justifyContent="center"
-                alignItems="center"
-                style={{
-                width: "100vw",
-                height: "100vh",
-                backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
-                }}
-            >
-                
-                <Grid item xs="12" align="center">
-                <Button
-                    onClick={handleGameMode}
-                    sx={{
-                        width: 300,
-                        height: 50,
-                        margin: 1,
-                        backgroundColor: 'white',
-                        '&:hover': {
-                        backgroundColor: 'white',
-                        opacity: [0.9, 0.8, 0.7],
-                        },
-                        borderRadius: 5,
-                        border: 3,
-                        color: "black"
-                    }}
-                    >
-                        <Typography>
-                            Click me to switch to Comic
-                        </Typography>
-                    </Button>
-                    <Typography fontSize={"64px"}>
-                        {currentPlayer} is currently writing...
-                    </Typography>
-                
-                    <List style={flexContainer}>
-                        {/* List of current panels drawn goes here */}
-                        <Grid>
-                            <Typography>
-                                {players[0]}:
-                            </Typography>
-                            <Box
-                                sx={{
-                                    width: 150,
-                                    height: 150,
-                                    margin: 1,
-                                    backgroundColor: 'white',
-                                    '&:hover': {
-                                    backgroundColor: 'white',
-                                    opacity: [0.9, 0.8, 0.7],
-                                    },
-                                    border: 3
-                                }}
-                            >
-                                <Typography fontSize={"10px"}>
-                                    Fiona lived in her parents’ house, 
-                                    in the town where she and Grant went to university. 
-                                    It was a big, bay-windowed house that seemed to Grant 
-                                    both luxurious and disorderly, with rugs crooked on the floors 
-                                    and cup rings bitten into the table varnish.
-                                </Typography>
-                            </Box>
-                        </Grid>
-                        <Grid>
-                            <Typography>
-                                {players[1]}:
-                            </Typography>
-                            <Box
-                                sx={{
-                                    width: 150,
-                                    height: 150,
-                                    margin: 1,
-                                    backgroundColor: 'white',
-                                    '&:hover': {
-                                    backgroundColor: 'white',
-                                    opacity: [0.9, 0.8, 0.7],
-                                    },
-                                    border: 3
-                                }}
-                            >
-                                <Typography fontSize={"10px"}>
-                                    Her mother was Icelandic—a powerful woman with a froth of white hair 
-                                    and indignant far-left politics. The father was an important cardiologist, 
-                                    revered around the hospital but happily subservient at home, where he would 
-                                    listen to his wife’s strange tirades with an absentminded smile.
-                                </Typography>
-                            </Box>
-                        </Grid>
-                        <Grid>
-                            <Typography>
-                                {players[2]}:
-                            </Typography>
-                            <Box
-                                sx={{
-                                    width: 150,
-                                    height: 150,
-                                    margin: 1,
-                                    backgroundColor: 'white',
-                                    '&:hover': {
-                                    backgroundColor: 'white',
-                                    opacity: [0.9, 0.8, 0.7],
-                                    },
-                                    border: 3
-                                }}
-                            >
-                                <Typography fontSize={"10px"}>
-                                    Fiona had her own little car and a pile of cashmere sweaters, but she wasn’t 
-                                    in a sorority, and her mother’s political activity was probably the reason. 
-                                    Not that she cared. Sororities were a joke to her, and so was politics—though 
-                                    she liked to play “The Four Insurgent Generals” on the phonograph, and 
-                                    sometimes also the “Internationale,” very loud.
-                                </Typography>
-
-                            </Box>
-                        </Grid>
-                    </List>
-                    
-                    
-                    {/* Bottom half of screen */}
-                    <List style={flexContainer} sx={{justifyContent:"center"}}>
-                        {/* Left of Canvas */}
-                        <Grid item xs="3" align="center"> 
-                            
-                        </Grid>
-                        {/* Drawing / Writing Canvas */}
-                        <Grid item xs="6" align="center">
-                        <Paper
+    </Grid>}
+    else{ gameWorkSpace = <Grid item xs="6" align="center">
+                         <Paper
                                 elevation={0}
                                 sx={{
                                 display: 'flex',
@@ -691,83 +466,318 @@ export default function GameScreen(){
                                 }}
                             ></Box>
                         </Grid>
-                        {/* Right of Canvas */}
-                        <Grid item xs="3" align="center">
-                            <Button
-                                sx={{
-                                    width: 450,
-                                    height: 75,
-                                    margin: 1,
-                                    backgroundColor: '#FF7F7F',
-                                    '&:hover': {
+    }
+
+    let gameUtils = ''
+    if(gameMode){ gameUtils = <Grid item xs="3" align="center">
+                    <Button
+                        sx={{
+                            width: 450,
+                            height: 75,
+                            margin: 1,
+                            backgroundColor: '#FF7F7F',
+                            borderRadius: 5,
+                            border: 3,
+                            color: "black"
+                        }}
+                    >
+                        <Typography fontSize={"32px"}>
+                            Time Left: {seconds}
+                        </Typography>
+                    </Button>
+                    <Button
+                        sx={{
+                            width: 450,
+                            height: 75,
+                            margin: 1,
+                            backgroundColor: 'primary.dark',
+                            '&:hover': {
+                            backgroundColor: 'primary.main',
+                            opacity: [0.9, 0.8, 0.7],
+                            },
+                            borderRadius: 5,
+                            border: 3,
+                            color: "black"
+                        }}
+                    >
+                        <Typography fontSize={"32px"}>
+                            Themes
+                        </Typography>
+                    </Button>
+                    <Button
+                        sx={{
+                            width: 450,
+                            height: 75,
+                            margin: 1,
+                            backgroundColor: 'primary.dark',
+                            '&:hover': {
+                            backgroundColor: 'primary.main',
+                            opacity: [0.9, 0.8, 0.7],
+                            },
+                            borderRadius: 5,
+                            border: 3,
+                            color: "black"
+                        }}
+                    >
+                        <Typography fontSize={"32px"}>
+                            Characters
+                        </Typography>
+                    </Button>
+                    <Button
+                        sx={{
+                            width: 450,
+                            height: 75,
+                            margin: 1,
+                            backgroundColor: 'primary.dark',
+                            '&:hover': {
+                            backgroundColor: 'primary.main',
+                            opacity: [0.9, 0.8, 0.7],
+                            },
+                            borderRadius: 5,
+                            border: 3,
+                            color: "black"
+                        }}
+                    >
+                        <Typography fontSize={"32px"}>
+                            Speech Bubbles
+                        </Typography>
+                    </Button>
+                    <Button
+                        sx={{
+                            width: 450,
+                            height: 75,
+                            margin: 1,
+                            backgroundColor: 'primary.dark',
+                            '&:hover': {
+                            backgroundColor: 'primary.main',
+                            opacity: [0.9, 0.8, 0.7],
+                            },
+                            borderRadius: 5,
+                            border: 3,
+                            color: "black"
+                        }}
+                    >
+                        <Typography fontSize={"32px"}>
+                            Your Recent Shapes
+                        </Typography>
+                    </Button>
+                    <Button
+                        sx={{
+                            width: 450,
+                            height: 75,
+                            margin: 1,
+                            backgroundColor: 'yellow',
+                            '&:hover': {
+                            backgroundColor: 'yellow',
+                            opacity: [0.9, 0.8, 0.7],
+                            },
+                            borderRadius: 5,
+                            border: 3,
+                            color: "black"
+                        }}
+                    >
+                        <Typography fontSize={"32px"}>
+                            Save Selected As Shape
+                        </Typography>
+                    </Button>
+                    <Button
+                        sx={{
+                            width: 450,
+                            height: 75,
+                            margin: 1,
+                            backgroundColor: 'green',
+                            '&:hover': {
+                            backgroundColor: 'green',
+                            opacity: [0.9, 0.8, 0.7],
+                            },
+                            borderRadius: 5,
+                            border: 3,
+                            color: "black"
+                        }}
+                    >
+                        <Typography fontSize={"32px"}>
+                            Submit
+                        </Typography>
+                    </Button>
+    </Grid>}
+    else{ gameUtils = <Grid item xs="3" align="center">
+                                 <Button
+                                    sx={{
+                                        width: 450,
+                                        height: 75,
+                                        margin: 1,
                                         backgroundColor: '#FF7F7F',
-                                        opacity: [1, 1, 1],
-                                    },
-                                    borderRadius: 5,
-                                    border: 3,
-                                    color: "black",
-                                }}
-                            >
-                                <Typography fontSize={"32px"}>
-                                    Time Left: {timer}
-                                </Typography>
-                            </Button>
-                            <Button
-                                sx={{
-                                    width: 450,
-                                    height: 75,
-                                    margin: 1,
-                                    backgroundColor: '#b19cd9',
-                                    '&:hover': {
+                                        '&:hover': {
+                                            backgroundColor: '#FF7F7F',
+                                            opacity: [1, 1, 1],
+                                        },
+                                        borderRadius: 5,
+                                        border: 3,
+                                        color: "black",
+                                    }}
+                                >
+                                    <Typography fontSize={"32px"}>
+                                        Time Left: {seconds}
+                                    </Typography>
+                                </Button>
+                                <Button
+                                    sx={{
+                                        width: 450,
+                                        height: 75,
+                                        margin: 1,
                                         backgroundColor: '#b19cd9',
-                                        opacity: [1, 1, 1],
-                                    },
-                                    borderRadius: 5,
-                                    border: 3,
-                                    color: "black"
-                                }}
-                            >
-                                <Typography fontSize={"32px"}>
-                                    Characters Left: {charactersLeft}
-                                </Typography>
-                            </Button>
-                            <Button
-                                sx={{
-                                    width: 450,
-                                    height: 75,
-                                    margin: 1,
-                                    backgroundColor: 'green',
-                                    '&:hover': {
-                                    backgroundColor: 'green',
-                                    opacity: [0.9, 0.8, 0.7],
-                                    },
-                                    borderRadius: 5,
-                                    border: 3,
-                                    color: "black"
-                                }}
-                            >
-                                <Typography fontSize={"32px"}>
-                                    Submit
-                                </Typography>
-                            </Button>
-                        </Grid>
+                                        '&:hover': {
+                                            backgroundColor: '#b19cd9',
+                                            opacity: [1, 1, 1],
+                                        },
+                                        borderRadius: 5,
+                                        border: 3,
+                                        color: "black"
+                                    }}
+                                >
+                                    <Typography fontSize={"32px"}>
+                                        Characters Left: {charactersLeft}
+                                    </Typography>
+                                </Button>
+                                <Button
+                                    sx={{
+                                        width: 450,
+                                        height: 75,
+                                        margin: 1,
+                                        backgroundColor: 'green',
+                                        '&:hover': {
+                                        backgroundColor: 'green',
+                                        opacity: [0.9, 0.8, 0.7],
+                                        },
+                                        borderRadius: 5,
+                                        border: 3,
+                                        color: "black"
+                                    }}
+                                >
+                                    <Typography fontSize={"32px"}>
+                                        Submit
+                                    </Typography>
+                                </Button>
+                            </Grid>
+    }
+    //#endregion render elements
+
+    //list of waiting elements to render
+    //#region wait elements
+    const waitChat = <Button
+        sx={{
+            width: 450,
+            height: 75,
+            margin: 1,
+            backgroundColor: 'red',
+            '&:hover': {
+            backgroundColor: 'primary.main',
+            opacity: [0.9, 0.8, 0.7],
+            },
+            borderRadius: 5,
+            border: 3,
+            color: "black"
+        }}
+    >
+        <Typography fontSize={"32px"}>
+            chat
+        </Typography>
+    </Button>
+
+    const waitUtils =<Grid item xs="3" align="center">
+                    <Button
+                    sx={{
+                        width: 450,
+                        height: 75,
+                        margin: 1,
+                        backgroundColor: '#FF7F7F',
+                        borderRadius: 5,
+                        border: 3,
+                        color: "black"
+                    }}
+                    >
+                        <Typography fontSize={"32px"}>
+                            Time Left: {seconds}
+                        </Typography>
+                    </Button>
+
+                    <Button
+                    sx={{
+                        width: 450,
+                        height: 75,
+                        margin: 1,
+                        backgroundColor: 'red',
+                        '&:hover': {
+                        backgroundColor: 'primary.main',
+                        opacity: [0.9, 0.8, 0.7],
+                        },
+                        borderRadius: 5,
+                        border: 3,
+                        color: "black"
+                    }}
+                    >
+                    <Typography fontSize={"32px"}>
+                        Leave
+                    </Typography>
+                    </Button>
+    </Grid>
+    //#endregion
+
+    if(auth.user.username != currentPlayer){
+        return  <Grid 
+                container
+                spacing={2}
+                justifyContent="center"
+                alignItems="center"
+                style={{
+                width: "100vw",
+                height: "100vh",
+                backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
+                }}
+            >
+                <Grid item xs="12" align="center">
+                    {gameModeButton}
+                    {gameCurrentPlayer}
+                    {/* List of current panels drawn goes here */}
+                    {gamePanels}
+                    {/* Bottom half of screen */}
+                    <List style={flexContainer} sx={{justifyContent:"center"}}>
+                        {/* Left of Canvas */}
+                        {waitChat}
+                        {/* Drawing Canvas */}
+                        {gameWorkSpace}
+                        {/* Right of Canvas */}
+                        {waitUtils}
                     </List>   
                 </Grid> 
             </Grid>
-    } else {
-        return <Grid
-            container
-            spacing={2}
-            justifyContent="center"
-            alignItems="center"
-            style={{
-            width: "100vw",
-            height: "100vh",
-            backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
-        }}
-        >
-            Invalid Game Mode
-        </Grid>
+    }else{
+        return  <Grid 
+                container
+                spacing={2}
+                justifyContent="center"
+                alignItems="center"
+                style={{
+                width: "100vw",
+                height: "100vh",
+                backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
+                }}
+            >
+                <Grid item xs="12" align="center">
+                    {gameModeButton}
+                    {gameCurrentPlayer}
+                    {/* List of current panels drawn goes here */}
+                    {gamePanels}
+                    {/* Bottom half of screen */}
+                    <List style={flexContainer} sx={{justifyContent:"center"}}>
+                        {/* Left of Canvas */}
+                        {gameTools}
+                        {/* Drawing Canvas */}
+                        {gameWorkSpace}
+                        {/* Right of Canvas */}
+                        {gameUtils}
+                    </List>   
+                </Grid> 
+            </Grid>
     }
-    
 }
