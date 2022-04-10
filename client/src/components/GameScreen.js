@@ -28,6 +28,9 @@ import Paper from '@mui/material/Paper';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
+// konva stuff
+import { Stage, Layer, Rect, Text, Circle, Line, Star } from 'react-konva';
+
 export default function GameScreen(){
     const { game } = useContext(GameContext);
 
@@ -50,6 +53,38 @@ export default function GameScreen(){
             setGameMode(true)
         }
     }
+
+    //#region KONVA hardcoded
+    const [tool, setTool] = React.useState('pen');
+    const [lines, setLines] = React.useState([]);
+    const isDrawing = React.useRef(false);
+
+    const handleMouseDown = (e) => {
+        isDrawing.current = true;
+        const pos = e.target.getStage().getPointerPosition();
+        setLines([...lines, { tool, points: [pos.x, pos.y] }]);
+    };
+
+    const handleMouseMove = (e) => {
+        // no drawing - skipping
+        if (!isDrawing.current) {
+        return;
+        }
+        const stage = e.target.getStage();
+        const point = stage.getPointerPosition();
+        let lastLine = lines[lines.length - 1];
+        // add point
+        lastLine.points = lastLine.points.concat([point.x, point.y]);
+
+        // replace last
+        lines.splice(lines.length - 1, 1, lastLine);
+        setLines(lines.concat());
+    };
+
+    const handleMouseUp = () => {
+        isDrawing.current = false;
+    };
+    //#endregion
 
     const timer = "0:11"
     const charactersLeft = 147
@@ -283,7 +318,7 @@ export default function GameScreen(){
                                 </Box>
                             </List>
                         </Grid>
-                        {/* Drawing / Writing Canvas */}
+                        {/* Drawing Canvas */}
                         <Grid item xs="6" align="center">
                             <Box
                                 sx={{
@@ -292,7 +327,44 @@ export default function GameScreen(){
                                     backgroundColor: 'white',
                                     border: 3
                                 }}
-                            ></Box>
+                            >
+                            <div>
+                            <Stage
+                                width={window.innerWidth}
+                                height={window.innerHeight}
+                                onMouseDown={handleMouseDown}
+                                onMousemove={handleMouseMove}
+                                onMouseup={handleMouseUp}
+                            >
+                                <Layer>
+                                <Text text="Just start drawing" x={5} y={30} />
+                                {lines.map((line, i) => (
+                                    <Line
+                                    key={i}
+                                    points={line.points}
+                                    stroke="#df4b26"
+                                    strokeWidth={5}
+                                    tension={0.5}
+                                    lineCap="round"
+                                    globalCompositeOperation={
+                                        line.tool === 'eraser' ? 'destination-out' : 'source-over'
+                                    }
+                                    />
+                                ))}
+                                </Layer>
+                            </Stage>
+                            <select
+                                value={tool}
+                                onChange={(e) => {
+                                setTool(e.target.value);
+                                }}
+                            >
+                                <option value="pen">Pen</option>
+                                <option value="eraser">Eraser</option>
+                            </select>
+                            </div>
+
+                            </Box>
                         </Grid>
                         {/* Right of Canvas */}
                         <Grid item xs="3" align="center">
