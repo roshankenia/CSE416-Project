@@ -1,8 +1,16 @@
 import { Grid, Typography, List, Box, Button } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalCommunityContext } from "../community";
+import { GameContext } from "../game";
 
 export default function VoteToPublishScreen(){
+    const { game } = useContext(GameContext);
+
+    const handleExitVoting = (event) => {
+        event.stopPropagation();
+        game.exitVoting();
+    }
+
     const players = [
         "u/foreverlife1143",
         "u/Terran",
@@ -205,7 +213,7 @@ export default function VoteToPublishScreen(){
                     </List>
                 </Grid>
                 <Button
-                    // onClick={}
+                    onClick={handleExitVoting}
                     sx={{
                         width: 300,
                         height: 50,
@@ -226,4 +234,5 @@ export default function VoteToPublishScreen(){
                 </Button>
                         
             </Grid>
+
 }

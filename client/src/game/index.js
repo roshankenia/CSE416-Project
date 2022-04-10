@@ -8,7 +8,8 @@ export const GameContext = createContext({});
 export const GameActionType = {
   CREATE_NEW_GAME: "CREATE_NEW_GAME",
   CREATE_NEW_LOBBY: "CREATE_NEW_LOBBY",
-  ENTER_VOTING: "ENTER_VOTING"
+  ENTER_VOTING: "ENTER_VOTING",
+  EXIT_VOTING: "EXIT_VOTING"
 };
 
 function GameContextProvider(props) {
@@ -48,7 +49,14 @@ function GameContextProvider(props) {
           game: game.game,
           lobby: game.lobby,
           voting: true
-        })
+        });
+      }
+      case GameActionType.EXIT_VOTING: {
+        return setGame({
+          game: game.game,
+          lobby: game.lobby,
+          voting: false
+        });
       }
       default:
         return game;
@@ -107,6 +115,22 @@ function GameContextProvider(props) {
       console.log('inside game.enterVoting')
       console.log(game)
       history.push("/game/" + id);
+        //}
+    } catch {
+      console.log("error buddy");
+    }
+  }
+
+  game.exitVoting = async function () {
+    try {
+        const id = 'madeupgameid'
+        gameReducer({
+          type: GameActionType.EXIT_VOTING,
+          payload: null,
+        });
+      console.log('inside game.exitVoting')
+      console.log(game)
+      history.push("/");
         //}
     } catch {
       console.log("error buddy");
