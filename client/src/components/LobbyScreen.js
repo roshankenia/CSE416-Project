@@ -3,17 +3,49 @@ import { GlobalCommunityContext } from "../community";
 import { GameContext } from "../game";
 import { Typography, Box, Grid, Button, List, ListItem, TextField } from "@mui/material";
 import Sidebar from "./Sidebar.js";
+import { useHistory } from "react-router-dom";
 //Table stuff
 import {Table, TableBody , TableCell , TableContainer , TableHead , TableRow , Paper} from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
+import AuthContext from "../auth";
 
 export default function LobbyScreen(){
 
     const { game } = useContext(GameContext);
+    const { auth } = useContext(AuthContext)
+
+    const history = useHistory();
+
+    const roomCode = 'imadethiscodeup'
+
+    const users = [
+      auth.user.username,
+      "Terran",
+      "someone",
+      "$_$",
+      "another",
+    ];
+
+    const [inlobby,setInLobby] = useState( [
+      {position : 1, username : users[0], host: true, ready: false},
+      {position : 2, username : "u/Terran", host: false, ready: true},
+      {position : 3, username : "xx", host: false, ready: true},
+      {position : 4, username : "zz", host: false, ready: true},
+    ])
+
+    const [, updateState] = React.useState();
+    const forceUpdate = React.useCallback(() => updateState({}), []);
 
     const handleStartGame = (event) => {
-        event.preventDefault();
+      let ready = 1
+      for(let i = 0; i<inlobby.length; i++){
+        if(inlobby[i].ready == false){
+           ready = 0
+        }
+      }
+      if(ready){
         game.createNewGame();
+      }
       };
 
     //not implemented, should return a model
@@ -21,20 +53,42 @@ export default function LobbyScreen(){
       console.log('nothing')
     }
 
+    const handleLeave = (event) =>{
+      history.push('/')
+    }
+
+    let lobbyTable = (
+      <TableBody>
+        {inlobby.map((user) => (
+          <TableRow
+            key={user.username}
+            sx={{ }}
+          >
+            <TableCell align="left">{user.host &&  <StarIcon/>}</TableCell>
+            <TableCell align="left" style={{fontSize: '48px'}}>{user.position}</TableCell>
+            <TableCell align="left" style={{fontSize: '48px'}}>{user.username}</TableCell>
+            <TableCell align="left" style={{fontSize: '48px'}}>{user.ready &&  <Typography style={{fontSize: '48px'}}>Ready!</Typography>}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    );
+
+    const handleToggleReady = (event) =>{
+      let newlobby = inlobby
+      for(let i = 0; i<inlobby.length; i++){
+        console.log(inlobby[i].ready)
+        if(inlobby[i].username == auth.user.username){
+          newlobby[i].ready = !inlobby[i].ready
+        }
+      }
+      setInLobby(newlobby)
+      forceUpdate();
+    }
+
     //does nothing
     const nothing = (event) =>{
       console.log('nothing')
     }
-
-    const roomCode = 'imadethiscodeup'
-
-    const users = [
-      "u/anon",
-      "u/Terran",
-      "u/someone",
-      "u/$_$",
-      "u/another",
-    ];
 
     let userCard = (
       <List>
@@ -87,31 +141,7 @@ export default function LobbyScreen(){
           </ListItem>
         ))}
       </List>
-    );
-
-    let host = {position : 1, username : "u/anon"}
-    let inlobby = [
-      {position : 1, username : "u/anon", host: true, ready: true},
-      {position : 2, username : "u/Terran", host: false, ready: true},
-      {position : 3, username : "xx", host: false, ready: false},
-      {position : 4, username : "zz", host: false, ready: false},
-    ]
-
-    let lobbyTable = (
-      <TableBody>
-        {inlobby.map((user) => (
-          <TableRow
-            key={user.username}
-            sx={{ }}
-          >
-            <TableCell align="left">{user.host &&  <StarIcon/>}</TableCell>
-            <TableCell align="left" style={{fontSize: '48px'}}>{user.position}</TableCell>
-            <TableCell align="left" style={{fontSize: '48px'}}>{user.username}</TableCell>
-            <TableCell align="left" style={{fontSize: '48px'}}>{user.ready &&  <Typography style={{fontSize: '48px'}}>Ready!</Typography>}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    );
+    );    
 
     return <Grid
             container
@@ -287,7 +317,7 @@ export default function LobbyScreen(){
                       color="success"
                       size="small"
                       align="center"
-                      onClick={(event) => handleInvite()}
+                      onClick={(event) => handleLeave()}
                       style={{
                         fontWeight: 600,
                         border: "3px solid",
@@ -306,7 +336,7 @@ export default function LobbyScreen(){
                       color="success"
                       size="small"
                       align="center"
-                      onClick={(event) => handleInvite()}
+                      onClick={(event) => handleToggleReady()}
                       style={{
                         fontWeight: 600,
                         border: "3px solid",

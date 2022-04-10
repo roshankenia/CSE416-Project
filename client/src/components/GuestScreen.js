@@ -84,7 +84,7 @@ export default function GuestScreen() {
                       id="username"
                       label="Temporary Username:"
                       name="username"
-                      variant="standard"
+                      // variant="standard"
                       InputProps={{
                         disableUnderline: true,
                         style: {

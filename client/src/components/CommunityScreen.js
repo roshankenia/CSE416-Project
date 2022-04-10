@@ -30,12 +30,12 @@ export default function CommunityScreen() {
   const handleBackToCommunities = (event) => {
     event.stopPropagation();
     community.setCommunity(null);
-  }
+  };
   return (
     <Box style={{ backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')" }}>
       <Grid container justifyContent="center">
         <Grid item xs={12}>
-        <Button
+          <Button
             variant="contained"
             color="success"
             size="small"
@@ -56,7 +56,11 @@ export default function CommunityScreen() {
           </Button>
         </Grid>
         <Grid item xs={8} textAlign="center">
-          <Typography display="inline" style={{ fontSize: "48px" }} sx={{ ml: 20}}>
+          <Typography
+            display="inline"
+            style={{ fontSize: "48px" }}
+            sx={{ ml: 20 }}
+          >
             {community.communityList}
           </Typography>
           <Button

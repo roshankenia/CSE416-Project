@@ -61,7 +61,7 @@ export default function GameScreen(){
         auth.user.username,
         "u/Terran",
         "xx",
-        "zz"
+        "zz",
     ]
 
     const flexContainer = {
@@ -74,38 +74,6 @@ export default function GameScreen(){
     };
 
     const [currentPlayer, setCurrentPlayer] = useState(players[0]);
-
-    //#region timer: some timer code i found online
-    const [seconds, setSeconds] = useState(30);
-    const [isActive, setIsActive] = useState(true);
-
-    // useEffect(() => {
-    //     let interval = null;
-    //     if (seconds === 0) {
-    //       setSeconds(500)
-    //     }
-    //     interval = setInterval(() => {
-    //         setSeconds(seconds => seconds - 1);
-    //     }, 1000);
-    // }, [seconds]);
-
-    // const [seconds, setSeconds] = React.useState(10);
-
-    React.useEffect(() => {
-        if (seconds > 0) {
-            setTimeout(() => setSeconds(seconds - 1), 1000);
-        } else {
-            if(players.indexOf(currentPlayer) == 3){
-                setSeconds('Vote To Publish!');
-                
-            }else{
-                setCurrentPlayer(players[players.indexOf(currentPlayer) + 1])
-                setSeconds(30);
-            }
-        }
-    });
-
-    //#endregion timer
 
     const [alignment, setAlignment] = React.useState('left');
     const [formats, setFormats] = React.useState(() => ['italic']);
@@ -133,9 +101,35 @@ export default function GameScreen(){
           },
         },
       }));
-    console.log(gameMode)
-    //#endregion game control
 
+    //#region timer: some timer code i found online
+    const [seconds, setSeconds] = useState(10);
+
+    React.useEffect(() => {
+        let interval = null;
+        if (seconds > 0) {
+            interval = setInterval(() => {
+                setSeconds(seconds => seconds - 1);
+              }, 1000);
+        } else {
+            if(players.indexOf(currentPlayer) == 3){
+                setSeconds('Vote To Publish!');
+                game.enterVoting();
+            }else{
+                setCurrentPlayer(players[players.indexOf(currentPlayer) + 1])
+                setSeconds(10);
+            }
+        }
+        return () => clearInterval(interval);
+    });
+
+    const handleSubmit = (event) =>{
+        event.preventDefault()
+        setTimeout(() => setSeconds(0), 1000);
+    }
+    //#endregion timer
+
+    //#endregion game control
 
     //#region KONVA functions hardcoded
     const [tool, setTool] = React.useState('pen');
@@ -167,8 +161,7 @@ export default function GameScreen(){
     const handleMouseUp = () => {
         isDrawing.current = false;
     };
-    //#endregion
-
+    //#endregion    
 
     //list of game elements to render
     //#region game elements to render
@@ -592,8 +585,9 @@ export default function GameScreen(){
                             },
                             borderRadius: 5,
                             border: 3,
-                            color: "black"
+                            color: "black",
                         }}
+                        onClick={ handleSubmit}
                     >
                         <Typography fontSize={"32px"}>
                             Submit
@@ -664,25 +658,54 @@ export default function GameScreen(){
 
     //list of waiting elements to render
     //#region wait elements
-    const waitChat = <Button
-        sx={{
-            width: 450,
-            height: 75,
-            margin: 1,
-            backgroundColor: 'red',
-            '&:hover': {
-            backgroundColor: 'primary.main',
-            opacity: [0.9, 0.8, 0.7],
-            },
-            borderRadius: 5,
-            border: 3,
-            color: "black"
-        }}
-    >
-        <Typography fontSize={"32px"}>
-            chat
-        </Typography>
-    </Button>
+    const waitChat = <Grid>
+        <Box
+           sx={{
+               width: 600,
+               height: 600,
+               backgroundColor: 'white',
+               border: 3,
+               justifyContent: 'space-between'
+           }}
+       >
+       <Typography fontSize={'32px'} sx={{width:'100%'}}>Terran: Hi!</Typography>
+       <Typography fontSize={'32px'} sx={{width:'100%'}}>xx: Hi!</Typography>
+        <TextField sx={{top: '65%',}}></TextField>
+        <Button
+            sx={{
+                width: 250,
+                height: 75,
+                margin: 1,
+                top: '65%', 
+                backgroundColor: 'yellow',
+                '&:hover': {
+                backgroundColor: 'primary.main',
+                opacity: [0.9, 0.8, 0.7],
+                },
+                borderRadius: 5,
+                border: 3,
+                color: "black"
+            }}
+        >
+            <Typography fontSize={"32px"}>
+                chat
+            </Typography>
+        </Button>
+       </Box>
+
+        
+    </Grid>
+    
+    const waitCenterPanel = <Grid item xs="6" align="center">
+       <Box
+           sx={{
+               width: 600,
+               height: 600,
+               backgroundColor: 'white',
+               border: 3
+           }}
+       ></Box>
+   </Grid>
 
     const waitUtils =<Grid item xs="3" align="center">
                     <Button
@@ -745,7 +768,7 @@ export default function GameScreen(){
                         {/* Left of Canvas */}
                         {waitChat}
                         {/* Drawing Canvas */}
-                        {gameWorkSpace}
+                        {waitCenterPanel}
                         {/* Right of Canvas */}
                         {waitUtils}
                     </List>   
