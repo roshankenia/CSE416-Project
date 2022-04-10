@@ -10,7 +10,7 @@ export default function ProfileScreen(){
     const { community } = useContext(GlobalCommunityContext);
     const { auth } = useContext(AuthContext);
     const welcomeTag = (
-        <div
+        <Typography
           style={{
             fontWeight: 600,
             color: "Black",
@@ -20,8 +20,8 @@ export default function ProfileScreen(){
           }}
           sx={{ mt: 2, width: "25%" }}
         >
-        {auth.user.username}
-        </div>
+        {"u/"+auth.user.username}
+        </Typography>
       );
     return(
         <Grid

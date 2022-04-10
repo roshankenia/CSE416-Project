@@ -79,7 +79,7 @@ export default function PostCard(props) {
     </Button>
   );
 
-  if (community.screen == "discovery") {
+  if (community.screen != "communities") {
     communityName = (
       <Button
         style={{

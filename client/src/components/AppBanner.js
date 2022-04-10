@@ -118,22 +118,9 @@ export default function AppBanner() {
 
   let menu = loggedOutMenu;
 
-  let test = <Box></Box>;
 
   if (auth.loggedIn && !auth.isGuest) {
     menu = loggedInMenu;
-    test = (
-      <Typography
-        variant="h4"
-        noWrap
-        component="div"
-        sx={{ display: { xs: "none", sm: "block" } }}
-      >
-        <Link style={{ textDecoration: "none", color: "white" }} to="/test">
-          TEST
-        </Link>
-      </Typography>
-    );
   }
 
   function getAccountMenu(loggedIn) {
@@ -141,7 +128,15 @@ export default function AppBanner() {
       let initials =
         auth.user.firstName.substring(0, 1) +
         auth.user.lastName.substring(0, 1);
-      return <div>{initials}</div>;
+      return (
+        <Typography
+          style={{
+            fontSize: "32px",
+          }}
+        >
+          {initials}
+        </Typography>
+      );
     } else {
       return <AccountCircle />;
     }
@@ -174,7 +169,6 @@ export default function AppBanner() {
               {getAccountMenu(auth.loggedIn)}
             </IconButton>
           </Box>
-          {test}
         </Toolbar>
       </AppBar>
       {menu}

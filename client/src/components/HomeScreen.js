@@ -62,6 +62,9 @@ const HomeScreen = () => {
     event.preventDefault();
     community.setScreen(screen);
   };
+  const handleLeaveCommunity = (event) => {
+    event.stopPropagation();
+  };
 
   const communitiesButton = (
     <Button
@@ -121,10 +124,11 @@ const HomeScreen = () => {
     <List>
       {communities.map((name) => (
         <ListItem key={name}>
-          <Box
+          <Button
             variant="contained"
             color="success"
             size="large"
+            onClick={(event) => handleOpenCommunity(event, name)}
             style={{
               fontWeight: 600,
               border: "3px solid",
@@ -143,25 +147,6 @@ const HomeScreen = () => {
                 </Typography>
               </Grid>
               <Grid item xs={2}>
-                <Button
-                  variant="contained"
-                  color="success"
-                  size="small"
-                  align="center"
-                  onClick={(event) => handleOpenCommunity(event, name)}
-                  style={{
-                    fontWeight: 600,
-                    border: "3px solid",
-                    borderColor: "black",
-                    backgroundColor: "blue",
-                    color: "black",
-                    fontSize: "10px",
-                    borderRadius: 20,
-                  }}
-                  sx={{ mt: 2, width: "25%" }}
-                >
-                  Open
-                </Button>
               </Grid>
               <Grid item xs={2}>
                 <Button
@@ -169,6 +154,7 @@ const HomeScreen = () => {
                   color="success"
                   size="small"
                   align="center"
+                  onClick={handleLeaveCommunity}
                   style={{
                     fontWeight: 600,
                     border: "3px solid",
@@ -184,7 +170,7 @@ const HomeScreen = () => {
                 </Button>
               </Grid>
             </Grid>
-          </Box>
+          </Button>
         </ListItem>
       ))}
     </List>

@@ -25,7 +25,7 @@ import Grid from "@mui/material/Grid";
 import Sidebar from "./Sidebar.js";
 import AuthContext from "../auth";
 import PostFeed from "./PostFeed.js";
-import Sticky from 'react-stickynode';
+import Sticky from "react-stickynode";
 
 export default function DiscoveryScreen() {
   const { community } = useContext(GlobalCommunityContext);
@@ -87,7 +87,6 @@ export default function DiscoveryScreen() {
       spacing={2}
       justifyContent="center"
       style={{
-
         backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
       }}
     >
@@ -97,13 +96,15 @@ export default function DiscoveryScreen() {
       </Grid>
       {/* <Grid item xs={6}></Grid> */}
 
-      <Grid item xs={8} sm={8} md ={8} lg = {8} xl ={8}>
-        <Typography style={{ fontSize: "32px" }}>{community.communityList}</Typography>
+      <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
+        <Typography style={{ fontSize: "32px" }}>
+          {community.communityList}
+        </Typography>
         <PostFeed />
       </Grid>
 
       <div class="sticky">
-       <Sidebar />
+        <Sidebar />
       </div>
     </Grid>
   );
