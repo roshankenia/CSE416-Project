@@ -59,7 +59,7 @@ export default function GameScreen(){
     const charactersLeft = 147
     const players = [
         auth.user.username,
-        "u/Terran",
+        "Terran",
         "xx",
         "zz",
     ]
