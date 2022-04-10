@@ -85,16 +85,21 @@ export default function GameScreen(){
         isDrawing.current = false;
     };
     //#endregion
+    const handleVotingStage = (event) => {
+        event.stopPropagation();
+        game.enterVoting();
+    }
+    
 
     const timer = "0:11"
     const charactersLeft = 147
     const players = [
-        "u/anon",
+        "u/foreverlife1143",
         "u/Terran",
-        "xx",
-        "zz"
+        "u/RDK",
+        "u/jeffhu"
     ]
-    const currentPlayer = players[0]
+    const currentPlayer = players[3]
 
     const flexContainer = {
         display: 'flex',
@@ -172,70 +177,63 @@ export default function GameScreen(){
                 
                     <List style={flexContainer}>
                         {/* List of current panels drawn goes here */}
-                        <Box sx={{
-                                width: 150,
-                                height: 150,
-                                margin: 1,
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                backgroundColor: 'white',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                border: 3
-                            }}/>
-                        <Box
-                            sx={{
-                                width: 150,
-                                height: 150,
-                                margin: 1,
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                backgroundColor: 'white',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                border: 3
-                            }}
-                        ></Box>
-                        <Box
-                            sx={{
-                                width: 150,
-                                height: 150,
-                                margin: 1,
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                backgroundColor: 'white',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                border: 3
-                            }}
-                        ></Box>
-                        <Box
-                            sx={{
-                                width: 150,
-                                height: 150,
-                                margin: 1,
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                backgroundColor: 'white',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                border: 3
-                            }}
-                        ></Box>
-                        <Box
-                            sx={{
-                                width: 150,
-                                height: 150,
-                                margin: 1,
-                                backgroundColor: 'white',
-                                '&:hover': {
-                                backgroundColor: 'white',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                border: 3
-                            }}
-                        ></Box>
-                        
+                        <Grid>
+                            <Typography>
+                                {players[0]}:
+                            </Typography>
+                            <Box
+                                sx={{
+                                    width: 150,
+                                    height: 150,
+                                    margin: 1,
+                                    backgroundColor: 'white',
+                                    '&:hover': {
+                                    backgroundColor: 'white',
+                                    opacity: [0.9, 0.8, 0.7],
+                                    },
+                                    border: 3
+                                }}
+                            >
+                            </Box>
+                        </Grid>
+                        <Grid>
+                            <Typography>
+                                {players[1]}:
+                            </Typography>
+                            <Box
+                                sx={{
+                                    width: 150,
+                                    height: 150,
+                                    margin: 1,
+                                    backgroundColor: 'white',
+                                    '&:hover': {
+                                    backgroundColor: 'white',
+                                    opacity: [0.9, 0.8, 0.7],
+                                    },
+                                    border: 3
+                                }}
+                            >
+                            </Box>
+                        </Grid>
+                        <Grid>
+                            <Typography>
+                                {players[2]}:
+                            </Typography>
+                            <Box
+                                sx={{
+                                    width: 150,
+                                    height: 150,
+                                    margin: 1,
+                                    backgroundColor: 'white',
+                                    '&:hover': {
+                                    backgroundColor: 'white',
+                                    opacity: [0.9, 0.8, 0.7],
+                                    },
+                                    border: 3
+                                }}
+                            >
+                            </Box>
+                        </Grid>                 
                     </List>
                     
                     {/* Bottom half of screen */}
@@ -368,15 +366,19 @@ export default function GameScreen(){
                         </Grid>
                         {/* Right of Canvas */}
                         <Grid item xs="3" align="center">
-                            <Button
+                        <Button
                                 sx={{
                                     width: 450,
                                     height: 75,
                                     margin: 1,
                                     backgroundColor: '#FF7F7F',
+                                    '&:hover': {
+                                        backgroundColor: '#FF7F7F',
+                                        opacity: [1, 1, 1],
+                                    },
                                     borderRadius: 5,
                                     border: 3,
-                                    color: "black"
+                                    color: "black",
                                 }}
                             >
                                 <Typography fontSize={"32px"}>
@@ -479,6 +481,7 @@ export default function GameScreen(){
                                 </Typography>
                             </Button>
                             <Button
+                                onClick={handleVotingStage}
                                 sx={{
                                     width: 450,
                                     height: 75,

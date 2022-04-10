@@ -8,6 +8,7 @@ export const GameContext = createContext({});
 export const GameActionType = {
   CREATE_NEW_GAME: "CREATE_NEW_GAME",
   CREATE_NEW_LOBBY: "CREATE_NEW_LOBBY",
+  ENTER_VOTING: "ENTER_VOTING"
 };
 
 function GameContextProvider(props) {
@@ -18,7 +19,8 @@ function GameContextProvider(props) {
  */
   const [game, setGame] = useState({
     game: null,
-    lobby: null
+    lobby: null,
+    voting: false
   });
   const history = useHistory();
 
@@ -30,14 +32,23 @@ function GameContextProvider(props) {
       case GameActionType.CREATE_NEW_LOBBY: {
         return setGame({
           game: null,
-          lobby: payload
+          lobby: payload,
+          voting: game.voting
         });
       }
       case GameActionType.CREATE_NEW_GAME: {
         return setGame({
           game: payload,
-          lobby: null
+          lobby: null,
+          voting: game.voting
         });
+      }
+      case GameActionType.ENTER_VOTING: {
+        return setGame({
+          game: game.game,
+          lobby: game.lobby,
+          voting: true
+        })
       }
       default:
         return game;
@@ -85,6 +96,22 @@ function GameContextProvider(props) {
         console.log("API FAILED TO CREATE A LOBBY MONGODB INSTANCE");
       }
   };
+
+  game.enterVoting = async function () {
+    try {
+        const id = 'madeupgameid'
+        gameReducer({
+          type: GameActionType.ENTER_VOTING,
+          payload: null,
+        });
+      console.log('inside game.enterVoting')
+      console.log(game)
+      history.push("/game/" + id);
+        //}
+    } catch {
+      console.log("error buddy");
+    }
+  }
 
   return (
     <GameContext.Provider
