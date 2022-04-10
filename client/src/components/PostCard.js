@@ -46,6 +46,11 @@ export default function PostCard(props) {
     // }
   }
 
+  function handleDelete(event) {
+    event.stopPropagation();
+    community.setDeletePost(true);
+  }
+
   let postData = (
     <Box sx={{ height: "90%", width: "90%" }} component="img" src={image}></Box>
   );
@@ -110,7 +115,7 @@ export default function PostCard(props) {
   if (community.screen == "profile") {
     profileOptions = (
       <Box>
-        <IconButton color="primary">
+        <IconButton color="primary" onClick={handleDelete}>
           <DeleteIcon
             sx={{
               width: 40,
@@ -265,6 +270,42 @@ export default function PostCard(props) {
                 }}
               />
             </IconButton>
+          </Grid>
+          <Grid item xs={12} textAlign="center">
+            <Box
+              style={{
+                border: "3px solid",
+                borderColor: "black",
+                color: "black",
+                backgroundColor: "white",
+                fontSize: "32px",
+                borderRadius: 20,
+                outline: "none",
+                width: "97%",
+                marginLeft: 15,
+              }}
+            >
+              <Box style={{ width: "96%" }}>
+                <TextField
+                  fullWidth
+                  variant="standard"
+                  id="comment"
+                  label="Comment:"
+                  name="comment"
+                  InputProps={{
+                    disableUnderline: true,
+                    style: {
+                      fontSize: 20,
+                      paddingLeft: 20,
+                    },
+                  }}
+                  InputLabelProps={{
+                    style: { fontSize: 24, paddingLeft: 20 },
+                    shrink: true,
+                  }}
+                />
+              </Box>
+            </Box>
           </Grid>
           <Grid item xs={12}>
             {commentFeed}
