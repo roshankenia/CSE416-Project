@@ -82,30 +82,31 @@ export default function DiscoveryScreen() {
   );
 
   return (
-    <Grid
-      container
-      spacing={2}
-      justifyContent="center"
+    <Box
       style={{
+        width: "100vw",
+        height: "100vh",
         backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
       }}
     >
-      <Grid item xs={6}>
-        {communitiesButton}
-        {discoveryButton}
-      </Grid>
-      {/* <Grid item xs={6}></Grid> */}
+      <Grid container spacing={2}>
+        <Grid item xs={6}>
+          {communitiesButton}
+          {discoveryButton}
+        </Grid>
+        {/* <Grid item xs={6}></Grid> */}
 
-      <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
-        <Typography style={{ fontSize: "32px" }}>
-          {community.communityList}
-        </Typography>
-        <PostFeed />
-      </Grid>
+        <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
+          <Typography style={{ fontSize: "32px" }}>
+            {community.communityList}
+          </Typography>
+          <PostFeed />
+        </Grid>
 
-      <div class="sticky">
-        <Sidebar />
-      </div>
-    </Grid>
+        <div class="sticky">
+          <Sidebar />
+        </div>
+      </Grid>
+    </Box>
   );
 }

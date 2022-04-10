@@ -28,6 +28,7 @@ export default function PostFeed() {
   const { community } = useContext(GlobalCommunityContext);
 
   const fakePost1 = {
+    authors:["Roshan", "Terran", "Jeff"],
     postTitle: "Mondays",
     likes: [
       "1",
@@ -115,6 +116,7 @@ export default function PostFeed() {
   };
 
   const fakePost2 = {
+    authors:["Alan", "Terran", "Jeff"],
     postTitle: "This is a post title",
     likes: [
       "1",
@@ -197,6 +199,7 @@ export default function PostFeed() {
 
 
   const fakePost3 = {
+    authors:["Alan", "Roshan"],
     postTitle: "A random title",
     likes: [
       "1",

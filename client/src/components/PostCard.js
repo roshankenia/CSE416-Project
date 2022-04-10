@@ -15,6 +15,8 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import CommentIcon from "@mui/icons-material/Comment";
 import FlagIcon from "@mui/icons-material/Flag";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 import SortIcon from "@mui/icons-material/Sort";
 
@@ -65,6 +67,16 @@ export default function PostCard(props) {
     );
   }
 
+  let authors = "Authors: ";
+  for (var i = 0; i < post.authors.length; i++) {
+    let author = post.authors[i];
+    if (i == post.authors.length - 1) {
+      authors = authors + author;
+    } else {
+      authors = authors + author + ", ";
+    }
+  }
+
   let comms = ["J/Rage Comics", "J/Memes", "J/Random"];
 
   let communityName = (
@@ -72,7 +84,7 @@ export default function PostCard(props) {
       style={{
         fontSize: "22px",
         paddingLeft: 10,
-        paddingBottom: 10
+        paddingBottom: 10,
       }}
     >
       {community.communityList}
@@ -85,11 +97,36 @@ export default function PostCard(props) {
         style={{
           fontSize: "22px",
           paddingLeft: 10,
-          paddingBottom: 10
+          paddingBottom: 10,
         }}
       >
         {comms[index]}
       </Button>
+    );
+  }
+
+  let profileOptions = "";
+
+  if (community.screen == "profile") {
+    profileOptions = (
+      <Box>
+        <IconButton color="primary">
+          <DeleteIcon
+            sx={{
+              width: 40,
+              height: 40,
+            }}
+          />
+        </IconButton>
+        <IconButton color="primary">
+          <EditIcon
+            sx={{
+              width: 40,
+              height: 40,
+            }}
+          />
+        </IconButton>
+      </Box>
     );
   }
 
@@ -201,6 +238,20 @@ export default function PostCard(props) {
           </Grid>
           <Grid item xs={10}>
             {postData}
+          </Grid>
+          <Grid item xs={2}></Grid>
+          <Grid item xs={8}>
+            <Typography
+              display="inline"
+              style={{
+                fontSize: "22px",
+              }}
+            >
+              {authors}
+            </Typography>
+          </Grid>
+          <Grid item xs={2}>
+            {profileOptions}
           </Grid>
           <Grid item xs={12} style={{ textAlign: "center" }}>
             <IconButton color="primary">
@@ -319,6 +370,20 @@ export default function PostCard(props) {
           </Grid>
           <Grid item xs={10}>
             {postData}
+          </Grid>
+          <Grid item xs={2}></Grid>
+          <Grid item xs={8}>
+            <Typography
+              display="inline"
+              style={{
+                fontSize: "22px",
+              }}
+            >
+              {authors}
+            </Typography>
+          </Grid>
+          <Grid item xs={2}>
+            {profileOptions}
           </Grid>
         </Grid>
       </Box>
