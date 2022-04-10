@@ -9,7 +9,6 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
 export default function Sidebar() {
-
   const { game } = useContext(GameContext);
 
   const handleHostNewGame = (event, name) => {
@@ -201,6 +200,70 @@ export default function Sidebar() {
               sx={{ mt: 1, mb: 0.5, width: "35%" }}
             >
               Create!
+            </Button>
+          </Box>
+        </Box>
+      </ListItem>
+      <ListItem key="create">
+        <Box
+          justifyContent="center"
+          alignItems="center"
+          style={{
+            border: "3px solid",
+            borderColor: "black",
+            color: "black",
+            backgroundColor: "#E39090",
+            fontSize: "20px",
+            outline: "none",
+            borderRadius: 20,
+            width: "75%",
+          }}
+        >
+          <Typography align="center" style={{ fontSize: "32px" }}>
+            {" "}
+            Your Invites
+          </Typography>
+          <Box textAlign="center">
+            <Typography
+              align="center"
+              display="inline"
+              style={{ fontSize: "28px" }}
+            >
+              {"u/Roshan"}
+            </Typography>
+            <Button
+              variant="contained"
+              color="success"
+              size="small"
+              style={{
+                fontWeight: 600,
+                border: "3px solid",
+                borderColor: "black",
+                backgroundColor: "#46EC2B",
+                color: "black",
+                fontSize: "20px",
+                borderRadius: 20,
+              }}
+              sx={{ ml:2,mb: 0.5, width: "25%" }}
+            >
+              Join
+            </Button>
+            <Button
+              variant="contained"
+              color="success"
+              size="small"
+              style={{
+                fontWeight: 600,
+                border: "3px solid",
+                borderColor: "black",
+                backgroundColor: "red",
+                color: "black",
+                fontSize: "20px",
+                borderRadius: 20,
+              }}
+              sx={{ ml:2,mb: 0.5, width: "25%" }}
+            >
+              Reject
             </Button>
           </Box>
         </Box>
