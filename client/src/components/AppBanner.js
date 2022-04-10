@@ -13,6 +13,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import DeleteAccountModal from "./DeleteAccountModal";
 import FeedbackModal from "./FeedbackModal";
 import ChangePasswordModal from "./ChangePasswordModal";
+import DeletePostModal from "./DeletePostModal";
 
 export default function AppBanner() {
   const { auth } = useContext(AuthContext);
@@ -105,10 +106,7 @@ export default function AppBanner() {
       onClose={handleMenuClose}
     >
       <Typography> {"Hi " + username} </Typography>
-      <MenuItem onClick={handleViewProfile}>
-        {" "}
-        View Profile(need implementation)
-      </MenuItem>
+      <MenuItem onClick={handleViewProfile}> View Profile</MenuItem>
       <MenuItem onClick={handleOpenChangePassword}>Change Password</MenuItem>
       <MenuItem onClick={handleOpenDeleteAccount}>Delete Account</MenuItem>
       <MenuItem onClick={handleOpenFeedback}>Send Feedback</MenuItem>
@@ -117,7 +115,6 @@ export default function AppBanner() {
   );
 
   let menu = loggedOutMenu;
-
 
   if (auth.loggedIn && !auth.isGuest) {
     menu = loggedInMenu;
@@ -175,6 +172,7 @@ export default function AppBanner() {
       <DeleteAccountModal />
       <FeedbackModal />
       <ChangePasswordModal />
+      <DeletePostModal />
     </Box>
   );
 }

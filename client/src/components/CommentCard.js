@@ -14,6 +14,8 @@ import { Collapse } from "@mui/material";
 import { Box } from "@mui/system";
 import { List } from "@mui/material";
 import { Link } from "react-router-dom";
+import TextField from "@mui/material/TextField";
+
 
 export default function CommentCard(props) {
   const { community } = useContext(GlobalCommunityContext);
@@ -182,6 +184,42 @@ export default function CommentCard(props) {
             >
               {comment.username + ": " + comment.comment}
             </Typography>
+          </Grid>
+          <Grid item xs={12} textAlign="center">
+            <Box
+              style={{
+                border: "3px solid",
+                borderColor: "black",
+                color: "black",
+                backgroundColor: "white",
+                fontSize: "32px",
+                borderRadius: 20,
+                outline: "none",
+                width: "97%",
+                marginLeft: 15,
+              }}
+            >
+              <Box style={{ width: "96%" }}>
+                <TextField
+                  fullWidth
+                  variant="standard"
+                  id="reply"
+                  label="Reply:"
+                  name="reply"
+                  InputProps={{
+                    disableUnderline: true,
+                    style: {
+                      fontSize: 20,
+                      paddingLeft: 20,
+                    },
+                  }}
+                  InputLabelProps={{
+                    style: { fontSize: 24, paddingLeft: 20 },
+                    shrink: true,
+                  }}
+                />
+              </Box>
+            </Box>
           </Grid>
           <Grid item xs={12}>
             {replyFeed}
