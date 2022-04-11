@@ -268,7 +268,6 @@ changePassword = async (req, res) => {
         errorMessage: "Wrong password provided.",
       });
     }
-
     // Checking to see if the new password was entered twice correctly
     if (newPassword !== newPassVerify) {
       return res.status(400).json({

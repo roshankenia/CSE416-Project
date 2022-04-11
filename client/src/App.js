@@ -66,8 +66,8 @@ const App = () => {
                     <Route path="/register/" exact component={RegisterScreen} />
                     <Route path="/login/" exact component={LoginScreen} />
                     <Route path="/guest/" exact component={GuestScreen} />
-                    <Route path="/test/" exact component={Test} />
                     <Route path="/game/:id" exact component={GameWrapper} />
+                    <Route path="/test" exact component={Test} />
                   </Switch>
                 </Box>
               </Box>

@@ -126,7 +126,7 @@ export default function GameScreen() {
 
   //#endregion game control
 
-  //#region KONVA functions hardcoded
+  //#region KONVA functions
   const [tool, setTool] = React.useState("pen");
   const [lines, setLines] = React.useState([]);
   const isDrawing = React.useRef(false);
@@ -158,7 +158,6 @@ export default function GameScreen() {
   };
   //#endregion
 
-  //list of game elements to render
   //#region game elements to render
   const gameModeButton = (
     <Button
@@ -668,7 +667,6 @@ export default function GameScreen() {
   }
   //#endregion render elements
 
-  //list of waiting elements to render
   //#region wait elements
   const waitChat = (
     <Grid>
@@ -759,66 +757,35 @@ export default function GameScreen() {
     </Grid>
   );
   //#endregion
+    
+  return (
+    <Grid
+    container
+    spacing={2}
+    justifyContent="center"
+    alignItems="center"
+    style={{
+        width: "100vw",
+        height: "100vh",
+        backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
+    }}
+    >
+        <Grid item xs="12" align="center">
+            {gameModeButton}
+            {gameCurrentPlayer}
+            {/* List of current panels drawn goes here */}
+            {gamePanels}
+            {/* Bottom half of screen */}
+            <List style={flexContainer} sx={{ justifyContent: "center" }}>
+            {/* Left of Canvas */}
+            {auth.user.username != currentPlayer ? waitChat : gameTools}
+            {/* Drawing Canvas */}
+            {auth.user.username != currentPlayer ? waitCenterPanel : gameWorkSpace}
+            {/* Right of Canvas */}
+            {auth.user.username != currentPlayer ? waitUtils : gameUtils}
+            </List>
+        </Grid>
+    </Grid>
+    );
 
-  if (auth.user.username != currentPlayer) {
-    return (
-      <Grid
-        container
-        spacing={2}
-        justifyContent="center"
-        alignItems="center"
-        style={{
-          width: "100vw",
-          height: "100vh",
-          backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
-        }}
-      >
-        <Grid item xs="12" align="center">
-          {gameModeButton}
-          {gameCurrentPlayer}
-          {/* List of current panels drawn goes here */}
-          {gamePanels}
-          {/* Bottom half of screen */}
-          <List style={flexContainer} sx={{ justifyContent: "center" }}>
-            {/* Left of Canvas */}
-            {waitChat}
-            {/* Drawing Canvas */}
-            {waitCenterPanel}
-            {/* Right of Canvas */}
-            {waitUtils}
-          </List>
-        </Grid>
-      </Grid>
-    );
-  } else {
-    return (
-      <Grid
-        container
-        spacing={2}
-        justifyContent="center"
-        alignItems="center"
-        style={{
-          width: "100vw",
-          height: "100vh",
-          backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
-        }}
-      >
-        <Grid item xs="12" align="center">
-          {gameModeButton}
-          {gameCurrentPlayer}
-          {/* List of current panels drawn goes here */}
-          {gamePanels}
-          {/* Bottom half of screen */}
-          <List style={flexContainer} sx={{ justifyContent: "center" }}>
-            {/* Left of Canvas */}
-            {gameTools}
-            {/* Drawing Canvas */}
-            {gameWorkSpace}
-            {/* Right of Canvas */}
-            {gameUtils}
-          </List>
-        </Grid>
-      </Grid>
-    );
-  }
 }

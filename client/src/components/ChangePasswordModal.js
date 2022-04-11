@@ -7,6 +7,11 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import TextField from "@mui/material/TextField";
 
+//hide password stuff
+import {IconButton, Input, FilledInput, OutlinedInput, InputLabel, InputAdornment, FormHelperText, FormControl} from '@mui/material/';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -16,19 +21,63 @@ const style = {
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
-  textAlign: "center",
+  textAlign: "left",
   p: 4,
 };
 export default function ChangePasswordModal() {
   const { auth } = useContext(AuthContext);
   const { community } = useContext(GlobalCommunityContext);
 
-  function handleChangePassword(event) {
-    // auth.deleteAccount();
+  const [values, setValues] = useState({
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+    showOldPassword: false,
+    showNewPassword: false,
+    showConfirmPassword: false,
+  });
+
+  const [err, setErr] = useState('')
+
+  useEffect(() => { if(values.newPassword.length < 8 && values.newPassword.length != 0){
+    setErr('lessthan8')
+  }else if(values.newPassword != values.confirmPassword){
+    setErr('mismatch')
+  }else{
+    setErr('')
+  }});
+
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
+    console.log(auth.errorMessage)
+  };
+  const handleClickShowPassword = (prop) => (event) => {
+    setValues({
+      ...values, [prop]: !values[prop],
+    });
+  };
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+  async function handleChangePassword(event) {
+    if(!err){
+      let response = await auth.changePassword(auth.user.username, values.oldPassword, values.newPassword, values.confirmPassword);
+      if(response){handleClose()}
+    }
   }
   function handleClose(event) {
+    setValues({
+      oldPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+      showOldPassword: false,
+      showNewPassword: false,
+      showConfirmPassword: false,
+    })
+    auth.setErrorMessage('')
     community.setChangePassword(false);
   }
+
   return (
     <Modal
       open={community.changePasswordModal}
@@ -37,64 +86,85 @@ export default function ChangePasswordModal() {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <TextField
-          name="oldPass"
-          fullWidth
-          id="oldPass"
-          label="Old Password:"
-          autoFocus
-          variant="standard"
-          InputProps={{
-            disableUnderline: true,
-            style: {
-              fontSize: 30,
-              paddingLeft: 20,
-              paddingBottom: 10,
-            },
-          }}
-          InputLabelProps={{
-            style: { fontSize: 30, paddingLeft: 20 },
-            shrink: true,
-          }}
-        />
-        <TextField
-          name="newPass"
-          fullWidth
-          id="newPass"
-          label="New Password:"
-          variant="standard"
-          InputProps={{
-            disableUnderline: true,
-            style: {
-              fontSize: 30,
-              paddingLeft: 20,
-              paddingBottom: 10,
-            },
-          }}
-          InputLabelProps={{
-            style: { fontSize: 30, paddingLeft: 20 },
-            shrink: true,
-          }}
-        />
-        <TextField
-          name="confirmNewPass"
-          fullWidth
-          id="confirmNewPass"
-          label="Confirm New Password:"
-          variant="standard"
-          InputProps={{
-            disableUnderline: true,
-            style: {
-              fontSize: 30,
-              paddingLeft: 20,
-              paddingBottom: 10,
-            },
-          }}
-          InputLabelProps={{
-            style: { fontSize: 30, paddingLeft: 20 },
-            shrink: true,
-          }}
-        />
+{/* Old Password */}
+      <Typography 
+        sx={{fontSize: 28, marginBottom:'-10px'}}>
+        Old Password:
+      </Typography>
+      <FormControl fullWidth sx={{ }} variant="standard" >
+          <Input
+            error={auth.errorMessage == 'Wrong password provided.'}
+            id="standard-adornment-password"
+            type={values.showOldPassword ? 'text' : 'password'}
+            value={values.oldPassword}
+            onChange={handleChange('oldPassword')}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle oldPassword visibility"
+                  onClick={handleClickShowPassword('showOldPassword')}
+                  onMouseDown={handleMouseDownPassword}
+                >
+                  {values.showOldPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+          {auth.errorMessage == 'Wrong password provided.' && <FormHelperText id="my-helper-text" sx={{color:'red', fontSize:'14px'}}>{auth.errorMessage}</FormHelperText>}
+      </FormControl>
+{/* New Password */}
+      <Typography 
+        sx={{fontSize: 28, marginBottom:'-10px'}}>
+        New Password:
+      </Typography>
+      <FormControl fullWidth sx={{ }} variant="standard" >
+          <Input
+            error={err=='lessthan8'}
+            id="standard-adornment-password"
+            type={values.showNewPassword ? 'text' : 'password'}
+            value={values.newPassword}
+            onChange={handleChange('newPassword')}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle newPassword visibility"
+                  onClick={handleClickShowPassword('showNewPassword')}
+                  onMouseDown={handleMouseDownPassword}
+                >
+                  {values.showNewPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+          {err=='lessthan8' && <FormHelperText id="my-helper-text" sx={{color:'red', fontSize:'14px'}}>Please enter a password of at least 8 characters.</FormHelperText>}
+      </FormControl>
+{/* Confirm New Password */}
+      <Typography 
+        sx={{fontSize: 28, marginBottom:'-10px'}}>
+        Confirm New Password:
+      </Typography>
+      <FormControl fullWidth sx={{ }} variant="standard" >
+          <Input
+            error={err=='mismatch'}
+            helperText="Incorrect entry."
+            id="standard-adornment-password"
+            type={values.showConfirmPassword ? 'text' : 'password'}
+            value={values.confirmPassword}
+            onChange={handleChange('confirmPassword')}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle confirmPassword visibility"
+                  onClick={handleClickShowPassword('showConfirmPassword')}
+                  onMouseDown={handleMouseDownPassword}
+                >
+                  {values.showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+          />
+         {err=='mismatch' && <FormHelperText id="my-helper-text" sx={{color:'red', fontSize:'14px'}}>Please enter the same password twice.</FormHelperText>}
+        </FormControl>
         <Button
           variant="contained"
           onClick={handleChangePassword}

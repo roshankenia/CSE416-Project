@@ -149,19 +149,19 @@ function AuthContextProvider(props) {
     }
   };
 
-  auth.changePassword = function (
+  auth.changePassword = async function (
     username,
     currPassword,
     newPassword,
     newPassVerify
   ) {
     try {
-      const response = api.changePassword(
+      const response = await api.changePassword(
         username,
         currPassword,
         newPassword,
         newPassVerify
-      );
+      )
       if (response.status === 200) {
         authReducer({
           type: AuthActionType.CHANGE_PASSWORD,
@@ -169,11 +169,14 @@ function AuthContextProvider(props) {
             user: response.data.user,
           },
         });
-        history.push("/");
+        history.push("/test");
+        return true
       }
     } catch (error) {
+      console.log(error)
       console.log(error.response.data.errorMessage);
-      //auth.setErrorMessage(error.response.data.errorMessage);
+      auth.setErrorMessage(error.response.data.errorMessage);
+      return false
     }
   };
 

@@ -113,6 +113,7 @@ const HomeScreen = () => {
   // //#endregion *************** delete community module ***************/
   return (
     <Grid container direction={'column'}>
+      <Typography fontSize={'34px'}>You have successfully changed your password</Typography>
     {/* {createCommunityRender}
     {deleteCommunityRender}
     {getCommunitiesRender} */}
