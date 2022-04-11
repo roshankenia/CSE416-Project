@@ -39,7 +39,7 @@ searchUsers = async (req, res) => {
     });
   }
 
-  const username = body.username;
+  const { username } = req.body;
   console.log(username);
 
   await User.find(
