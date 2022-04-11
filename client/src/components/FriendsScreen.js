@@ -34,7 +34,7 @@ import AuthContext from "../auth";
     
     @Terran
 */
-const HomeScreen = () => {
+const FriendsScreen = () => {
   const { innerWidth: width, innerHeight: height } = window;
   const { community } = useContext(GlobalCommunityContext);
 
@@ -66,10 +66,63 @@ const HomeScreen = () => {
     event.stopPropagation();
   };
 
+  let friends = ["Roshan", "Terran", "Alan"];
+
+  let friendsList = (
+    <List textAlign="center">
+      {friends.map((friend) => (
+        <ListItem key={friend}>
+          <Box
+            style={{
+              border: "3px solid",
+              borderColor: "black",
+              color: "black",
+              backgroundColor: "white",
+              fontSize: "20px",
+              outline: "none",
+              borderRadius: 20,
+              width: "100%",
+            }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={8}>
+                <Typography
+                  display="inline"
+                  style={{ fontSize: "32px" }}
+                  sx={{ ml: 2 }}
+                >
+                  {friend}
+                </Typography>
+              </Grid>
+              <Grid item xs={4}>
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  style={{
+                    fontWeight: 600,
+                    border: "3px solid",
+                    borderColor: "black",
+                    backgroundColor: "blue",
+                    color: "white",
+                    fontSize: "10px",
+                    borderRadius: 20,
+                  }}
+                  sx={{mt:1}}
+                >
+                  View Profile
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </ListItem>
+      ))}
+    </List>
+  );
+
   const communitiesButton = (
     <Button
       onClick={(event) => setScreen(event, "communities")}
-      disabled={true}
       variant="contained"
       color="success"
       size="small"
@@ -82,7 +135,6 @@ const HomeScreen = () => {
         color: "black",
         fontSize: "10px",
         borderRadius: 20,
-        opacity: 0.5,
       }}
       sx={{ mt: 2, width: "25%" }}
     >
@@ -115,6 +167,7 @@ const HomeScreen = () => {
   const friendsButton = (
     <Button
       onClick={(event) => setScreen(event, "friends")}
+      disabled={true}
       variant="contained"
       color="success"
       size="small"
@@ -127,6 +180,7 @@ const HomeScreen = () => {
         color: "white",
         fontSize: "10px",
         borderRadius: 20,
+        opacity: 0.5,
       }}
       sx={{ mt: 2, width: "25%" }}
     >
@@ -134,68 +188,6 @@ const HomeScreen = () => {
     </Button>
   );
 
-  const communities = [
-    "J/Stickman",
-    "J/Rage Comics",
-    "J/Memes",
-    "J/Spiderman",
-    "J/Random",
-  ];
-  let communityCard = <List></List>;
-  communityCard = (
-    <List>
-      {communities.map((name) => (
-        <ListItem key={name}>
-          <Button
-            variant="contained"
-            color="success"
-            size="large"
-            onClick={(event) => handleOpenCommunity(event, name)}
-            style={{
-              fontWeight: 600,
-              border: "3px solid",
-              borderColor: "black",
-              backgroundColor: "white",
-              color: "black",
-              fontSize: "48px",
-              borderRadius: 20,
-            }}
-            sx={{ mt: 2, width: "100%" }}
-          >
-            <Grid container>
-              <Grid item xs={8}>
-                <Typography align="center" style={{ fontSize: "48px" }}>
-                  {name}
-                </Typography>
-              </Grid>
-              <Grid item xs={2}></Grid>
-              <Grid item xs={2}>
-                <Button
-                  variant="contained"
-                  color="success"
-                  size="small"
-                  align="center"
-                  onClick={handleLeaveCommunity}
-                  style={{
-                    fontWeight: 600,
-                    border: "3px solid",
-                    borderColor: "black",
-                    backgroundColor: "red",
-                    color: "black",
-                    fontSize: "10px",
-                    borderRadius: 20,
-                  }}
-                  sx={{ mt: 2, width: "25%" }}
-                >
-                  Leave
-                </Button>
-              </Grid>
-            </Grid>
-          </Button>
-        </ListItem>
-      ))}
-    </List>
-  );
   return (
     <Box
       style={{
@@ -211,51 +203,72 @@ const HomeScreen = () => {
           {friendsButton}
         </Grid>
         <Grid item xs={6}></Grid>
-        <Grid item xs={3}>
-          <Typography display="inline" style={{ fontSize: "48px" }}>
-            {"Your Communities"}
-          </Typography>
+        <Grid item xs={12} textAlign="center">
+          <Typography style={{ fontSize: "48px" }}>{"Friends"}</Typography>
         </Grid>
-        <Grid item xs={5}>
-          {" "}
+        <Grid item xs={4}>
           <Box
+            justifyContent="center"
+            alignItems="center"
             style={{
               border: "3px solid",
               borderColor: "black",
               color: "black",
               backgroundColor: "white",
-              fontSize: "32px",
-              borderRadius: 20,
+              fontSize: "20px",
               outline: "none",
-              width: "96%",
-              marginTop:2
+              borderRadius: 20,
+              width: "90%",
             }}
           >
-            <Box style={{ width: "96%" }}>
-              <TextField
-                fullWidth
-                variant="standard"
-                id="search"
-                label="Search:"
-                name="search"
-                InputProps={{
-                  disableUnderline: true,
-                  style: {
-                    fontSize: 20,
-                    paddingLeft: 20,
-                  },
-                }}
-                InputLabelProps={{
-                  style: { fontSize: 24, paddingLeft: 20 },
-                  shrink: true,
-                }}
-              />
-            </Box>
+            <Typography align="center" style={{ fontSize: "32px" }}>
+              {" "}
+              Your Friends
+            </Typography>
+            {friendsList}
           </Box>
         </Grid>
-        <Grid item xs={4}></Grid>
-        <Grid item xs={8} align="center">
-          {communityCard}
+        <Grid item xs={4}>
+          <Box
+            justifyContent="center"
+            alignItems="center"
+            style={{
+              border: "3px solid",
+              borderColor: "black",
+              color: "black",
+              backgroundColor: "white",
+              fontSize: "20px",
+              outline: "none",
+              borderRadius: 20,
+              width: "90%",
+            }}
+          >
+            <Typography align="center" style={{ fontSize: "32px" }}>
+              {" "}
+              Friend Requests
+            </Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={8} textAlign="center">
+          <Box
+            justifyContent="center"
+            alignItems="center"
+            style={{
+              border: "3px solid",
+              borderColor: "black",
+              color: "black",
+              backgroundColor: "white",
+              fontSize: "20px",
+              outline: "none",
+              borderRadius: 20,
+              width: "95%",
+            }}
+          >
+            <Typography align="center" style={{ fontSize: "32px" }}>
+              {" "}
+              Search Users
+            </Typography>
+          </Box>
         </Grid>
         <div class="sticky">
           {/* <Sticky> */}
@@ -267,4 +280,4 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default FriendsScreen;

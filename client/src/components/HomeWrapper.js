@@ -4,6 +4,7 @@ import WelcomeScreen from "./WelcomeScreen";
 import CommunityScreen from "./CommunityScreen";
 import DiscoveryScreen from "./DiscoveryScreen";
 import AuthContext from "../auth";
+import FriendsScreen from "./FriendsScreen";
 import { GlobalCommunityContext } from "../community";
 import ProfileScreen from "./ProfileScreen";
 
@@ -26,9 +27,10 @@ export default function HomeWrapper() {
           return <HomeScreen />;
         } else if (community.screen == "discovery") {
           return <DiscoveryScreen />;
-        }
-        if (community.screen == "profile"){
-          return <ProfileScreen />
+        } else if (community.screen == "profile") {
+          return <ProfileScreen />;
+        } else if (community.screen == "friends") {
+          return <FriendsScreen />;
         }
       }
     } else return <WelcomeScreen />;

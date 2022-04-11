@@ -81,6 +81,28 @@ export default function DiscoveryScreen() {
     </Button>
   );
 
+  const friendsButton = (
+    <Button
+      onClick={(event) => setScreen(event, "friends")}
+      variant="contained"
+      color="success"
+      size="small"
+      align="center"
+      style={{
+        fontWeight: 600,
+        border: "3px solid",
+        borderColor: "black",
+        backgroundColor: "purple",
+        color: "white",
+        fontSize: "10px",
+        borderRadius: 20,
+      }}
+      sx={{ mt: 2, width: "25%" }}
+    >
+      Friends
+    </Button>
+  );
+
   return (
     <Box
       style={{
@@ -93,6 +115,7 @@ export default function DiscoveryScreen() {
         <Grid item xs={6}>
           {communitiesButton}
           {discoveryButton}
+          {friendsButton}
         </Grid>
         {/* <Grid item xs={6}></Grid> */}
 

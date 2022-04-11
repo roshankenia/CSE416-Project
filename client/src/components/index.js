@@ -30,6 +30,7 @@ import WelcomeScreen from './WelcomeScreen'
 import HomeWrapper from './HomeWrapper'
 import Test from './Test'
 import GuestScreen from './GuestScreen'
+import FriendsScreen from './FriendsScreen'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -68,5 +69,6 @@ export {
     WelcomeScreen,
     HomeWrapper,
     Test,
-    GuestScreen
+    GuestScreen,
+    FriendsScreen,
     }
