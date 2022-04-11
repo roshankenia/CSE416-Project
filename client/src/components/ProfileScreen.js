@@ -26,7 +26,7 @@ export default function ProfileScreen() {
       }}
       sx={{ mt: 2, width: "25%" }}
     >
-      {"u/" + auth.user.username}
+      {"u/" + community.userProfile.username}
     </Typography>
   );
   return (

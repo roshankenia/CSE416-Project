@@ -26,9 +26,11 @@ export const GlobalCommunityActionType = {
   SET_CHANGE_PASSWORD: "SET_CHANGE_PASSWORD",
   SET_FEEDBACK: "SET_FEEDBACK",
   SET_DELETE_POST: "SET_DELETE_POST",
+  SET_USER_PROFILE: "SET_USER_PROFILE",
 };
 
 function GlobalCommunityContextProvider(props) {
+  const { auth } = useContext(AuthContext);
   const [community, setCommunity] = useState({
     communityList: null,
     currentCommunity: null,
@@ -40,10 +42,9 @@ function GlobalCommunityContextProvider(props) {
     changePasswordModal: false,
     feedbackModal: false,
     deletePostModal: false,
+    userProfile: auth.user,
   });
   const history = useHistory();
-
-  const { auth } = useContext(AuthContext);
 
   const communityReducer = (action) => {
     const { type, payload } = action;
@@ -60,6 +61,7 @@ function GlobalCommunityContextProvider(props) {
           changePasswordModal: community.changePasswordModal,
           feedbackModal: community.feedbackModal,
           deletePostModal: community.deletePostModal,
+          userProfile: community.userProfile,
         });
       }
       case GlobalCommunityActionType.GET_COMMUNITYLIST: {
@@ -74,6 +76,7 @@ function GlobalCommunityContextProvider(props) {
           changePasswordModal: community.changePasswordModal,
           feedbackModal: community.feedbackModal,
           deletePostModal: community.deletePostModal,
+          userProfile: community.userProfile,
         });
       }
       case GlobalCommunityActionType.UPDATE_COMMUNITYLIST: {
@@ -88,6 +91,7 @@ function GlobalCommunityContextProvider(props) {
           changePasswordModal: community.changePasswordModal,
           feedbackModal: community.feedbackModal,
           deletePostModal: community.deletePostModal,
+          userProfile: community.userProfile,
         });
       }
       //For testing purpose only
@@ -103,6 +107,7 @@ function GlobalCommunityContextProvider(props) {
           changePasswordModal: community.changePasswordModal,
           feedbackModal: community.feedbackModal,
           deletePostModal: community.deletePostModal,
+          userProfile: community.userProfile,
         });
       }
       case GlobalCommunityActionType.SET_COMMUNITY: {
@@ -117,6 +122,7 @@ function GlobalCommunityContextProvider(props) {
           changePasswordModal: community.changePasswordModal,
           feedbackModal: community.feedbackModal,
           deletePostModal: community.deletePostModal,
+          userProfile: community.userProfile,
         });
       }
       case GlobalCommunityActionType.SET_SCREEN: {
@@ -131,6 +137,7 @@ function GlobalCommunityContextProvider(props) {
           changePasswordModal: community.changePasswordModal,
           feedbackModal: community.feedbackModal,
           deletePostModal: community.deletePostModal,
+          userProfile: auth.user,
         });
       }
       case GlobalCommunityActionType.SET_DELETE_ACCOUNT: {
@@ -145,6 +152,7 @@ function GlobalCommunityContextProvider(props) {
           changePasswordModal: community.changePasswordModal,
           feedbackModal: community.feedbackModal,
           deletePostModal: community.deletePostModal,
+          userProfile: community.userProfile,
         });
       }
       case GlobalCommunityActionType.SET_FEEDBACK: {
@@ -159,6 +167,7 @@ function GlobalCommunityContextProvider(props) {
           changePasswordModal: community.changePasswordModal,
           feedbackModal: payload,
           deletePostModal: community.deletePostModal,
+          userProfile: community.userProfile,
         });
       }
       case GlobalCommunityActionType.SET_CHANGE_PASSWORD: {
@@ -173,6 +182,7 @@ function GlobalCommunityContextProvider(props) {
           changePasswordModal: payload,
           feedbackModal: community.feedbackModal,
           deletePostModal: community.deletePostModal,
+          userProfile: community.userProfile,
         });
       }
       case GlobalCommunityActionType.SET_DELETE_POST: {
@@ -187,6 +197,22 @@ function GlobalCommunityContextProvider(props) {
           changePasswordModal: community.changePasswordModal,
           feedbackModal: community.feedbackModal,
           deletePostModal: payload,
+          userProfile: community.userProfile,
+        });
+      }
+      case GlobalCommunityActionType.SET_USER_PROFILE: {
+        return setCommunity({
+          communityList: community.communityList,
+          currentCommunity: community.currentCommunity,
+          search: community.search,
+          errorMessage: community.errorMessage,
+          sort: community.sort,
+          screen: "profile",
+          deleteAccountModal: community.deleteAccountModal,
+          changePasswordModal: community.changePasswordModal,
+          feedbackModal: community.feedbackModal,
+          deletePostModal: community.deletePostModal,
+          userProfile: payload,
         });
       }
       default:
@@ -194,6 +220,12 @@ function GlobalCommunityContextProvider(props) {
     }
   };
   //hard coded for now
+  community.setUserProfile = async function (user) {
+    communityReducer({
+      type: GlobalCommunityActionType.SET_USER_PROFILE,
+      payload: user,
+    });
+  };
   community.setScreen = async function (screen) {
     communityReducer({
       type: GlobalCommunityActionType.SET_SCREEN,

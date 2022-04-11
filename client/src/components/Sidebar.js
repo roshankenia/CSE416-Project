@@ -221,7 +221,7 @@ export default function Sidebar() {
         >
           <Typography align="center" style={{ fontSize: "32px" }}>
             {" "}
-            Your Invites
+            Your Game Invites
           </Typography>
           <Box textAlign="center">
             <Typography

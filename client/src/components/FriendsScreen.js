@@ -66,7 +66,151 @@ const FriendsScreen = () => {
     event.stopPropagation();
   };
 
+  //Keeps track of current search
+  const [userSearch, setUserSearch] = useState("");
+
+  function handleUpdateSearch(event) {
+    setUserSearch(event.target.value);
+  }
+  function handleKeyPress(event) {
+    if (event.code === "Enter") {
+      let text = event.target.value;
+      console.log(text);
+      auth.search(text);
+    }
+  }
+
+  function handleViewProfile(event, user) {
+    event.stopPropagation();
+    community.setUserProfile(user);
+  }
+
   let friends = ["Roshan", "Terran", "Alan"];
+  let searchUsers = Object.values(auth.searchUsers);
+  let searchUserList = "";
+  if (auth.searchUsers) {
+    searchUserList = (
+      <List textAlign="center">
+        {searchUsers.map((user) => (
+          <ListItem key={user}>
+            <Box
+              style={{
+                border: "3px solid",
+                borderColor: "black",
+                color: "black",
+                backgroundColor: "white",
+                fontSize: "20px",
+                outline: "none",
+                borderRadius: 20,
+                width: "100%",
+              }}
+            >
+              <Grid container spacing={2}>
+                <Grid item xs={8}>
+                  <Typography
+                    display="inline"
+                    style={{ fontSize: "32px" }}
+                    sx={{ ml: 2 }}
+                  >
+                    {user.username}
+                  </Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    size="small"
+                    onClick={(event) => handleViewProfile(event, user)}
+                    style={{
+                      fontWeight: 600,
+                      border: "3px solid",
+                      borderColor: "black",
+                      backgroundColor: "blue",
+                      color: "white",
+                      fontSize: "10px",
+                      borderRadius: 20,
+                    }}
+                    sx={{ mt: 1 }}
+                  >
+                    View Profile
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
+          </ListItem>
+        ))}
+      </List>
+    );
+  }
+
+  let requestList = (
+    <List textAlign="center">
+      {friends.map((friend) => (
+        <ListItem key={friend}>
+          <Box
+            style={{
+              border: "3px solid",
+              borderColor: "black",
+              color: "black",
+              backgroundColor: "white",
+              fontSize: "20px",
+              outline: "none",
+              borderRadius: 20,
+              width: "100%",
+            }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={7}>
+                <Typography
+                  display="inline"
+                  style={{ fontSize: "32px" }}
+                  sx={{ ml: 2 }}
+                >
+                  {friend}
+                </Typography>
+              </Grid>
+              <Grid item xs={5}>
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  style={{
+                    fontWeight: 600,
+                    border: "3px solid",
+                    borderColor: "black",
+                    backgroundColor: "green",
+                    color: "white",
+                    fontSize: "10px",
+                    borderRadius: 20,
+                  }}
+                  sx={{ mt: 1 }}
+                >
+                  Accept
+                </Button>
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  style={{
+                    fontWeight: 600,
+                    border: "3px solid",
+                    borderColor: "black",
+                    backgroundColor: "red",
+                    color: "white",
+                    fontSize: "10px",
+                    borderRadius: 20,
+                  }}
+                  sx={{ ml: 2, mt: 1 }}
+                >
+                  Deny
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </ListItem>
+      ))}
+    </List>
+  );
 
   let friendsList = (
     <List textAlign="center">
@@ -108,7 +252,7 @@ const FriendsScreen = () => {
                     fontSize: "10px",
                     borderRadius: 20,
                   }}
-                  sx={{mt:1}}
+                  sx={{ mt: 1 }}
                 >
                   View Profile
                 </Button>
@@ -247,9 +391,10 @@ const FriendsScreen = () => {
               {" "}
               Friend Requests
             </Typography>
+            {requestList}
           </Box>
         </Grid>
-        <Grid item xs={8} textAlign="center">
+        <Grid item xs={8} textAlign="center" sx={{ mt: 2 }}>
           <Box
             justifyContent="center"
             alignItems="center"
@@ -268,6 +413,44 @@ const FriendsScreen = () => {
               {" "}
               Search Users
             </Typography>
+
+            <Box
+              style={{
+                border: "3px solid",
+                borderColor: "black",
+                color: "black",
+                backgroundColor: "white",
+                fontSize: "32px",
+                borderRadius: 20,
+                outline: "none",
+                width: "96%",
+                marginLeft: 15,
+              }}
+            >
+              <Box style={{ width: "96%" }}>
+                <TextField
+                  fullWidth
+                  variant="standard"
+                  id="searchUser"
+                  label="Search:"
+                  name="searchUser"
+                  onKeyPress={handleKeyPress}
+                  onChange={handleUpdateSearch}
+                  InputProps={{
+                    disableUnderline: true,
+                    style: {
+                      fontSize: 20,
+                      paddingLeft: 20,
+                    },
+                  }}
+                  InputLabelProps={{
+                    style: { fontSize: 24, paddingLeft: 20 },
+                    shrink: true,
+                  }}
+                />
+              </Box>
+            </Box>
+            {searchUserList}
           </Box>
         </Grid>
         <div class="sticky">

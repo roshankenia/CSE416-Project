@@ -17,6 +17,7 @@ export const AuthActionType = {
   RESET_PASSWORD: "RESET_PASSWORD",
   DELETE_ACCOUNT: "DELETE_ACCOUNT",
   CREATE_GUEST: "CREATE_GUEST",
+  SEARCH_USERS: "SEARCH_USERS",
 };
 
 function AuthContextProvider(props) {
@@ -25,6 +26,7 @@ function AuthContextProvider(props) {
     loggedIn: false,
     errorMessage: null,
     isGuest: false, //Add this to the setAuth in the reducer
+    searchUsers: null,
   });
   const history = useHistory();
   const { community } = useContext(GlobalCommunityContext);
@@ -42,6 +44,7 @@ function AuthContextProvider(props) {
           loggedIn: payload.loggedIn,
           errorMessage: auth.errorMessage,
           isGuest: auth.isGuest,
+          searchUsers: auth.searchUsers,
         });
       }
       case AuthActionType.LOGIN_USER: {
@@ -50,6 +53,7 @@ function AuthContextProvider(props) {
           loggedIn: true,
           errorMessage: auth.errorMessage,
           isGuest: auth.isGuest,
+          searchUsers: auth.searchUsers,
         });
       }
       case AuthActionType.LOGOUT_USER: {
@@ -58,6 +62,7 @@ function AuthContextProvider(props) {
           loggedIn: false,
           errorMessage: auth.errorMessage,
           isGuest: auth.isGuest,
+          searchUsers: auth.searchUsers,
         });
       }
       case AuthActionType.REGISTER_USER: {
@@ -66,6 +71,7 @@ function AuthContextProvider(props) {
           loggedIn: true,
           errorMessage: auth.errorMessage,
           isGuest: auth.isGuest,
+          searchUsers: auth.searchUsers,
         });
       }
       case AuthActionType.CREATE_GUEST: {
@@ -74,6 +80,7 @@ function AuthContextProvider(props) {
           loggedIn: true,
           errorMessage: auth.errorMessage,
           isGuest: true,
+          searchUsers: auth.searchUsers,
         });
       }
       case AuthActionType.SET_ERROR_MESSAGE: {
@@ -82,6 +89,7 @@ function AuthContextProvider(props) {
           loggedIn: auth.loggedIn,
           errorMessage: payload,
           isGuest: auth.isGuest,
+          searchUsers: auth.searchUsers,
         });
       }
       case AuthActionType.CHANGE_PASSWORD: {
@@ -90,6 +98,7 @@ function AuthContextProvider(props) {
           loggedIn: true,
           errorMessage: auth.errorMessage,
           isGuest: auth.isGuest,
+          searchUsers: auth.searchUsers,
         });
       }
       case AuthActionType.RESET_PASSWORD: {
@@ -98,6 +107,7 @@ function AuthContextProvider(props) {
           loggedIn: false,
           errorMessage: auth.errorMessage,
           isGuest: auth.isGuest,
+          searchUsers: auth.searchUsers,
         });
       }
       case AuthActionType.DELETE_ACCOUNT: {
@@ -106,10 +116,34 @@ function AuthContextProvider(props) {
           loggedIn: false,
           errorMessage: auth.errorMessage,
           isGuest: auth.isGuest,
+          searchUsers: auth.searchUsers,
+        });
+      }
+      case AuthActionType.SEARCH_USERS: {
+        return setAuth({
+          user: auth.user,
+          loggedIn: auth.loggedIn,
+          errorMessage: auth.errorMessage,
+          isGuest: auth.isGuest,
+          searchUsers: payload,
         });
       }
       default:
         return auth;
+    }
+  };
+
+  auth.search = async function (username) {
+    console.log(username);
+    let response = await api.searchUsers(username);
+    if (response.status === 200) {
+      console.log(response.data.usernames);
+      authReducer({
+        type: AuthActionType.SEARCH_USERS,
+        payload: response.data.usernames,
+      });
+    } else {
+      console.log(response);
     }
   };
 
@@ -161,7 +195,7 @@ function AuthContextProvider(props) {
         currPassword,
         newPassword,
         newPassVerify
-      )
+      );
       if (response.status === 200) {
         authReducer({
           type: AuthActionType.CHANGE_PASSWORD,
@@ -169,13 +203,13 @@ function AuthContextProvider(props) {
             user: response.data.user,
           },
         });
-        return true
+        return true;
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       console.log(error.response.data.errorMessage);
       auth.setErrorMessage(error.response.data.errorMessage);
-      return false
+      return false;
     }
   };
 

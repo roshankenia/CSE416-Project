@@ -88,6 +88,11 @@ export const deleteAccount = (username, password) => {
   });
 };
 
+export const searchUsers = (username) => {
+  return api.post("/search/", {
+    username: username,
+  });
+};
 const apis = {
   getLoggedIn,
   registerUser,
@@ -97,6 +102,7 @@ const apis = {
   changePassword,
   resetPassword,
   deleteAccount,
+  searchUsers,
   // ,
   // changePassword,
   // resetPassword,
