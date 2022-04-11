@@ -169,7 +169,6 @@ function AuthContextProvider(props) {
             user: response.data.user,
           },
         });
-        history.push("/test");
         return true
       }
     } catch (error) {

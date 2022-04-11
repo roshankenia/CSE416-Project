@@ -1,14 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalCommunityContext } from "../community";
 import AuthContext from "../auth";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-import TextField from "@mui/material/TextField";
+import {Box, Button, Typography, Modal, Grid} from "@mui/material/";
 
 //hide password stuff
-import {IconButton, Input, FilledInput, OutlinedInput, InputLabel, InputAdornment, FormHelperText, FormControl} from '@mui/material/';
+import {IconButton, Input, InputAdornment, FormHelperText, FormControl} from '@mui/material/';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
@@ -36,16 +32,16 @@ export default function ChangePasswordModal() {
     showNewPassword: false,
     showConfirmPassword: false,
   });
-
   const [err, setErr] = useState('')
+  const [success, setSuccess] = useState(false)
 
-  useEffect(() => { if(values.newPassword.length < 8 && values.newPassword.length != 0){
+  useEffect(() => { if(values.newPassword.length < 8 && values.newPassword.length !== 0){
     setErr('lessthan8')
-  }else if(values.newPassword != values.confirmPassword){
+  }else if(values.newPassword !== values.confirmPassword){
     setErr('mismatch')
   }else{
     setErr('')
-  }});
+  }},[values.newPassword, values.confirmPassword]);
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -62,7 +58,7 @@ export default function ChangePasswordModal() {
   async function handleChangePassword(event) {
     if(!err){
       let response = await auth.changePassword(auth.user.username, values.oldPassword, values.newPassword, values.confirmPassword);
-      if(response){handleClose()}
+      setSuccess(response)
     }
   }
   function handleClose(event) {
@@ -74,6 +70,7 @@ export default function ChangePasswordModal() {
       showNewPassword: false,
       showConfirmPassword: false,
     })
+    setSuccess(false)
     auth.setErrorMessage('')
     community.setChangePassword(false);
   }
@@ -86,6 +83,8 @@ export default function ChangePasswordModal() {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
+      {!success? 
+      <Grid>
 {/* Old Password */}
       <Typography 
         sx={{fontSize: 28, marginBottom:'-10px'}}>
@@ -93,7 +92,7 @@ export default function ChangePasswordModal() {
       </Typography>
       <FormControl fullWidth sx={{ }} variant="standard" >
           <Input
-            error={auth.errorMessage == 'Wrong password provided.'}
+            error={auth.errorMessage === 'Wrong password provided.'}
             id="standard-adornment-password"
             type={values.showOldPassword ? 'text' : 'password'}
             value={values.oldPassword}
@@ -110,7 +109,7 @@ export default function ChangePasswordModal() {
               </InputAdornment>
             }
           />
-          {auth.errorMessage == 'Wrong password provided.' && <FormHelperText id="my-helper-text" sx={{color:'red', fontSize:'14px'}}>{auth.errorMessage}</FormHelperText>}
+          {auth.errorMessage === 'Wrong password provided.' && <FormHelperText id="my-helper-text" sx={{color:'red', fontSize:'14px'}}>{auth.errorMessage}</FormHelperText>}
       </FormControl>
 {/* New Password */}
       <Typography 
@@ -119,7 +118,7 @@ export default function ChangePasswordModal() {
       </Typography>
       <FormControl fullWidth sx={{ }} variant="standard" >
           <Input
-            error={err=='lessthan8'}
+            error={err==='lessthan8'}
             id="standard-adornment-password"
             type={values.showNewPassword ? 'text' : 'password'}
             value={values.newPassword}
@@ -136,7 +135,7 @@ export default function ChangePasswordModal() {
               </InputAdornment>
             }
           />
-          {err=='lessthan8' && <FormHelperText id="my-helper-text" sx={{color:'red', fontSize:'14px'}}>Please enter a password of at least 8 characters.</FormHelperText>}
+          {err==='lessthan8' && <FormHelperText id="my-helper-text" sx={{color:'red', fontSize:'14px'}}>Please enter a password of at least 8 characters.</FormHelperText>}
       </FormControl>
 {/* Confirm New Password */}
       <Typography 
@@ -145,7 +144,7 @@ export default function ChangePasswordModal() {
       </Typography>
       <FormControl fullWidth sx={{ }} variant="standard" >
           <Input
-            error={err=='mismatch'}
+            error={err==='mismatch'}
             helperText="Incorrect entry."
             id="standard-adornment-password"
             type={values.showConfirmPassword ? 'text' : 'password'}
@@ -163,17 +162,21 @@ export default function ChangePasswordModal() {
               </InputAdornment>
             }
           />
-         {err=='mismatch' && <FormHelperText id="my-helper-text" sx={{color:'red', fontSize:'14px'}}>Please enter the same password twice.</FormHelperText>}
+         {err==='mismatch' && <FormHelperText id="my-helper-text" sx={{color:'red', fontSize:'14px'}}>Please enter the same password twice.</FormHelperText>}
         </FormControl>
+        </Grid>
+        : "Change successful"}
+
+        {!success &&
         <Button
           variant="contained"
           onClick={handleChangePassword}
           sx={{ m: 1 }}
         >
           Confirm
-        </Button>
+        </Button>}
         <Button variant="outlined" onClick={handleClose} sx={{ m: 1 }}>
-          Cancel
+          Close
         </Button>
       </Box>
     </Modal>
