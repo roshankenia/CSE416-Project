@@ -431,4 +431,5 @@ module.exports = {
   resetPassword,
   deleteAccount,
   createGuest,
+  searchUsers,
 };
