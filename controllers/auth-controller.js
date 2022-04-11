@@ -31,6 +31,37 @@ getLoggedIn = async (req, res) => {
   }
 };
 
+searchUsers = async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
+
+  const username = body.username;
+  console.log(username);
+
+  await User.find(
+    { username: { $regex: new RegExp("^" + username, "i") } },
+    (err, usernames) => {
+      console.log("found usernames: " + JSON.stringify(usernames));
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+      if (!usernames) {
+        console.log("!usernames.length");
+        return res
+          .status(404)
+          .json({ success: false, error: "Users not found" });
+      } else {
+        console.log("Send the Users");
+        return res.status(200).json({ success: true, usernames: usernames });
+      }
+    }
+  ).catch((err) => console.log(err));
+};
+
 loginUser = async (req, res) => {
   console.log("loginUser");
   try {

@@ -10,5 +10,6 @@ router.get("/loggedIn", AuthController.getLoggedIn);
 router.post("/changePassword", AuthController.changePassword);
 router.post("/resetPassword", AuthController.resetPassword);
 router.post("/deleteAccount", AuthController.deleteAccount);
+router.get("/search/", AuthController.searchUsers);
 
 module.exports = router;
