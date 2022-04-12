@@ -524,4 +524,6 @@ module.exports = {
   deleteAccount,
   createGuest,
   searchUsers,
+  addFriendRequest,
+  addFriend,
 };
