@@ -31,6 +31,125 @@ getLoggedIn = async (req, res) => {
   }
 };
 
+removeFriendRequest = async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
+
+  const { sentUserEmail, receivedUserEmail } = req.body;
+  console.log(sentUserEmail, " ", receivedUserEmail);
+
+  //first find sent user
+  await User.findOne({ email: sentUserEmail }, async (err1, sentUser) => {
+    console.log("found sent user: " + JSON.stringify(sentUser));
+    //now find received user
+    await User.findOne({ email: receivedUserEmail }, (err2, receivedUser) => {
+      console.log("found receieve user: " + JSON.stringify(receivedUser));
+
+      sentUserId = JSON.stringify(sentUser._id);
+      //remove request from received user
+      for (var i = 0; i < receivedUser.requests.length; i++) {
+        requestId = JSON.stringify(receivedUser.requests[i]._id);
+        console.log(sentUserId, " and ", requestId);
+        if (requestId == sentUserId) {
+          console.log("ids equal");
+          receivedUser.requests.splice(i, 1);
+          break;
+        }
+      }
+
+      receivedUser.guest = false;
+
+      receivedUser
+        .save()
+        .then(() => {
+          console.log("SUCCESS!!!");
+          return res.status(200).json({
+            success: true,
+            receivedUser: receivedUser,
+          });
+        })
+        .catch((error) => {
+          console.log("FAILURE: " + JSON.stringify(error));
+          return res.status(404).json({
+            error,
+            message: "Friend Request not removed!",
+          });
+        });
+    }).catch((err2) => console.log(err));
+  }).catch((err1) => console.log(err));
+};
+
+removeFriend = async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
+
+  const { sentUserEmail, receivedUserEmail } = req.body;
+  console.log(sentUserEmail, " ", receivedUserEmail);
+
+  //first find sent user
+  await User.findOne({ email: sentUserEmail }, async (err1, sentUser) => {
+    console.log("found sent user: " + JSON.stringify(sentUser));
+    //now find received user
+    await User.findOne({ email: receivedUserEmail }, (err2, receivedUser) => {
+      console.log("found receive user: " + JSON.stringify(receivedUser));
+
+      sentUserId = JSON.stringify(sentUser._id);
+      //remove friend from received user
+      for (var i = 0; i < receivedUser.friends.length; i++) {
+        requestId = JSON.stringify(receivedUser.friends[i]._id);
+        console.log(sentUserId, " and ", requestId);
+        if (requestId == sentUserId) {
+          console.log("ids equal");
+          receivedUser.friends.splice(i, 1);
+          break;
+        }
+      }
+
+      receivedUserId = JSON.stringify(receivedUser._id);
+      //remove friend from sent user
+      for (var i = 0; i < sentUser.friends.length; i++) {
+        requestId = JSON.stringify(sentUser.friends[i]._id);
+        console.log(receivedUserId, " and ", requestId);
+        if (requestId == receivedUserId) {
+          console.log("ids equal");
+          sentUser.friends.splice(i, 1);
+          break;
+        }
+      }
+
+      receivedUser.guest = false;
+      sentUser.guest = false;
+
+      sentUser.save();
+
+      receivedUser
+        .save()
+        .then(() => {
+          console.log("SUCCESS!!!");
+          return res.status(200).json({
+            success: true,
+            receivedUser: receivedUser,
+          });
+        })
+        .catch((error) => {
+          console.log("FAILURE: " + JSON.stringify(error));
+          return res.status(404).json({
+            error,
+            message: "Friend not removed!",
+          });
+        });
+    }).catch((err2) => console.log(err));
+  }).catch((err1) => console.log(err));
+};
+
 addFriendRequest = async (req, res) => {
   const body = req.body;
   if (!body) {
@@ -102,7 +221,7 @@ addFriend = async (req, res) => {
       for (var i = 0; i < receivedUser.requests.length; i++) {
         requestId = JSON.stringify(receivedUser.requests[i]._id);
         console.log(sentUserId, " and ", requestId);
-        if ((requestId = sentUserId)) {
+        if (requestId == sentUserId) {
           console.log("ids equal");
           receivedUser.requests.splice(i, 1);
           break;
@@ -536,4 +655,6 @@ module.exports = {
   searchUsers,
   addFriendRequest,
   addFriend,
+  removeFriendRequest,
+  removeFriend,
 };

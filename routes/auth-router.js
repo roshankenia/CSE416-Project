@@ -1,4 +1,5 @@
 const express = require("express");
+const auth = require("../auth");
 const router = express.Router();
 const AuthController = require("../controllers/auth-controller");
 
@@ -13,5 +14,7 @@ router.post("/deleteAccount", AuthController.deleteAccount);
 router.post("/search", AuthController.searchUsers);
 router.put("/friendRequest", AuthController.addFriendRequest);
 router.put("/friend", AuthController.addFriend);
+router.put("/removeFriendRequest", AuthController.removeFriendRequest);
+router.put("/removeFriend", AuthController.removeFriend);
 
 module.exports = router;
