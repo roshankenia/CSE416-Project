@@ -53,6 +53,8 @@ addFriendRequest = async (req, res) => {
         receivedUser.requests.push(sentUser);
       }
 
+      receivedUser.guest = false;
+
       receivedUser
         .save()
         .then(() => {
@@ -101,6 +103,9 @@ addFriend = async (req, res) => {
       if (index > -1) {
         receivedUser.requests.splice(index, 1);
       }
+
+      sentUser.guest = false;
+      receivedUser.guest = false;
 
       sentUser.save();
       receivedUser
