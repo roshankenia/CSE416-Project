@@ -31,6 +31,98 @@ getLoggedIn = async (req, res) => {
   }
 };
 
+addFriendRequest = async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
+
+  const { sentUserEmail, receivedUserEmail } = req.body;
+  console.log(sentUserEmail, " ", receivedUserEmail);
+
+  //first find sent user
+  await User.findOne({ email: sentUserEmail }, (err1, sentUser) => {
+    console.log("found sent user: " + JSON.stringify(sentUser));
+    //now find received user
+    await User.findOne({ email: receivedUserEmail }, (err2, receivedUser) => {
+      console.log("found sent user: " + JSON.stringify(receivedUser));
+
+      if (!receivedUser.requests.includes(sentUser)) {
+        receivedUser.requests.push(sentUser);
+      }
+
+      receivedUser
+        .save()
+        .then(() => {
+          console.log("SUCCESS!!!");
+          return res.status(200).json({
+            success: true,
+            receivedUser: receivedUser,
+          });
+        })
+        .catch((error) => {
+          console.log("FAILURE: " + JSON.stringify(error));
+          return res.status(404).json({
+            error,
+            message: "Friend Request not sent!",
+          });
+        });
+    }).catch((err2) => console.log(err));
+  }).catch((err1) => console.log(err));
+};
+
+addFriend = async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
+
+  const { sentUserEmail, receivedUserEmail } = req.body;
+  console.log(sentUserEmail, " ", receivedUserEmail);
+
+  //first find sent user
+  await User.findOne({ email: sentUserEmail }, (err1, sentUser) => {
+    console.log("found sent user: " + JSON.stringify(sentUser));
+    //now find received user
+    await User.findOne({ email: receivedUserEmail }, (err2, receivedUser) => {
+      console.log("found receieved user: " + JSON.stringify(receivedUser));
+
+      //update friends list of each
+      sentUser.friends.push(receivedUser);
+      receivedUser.friends.push(sentUser);
+
+      //remove request from received user
+
+      var index = receivedUser.requests.indexOf(sentUser);
+      if (index > -1) {
+        receivedUser.requests.splice(index, 1);
+      }
+
+      sentUser.save();
+      receivedUser
+        .save()
+        .then(() => {
+          console.log("SUCCESS!!!");
+          return res.status(200).json({
+            success: true,
+            receivedUser: receivedUser,
+          });
+        })
+        .catch((error) => {
+          console.log("FAILURE: " + JSON.stringify(error));
+          return res.status(404).json({
+            error,
+            message: "Friends not added!",
+          });
+        });
+    }).catch((err2) => console.log(err));
+  }).catch((err1) => console.log(err));
+};
+
 searchUsers = async (req, res) => {
   const body = req.body;
   if (!body) {
