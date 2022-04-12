@@ -26,6 +26,21 @@ getLoggedIn = async (req, res) => {
   }
 };
 
+findById = async (req, res) => {
+  console.log("Find User with id: " + JSON.stringify(req.params.id));
+
+  await User.findById({ _id: req.params.id }, (err, user) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    } else if (!user) {
+      return res.status(400).json({ success: false, error: "User not found" });
+    }
+    console.log("Found user: " + JSON.stringify(user));
+
+    return res.status(200).json({ success: true, user: user });
+  }).catch((err) => console.log(err));
+};
+
 removeFriendRequest = async (req, res) => {
   const body = req.body;
   if (!body) {
@@ -637,4 +652,5 @@ module.exports = {
   addFriend,
   removeFriendRequest,
   removeFriend,
+  findById
 };

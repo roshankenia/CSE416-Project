@@ -16,5 +16,6 @@ router.put("/friendRequest", AuthController.addFriendRequest);
 router.put("/friend", AuthController.addFriend);
 router.put("/removeFriendRequest", AuthController.removeFriendRequest);
 router.put("/removeFriend", AuthController.removeFriend);
+router.get("/findById/:id", AuthController.findById);
 
 module.exports = router;
