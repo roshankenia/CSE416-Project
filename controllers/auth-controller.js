@@ -98,10 +98,11 @@ addFriend = async (req, res) => {
       receivedUser.friends.push(sentUser);
 
       //remove request from received user
-
-      var index = receivedUser.requests.indexOf(sentUser);
-      if (index > -1) {
-        receivedUser.requests.splice(index, 1);
+      for (var i = 0; i < receivedUser.requests.length; i++) {
+        if (receivedUser.requests[i].email == sentUser.email) {
+          receivedUser.requests.splice(i, 1);
+          break;
+        }
       }
 
       sentUser.guest = false;
