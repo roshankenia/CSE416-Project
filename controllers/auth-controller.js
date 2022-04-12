@@ -100,8 +100,9 @@ addFriend = async (req, res) => {
       //remove request from received user
       for (var i = 0; i < receivedUser.requests.length; i++) {
         console.log(receivedUser.requests[i]);
-        console.log(receivedUser.requests[i]._id);
-        if (receivedUser.requests[i] == sentUser._id) {
+        console.log("request id:", receivedUser.requests[i]._id);
+        console.log("sent id:", sentUser._id);
+        if (receivedUser.requests[i]._id == sentUser._id) {
           receivedUser.requests.splice(i, 1);
           break;
         }
