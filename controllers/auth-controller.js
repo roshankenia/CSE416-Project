@@ -43,7 +43,7 @@ addFriendRequest = async (req, res) => {
   console.log(sentUserEmail, " ", receivedUserEmail);
 
   //first find sent user
-  await User.findOne({ email: sentUserEmail }, (err1, sentUser) => {
+  await User.findOne({ email: sentUserEmail }, async (err1, sentUser) => {
     console.log("found sent user: " + JSON.stringify(sentUser));
     //now find received user
     await User.findOne({ email: receivedUserEmail }, (err2, receivedUser) => {
@@ -85,7 +85,7 @@ addFriend = async (req, res) => {
   console.log(sentUserEmail, " ", receivedUserEmail);
 
   //first find sent user
-  await User.findOne({ email: sentUserEmail }, (err1, sentUser) => {
+  await User.findOne({ email: sentUserEmail }, async (err1, sentUser) => {
     console.log("found sent user: " + JSON.stringify(sentUser));
     //now find received user
     await User.findOne({ email: receivedUserEmail }, (err2, receivedUser) => {
