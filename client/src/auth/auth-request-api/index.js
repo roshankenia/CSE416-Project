@@ -93,6 +93,9 @@ export const searchUsers = (username) => {
     username: username,
   });
 };
+
+export const findById = (id) => api.get(`/findById/${id}`);
+
 const apis = {
   getLoggedIn,
   registerUser,
@@ -103,6 +106,7 @@ const apis = {
   resetPassword,
   deleteAccount,
   searchUsers,
+  findById
   // ,
   // changePassword,
   // resetPassword,

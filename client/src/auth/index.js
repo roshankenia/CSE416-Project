@@ -18,6 +18,7 @@ export const AuthActionType = {
   DELETE_ACCOUNT: "DELETE_ACCOUNT",
   CREATE_GUEST: "CREATE_GUEST",
   SEARCH_USERS: "SEARCH_USERS",
+  SET_FRIENDS_AND_REQUESTS: "SET_FRIENDS_AND_REQUESTS",
 };
 
 function AuthContextProvider(props) {
@@ -27,6 +28,8 @@ function AuthContextProvider(props) {
     errorMessage: null,
     isGuest: false, //Add this to the setAuth in the reducer
     searchUsers: null,
+    friends: null,
+    friendRequests: null,
   });
   const history = useHistory();
   const { community } = useContext(GlobalCommunityContext);
@@ -45,6 +48,8 @@ function AuthContextProvider(props) {
           errorMessage: auth.errorMessage,
           isGuest: auth.isGuest,
           searchUsers: auth.searchUsers,
+          friends: auth.friends,
+          friendRequests: auth.friendRequests,
         });
       }
       case AuthActionType.LOGIN_USER: {
@@ -54,6 +59,8 @@ function AuthContextProvider(props) {
           errorMessage: auth.errorMessage,
           isGuest: auth.isGuest,
           searchUsers: auth.searchUsers,
+          friends: payload.friends,
+          friendRequests: payload.friendRequests,
         });
       }
       case AuthActionType.LOGOUT_USER: {
@@ -63,6 +70,8 @@ function AuthContextProvider(props) {
           errorMessage: auth.errorMessage,
           isGuest: auth.isGuest,
           searchUsers: auth.searchUsers,
+          friends: auth.friends,
+          friendRequests: auth.friendRequests,
         });
       }
       case AuthActionType.REGISTER_USER: {
@@ -72,6 +81,8 @@ function AuthContextProvider(props) {
           errorMessage: auth.errorMessage,
           isGuest: auth.isGuest,
           searchUsers: auth.searchUsers,
+          friends: auth.friends,
+          friendRequests: auth.friendRequests,
         });
       }
       case AuthActionType.CREATE_GUEST: {
@@ -81,6 +92,8 @@ function AuthContextProvider(props) {
           errorMessage: auth.errorMessage,
           isGuest: true,
           searchUsers: auth.searchUsers,
+          friends: auth.friends,
+          friendRequests: auth.friendRequests,
         });
       }
       case AuthActionType.SET_ERROR_MESSAGE: {
@@ -90,6 +103,8 @@ function AuthContextProvider(props) {
           errorMessage: payload,
           isGuest: auth.isGuest,
           searchUsers: auth.searchUsers,
+          friends: auth.friends,
+          friendRequests: auth.friendRequests,
         });
       }
       case AuthActionType.CHANGE_PASSWORD: {
@@ -99,6 +114,8 @@ function AuthContextProvider(props) {
           errorMessage: auth.errorMessage,
           isGuest: auth.isGuest,
           searchUsers: auth.searchUsers,
+          friends: auth.friends,
+          friendRequests: auth.friendRequests,
         });
       }
       case AuthActionType.RESET_PASSWORD: {
@@ -108,6 +125,8 @@ function AuthContextProvider(props) {
           errorMessage: auth.errorMessage,
           isGuest: auth.isGuest,
           searchUsers: auth.searchUsers,
+          friends: auth.friends,
+          friendRequests: auth.friendRequests,
         });
       }
       case AuthActionType.DELETE_ACCOUNT: {
@@ -117,6 +136,8 @@ function AuthContextProvider(props) {
           errorMessage: auth.errorMessage,
           isGuest: auth.isGuest,
           searchUsers: auth.searchUsers,
+          friends: auth.friends,
+          friendRequests: auth.friendRequests,
         });
       }
       case AuthActionType.SEARCH_USERS: {
@@ -126,10 +147,30 @@ function AuthContextProvider(props) {
           errorMessage: auth.errorMessage,
           isGuest: auth.isGuest,
           searchUsers: payload,
+          friends: auth.friends,
+          friendRequests: auth.friendRequests,
         });
       }
       default:
         return auth;
+    }
+  };
+
+  auth.setFriendsandRequests = async function () {
+    console.log("login updating friends and requests");
+    let friendRequestIds = auth.user.requests;
+    let friendIds = auth.user.friends;
+
+    let friendRequests = [];
+    let friends = [];
+
+    for (let i = 0; i < friendRequestIds.length; i++) {
+      let response = await api.findById(friendRequestIds[i]);
+      friendRequests.push(response.data.user);
+    }
+    for (let i = 0; i < friendIds.length; i++) {
+      let response = await api.findById(friendIds[i]);
+      friends.push(response.data.user);
     }
   };
 
@@ -277,10 +318,29 @@ function AuthContextProvider(props) {
     try {
       const response = await api.loginUser(username, password);
       if (response.status === 200) {
+        let user = response.data.user;
+        console.log("login updating friends and requests");
+        let friendRequestIds = user.requests;
+        let friendIds = user.friends;
+
+        let friendRequests = [];
+        let friends = [];
+
+        for (let i = 0; i < friendRequestIds.length; i++) {
+          let response = await api.findById(friendRequestIds[i]);
+          friendRequests.push(response.data.user);
+        }
+        for (let i = 0; i < friendIds.length; i++) {
+          let response = await api.findById(friendIds[i]);
+          friends.push(response.data.user);
+        }
+
         authReducer({
           type: AuthActionType.LOGIN_USER,
           payload: {
-            user: response.data.user,
+            user: user,
+            friends: friends,
+            friendRequests: friendRequests,
           },
         });
         history.push("/");

@@ -84,11 +84,11 @@ const FriendsScreen = () => {
     event.stopPropagation();
     community.setUserProfile(user);
   }
+  console.log("FRIENDS:", auth.friends);
 
-  let friends = ["Roshan", "Terran", "Alan"];
-  let searchUsers = Object.values(auth.searchUsers);
   let searchUserList = "";
   if (auth.searchUsers) {
+    let searchUsers = Object.values(auth.searchUsers);
     searchUserList = (
       <List textAlign="center">
         {searchUsers.map((user) => (
@@ -145,8 +145,8 @@ const FriendsScreen = () => {
 
   let requestList = (
     <List textAlign="center">
-      {friends.map((friend) => (
-        <ListItem key={friend}>
+      {auth.friendRequests.map((request) => (
+        <ListItem key={request}>
           <Box
             style={{
               border: "3px solid",
@@ -166,7 +166,7 @@ const FriendsScreen = () => {
                   style={{ fontSize: "32px" }}
                   sx={{ ml: 2 }}
                 >
-                  {friend}
+                  {request.username}
                 </Typography>
               </Grid>
               <Grid item xs={5}>
@@ -214,7 +214,7 @@ const FriendsScreen = () => {
 
   let friendsList = (
     <List textAlign="center">
-      {friends.map((friend) => (
+      {auth.friends.map((friend) => (
         <ListItem key={friend}>
           <Box
             style={{
@@ -235,7 +235,7 @@ const FriendsScreen = () => {
                   style={{ fontSize: "32px" }}
                   sx={{ ml: 2 }}
                 >
-                  {friend}
+                  {friend.username}
                 </Typography>
               </Grid>
               <Grid item xs={4}>
@@ -426,6 +426,7 @@ const FriendsScreen = () => {
                 width: "96%",
                 marginLeft: 15,
               }}
+              sx={{ mb: 2 }}
             >
               <Box style={{ width: "96%" }}>
                 <TextField

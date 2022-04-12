@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import HomeScreen from "./HomeScreen";
 import WelcomeScreen from "./WelcomeScreen";
 import CommunityScreen from "./CommunityScreen";
