@@ -18,12 +18,7 @@ getLoggedIn = async (req, res) => {
 
     return res.status(200).json({
       loggedIn: true,
-      user: {
-        firstName: loggedInUser.firstName,
-        lastName: loggedInUser.lastName,
-        email: loggedInUser.email,
-        username: loggedInUser.username,
-      },
+      user: loggedInUser,
     });
   } catch (err) {
     console.log("err: " + err);
@@ -327,12 +322,7 @@ loginUser = async (req, res) => {
       .status(200)
       .json({
         success: true,
-        user: {
-          firstName: existingUser.firstName,
-          lastName: existingUser.lastName,
-          email: existingUser.email,
-          username: existingUser.username,
-        },
+        user: existingUser,
       });
   } catch (err) {
     console.error(err);
@@ -480,12 +470,7 @@ registerUser = async (req, res) => {
       .status(200)
       .json({
         success: true,
-        user: {
-          firstName: savedUser.firstName,
-          lastName: savedUser.lastName,
-          email: savedUser.email,
-          username: savedUser.username,
-        },
+        user: savedUser,
       });
 
     console.log("token sent");
@@ -539,12 +524,7 @@ changePassword = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      user: {
-        firstName: currentUser.firstName,
-        lastName: currentUser.lastName,
-        email: currentUser.email,
-        username: currentUser.username,
-      },
+      user: currentUser,
     });
   } catch (err) {
     console.error(err);
