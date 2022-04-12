@@ -15,6 +15,7 @@ const UserSchema = new Schema(
     dislikedPosts: { type: [String], required: false },
     likedComments: { type: [String], required: false },
     dislikedComments: { type: [String], required: false },
+    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", required: false }],
     comments: [
       { type: mongoose.Schema.Types.ObjectId, ref: "Comment", required: false },
     ],
