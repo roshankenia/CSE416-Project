@@ -18,6 +18,80 @@ export default function Sidebar() {
 
   return (
     <List>
+      <ListItem key="join">
+        <Box
+          justifyContent="center"
+          alignItems="center"
+          style={{
+            border: "3px solid",
+            borderColor: "black",
+            color: "black",
+            backgroundColor: "#E39090",
+            fontSize: "20px",
+            outline: "none",
+            borderRadius: 20,
+            width: "75%",
+          }}
+        >
+          <Typography align="center" style={{ fontSize: "32px" }}>
+            Add a friend c:
+          </Typography>
+          <Box
+            m="auto"
+            textAlign="center"
+            style={{
+              border: "3px solid",
+              borderColor: "black",
+              color: "black",
+              backgroundColor: "white",
+              fontSize: "32px",
+              borderRadius: 40,
+              outline: "none",
+              width: "85%",
+            }}
+          >
+            <TextField
+              align="center"
+              id="lobbyCode"
+              label="Enter email:"
+              autoFocus
+              variant="standard"
+              InputProps={{
+                disableUnderline: true,
+                style: {
+                  fontSize: 20,
+                  paddingLeft: 20,
+                  paddingBottom: 10,
+                },
+              }}
+              InputLabelProps={{
+                style: { fontSize: 30, paddingLeft: 20 },
+                shrink: true,
+              }}
+            />
+          </Box>
+          <Box textAlign="center">
+            <Button
+              variant="contained"
+              color="success"
+              size="small"
+              style={{
+                fontWeight: 600,
+                border: "3px solid",
+                borderColor: "black",
+                backgroundColor: "#46EC2B",
+                color: "black",
+                fontSize: "20px",
+                borderRadius: 20,
+              }}
+              sx={{ mt: 1, mb: 0.5, width: "25%" }}
+              onClick={handleHostNewGame}
+            >
+              Join
+            </Button>
+          </Box>
+        </Box>
+      </ListItem>
       <ListItem key="host">
         <Box
           justifyContent="center"
