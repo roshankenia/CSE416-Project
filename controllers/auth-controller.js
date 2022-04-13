@@ -180,7 +180,18 @@ addFriendRequest = async (req, res) => {
     await User.findOne({ email: receivedUserEmail }, (err2, receivedUser) => {
       console.log("found sent user: " + JSON.stringify(receivedUser));
 
-      if (!receivedUser.requests.includes(sentUser)) {
+      sentUserId = JSON.stringify(sentUser._id);
+      //only add if not a request already
+      add = true;
+      for (var i = 0; i < receivedUser.requests.length; i++) {
+        requestId = JSON.stringify(receivedUser.requests[i]._id);
+        console.log(sentUserId, " and ", requestId);
+        if (requestId == sentUserId) {
+          console.log("ids equal");
+          add = false;
+        }
+      }
+      if (add) {
         receivedUser.requests.push(sentUser);
       }
 
@@ -656,5 +667,5 @@ module.exports = {
   addFriend,
   removeFriendRequest,
   removeFriend,
-  findById
+  findById,
 };
