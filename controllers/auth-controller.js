@@ -80,6 +80,7 @@ removeFriendRequest = async (req, res) => {
           return res.status(200).json({
             success: true,
             receivedUser: receivedUser,
+            sentUser: sentUser,
           });
         })
         .catch((error) => {
@@ -147,6 +148,7 @@ removeFriend = async (req, res) => {
           return res.status(200).json({
             success: true,
             receivedUser: receivedUser,
+            sentUser: sentUser,
           });
         })
         .catch((error) => {
@@ -191,6 +193,7 @@ addFriendRequest = async (req, res) => {
           return res.status(200).json({
             success: true,
             receivedUser: receivedUser,
+            sentUser: sentUser,
           });
         })
         .catch((error) => {
@@ -249,6 +252,7 @@ addFriend = async (req, res) => {
           return res.status(200).json({
             success: true,
             receivedUser: receivedUser,
+            sentUser: sentUser,
           });
         })
         .catch((error) => {
