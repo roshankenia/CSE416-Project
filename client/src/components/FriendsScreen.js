@@ -113,9 +113,33 @@ const FriendsScreen = () => {
   let searchUserList = "";
   if (auth.searchUsers) {
     let searchUsers = Object.values(auth.searchUsers);
+    let newSearchUsers = [];
+    console.log("search users:", searchUsers);
+    console.log("friends:", auth.friends);
+    console.log("friend requests:", auth.friendRequests);
+    //we must first remove friends, requests, and user themself from this list
+    for (var i = 0; i < searchUsers.length; i++) {
+      let add = true;
+      for (var j = 0; j < auth.friendRequests.length; j++) {
+        if (searchUsers[i].username == auth.friendRequests[j].username) {
+          add = false;
+        }
+      }
+      for (var j = 0; j < auth.friends.length; j++) {
+        if (searchUsers[i].username == auth.friends[j].username) {
+          add = false;
+        }
+      }
+      if (auth.user.username == searchUsers[i].username) {
+        add = false;
+      }
+      if (add) {
+        newSearchUsers.push(searchUsers[i]);
+      }
+    }
     searchUserList = (
       <List textAlign="center">
-        {searchUsers.map((user) => (
+        {newSearchUsers.map((user) => (
           <ListItem key={user}>
             <Box
               style={{
@@ -162,7 +186,7 @@ const FriendsScreen = () => {
                     variant="contained"
                     color="success"
                     size="small"
-                    onClick = {(event)=>sendFriendRequest(event, user)}
+                    onClick={(event) => sendFriendRequest(event, user)}
                     style={{
                       fontWeight: 600,
                       border: "3px solid",
@@ -232,7 +256,7 @@ const FriendsScreen = () => {
                 </Button>
                 <Button
                   variant="contained"
-                  onClick={(event)=>removeFriendRequest(event, request)}
+                  onClick={(event) => removeFriendRequest(event, request)}
                   color="success"
                   size="small"
                   style={{
