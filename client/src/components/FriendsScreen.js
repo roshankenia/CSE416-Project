@@ -84,7 +84,31 @@ const FriendsScreen = () => {
     event.stopPropagation();
     community.setUserProfile(user);
   }
-  console.log("FRIENDS:", auth.friends);
+
+  function addFriend(event, sentUser) {
+    event.stopPropagation();
+    let receivedUserEmail = auth.user.email;
+    let sentUserEmail = sentUser.email;
+    auth.addFriend(sentUserEmail, receivedUserEmail);
+  }
+  function removeFriend(event, externalUser) {
+    event.stopPropagation();
+    let currentEmail = auth.user.email;
+    let externalUserEmail = externalUser.email;
+    auth.removeFriend(currentEmail, externalUserEmail);
+  }
+  function sendFriendRequest(event, receivedUser) {
+    event.stopPropagation();
+    let receivedUserEmail = receivedUser.email;
+    let sentUserEmail = auth.user.email;
+    auth.sendFriendRequest(sentUserEmail, receivedUserEmail);
+  }
+  function removeFriendRequest(event, sentUser) {
+    event.stopPropagation();
+    let receivedUserEmail = auth.user.email;
+    let sentUserEmail = sentUser.email;
+    auth.removeFriendRequest(sentUserEmail, receivedUserEmail);
+  }
 
   let searchUserList = "";
   if (auth.searchUsers) {
@@ -134,6 +158,24 @@ const FriendsScreen = () => {
                   >
                     View Profile
                   </Button>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    size="small"
+                    onClick = {(event)=>sendFriendRequest(event, user)}
+                    style={{
+                      fontWeight: 600,
+                      border: "3px solid",
+                      borderColor: "black",
+                      backgroundColor: "green",
+                      color: "white",
+                      fontSize: "10px",
+                      borderRadius: 20,
+                    }}
+                    sx={{ ml: 2, mt: 1 }}
+                  >
+                    Add Friend
+                  </Button>
                 </Grid>
               </Grid>
             </Box>
@@ -174,6 +216,7 @@ const FriendsScreen = () => {
                   variant="contained"
                   color="success"
                   size="small"
+                  onClick={(event) => addFriend(event, request)}
                   style={{
                     fontWeight: 600,
                     border: "3px solid",
@@ -189,6 +232,7 @@ const FriendsScreen = () => {
                 </Button>
                 <Button
                   variant="contained"
+                  onClick={(event)=>removeFriendRequest(event, request)}
                   color="success"
                   size="small"
                   style={{
@@ -229,7 +273,7 @@ const FriendsScreen = () => {
             }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={8}>
+              <Grid item xs={5}>
                 <Typography
                   display="inline"
                   style={{ fontSize: "32px" }}
@@ -238,11 +282,12 @@ const FriendsScreen = () => {
                   {friend.username}
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={7}>
                 <Button
                   variant="contained"
                   color="success"
                   size="small"
+                  onClick={(event) => handleViewProfile(event, friend)}
                   style={{
                     fontWeight: 600,
                     border: "3px solid",
@@ -255,6 +300,24 @@ const FriendsScreen = () => {
                   sx={{ mt: 1 }}
                 >
                   View Profile
+                </Button>
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  onClick={(event) => removeFriend(event, friend)}
+                  style={{
+                    fontWeight: 600,
+                    border: "3px solid",
+                    borderColor: "black",
+                    backgroundColor: "red",
+                    color: "white",
+                    fontSize: "10px",
+                    borderRadius: 20,
+                  }}
+                  sx={{ ml: 2, mt: 1 }}
+                >
+                  Remove Friend
                 </Button>
               </Grid>
             </Grid>

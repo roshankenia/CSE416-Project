@@ -151,9 +151,173 @@ function AuthContextProvider(props) {
           friendRequests: auth.friendRequests,
         });
       }
+      case AuthActionType.SET_FRIENDS_AND_REQUESTS: {
+        return setAuth({
+          user: auth.user,
+          loggedIn: auth.loggedIn,
+          errorMessage: auth.errorMessage,
+          isGuest: auth.isGuest,
+          searchUsers: auth.searchUsers,
+          friends: payload.friends,
+          friendRequests: payload.friendRequests,
+        });
+      }
       default:
         return auth;
     }
+  };
+
+  auth.sendFriendRequest = async function (sentUserEmail, receivedUserEmail) {
+    console.log("sending friend request");
+    try {
+      const response = api.friendRequest(sentUserEmail, receivedUserEmail);
+      if (response.status === 200) {
+        let sentUser = response.data.sentUser;
+        console.log("send friend request updating friends and requests");
+        let friendRequestIds = sentUser.requests;
+        let friendIds = sentUser.friends;
+
+        let friendRequests = [];
+        let friends = [];
+
+        for (let i = 0; i < friendRequestIds.length; i++) {
+          let response = await api.findById(friendRequestIds[i]);
+          friendRequests.push(response.data.user);
+        }
+        for (let i = 0; i < friendIds.length; i++) {
+          let response = await api.findById(friendIds[i]);
+          friends.push(response.data.user);
+        }
+
+        authReducer({
+          type: AuthActionType.SET_FRIENDS_AND_REQUESTS,
+          payload: {
+            friends: friends,
+            friendRequests: friendRequests,
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error.response.data.errorMessage);
+      //auth.setErrorMessage(error.response.data.errorMessage);
+    }
+    history.push("/");
+  };
+
+  auth.addFriend = async function (sentUserEmail, receivedUserEmail) {
+    console.log("adding friend");
+    try {
+      const response = api.friend(sentUserEmail, receivedUserEmail);
+      if (response.status === 200) {
+        let receivedUser = response.data.receivedUser;
+
+        console.log("add friend updating friends and requests");
+        let friendRequestIds = receivedUser.requests;
+        let friendIds = receivedUser.friends;
+
+        let friendRequests = [];
+        let friends = [];
+
+        for (let i = 0; i < friendRequestIds.length; i++) {
+          let response = await api.findById(friendRequestIds[i]);
+          friendRequests.push(response.data.user);
+        }
+        for (let i = 0; i < friendIds.length; i++) {
+          let response = await api.findById(friendIds[i]);
+          friends.push(response.data.user);
+        }
+
+        authReducer({
+          type: AuthActionType.SET_FRIENDS_AND_REQUESTS,
+          payload: {
+            friends: friends,
+            friendRequests: friendRequests,
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error.response.data.errorMessage);
+      //auth.setErrorMessage(error.response.data.errorMessage);
+    }
+    history.push("/");
+  };
+
+  auth.removeFriendRequest = async function (sentUserEmail, receivedUserEmail) {
+    console.log("removing friend request");
+    try {
+      const response = api.removeFriendRequest(
+        sentUserEmail,
+        receivedUserEmail
+      );
+      if (response.status === 200) {
+        let receivedUser = response.data.receivedUser;
+
+        console.log("remove friend request updating friends and requests");
+        let friendRequestIds = receivedUser.requests;
+        let friendIds = receivedUser.friends;
+
+        let friendRequests = [];
+        let friends = [];
+
+        for (let i = 0; i < friendRequestIds.length; i++) {
+          let response = await api.findById(friendRequestIds[i]);
+          friendRequests.push(response.data.user);
+        }
+        for (let i = 0; i < friendIds.length; i++) {
+          let response = await api.findById(friendIds[i]);
+          friends.push(response.data.user);
+        }
+
+        authReducer({
+          type: AuthActionType.SET_FRIENDS_AND_REQUESTS,
+          payload: {
+            friends: friends,
+            friendRequests: friendRequests,
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error.response.data.errorMessage);
+      //auth.setErrorMessage(error.response.data.errorMessage);
+    }
+    history.push("/");
+  };
+
+  auth.removeFriend = async function (currentEmail, externalUserEmail) {
+    console.log("removing friend");
+    try {
+      const response = api.removeFriend(currentEmail, externalUserEmail);
+      if (response.status === 200) {
+        let currentUser = response.data.sentUser;
+        console.log("remove friend updating friends and requests");
+        let friendRequestIds = currentUser.requests;
+        let friendIds = currentUser.friends;
+
+        let friendRequests = [];
+        let friends = [];
+
+        for (let i = 0; i < friendRequestIds.length; i++) {
+          let response = await api.findById(friendRequestIds[i]);
+          friendRequests.push(response.data.user);
+        }
+        for (let i = 0; i < friendIds.length; i++) {
+          let response = await api.findById(friendIds[i]);
+          friends.push(response.data.user);
+        }
+
+        authReducer({
+          type: AuthActionType.SET_FRIENDS_AND_REQUESTS,
+          payload: {
+            friends: friends,
+            friendRequests: friendRequests,
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error.response.data.errorMessage);
+      //auth.setErrorMessage(error.response.data.errorMessage);
+    }
+    history.push("/");
   };
 
   auth.setFriendsandRequests = async function () {
