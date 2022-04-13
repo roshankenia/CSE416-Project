@@ -170,7 +170,11 @@ function AuthContextProvider(props) {
   auth.sendFriendRequest = async function (sentUserEmail, receivedUserEmail) {
     console.log("sending friend request");
     try {
-      const response = api.friendRequest(sentUserEmail, receivedUserEmail);
+      const response = await api.friendRequest(
+        sentUserEmail,
+        receivedUserEmail
+      );
+      console.log("response:", response);
       if (response.status === 200) {
         let sentUser = response.data.sentUser;
         console.log("send friend request updating friends and requests");
@@ -207,11 +211,13 @@ function AuthContextProvider(props) {
   auth.addFriend = async function (sentUserEmail, receivedUserEmail) {
     console.log("adding friend");
     try {
-      const response = api.friend(sentUserEmail, receivedUserEmail);
+      const response = await api.friend(sentUserEmail, receivedUserEmail);
+      console.log("response:", response);
       if (response.status === 200) {
         let receivedUser = response.data.receivedUser;
 
         console.log("add friend updating friends and requests");
+
         let friendRequestIds = receivedUser.requests;
         let friendIds = receivedUser.friends;
 
@@ -226,6 +232,7 @@ function AuthContextProvider(props) {
           let response = await api.findById(friendIds[i]);
           friends.push(response.data.user);
         }
+        console.log("current friends:", friends);
 
         authReducer({
           type: AuthActionType.SET_FRIENDS_AND_REQUESTS,
@@ -245,14 +252,16 @@ function AuthContextProvider(props) {
   auth.removeFriendRequest = async function (sentUserEmail, receivedUserEmail) {
     console.log("removing friend request");
     try {
-      const response = api.removeFriendRequest(
+      const response = await api.removeFriendRequest(
         sentUserEmail,
         receivedUserEmail
       );
+      console.log("response:", response);
       if (response.status === 200) {
         let receivedUser = response.data.receivedUser;
 
         console.log("remove friend request updating friends and requests");
+
         let friendRequestIds = receivedUser.requests;
         let friendIds = receivedUser.friends;
 
@@ -286,10 +295,13 @@ function AuthContextProvider(props) {
   auth.removeFriend = async function (currentEmail, externalUserEmail) {
     console.log("removing friend");
     try {
-      const response = api.removeFriend(currentEmail, externalUserEmail);
+      const response = await api.removeFriend(currentEmail, externalUserEmail);
+      console.log("response:", response);
+
       if (response.status === 200) {
         let currentUser = response.data.sentUser;
         console.log("remove friend updating friends and requests");
+
         let friendRequestIds = currentUser.requests;
         let friendIds = currentUser.friends;
 
@@ -320,24 +332,6 @@ function AuthContextProvider(props) {
     history.push("/");
   };
 
-  auth.setFriendsandRequests = async function () {
-    console.log("login updating friends and requests");
-    let friendRequestIds = auth.user.requests;
-    let friendIds = auth.user.friends;
-
-    let friendRequests = [];
-    let friends = [];
-
-    for (let i = 0; i < friendRequestIds.length; i++) {
-      let response = await api.findById(friendRequestIds[i]);
-      friendRequests.push(response.data.user);
-    }
-    for (let i = 0; i < friendIds.length; i++) {
-      let response = await api.findById(friendIds[i]);
-      friends.push(response.data.user);
-    }
-  };
-
   auth.search = async function (username) {
     console.log(username);
     let response = await api.searchUsers(username);
@@ -352,9 +346,9 @@ function AuthContextProvider(props) {
     }
   };
 
-  auth.deleteAccount = function (username, password) {
+  auth.deleteAccount = async function (username, password) {
     try {
-      const response = api.deleteAccount(username, password);
+      const response = await api.deleteAccount(username, password);
       if (response.status === 200) {
         authReducer({
           type: AuthActionType.DELETE_ACCOUNT,
@@ -370,9 +364,9 @@ function AuthContextProvider(props) {
     }
   };
 
-  auth.resetPassword = function (email) {
+  auth.resetPassword = async function (email) {
     try {
-      const response = api.resetPassword(email);
+      const response = await api.resetPassword(email);
       if (response.status === 200) {
         authReducer({
           type: AuthActionType.RESET_PASSWORD,
@@ -481,6 +475,8 @@ function AuthContextProvider(props) {
   auth.loginUser = async function (username, password) {
     try {
       const response = await api.loginUser(username, password);
+      console.log("response:", response);
+
       if (response.status === 200) {
         let user = response.data.user;
         console.log("login updating friends and requests");
