@@ -29,9 +29,9 @@ export default function Sidebar() {
     <List>
       <ListItem key="join">
         <Box
-          component="form"
-          onSubmit={handleAddFriend}
-          noValidate
+          // component="form"
+          // onSubmit={handleAddFriend}
+          // noValidate
           justifyContent="center"
           alignItems="center"
           style={{
@@ -48,63 +48,66 @@ export default function Sidebar() {
           <Typography align="center" style={{ fontSize: "32px" }}>
             Add a friend c:
           </Typography>
-          {/* <Box
-           
-            >
-          </Box> */}
           <Box
-            m="auto"
-            textAlign="center"
-            style={{
-              border: "3px solid",
-              borderColor: "black",
-              color: "black",
-              backgroundColor: "white",
-              fontSize: "32px",
-              borderRadius: 40,
-              outline: "none",
-              width: "85%",
-            }}
-          >
-            <TextField
-              align="center"
-              id="email"
-              label="Enter email:"
-              autoFocus
-              variant="standard"
-              InputProps={{
-                disableUnderline: true,
-                style: {
-                  fontSize: 20,
-                  paddingLeft: 20,
-                  paddingBottom: 10,
-                },
-              }}
-              InputLabelProps={{
-                style: { fontSize: 30, paddingLeft: 20 },
-                shrink: true,
-              }}
-            />
-          </Box>
-          <Box textAlign="center">
-            <Button
-              type = "submit"
-              variant="contained"
-              color="success"
-              size="small"
+            component="form"
+            onSubmit={handleAddFriend}
+            noValidate
+            >
+            <Box
+              m="auto"
+              textAlign="center"
               style={{
-                fontWeight: 600,
                 border: "3px solid",
                 borderColor: "black",
-                backgroundColor: "#46EC2B",
                 color: "black",
-                fontSize: "20px",
-                borderRadius: 20,
+                backgroundColor: "white",
+                fontSize: "32px",
+                borderRadius: 40,
+                outline: "none",
+                width: "85%",
               }}
-              sx={{ mt: 1, mb: 0.5, width: "25%" }}
             >
-              Add
-            </Button>
+              <TextField
+                align="center"
+                id="email"
+                name="email"
+                label="Enter email:"
+                autoFocus
+                variant="standard"
+                InputProps={{
+                  disableUnderline: true,
+                  style: {
+                    fontSize: 20,
+                    paddingLeft: 20,
+                    paddingBottom: 10,
+                  },
+                }}
+                InputLabelProps={{
+                  style: { fontSize: 30, paddingLeft: 20 },
+                  shrink: true,
+                }}
+              />
+            </Box>
+            <Box textAlign="center">
+              <Button
+                type = "submit"
+                variant="contained"
+                color="success"
+                size="small"
+                style={{
+                  fontWeight: 600,
+                  border: "3px solid",
+                  borderColor: "black",
+                  backgroundColor: "#46EC2B",
+                  color: "black",
+                  fontSize: "20px",
+                  borderRadius: 20,
+                }}
+                sx={{ mt: 1, mb: 0.5, width: "25%" }}
+              >
+                Add
+              </Button>
+            </Box>
           </Box>
         </Box>
       </ListItem>
