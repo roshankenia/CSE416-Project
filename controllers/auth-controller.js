@@ -185,6 +185,21 @@ addFriendRequest = async (req, res) => {
       errorMessage: "Invalid Email",
     });
   }
+
+  try{
+    console.log("inside try catch")
+    const sent = await User.findOne({ email: sentUserEmail }, async (err1, sentUser) => {
+      console.log("found sent user: " + JSON.stringify(sentUser));
+    })
+    const received = await User.findOne({ email: receivedUserEmail }, (err2, receivedUser) => {
+      console.log("found sent user: " + JSON.stringify(receivedUser));
+    })
+    
+    console.log("This is the SENT EMAIL"+sent)
+    console.log("This is the RECEIVED EMAIL"+received)
+  }catch(error){
+    console.log(error)
+  }
   console.log("VALID EMAILS")
   //first find sent user
   await User.findOne({ email: sentUserEmail }, async (err1, sentUser) => {
