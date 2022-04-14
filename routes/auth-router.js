@@ -12,6 +12,7 @@ router.post("/changePassword", AuthController.changePassword);
 router.post("/resetPassword", AuthController.resetPassword);
 router.post("/deleteAccount", AuthController.deleteAccount);
 router.post("/search", AuthController.searchUsers);
+router.post("/findByEmail/:email", AuthController.findByEmail);
 router.put("/friendRequest", AuthController.addFriendRequest);
 router.put("/friend", AuthController.addFriend);
 router.put("/removeFriendRequest", AuthController.removeFriendRequest);

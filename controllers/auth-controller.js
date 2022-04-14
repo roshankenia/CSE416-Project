@@ -642,6 +642,24 @@ deleteAccount = async (req, res) => {
   }
 };
 
+
+//Fix
+findByEmail = async (req, res) => {
+  console.log("Find User with email: " + JSON.stringify(req.params.email));
+
+  await User.findByEmail({ email: req.params.email }, (err, user) => {
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    } else if (!user) {
+      return res.status(400).json({ success: false, error: "User not found" });
+    }
+    console.log("Found user: " + JSON.stringify(user));
+
+    return res.status(200).json({ success: true, user: user });
+  }).catch((err) => console.log(err));
+};
+
+
 module.exports = {
   getLoggedIn,
   registerUser,
@@ -656,5 +674,6 @@ module.exports = {
   addFriend,
   removeFriendRequest,
   removeFriend,
-  findById
+  findById,
+  findByEmail
 };

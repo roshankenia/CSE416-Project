@@ -156,6 +156,17 @@ function AuthContextProvider(props) {
     }
   };
 
+  auth.addFriendByEmail = async function(email){
+    console.log("Adding friend By Email")
+    let response = await api.findByEmail(email);
+    if (response.status === 200) {
+      console.log(response.data.usernames);
+
+    } else {
+      console.log(response);
+    
+    }
+  }
   auth.setFriendsandRequests = async function () {
     console.log("login updating friends and requests");
     let friendRequestIds = auth.user.requests;

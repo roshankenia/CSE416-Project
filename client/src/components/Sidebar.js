@@ -7,9 +7,15 @@ import ListItem from "@mui/material/ListItem";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-
+import AuthContext from "../auth";
 export default function Sidebar() {
   const { game } = useContext(GameContext);
+  const { auth } = useContext(AuthContext);
+
+  const handleAddFriend = (event, email)=>{
+    event.preventDefault();
+    auth.addFriendByEmail(email);
+  }
 
   const handleHostNewGame = (event, name) => {
     event.preventDefault();
@@ -37,6 +43,8 @@ export default function Sidebar() {
             Add a friend c:
           </Typography>
           <Box
+            component={"form"}
+            onSubmit={handleAddFriend}
             m="auto"
             textAlign="center"
             style={{
@@ -72,6 +80,7 @@ export default function Sidebar() {
           </Box>
           <Box textAlign="center">
             <Button
+              type = "submit"
               variant="contained"
               color="success"
               size="small"
@@ -85,9 +94,8 @@ export default function Sidebar() {
                 borderRadius: 20,
               }}
               sx={{ mt: 1, mb: 0.5, width: "25%" }}
-              onClick={handleHostNewGame}
             >
-              Join
+              Add
             </Button>
           </Box>
         </Box>
