@@ -197,6 +197,18 @@ addFriendRequest = async (req, res) => {
     
     console.log("This is the SENT EMAIL"+sent)
     console.log("This is the RECEIVED EMAIL"+received)
+    if(sent == null){
+      console.log("INSIDE NULL BECAUSE INVALID EMAIL")
+      return res.status(400).json({
+        errorMessage: "Invalid Email",
+      });
+    }
+    else if (received == null){
+      console.log("INSIDE NULL BECAUSE INVALID EMAIL")
+      return res.status(400).json({
+        errorMessage: "Invalid Email",
+      });
+    }
   }catch(error){
     console.log(error)
   }
