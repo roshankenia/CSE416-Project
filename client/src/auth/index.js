@@ -171,9 +171,11 @@ function AuthContextProvider(props) {
     console.log("Adding friend By Email")
     let response = await api.findByEmail(email);
     if (response.status === 200) {
-      console.log(response.data.usernames);
+      console.log(email);
+      auth.sendFriendRequest(auth.user.email, email);
 
     } else {
+      console.log("No email found")
       console.log(response);
     
     }
