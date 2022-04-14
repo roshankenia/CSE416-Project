@@ -28,7 +28,11 @@ export default function PostFeed() {
   const { community } = useContext(GlobalCommunityContext);
 
   const fakePost1 = {
-    authors:["Roshan", "Terran", "Jeff"],
+    authors: [
+      { username: "Roshan" },
+      { username: "Terran" },
+      { username: "Jeff" },
+    ],
     postTitle: "Mondays",
     likes: [
       "1",
@@ -116,7 +120,11 @@ export default function PostFeed() {
   };
 
   const fakePost2 = {
-    authors:["Alan", "Terran", "Jeff"],
+    authors: [
+      { username: "Alan" },
+      { username: "Terran" },
+      { username: "Jeff" },
+    ],
     postTitle: "This is a post title",
     likes: [
       "1",
@@ -135,12 +143,12 @@ export default function PostFeed() {
       "2",
       "3",
     ],
-    dislikes: ["1", "2", "3","1", "2", "3","1", "2", "3"],
+    dislikes: ["1", "2", "3", "1", "2", "3", "1", "2", "3"],
     comments: [
       {
         username: "RDK961",
         comment: "this is so funny",
-        likes: ["1", "2", "3","1", "2", "3","1", "2", "3"],
+        likes: ["1", "2", "3", "1", "2", "3", "1", "2", "3"],
         dislikes: ["1", "2", "3"],
         reply: [
           {
@@ -197,9 +205,8 @@ export default function PostFeed() {
     dateAndTime: "04-07-2022",
   };
 
-
   const fakePost3 = {
-    authors:["Alan", "Roshan"],
+    authors: [{ username: "Alan" }, { username: "Roshan" }],
     postTitle: "A random title",
     likes: [
       "1",
@@ -226,12 +233,12 @@ export default function PostFeed() {
       "2",
       "3",
     ],
-    dislikes: ["1", "2", "3","1", "2",],
+    dislikes: ["1", "2", "3", "1", "2"],
     comments: [
       {
         username: "Terran",
         comment: "this is a comment",
-        likes: ["1", "2", "3","1", "2", "3","1", "2", "3"],
+        likes: ["1", "2", "3", "1", "2", "3", "1", "2", "3"],
         dislikes: ["1", "2", "3"],
         reply: [
           {
@@ -293,7 +300,7 @@ export default function PostFeed() {
     <List>
       {posts.map((post) => (
         <ListItem key={post}>
-          <PostCard post={post} index={posts.indexOf(post)}/>
+          <PostCard post={post} index={posts.indexOf(post)} />
         </ListItem>
       ))}
     </List>
@@ -301,7 +308,7 @@ export default function PostFeed() {
 
   return (
     <Grid container alignItems="center">
-      <Grid item xs={10} style={{paddingLeft:18}}>
+      <Grid item xs={10} style={{ paddingLeft: 18 }}>
         <Box
           style={{
             border: "3px solid",

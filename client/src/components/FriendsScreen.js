@@ -8,6 +8,8 @@ import Sidebar from "./Sidebar.js";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -27,6 +29,8 @@ import ListItem from "@mui/material/ListItem";
 import Grid from "@mui/material/Grid";
 
 import AuthContext from "../auth";
+
+import Snackbar from "@mui/material/Snackbar";
 
 /*
     User gets redirected here after login,
@@ -48,6 +52,8 @@ const FriendsScreen = () => {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const [notifyOpen, setNotifyOpen] = React.useState(false);
+
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -102,13 +108,35 @@ const FriendsScreen = () => {
     let receivedUserEmail = receivedUser.email;
     let sentUserEmail = auth.user.email;
     auth.sendFriendRequest(sentUserEmail, receivedUserEmail);
+    setNotifyOpen(true);
   }
+
+  const handleNotifyClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setNotifyOpen(false);
+  };
   function removeFriendRequest(event, sentUser) {
     event.stopPropagation();
     let receivedUserEmail = auth.user.email;
     let sentUserEmail = sentUser.email;
     auth.removeFriendRequest(sentUserEmail, receivedUserEmail);
   }
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleNotifyClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   let searchUserList = "";
   if (auth.searchUsers) {
@@ -200,6 +228,13 @@ const FriendsScreen = () => {
                   >
                     Add Friend
                   </Button>
+                  <Snackbar
+                    open={notifyOpen}
+                    autoHideDuration={3000}
+                    message="Friend Request Sent"
+                    onClose={handleNotifyClose}
+                    action={action}
+                  />
                 </Grid>
               </Grid>
             </Box>
