@@ -163,6 +163,7 @@ removeFriend = async (req, res) => {
 };
 
 addFriendRequest = async (req, res) => {
+  console.log("HERE in add FriendEquest")
   const body = req.body;
   if (!body) {
     return res.status(400).json({
@@ -172,7 +173,19 @@ addFriendRequest = async (req, res) => {
 
   const { sentUserEmail, receivedUserEmail } = req.body;
   console.log(sentUserEmail, " ", receivedUserEmail);
-
+  if(sentUserEmail == null){
+    console.log("invalid email in new add Friend Request")
+    return res.status(400).json({
+      errorMessage: "Invalid Email",
+    });
+  }
+  else if(receivedUserEmail == null){
+    console.log("invalid email in new add Friend Request")
+    return res.status(400).json({
+      errorMessage: "Invalid Email",
+    });
+  }
+  console.log("VALID EMAILS")
   //first find sent user
   await User.findOne({ email: sentUserEmail }, async (err1, sentUser) => {
     console.log("found sent user: " + JSON.stringify(sentUser));
@@ -228,6 +241,13 @@ addFriend = async (req, res) => {
 
   const { sentUserEmail, receivedUserEmail } = req.body;
   console.log(sentUserEmail, " ", receivedUserEmail);
+  if(sentUserEmail == null || receivedUserEmail==null){
+    console.log("invalid email in new add Friend Request")
+    return res.status(400).json({
+      errorMessage: "Invalid Email",
+    });
+  }
+  console.log("VALID emails")
 
   //first find sent user
   await User.findOne({ email: sentUserEmail }, async (err1, sentUser) => {
