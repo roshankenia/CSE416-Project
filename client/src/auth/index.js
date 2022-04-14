@@ -183,41 +183,48 @@ function AuthContextProvider(props) {
 
   auth.sendFriendRequest = async function (sentUserEmail, receivedUserEmail) {
     console.log("sending friend request");
-    try {
-      const response = await api.friendRequest(
-        sentUserEmail,
-        receivedUserEmail
-      );
-      console.log("response:", response);
-      if (response.status === 200) {
-        let sentUser = response.data.sentUser;
-        console.log("send friend request updating friends and requests");
-        let friendRequestIds = sentUser.requests;
-        let friendIds = sentUser.friends;
+    console.log("received user email is"+ receivedUserEmail)
+    if(receivedUserEmail == null){
+      console.log("invalid Email")
+    }
+    else{
+      console.log("valid email")
+      try {
+        const response = await api.friendRequest(
+          sentUserEmail,
+          receivedUserEmail
+        );
+        console.log("response:", response);
+        if (response.status === 200) {
+          let sentUser = response.data.sentUser;
+          console.log("send friend request updating friends and requests");
+          let friendRequestIds = sentUser.requests;
+          let friendIds = sentUser.friends;
 
-        let friendRequests = [];
-        let friends = [];
+          let friendRequests = [];
+          let friends = [];
 
-        for (let i = 0; i < friendRequestIds.length; i++) {
-          let response = await api.findById(friendRequestIds[i]);
-          friendRequests.push(response.data.user);
+          for (let i = 0; i < friendRequestIds.length; i++) {
+            let response = await api.findById(friendRequestIds[i]);
+            friendRequests.push(response.data.user);
+          }
+          for (let i = 0; i < friendIds.length; i++) {
+            let response = await api.findById(friendIds[i]);
+            friends.push(response.data.user);
+          }
+
+          authReducer({
+            type: AuthActionType.SET_FRIENDS_AND_REQUESTS,
+            payload: {
+              friends: friends,
+              friendRequests: friendRequests,
+            },
+          });
         }
-        for (let i = 0; i < friendIds.length; i++) {
-          let response = await api.findById(friendIds[i]);
-          friends.push(response.data.user);
-        }
-
-        authReducer({
-          type: AuthActionType.SET_FRIENDS_AND_REQUESTS,
-          payload: {
-            friends: friends,
-            friendRequests: friendRequests,
-          },
-        });
+      } catch (error) {
+        console.log(error.response.data.errorMessage);
+        //auth.setErrorMessage(error.response.data.errorMessage);
       }
-    } catch (error) {
-      console.log(error.response.data.errorMessage);
-      //auth.setErrorMessage(error.response.data.errorMessage);
     }
     history.push("/");
   };
