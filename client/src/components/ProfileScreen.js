@@ -15,6 +15,12 @@ export default function ProfileScreen() {
     event.stopPropagation();
     community.setScreen("communities");
   };
+
+  const handleSendFriendRequest = (event) => {
+    event.stopPropagation();
+    
+  }
+
   const welcomeTag = (
     <Typography
       style={{
@@ -61,6 +67,25 @@ export default function ProfileScreen() {
       <Grid item xs={5} alignItems="flex-start">
         {welcomeTag}
       </Grid>
+      
+      <Button
+        variant="contained"
+        color="success"
+        size="small"
+        style={{
+          fontWeight: 600,
+          border: "3px solid",
+          borderColor: "black",
+          backgroundColor: "#46EC2B",
+          color: "black",
+          fontSize: "24px",
+          borderRadius: 50,
+        }}
+        sx={{ mb: 0.5, height: "5%", width: "15%" }}
+        // onClick={handleHostNewGame}
+      >
+        + Add Friend
+      </Button>
 
       <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
         <Typography style={{ fontSize: "32px" }}>
