@@ -71,28 +71,30 @@ export default function RegisterScreen() {
                     outline: "none",
                   }}
                 >
-                  <TextField
-                    autoComplete="fname"
-                    name="firstName"
-                    required
-                    fullWidth
-                    id="firstName"
-                    label="First Name:"
-                    autoFocus
-                    variant="standard"
-                    InputProps={{
-                      disableUnderline: true,
-                      style: {
-                        fontSize: 30,
-                        paddingLeft: 20,
-                        paddingBottom: 10,
-                      },
-                    }}
-                    InputLabelProps={{
-                      style: { fontSize: 30, paddingLeft: 20 },
-                      shrink: true,
-                    }}
-                  />
+                  <Box style={{ width: "96%" }}>
+                    <TextField
+                      autoComplete="fname"
+                      name="firstName"
+                      required
+                      fullWidth
+                      id="firstName"
+                      label="First Name:"
+                      autoFocus
+                      variant="standard"
+                      InputProps={{
+                        disableUnderline: true,
+                        style: {
+                          fontSize: 30,
+                          paddingLeft: 20,
+                          paddingBottom: 10,
+                        },
+                      }}
+                      InputLabelProps={{
+                        style: { fontSize: 30, paddingLeft: 20 },
+                        shrink: true,
+                      }}
+                    />
+                  </Box>
                 </Box>
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -107,27 +109,29 @@ export default function RegisterScreen() {
                     outline: "none",
                   }}
                 >
-                  <TextField
-                    required
-                    fullWidth
-                    variant="standard"
-                    id="lastName"
-                    label="Last Name:"
-                    name="lastName"
-                    autoComplete="lname"
-                    InputProps={{
-                      disableUnderline: true,
-                      style: {
-                        fontSize: 30,
-                        paddingLeft: 20,
-                        paddingBottom: 10,
-                      },
-                    }}
-                    InputLabelProps={{
-                      style: { fontSize: 30, paddingLeft: 20 },
-                      shrink: true,
-                    }}
-                  />
+                  <Box style={{ width: "96%" }}>
+                    <TextField
+                      required
+                      fullWidth
+                      variant="standard"
+                      id="lastName"
+                      label="Last Name:"
+                      name="lastName"
+                      autoComplete="lname"
+                      InputProps={{
+                        disableUnderline: true,
+                        style: {
+                          fontSize: 30,
+                          paddingLeft: 20,
+                          paddingBottom: 10,
+                        },
+                      }}
+                      InputLabelProps={{
+                        style: { fontSize: 30, paddingLeft: 20 },
+                        shrink: true,
+                      }}
+                    />
+                  </Box>
                 </Box>
               </Grid>
               <Grid item xs={12}>
@@ -142,27 +146,29 @@ export default function RegisterScreen() {
                     outline: "none",
                   }}
                 >
-                  <TextField
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                    variant="standard"
-                    InputProps={{
-                      disableUnderline: true,
-                      style: {
-                        fontSize: 30,
-                        paddingLeft: 20,
-                        paddingBottom: 10,
-                      },
-                    }}
-                    InputLabelProps={{
-                      style: { fontSize: 30, paddingLeft: 20 },
-                      shrink: true,
-                    }}
-                  />
+                  <Box style={{ width: "96%" }}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="email"
+                      label="Email Address"
+                      name="email"
+                      autoComplete="email"
+                      variant="standard"
+                      InputProps={{
+                        disableUnderline: true,
+                        style: {
+                          fontSize: 30,
+                          paddingLeft: 20,
+                          paddingBottom: 10,
+                        },
+                      }}
+                      InputLabelProps={{
+                        style: { fontSize: 30, paddingLeft: 20 },
+                        shrink: true,
+                      }}
+                    />
+                  </Box>
                 </Box>
               </Grid>
               <Grid item xs={12}>
@@ -177,28 +183,30 @@ export default function RegisterScreen() {
                     outline: "none",
                   }}
                 >
-                  <TextField
-                    required
-                    fullWidth
-                    name="username"
-                    label="Username"
-                    type="username"
-                    id="username"
-                    autoComplete="username"
-                    variant="standard"
-                    InputProps={{
-                      disableUnderline: true,
-                      style: {
-                        fontSize: 30,
-                        paddingLeft: 20,
-                        paddingBottom: 10,
-                      },
-                    }}
-                    InputLabelProps={{
-                      style: { fontSize: 30, paddingLeft: 20 },
-                      shrink: true,
-                    }}
-                  />
+                  <Box style={{ width: "96%" }}>
+                    <TextField
+                      required
+                      fullWidth
+                      name="username"
+                      label="Username"
+                      type="username"
+                      id="username"
+                      autoComplete="username"
+                      variant="standard"
+                      InputProps={{
+                        disableUnderline: true,
+                        style: {
+                          fontSize: 30,
+                          paddingLeft: 20,
+                          paddingBottom: 10,
+                        },
+                      }}
+                      InputLabelProps={{
+                        style: { fontSize: 30, paddingLeft: 20 },
+                        shrink: true,
+                      }}
+                    />
+                  </Box>
                 </Box>
               </Grid>
               <Grid item xs={12}>
@@ -213,28 +221,30 @@ export default function RegisterScreen() {
                     outline: "none",
                   }}
                 >
-                  <TextField
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="new-password"
-                    variant="standard"
-                    InputProps={{
-                      disableUnderline: true,
-                      style: {
-                        fontSize: 30,
-                        paddingLeft: 20,
-                        paddingBottom: 10,
-                      },
-                    }}
-                    InputLabelProps={{
-                      style: { fontSize: 30, paddingLeft: 20 },
-                      shrink: true,
-                    }}
-                  />
+                  <Box style={{ width: "96%" }}>
+                    <TextField
+                      required
+                      fullWidth
+                      name="password"
+                      label="Password"
+                      type="password"
+                      id="password"
+                      autoComplete="new-password"
+                      variant="standard"
+                      InputProps={{
+                        disableUnderline: true,
+                        style: {
+                          fontSize: 30,
+                          paddingLeft: 20,
+                          paddingBottom: 10,
+                        },
+                      }}
+                      InputLabelProps={{
+                        style: { fontSize: 30, paddingLeft: 20 },
+                        shrink: true,
+                      }}
+                    />
+                  </Box>
                 </Box>
               </Grid>
               <Grid item xs={12}>
@@ -249,28 +259,30 @@ export default function RegisterScreen() {
                     outline: "none",
                   }}
                 >
-                  <TextField
-                    required
-                    fullWidth
-                    name="passwordVerify"
-                    label="Password Verify"
-                    type="password"
-                    id="passwordVerify"
-                    autoComplete="new-password"
-                    variant="standard"
-                    InputProps={{
-                      disableUnderline: true,
-                      style: {
-                        fontSize: 30,
-                        paddingLeft: 20,
-                        paddingBottom: 10,
-                      },
-                    }}
-                    InputLabelProps={{
-                      style: { fontSize: 30, paddingLeft: 20 },
-                      shrink: true,
-                    }}
-                  />
+                  <Box style={{ width: "96%" }}>
+                    <TextField
+                      required
+                      fullWidth
+                      name="passwordVerify"
+                      label="Password Verify"
+                      type="password"
+                      id="passwordVerify"
+                      autoComplete="new-password"
+                      variant="standard"
+                      InputProps={{
+                        disableUnderline: true,
+                        style: {
+                          fontSize: 30,
+                          paddingLeft: 20,
+                          paddingBottom: 10,
+                        },
+                      }}
+                      InputLabelProps={{
+                        style: { fontSize: 30, paddingLeft: 20 },
+                        shrink: true,
+                      }}
+                    />
+                  </Box>
                 </Box>
               </Grid>
             </Grid>

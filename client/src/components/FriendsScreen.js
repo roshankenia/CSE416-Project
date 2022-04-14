@@ -8,6 +8,8 @@ import Sidebar from "./Sidebar.js";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -27,6 +29,8 @@ import ListItem from "@mui/material/ListItem";
 import Grid from "@mui/material/Grid";
 
 import AuthContext from "../auth";
+
+import Snackbar from "@mui/material/Snackbar";
 
 /*
     User gets redirected here after login,
@@ -48,6 +52,8 @@ const FriendsScreen = () => {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+  const [notifyOpen, setNotifyOpen] = React.useState(false);
+
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -84,14 +90,84 @@ const FriendsScreen = () => {
     event.stopPropagation();
     community.setUserProfile(user);
   }
-  console.log("FRIENDS:", auth.friends);
+
+  function addFriend(event, sentUser) {
+    event.stopPropagation();
+    let receivedUserEmail = auth.user.email;
+    let sentUserEmail = sentUser.email;
+    auth.addFriend(sentUserEmail, receivedUserEmail);
+  }
+  function removeFriend(event, externalUser) {
+    event.stopPropagation();
+    let currentEmail = auth.user.email;
+    let externalUserEmail = externalUser.email;
+    auth.removeFriend(currentEmail, externalUserEmail);
+  }
+  function sendFriendRequest(event, receivedUser) {
+    event.stopPropagation();
+    let receivedUserEmail = receivedUser.email;
+    let sentUserEmail = auth.user.email;
+    auth.sendFriendRequest(sentUserEmail, receivedUserEmail);
+    setNotifyOpen(true);
+  }
+
+  const handleNotifyClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setNotifyOpen(false);
+  };
+  function removeFriendRequest(event, sentUser) {
+    event.stopPropagation();
+    let receivedUserEmail = auth.user.email;
+    let sentUserEmail = sentUser.email;
+    auth.removeFriendRequest(sentUserEmail, receivedUserEmail);
+  }
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleNotifyClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   let searchUserList = "";
   if (auth.searchUsers) {
     let searchUsers = Object.values(auth.searchUsers);
+    let newSearchUsers = [];
+    console.log("search users:", searchUsers);
+    console.log("friends:", auth.friends);
+    console.log("friend requests:", auth.friendRequests);
+    //we must first remove friends, requests, and user themself from this list
+    for (var i = 0; i < searchUsers.length; i++) {
+      let add = true;
+      for (var j = 0; j < auth.friendRequests.length; j++) {
+        if (searchUsers[i].username == auth.friendRequests[j].username) {
+          add = false;
+        }
+      }
+      for (var j = 0; j < auth.friends.length; j++) {
+        if (searchUsers[i].username == auth.friends[j].username) {
+          add = false;
+        }
+      }
+      if (auth.user.username == searchUsers[i].username) {
+        add = false;
+      }
+      if (add) {
+        newSearchUsers.push(searchUsers[i]);
+      }
+    }
     searchUserList = (
       <List textAlign="center">
-        {searchUsers.map((user) => (
+        {newSearchUsers.map((user) => (
           <ListItem key={user}>
             <Box
               style={{
@@ -134,6 +210,31 @@ const FriendsScreen = () => {
                   >
                     View Profile
                   </Button>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    size="small"
+                    onClick={(event) => sendFriendRequest(event, user)}
+                    style={{
+                      fontWeight: 600,
+                      border: "3px solid",
+                      borderColor: "black",
+                      backgroundColor: "green",
+                      color: "white",
+                      fontSize: "10px",
+                      borderRadius: 20,
+                    }}
+                    sx={{ ml: 2, mt: 1 }}
+                  >
+                    Add Friend
+                  </Button>
+                  <Snackbar
+                    open={notifyOpen}
+                    autoHideDuration={3000}
+                    message="Friend Request Sent"
+                    onClose={handleNotifyClose}
+                    action={action}
+                  />
                 </Grid>
               </Grid>
             </Box>
@@ -174,6 +275,7 @@ const FriendsScreen = () => {
                   variant="contained"
                   color="success"
                   size="small"
+                  onClick={(event) => addFriend(event, request)}
                   style={{
                     fontWeight: 600,
                     border: "3px solid",
@@ -189,6 +291,7 @@ const FriendsScreen = () => {
                 </Button>
                 <Button
                   variant="contained"
+                  onClick={(event) => removeFriendRequest(event, request)}
                   color="success"
                   size="small"
                   style={{
@@ -229,7 +332,7 @@ const FriendsScreen = () => {
             }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={8}>
+              <Grid item xs={5}>
                 <Typography
                   display="inline"
                   style={{ fontSize: "32px" }}
@@ -238,11 +341,12 @@ const FriendsScreen = () => {
                   {friend.username}
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={7}>
                 <Button
                   variant="contained"
                   color="success"
                   size="small"
+                  onClick={(event) => handleViewProfile(event, friend)}
                   style={{
                     fontWeight: 600,
                     border: "3px solid",
@@ -255,6 +359,24 @@ const FriendsScreen = () => {
                   sx={{ mt: 1 }}
                 >
                   View Profile
+                </Button>
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  onClick={(event) => removeFriend(event, friend)}
+                  style={{
+                    fontWeight: 600,
+                    border: "3px solid",
+                    borderColor: "black",
+                    backgroundColor: "red",
+                    color: "white",
+                    fontSize: "10px",
+                    borderRadius: 20,
+                  }}
+                  sx={{ ml: 2, mt: 1 }}
+                >
+                  Remove Friend
                 </Button>
               </Grid>
             </Grid>

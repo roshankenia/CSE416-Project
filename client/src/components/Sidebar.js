@@ -12,8 +12,11 @@ export default function Sidebar() {
   const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
 
-  const handleAddFriend = (event, email)=>{
+  const handleAddFriend = (event)=>{
     event.preventDefault();
+    console.log("handleAddFriend")
+    const data = new FormData(event.currentTarget);
+    console.log(data.get("email"))
     auth.addFriendByEmail(email);
   }
 
@@ -26,6 +29,9 @@ export default function Sidebar() {
     <List>
       <ListItem key="join">
         <Box
+          component="form"
+          onSubmit={handleAddFriend}
+          noValidate
           justifyContent="center"
           alignItems="center"
           style={{
@@ -42,9 +48,11 @@ export default function Sidebar() {
           <Typography align="center" style={{ fontSize: "32px" }}>
             Add a friend c:
           </Typography>
+          {/* <Box
+           
+            >
+          </Box> */}
           <Box
-            component={"form"}
-            onSubmit={handleAddFriend}
             m="auto"
             textAlign="center"
             style={{
@@ -60,7 +68,7 @@ export default function Sidebar() {
           >
             <TextField
               align="center"
-              id="lobbyCode"
+              id="email"
               label="Enter email:"
               autoFocus
               variant="standard"

@@ -98,6 +98,34 @@ export const findById = (id) => api.get(`/findById/${id}`);
 
 export const findByEmail = (email) =>api.post(`/findByEmail/ ${email}`);
 
+export const friendRequest = (sentUserEmail, receivedUserEmail) => {
+  return api.put("/friendRequest/", {
+    sentUserEmail: sentUserEmail,
+    receivedUserEmail: receivedUserEmail,
+  });
+};
+
+export const friend = (sentUserEmail, receivedUserEmail) => {
+  return api.put("/friend/", {
+    sentUserEmail: sentUserEmail,
+    receivedUserEmail: receivedUserEmail,
+  });
+};
+
+export const removeFriendRequest = (sentUserEmail, receivedUserEmail) => {
+  return api.put("/removeFriendRequest/", {
+    sentUserEmail: sentUserEmail,
+    receivedUserEmail: receivedUserEmail,
+  });
+};
+
+export const removeFriend = (sentUserEmail, receivedUserEmail) => {
+  return api.put("/removeFriend/", {
+    sentUserEmail: sentUserEmail,
+    receivedUserEmail: receivedUserEmail,
+  });
+};
+
 const apis = {
   getLoggedIn,
   registerUser,
@@ -109,7 +137,15 @@ const apis = {
   deleteAccount,
   searchUsers,
   findById,
-  findByEmail
+  findByEmail,
+  friendRequest,
+  friend,
+  removeFriendRequest,
+  removeFriend,
+  // ,
+  // changePassword,
+  // resetPassword,
+  // deleteAccount
 };
 
 export default apis;

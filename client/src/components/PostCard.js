@@ -71,15 +71,9 @@ export default function PostCard(props) {
       </Typography>
     );
   }
-
-  let authors = "Authors: ";
-  for (var i = 0; i < post.authors.length; i++) {
-    let author = post.authors[i];
-    if (i == post.authors.length - 1) {
-      authors = authors + author;
-    } else {
-      authors = authors + author + ", ";
-    }
+  function handleViewProfile(event, user) {
+    event.stopPropagation();
+    community.setUserProfile(user);
   }
 
   let comms = ["J/Rage Comics", "J/Memes", "J/Random"];
@@ -252,8 +246,21 @@ export default function PostCard(props) {
                 fontSize: "22px",
               }}
             >
-              {authors}
+              {"Authors:"}
             </Typography>
+            {post.authors.map((author) => {
+              return (
+                <Button
+                  display="inline"
+                  onClick={(event) => handleViewProfile(event, author)}
+                  style={{ fontSize: "24px" }}
+                  sx={{ mt: 1 }}
+                  key={author}
+                >
+                  {author.username}
+                </Button>
+              );
+            })}
           </Grid>
           <Grid item xs={2}>
             {profileOptions}
@@ -420,8 +427,21 @@ export default function PostCard(props) {
                 fontSize: "22px",
               }}
             >
-              {authors}
+              {"Authors:"}
             </Typography>
+            {post.authors.map((author) => {
+              return (
+                <Button
+                  display="inline"
+                  onClick={(event) => handleViewProfile(event, author)}
+                  style={{ fontSize: "24px" }}
+                  key={author}
+                  sx={{ mt: 1 }}
+                >
+                  {author.username}
+                </Button>
+              );
+            })}
           </Grid>
           <Grid item xs={2}>
             {profileOptions}
