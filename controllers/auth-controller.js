@@ -186,6 +186,7 @@ addFriendRequest = async (req, res) => {
     });
   }
 
+    // Updated and make this code nicer Alan
   try{
     console.log("inside try catch")
     const sent = await User.findOne({ email: sentUserEmail }, async (err1, sentUser) => {
@@ -219,6 +220,8 @@ addFriendRequest = async (req, res) => {
     //now find received user
     await User.findOne({ email: receivedUserEmail }, (err2, receivedUser) => {
       console.log("found sent user: " + JSON.stringify(receivedUser));
+      
+// TODO add checks here ALAN
 
       sentUserId = JSON.stringify(sentUser._id);
       //only add if not a request already
