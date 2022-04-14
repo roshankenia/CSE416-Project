@@ -16,8 +16,7 @@ export default function Sidebar() {
     event.preventDefault();
     console.log("handleAddFriend")
     const data = new FormData(event.currentTarget);
-    console.log(data.get("email"))
-    auth.addFriendByEmail(data.get("email"));
+    auth.sendFriendRequest(auth.user.email, data.get("email"))
   }
 
   const handleHostNewGame = (event, name) => {

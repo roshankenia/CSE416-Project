@@ -654,7 +654,7 @@ deleteAccount = async (req, res) => {
 };
 
 
-//Fix
+//Fix Alan
 findByEmail = async (req, res) => {
   console.log("Find User with email: " + JSON.stringify(req.params.email));
 
