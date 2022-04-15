@@ -8,6 +8,7 @@ router.post("/guest", AuthController.createGuest);
 router.post("/login", AuthController.loginUser);
 router.post("/logout", AuthController.logoutUser);
 router.get("/loggedIn", AuthController.getLoggedIn);
+router.post("/updateBio", AuthController.updateBio);
 router.post("/changePassword", AuthController.changePassword);
 router.post("/resetPassword", AuthController.resetPassword);
 router.post("/deleteAccount", AuthController.deleteAccount);
