@@ -507,14 +507,14 @@ function AuthContextProvider(props) {
         let friendRequests = [];
         let friends = [];
 
-        // for (let i = 0; i < friendRequestIds.length; i++) {
-        //   let response = await api.findById(friendRequestIds[i]);
-        //   friendRequests.push(response.data.user);
-        // }
-        // for (let i = 0; i < friendIds.length; i++) {
-        //   let response = await api.findById(friendIds[i]);
-        //   friends.push(response.data.user);
-        // }
+        for (let i = 0; i < friendRequestIds.length; i++) {
+          let response = await api.findById(friendRequestIds[i]);
+          friendRequests.push(response.data.user);
+        }
+        for (let i = 0; i < friendIds.length; i++) {
+          let response = await api.findById(friendIds[i]);
+          friends.push(response.data.user);
+        }
 
         authReducer({
           type: AuthActionType.LOGIN_USER,
