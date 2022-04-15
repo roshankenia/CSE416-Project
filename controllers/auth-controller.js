@@ -629,44 +629,45 @@ resetPassword = async (req, res) => {
     text: 'Testing some Mailgun awesomness!'
   };
   mg.messages().send(data, function (error, body) {
+    console.log('mail error: ' + error)
     console.log(body);
   });
 
-    // const { email } = req.body;
+  const { email } = req.body;
 
-    // const existingUser = await User.findOne({ email: email });
-    // if (!existingUser) {
-    //   return res.status(401).json({
-    //     errorMessage: "Current User's email not found in database.",
-    //   });
-    // }
-
-    //We should generate a random password here but for now it is hardcoded
-    //const tempPassword = "12345678";
-    //We would then email the generated password to the given email address here
-
-    // Hashing the new password and changing the user's password to the new password
-  //   const saltRounds = 10;
-  //   const salt = await bcrypt.genSalt(saltRounds);
-  //   const newPasswordHash = await bcrypt.hash(tempPassword, salt);
-  //   console.log("passwordHash: " + newPasswordHash);
-
-  //   existingUser.passwordHash = newPasswordHash;
-  //   await existingUser.save();
-
-  //   res.status(200).json({
-  //     success: true,
-  //     user: {
-  //       firstName: existingUser.firstName,
-  //       lastName: existingUser.lastName,
-  //       email: existingUser.email,
-  //       username: existingUser.username,
-  //     },
+  const existingUser = await User.findOne({ email: email });
+  // if (!existingUser) {
+  //   return res.status(401).json({
+  //     errorMessage: "Current User's email not found in database.",
   //   });
-  // } catch (err) {
-  //   console.error(err);
-  //   res.status(500).send();
   // }
+
+  We should generate a random password here but for now it is hardcoded
+  const tempPassword = "12345678";
+  We would then email the generated password to the given email address here
+
+  Hashing the new password and changing the user's password to the new password
+  const saltRounds = 10;
+  const salt = await bcrypt.genSalt(saltRounds);
+  const newPasswordHash = await bcrypt.hash(tempPassword, salt);
+  console.log("passwordHash: " + newPasswordHash);
+
+  existingUser.passwordHash = newPasswordHash;
+  await existingUser.save();
+
+  res.status(200).json({
+    success: true,
+    user: {
+      firstName: existingUser.firstName,
+      lastName: existingUser.lastName,
+      email: existingUser.email,
+      username: existingUser.username,
+    },
+  });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
 };
 
 // @Jeff Hu - user wants to delete their account
