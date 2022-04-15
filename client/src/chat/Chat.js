@@ -7,7 +7,7 @@ import { Button } from '@mui/material';
 import axios from "axios";
 axios.defaults.withCredentials = true;
 const api = axios.create({
-  baseURL: "https://cse-416-jart.herokuapp.com/game",
+  baseURL: "https://cse-416-jart.herokuapp.com/play",
 });
 
 export default function Chat() {
@@ -43,7 +43,7 @@ export default function Chat() {
                     c.participants = channel.participants;
                 }
             });
-            setState({ channels: channels, socket: state.socket, channel: state.channel });
+            setState({ channels: channels, socket: socket, channel: state.channel });
         });
         socket.on('message', message => {
             
@@ -57,10 +57,11 @@ export default function Chat() {
                     }
                 }
             });
-            setState({ channels: channels, socket: state.socket, channel: state.channel });
+            setState({ channels: channels, socket: socket, channel: state.channel });
         });
         //socket = socket;
         setState({ channels: state.channels, socket: socket, channel: state.channel });
+        console.log(state.socket)
     }
 
     const getChannels = (username, password) => {
@@ -70,13 +71,9 @@ export default function Chat() {
     const loadChannels = async () => {
         try{
             let response = await getChannels() ;
+            console.log('response from getChannels: ' + response)
             console.log(response)
-            // .then(async response => {
-            //     let data = await response//.json();
-            //     console.log('response from getChannels: ' + response)
-            //     console.log(response)
-            //     setState({ channels: data.channels });
-            // })
+            setState({ channels: response.data.channels, socket:state.socket, channel:state.channel });
         }catch(err){
             console.log(err)
         }
@@ -102,6 +99,7 @@ export default function Chat() {
     return (
         <div className='chat-app'>
             <Button onClick={loadChannels}>load channels</Button>
+            <Button onClick={configureSocket}>configureSocket</Button>
             <ChannelList channels={state.channels} onSelectChannel={handleChannelSelect} />
             <MessagesPanel onSendMessage={handleSendMessage} channel={state.channel} />
         </div>
