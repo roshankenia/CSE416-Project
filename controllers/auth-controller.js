@@ -717,12 +717,14 @@ try {
   const tempPassword = Math.random().toString(36).substr(2, 8);
 
   //We would then email the generated password to the given email address here
+  console.log('email receiver: ' + email)
+  let emailBody = 'Your temporaray passcode for Jart is: <' + tempPassword +'> (exclude the angle brackets).'
+  console.log(emailBody)
   const msg = {
     to: email, // Change to your recipient
     from: 'tianrun.liu@stonybrook.edu', // Change to your verified sender
     subject: 'Your temporary JART passcode',
-    text: 'Your temporaray passcode for Jart is: <' + tempPassword +'> (exclude the angle brackets).',
-    html: '',
+    text: emailBody,
   }
   sgMail
       .send(msg)

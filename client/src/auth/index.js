@@ -169,6 +169,7 @@ function AuthContextProvider(props) {
     }
   };
 
+//#region friend functions
   auth.addFriendByEmail = async function (email) {
     console.log("Adding friend By Email");
     let response = await api.findByEmail(email);
@@ -362,7 +363,8 @@ function AuthContextProvider(props) {
       console.log(response);
     }
   };
-
+//#endregion friend functions
+  
   auth.deleteAccount = async function (password) {
     try {
       console.log("attempt to delete account...");
@@ -400,7 +402,6 @@ function AuthContextProvider(props) {
             message: response.message,
           },
         });
-        history.push("/");
       }
       return true;
     } catch (error) {
