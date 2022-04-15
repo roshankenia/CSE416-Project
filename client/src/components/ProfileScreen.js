@@ -15,6 +15,7 @@ export default function ProfileScreen() {
   const { community } = useContext(GlobalCommunityContext);
   const { auth } = useContext(AuthContext);
   const [notifyOpen, setNotifyOpen] = React.useState(false);
+  
 
   const handleBackToCommunities = (event) => {
     event.stopPropagation();
@@ -66,75 +67,146 @@ export default function ProfileScreen() {
       {"u/" + community.userProfile.username}
     </Typography>
   );
-  return (
-    <Grid
-      container
-      justifyContent="center"
-      style={{
-        backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
-      }}
-    >
-      <Grid item xs={12}>
+  console.log(auth)
+  console.log(auth.email)
+  console.log(auth.user._id)
+  console.log(community.userProfile.friends)
+  console.log(community.userProfile._id)
+
+  let notFriendOrSelf = true;
+  if (community.userProfile._id === auth.user._id){
+    notFriendOrSelf = false
+  } else {
+    for (var i = 0; i < community.userProfile.friends.length; i++){
+      if (auth.user._id === community.userProfile.friends[i]){
+        notFriendOrSelf = false
+      }
+    }
+    for (var j = 0; j < community.userProfile.requests.length; j++){
+      if (auth.user._id === community.userProfile.requests[j]){
+        notFriendOrSelf = false
+      }
+    }
+  }
+
+  if (notFriendOrSelf){
+    return (
+      <Grid
+        container
+        justifyContent="center"
+        style={{
+          backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
+        }}
+      >
+        <Grid item xs={12}>
+          <Button
+            variant="contained"
+            color="success"
+            size="small"
+            align="center"
+            onClick={handleBackToCommunities}
+            style={{
+              fontWeight: 600,
+              border: "3px solid",
+              borderColor: "black",
+              backgroundColor: "orange",
+              color: "black",
+              fontSize: "10px",
+              borderRadius: 20,
+            }}
+            sx={{ mt: 2 }}
+          >
+            Back to Communities
+          </Button>
+        </Grid>
+        <Grid item xs={5} alignItems="flex-start">
+          {welcomeTag}
+        </Grid>
+  
         <Button
           variant="contained"
           color="success"
           size="small"
-          align="center"
-          onClick={handleBackToCommunities}
           style={{
             fontWeight: 600,
             border: "3px solid",
             borderColor: "black",
-            backgroundColor: "orange",
+            backgroundColor: "#46EC2B",
             color: "black",
-            fontSize: "10px",
-            borderRadius: 20,
+            fontSize: "24px",
+            borderRadius: 50,
           }}
-          sx={{ mt: 2 }}
+          sx={{ mb: 0.5, height: "5%", width: "15%" }}
+          onClick={handleSendFriendRequest}
         >
-          Back to Communities
+          + Add Friend
         </Button>
+        <Snackbar
+          open={notifyOpen}
+          autoHideDuration={3000}
+          message="Friend Request Sent"
+          onClose={handleNotifyClose}
+          action={action}
+        />
+  
+        <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
+          <Typography style={{ fontSize: "32px" }}>
+            {community.communityList}
+          </Typography>
+          <PostFeed />
+        </Grid>
+  
+        <div class="sticky">
+          <Sidebar />
+        </div>
       </Grid>
-      <Grid item xs={5} alignItems="flex-start">
-        {welcomeTag}
-      </Grid>
-      
-      <Button
-        variant="contained"
-        color="success"
-        size="small"
+    );
+  } else {
+    return (
+      <Grid
+        container
+        justifyContent="center"
         style={{
-          fontWeight: 600,
-          border: "3px solid",
-          borderColor: "black",
-          backgroundColor: "#46EC2B",
-          color: "black",
-          fontSize: "24px",
-          borderRadius: 50,
+          backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
         }}
-        sx={{ mb: 0.5, height: "5%", width: "15%" }}
-        onClick={handleSendFriendRequest}
       >
-        + Add Friend
-      </Button>
-      <Snackbar
-        open={notifyOpen}
-        autoHideDuration={3000}
-        message="Friend Request Sent"
-        onClose={handleNotifyClose}
-        action={action}
-      />
-
-      <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
-        <Typography style={{ fontSize: "32px" }}>
-          {community.communityList}
-        </Typography>
-        <PostFeed />
+        <Grid item xs={12}>
+          <Button
+            variant="contained"
+            color="success"
+            size="small"
+            align="center"
+            onClick={handleBackToCommunities}
+            style={{
+              fontWeight: 600,
+              border: "3px solid",
+              borderColor: "black",
+              backgroundColor: "orange",
+              color: "black",
+              fontSize: "10px",
+              borderRadius: 20,
+            }}
+            sx={{ mt: 2 }}
+          >
+            Back to Communities
+          </Button>
+        </Grid>
+        <Grid item xs={5} alignItems="flex-start">
+          {welcomeTag}
+        </Grid>
+  
+        <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
+          <Typography style={{ fontSize: "32px" }}>
+            {community.communityList}
+          </Typography>
+          <PostFeed />
+        </Grid>
+  
+        <div class="sticky">
+          <Sidebar />
+        </div>
       </Grid>
-
-      <div class="sticky">
-        <Sidebar />
-      </div>
-    </Grid>
-  );
+    );
+  }
+  
 }
