@@ -122,9 +122,9 @@ function AuthContextProvider(props) {
       }
       case AuthActionType.RESET_PASSWORD: {
         return setAuth({
-          user: payload.user,
+          user: authReducer.user,
           loggedIn: false,
-          errorMessage: auth.errorMessage,
+          errorMessage: payload.message,
           isGuest: auth.isGuest,
           searchUsers: auth.searchUsers,
           friends: auth.friends,
@@ -388,22 +388,26 @@ function AuthContextProvider(props) {
   };
 
   auth.resetPassword = async function (email) {
+    if(email.indexOf('@') === -1){
+      console.log('what?>')
+      auth.setErrorMessage('Please enter a valid email address!')
+      return false
+    }
     try {
-
       const response = await api.resetPassword(email);
       if (response.status === 200) {
         authReducer({
           type: AuthActionType.RESET_PASSWORD,
           payload: {
-            user: response,
+            message: response.message,
           },
         });
         history.push("/");
       }
-
+      return true;
     } catch (error) {
       console.log(error);
-      //auth.setErrorMessage(error.response.data.errorMessage);
+      return false
     }
   };
 

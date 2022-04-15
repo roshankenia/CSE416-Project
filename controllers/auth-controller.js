@@ -3,7 +3,12 @@ const User = require("../models/user-model");
 const bcrypt = require("bcryptjs");
 const express = require("express");
 const router = express.Router();
+//email stuff
+const sgMail = require('@sendgrid/mail')
+//if someone can save the api key string as env variable that would be great -@Terran
+sgMail.setApiKey("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")
 
+//#region login/register/logout/guest
 getLoggedIn = async (req, res) => {
   try {
     let userId = auth.verifyUser(req);
@@ -27,33 +32,210 @@ getLoggedIn = async (req, res) => {
     res.json(false);
   }
 };
-
-updateBio = async (req, res) => {
+loginUser = async (req, res) => {
+  console.log("loginUser");
   try {
-    const { username, bio } = req.body;
+    const { username, password } = req.body;
 
-    const currentUser = await User.findOne({ username: username });
-    console.log("currentUser: " + currentUser);
-    if (!currentUser) {
+    if (!username || !password) {
+      return res
+        .status(400)
+        .json({ errorMessage: "Please enter all required fields." });
+    }
+
+    const existingUser = await User.findOne({ username: username });
+    console.log("existingUser: " + existingUser);
+    if (!existingUser) {
       return res.status(401).json({
-        errorMessage: "Current User's username not found in database.",
+        errorMessage: "Wrong username or password provided.",
       });
     }
 
-    currentUser.bio = bio;
-    await currentUser.save();
+    console.log("provided password: " + password);
+    const passwordCorrect = await bcrypt.compare(
+      password,
+      existingUser.passwordHash
+    );
+    if (!passwordCorrect) {
+      console.log("Incorrect password");
+      return res.status(401).json({
+        errorMessage: "Wrong username or password provided.",
+      });
+    }
 
-    res.status(200).json({
-      success: true,
-      user: currentUser,
-      bio: bio
-    });
+    // LOGIN THE USER
+    const token = auth.signToken(existingUser._id);
+    console.log(token);
+
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: true,
+      })
+      .status(200)
+      .json({
+        success: true,
+        user: existingUser,
+      });
   } catch (err) {
     console.error(err);
     res.status(500).send();
   }
 };
 
+logoutUser = async (req, res) => {
+  res
+    .cookie("token", "", {
+      httpOnly: true,
+      expires: new Date(0),
+      secure: true,
+      sameSite: "none",
+    })
+    .status(200)
+    .json({
+      success: true,
+    })
+    .send();
+};
+
+createGuest = async (req, res) => {
+  try {
+    const { username, guest } = req.body;
+    console.log("create user: " + username);
+    if (!username) {
+      return res
+        .status(400)
+        .json({ errorMessage: "Please enter all required fields." });
+    }
+
+    const newUser = new User({
+      guest,
+      username,
+    });
+    const savedUser = await newUser
+      .save()
+      .then(() => {
+        console.log("SUCCESS!!!");
+        return res.status(200).json({
+          success: true,
+          newUser: newUser,
+          message: "Guest Created!",
+        });
+      })
+      .catch((error) => {
+        console.log("FAILURE: " + JSON.stringify(error));
+        return res.status(404).json({
+          error,
+          message: "Guest not created!",
+        });
+      });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
+registerUser = async (req, res) => {
+  try {
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      passwordVerify,
+      username,
+      guest,
+    } = req.body;
+    console.log(
+      "create user: " +
+        firstName +
+        " " +
+        lastName +
+        " " +
+        email +
+        " " +
+        password +
+        " " +
+        passwordVerify +
+        " " +
+        username
+    );
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      !password ||
+      !passwordVerify ||
+      !username
+    ) {
+      return res
+        .status(400)
+        .json({ errorMessage: "Please enter all required fields." });
+    }
+    console.log("all fields provided");
+    if (password.length < 8) {
+      return res.status(400).json({
+        errorMessage: "Please enter a password of at least 8 characters.",
+      });
+    }
+    console.log("password long enough");
+    if (password !== passwordVerify) {
+      return res.status(400).json({
+        errorMessage: "Please enter the same password twice.",
+      });
+    }
+    console.log("password and password verify match");
+    const existingUser = await User.findOne({ email: email });
+    console.log("existingUser: " + existingUser);
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        errorMessage: "An account with this email address already exists.",
+      });
+    }
+
+    const saltRounds = 10;
+    const salt = await bcrypt.genSalt(saltRounds);
+    const passwordHash = await bcrypt.hash(password, salt);
+    console.log("passwordHash: " + passwordHash);
+
+    const newUser = new User({
+      guest,
+      firstName,
+      lastName,
+      email,
+      passwordHash,
+      username,
+    });
+    const savedUser = await newUser.save();
+    console.log("new user saved: " + savedUser._id);
+
+    // LOGIN THE USER
+    const token = auth.signToken(savedUser._id);
+    console.log("token:" + token);
+
+    await res
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      })
+      .status(200)
+      .json({
+        success: true,
+        user: savedUser,
+      });
+
+    console.log("token sent");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+//#endregion login/register/logout/guest
+
+//#region friend stuff
 findById = async (req, res) => {
   console.log("Find User with id: " + JSON.stringify(req.params.id));
 
@@ -383,208 +565,35 @@ searchUsers = async (req, res) => {
     }
   ).catch((err) => console.log(err));
 };
+//#endregion friend stuff
 
-loginUser = async (req, res) => {
-  console.log("loginUser");
+//#region account settings
+updateBio = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, bio } = req.body;
 
-    if (!username || !password) {
-      return res
-        .status(400)
-        .json({ errorMessage: "Please enter all required fields." });
-    }
-
-    const existingUser = await User.findOne({ username: username });
-    console.log("existingUser: " + existingUser);
-    if (!existingUser) {
+    const currentUser = await User.findOne({ username: username });
+    console.log("currentUser: " + currentUser);
+    if (!currentUser) {
       return res.status(401).json({
-        errorMessage: "Wrong username or password provided.",
+        errorMessage: "Current User's username not found in database.",
       });
     }
 
-    console.log("provided password: " + password);
-    const passwordCorrect = await bcrypt.compare(
-      password,
-      existingUser.passwordHash
-    );
-    if (!passwordCorrect) {
-      console.log("Incorrect password");
-      return res.status(401).json({
-        errorMessage: "Wrong username or password provided.",
-      });
-    }
+    currentUser.bio = bio;
+    await currentUser.save();
 
-    // LOGIN THE USER
-    const token = auth.signToken(existingUser._id);
-    console.log(token);
-
-    res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: true,
-      })
-      .status(200)
-      .json({
-        success: true,
-        user: existingUser,
-      });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send();
-  }
-};
-
-logoutUser = async (req, res) => {
-  res
-    .cookie("token", "", {
-      httpOnly: true,
-      expires: new Date(0),
-      secure: true,
-      sameSite: "none",
-    })
-    .status(200)
-    .json({
+    res.status(200).json({
       success: true,
-    })
-    .send();
-};
-
-createGuest = async (req, res) => {
-  try {
-    const { username, guest } = req.body;
-    console.log("create user: " + username);
-    if (!username) {
-      return res
-        .status(400)
-        .json({ errorMessage: "Please enter all required fields." });
-    }
-
-    const newUser = new User({
-      guest,
-      username,
+      user: currentUser,
+      bio: bio
     });
-    const savedUser = await newUser
-      .save()
-      .then(() => {
-        console.log("SUCCESS!!!");
-        return res.status(200).json({
-          success: true,
-          newUser: newUser,
-          message: "Guest Created!",
-        });
-      })
-      .catch((error) => {
-        console.log("FAILURE: " + JSON.stringify(error));
-        return res.status(404).json({
-          error,
-          message: "Guest not created!",
-        });
-      });
   } catch (err) {
     console.error(err);
     res.status(500).send();
   }
 };
 
-registerUser = async (req, res) => {
-  try {
-    const {
-      firstName,
-      lastName,
-      email,
-      password,
-      passwordVerify,
-      username,
-      guest,
-    } = req.body;
-    console.log(
-      "create user: " +
-        firstName +
-        " " +
-        lastName +
-        " " +
-        email +
-        " " +
-        password +
-        " " +
-        passwordVerify +
-        " " +
-        username
-    );
-    if (
-      !firstName ||
-      !lastName ||
-      !email ||
-      !password ||
-      !passwordVerify ||
-      !username
-    ) {
-      return res
-        .status(400)
-        .json({ errorMessage: "Please enter all required fields." });
-    }
-    console.log("all fields provided");
-    if (password.length < 8) {
-      return res.status(400).json({
-        errorMessage: "Please enter a password of at least 8 characters.",
-      });
-    }
-    console.log("password long enough");
-    if (password !== passwordVerify) {
-      return res.status(400).json({
-        errorMessage: "Please enter the same password twice.",
-      });
-    }
-    console.log("password and password verify match");
-    const existingUser = await User.findOne({ email: email });
-    console.log("existingUser: " + existingUser);
-    if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        errorMessage: "An account with this email address already exists.",
-      });
-    }
-
-    const saltRounds = 10;
-    const salt = await bcrypt.genSalt(saltRounds);
-    const passwordHash = await bcrypt.hash(password, salt);
-    console.log("passwordHash: " + passwordHash);
-
-    const newUser = new User({
-      guest,
-      firstName,
-      lastName,
-      email,
-      passwordHash,
-      username,
-    });
-    const savedUser = await newUser.save();
-    console.log("new user saved: " + savedUser._id);
-
-    // LOGIN THE USER
-    const token = auth.signToken(savedUser._id);
-    console.log("token:" + token);
-
-    await res
-      .cookie("token", token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: "none",
-      })
-      .status(200)
-      .json({
-        success: true,
-        user: savedUser,
-      });
-
-    console.log("token sent");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send();
-  }
-};
 
 // @Jeff Hu - user knows current password and wants to change their password
 changePassword = async (req, res) => {
@@ -638,72 +647,6 @@ changePassword = async (req, res) => {
   }
 };
 
-// @Jeff Hu - user does not know current password and needs to recover account by resetting password
-
-
-resetPassword = async (req, res) => {
-   
-
-    const sgMail = require('@sendgrid/mail')
-    
-    sgMail.setApiKey("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")
-
-    const msg = {
-      to: 'nikolaterranthe1@gmail.com', // Change to your recipient
-      from: 'tianrun.liu@stonybrook.edu', // Change to your verified sender
-      subject: 'fffffffffffffffffffffffffffffff',
-      text: 'and easy to do anywhere, even with Node.js',
-      html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-    }
-
-    sgMail
-      .send(msg)
-      .then((response) => {
-        console.log(response[0].statusCode)
-        console.log(response[0].headers)
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-      console.log('end sending email')
-//try {
-  // const { email } = req.body;
-
-  // const existingUser = await User.findOne({ email: email });
-  // if (!existingUser) {
-  //   return res.status(401).json({
-  //     errorMessage: "Current User's email not found in database.",
-  //   });
-  // }
-
-  //We should generate a random password here but for now it is hardcoded
-  //const tempPassword = "12345678";
-  //We would then email the generated password to the given email address here
-
-  //Hashing the new password and changing the user's password to the new password
-  // const saltRounds = 10;
-  // const salt = await bcrypt.genSalt(saltRounds);
-  // const newPasswordHash = await bcrypt.hash(tempPassword, salt);
-  // console.log("passwordHash: " + newPasswordHash);
-
-  // existingUser.passwordHash = newPasswordHash;
-  // await existingUser.save();
-
-  // res.status(200).json({
-  //   success: true,
-  //   user: {
-  //     firstName: existingUser.firstName,
-  //     lastName: existingUser.lastName,
-  //     email: existingUser.email,
-  //     username: existingUser.username,
-  //   },
-  // });
-  // } catch (err) {
-  //   console.error(err);
-  //   res.status(500).send();
-  // }
-};
-
 // @Jeff Hu - user wants to delete their account
 deleteAccount = async (req, res) => {//
   try {
@@ -755,6 +698,62 @@ deleteAccount = async (req, res) => {//
     res.status(500).send();
   }
 };
+//#endregion account settings
+
+// @Jeff Hu - user does not know current password and needs to recover account by resetting password
+resetPassword = async (req, res) => {
+try {
+  const { email } = req.body;
+
+  const existingUser = await User.findOne({ email: email });
+  if (!existingUser) {
+    //we don't want to give out this info to potential attacker
+    return res.status(200).json({
+      message: "Reset email has been sent, check your inbox.",
+    });
+  }
+
+  //generate a temporary password
+  const tempPassword = Math.random().toString(36).substr(2, 8);
+
+  //We would then email the generated password to the given email address here
+  const msg = {
+    to: email, // Change to your recipient
+    from: 'tianrun.liu@stonybrook.edu', // Change to your verified sender
+    subject: 'Your temporary JART passcode',
+    text: 'Your temporaray passcode for Jart is: <' + tempPassword +'> (exclude the angle brackets).',
+    html: '',
+  }
+  sgMail
+      .send(msg)
+      .then((response) => {
+        console.log(response[0].statusCode)
+        console.log(response[0].headers)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+      console.log('email sent')
+
+  //Hashing the new password and changing the user's password to the new password
+  const saltRounds = 10;
+  const salt = await bcrypt.genSalt(saltRounds);
+  const newPasswordHash = await bcrypt.hash(tempPassword, salt);
+  console.log("passwordHash: " + newPasswordHash);
+
+  existingUser.passwordHash = newPasswordHash;
+  await existingUser.save();
+
+  res.status(200).json({
+    success: true,
+    message: "Reset email has been sent, check your inbox."
+  });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send();
+  }
+};
+
 
 
 //Fix Alan

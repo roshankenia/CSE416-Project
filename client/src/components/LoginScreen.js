@@ -29,10 +29,6 @@ export default function LoginScreen() {
     auth.loginUser(data.get("username"), data.get("password"));
   };
 
-  function handleReset() {
-    auth.resetPassword('abc')
-  }
-
   return (
     <Box
       style={{
@@ -171,16 +167,15 @@ export default function LoginScreen() {
               <Grid container justifyContent="flex-end">
                 <Grid item xs>
                   <Link
-                    href="#"
+                    href="/reset/"
                     variant="body2"
-                    sx={{ }}
-                    onClick={handleReset}
+                    sx={{fontSize: 24}}
                   >
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link href="/register/" variant="body2">
+                  <Link href="/register/" variant="body2" sx={{fontSize: 24}}>
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>

@@ -15,6 +15,7 @@ import {
   Test,
   GuestScreen,
   GameWrapper,
+  ResetScreen
 } from "./components";
 /*
     This is our application's top-level component.
@@ -67,6 +68,7 @@ const App = () => {
                     <Route path="/login/" exact component={LoginScreen} />
                     <Route path="/guest/" exact component={GuestScreen} />
                     <Route path="/game/:id" exact component={GameWrapper} />
+                    <Route path="/reset" exact component={ResetScreen} />
                     <Route path="/test" exact component={Test} />
                   </Switch>
                 </Box>
