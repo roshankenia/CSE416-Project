@@ -1,40 +1,46 @@
-import React from 'react';
+import React, { useState }  from 'react';
 import { ChannelList } from './ChannelList';
 import { MessagesPanel } from './MessagesPanel';
 import io from "socket.io-client";
-export default class Chat extends React.Component {
+import { Button } from '@mui/material';
+export default function Chat() {
 
-    state = {
+    // let state = {
+    //     channels: null,
+    //     socket: null,
+    //     channel: null
+    // }
+    //let socket;
+    // componentDidMount() {
+    //     console.log('mounted!')
+    //     this.loadChannels();
+    //     this.configureSocket();
+    // }
+    const [state, setState] = useState({
         channels: null,
         socket: null,
         channel: null
-    }
-    socket;
-    componentDidMount() {
-        this.loadChannels();
-        this.configureSocket();
-    }
+    })
 
-    configureSocket = () => {
+    const configureSocket = () => {
         var socket = io.connect('/');
         socket.on('connection', () => {
-            if (this.state.channel) {
-                this.handleChannelSelect(this.state.channel.id);
+            if (state.channel) {
+                handleChannelSelect(state.channel.id);
             }
         });
         socket.on('channel', channel => {
-            
-            let channels = this.state.channels;
+            let channels = state.channels;
             channels.forEach(c => {
                 if (c.id === channel.id) {
                     c.participants = channel.participants;
                 }
             });
-            this.setState({ channels });
+            setState({ channels: channels, socket: state.socket, channel: state.channel });
         });
         socket.on('message', message => {
             
-            let channels = this.state.channels
+            let channels = state.channels
             channels.forEach(c => {
                 if (c.id === message.channel_id) {
                     if (!c.messages) {
@@ -44,38 +50,44 @@ export default class Chat extends React.Component {
                     }
                 }
             });
-            this.setState({ channels });
+            setState({ channels: channels, socket: state.socket, channel: state.channel });
         });
-        this.socket = socket;
+        //socket = socket;
+        setState({ channels: state.channels, socket: socket, channel: state.channel });
     }
 
-    loadChannels = async () => {
+    const loadChannels = async () => {
         fetch('/getChannels').then(async response => {
-            let data = await response.json();
-            this.setState({ channels: data.channels });
+            let data = await response//.json();
+            console.log('response from getChannels: ' + response)
+            console.log(response)
+            setState({ channels: data.channels });
         })
     }
 
-    handleChannelSelect = id => {
-        let channel = this.state.channels.find(c => {
+    const handleChannelSelect = id => {
+        let channel = state.channels.find(c => {
             return c.id === id;
         });
-        this.setState({ channel });
-        this.socket.emit('channel-join', id, ack => {
+        setState({ channels: state.channels, socket: state.socket, channel: channel });
+        state.socket.emit('channel-join', id, ack => {
         });
     }
 
-    handleSendMessage = (channel_id, text) => {
-        this.socket.emit('send-message', { channel_id, text, senderName: this.socket.id, id: Date.now() });
+    const handleSendMessage = (channel_id, text) => {
+        state.socket.emit('send-message', { channel_id, text, senderName: state.socket.id, id: Date.now() });
     }
 
-    render() {
+    // render() {
+    // loadChannels();
+    // configureSocket();
 
-        return (
-            <div className='chat-app'>
-                <ChannelList channels={this.state.channels} onSelectChannel={this.handleChannelSelect} />
-                <MessagesPanel onSendMessage={this.handleSendMessage} channel={this.state.channel} />
-            </div>
-        );
-    }
+    return (
+        <div className='chat-app'>
+            <Button onClick={loadChannels}>load channels</Button>
+            <ChannelList channels={state.channels} onSelectChannel={handleChannelSelect} />
+            <MessagesPanel onSendMessage={handleSendMessage} channel={state.channel} />
+        </div>
+    );
+    // }
 }
