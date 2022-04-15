@@ -655,6 +655,8 @@ deleteAccount = async (req, res) => {//
   try {
     const { _id, password } = req.body;
 
+    console.log(_id)
+
     const currentUser = await User.findOne({ _id: _id });
     console.log("currentUser: " + currentUser);
     if (!currentUser) {
