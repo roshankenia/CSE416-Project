@@ -2,8 +2,7 @@ import React, { createContext, useEffect, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import api from "./auth-request-api";
 import { GlobalCommunityContext } from "../community";
-
-
+import { GameContext } from "../game";
 
 const AuthContext = createContext();
 console.log("create AuthContext: " + AuthContext);
@@ -35,6 +34,7 @@ function AuthContextProvider(props) {
   });
   const history = useHistory();
   const { community } = useContext(GlobalCommunityContext);
+  const { game } = useContext(GameContext);
 
   useEffect(() => {
     auth.getLoggedIn();
@@ -169,25 +169,23 @@ function AuthContextProvider(props) {
     }
   };
 
-  auth.addFriendByEmail = async function(email){
-    console.log("Adding friend By Email")
+  auth.addFriendByEmail = async function (email) {
+    console.log("Adding friend By Email");
     let response = await api.findByEmail(email);
     if (response.status === 200) {
       console.log(email);
       auth.sendFriendRequest(auth.user.email, email);
-
     } else {
-      console.log("No email found")
+      console.log("No email found");
       console.log(response);
-    
     }
-  }
+  };
 
   auth.sendFriendRequest = async function (sentUserEmail, receivedUserEmail) {
     console.log("sending friend request");
-    console.log("The sent user email is"+sentUserEmail)
-    console.log("the received user email is"+receivedUserEmail)
-    
+    console.log("The sent user email is" + sentUserEmail);
+    console.log("the received user email is" + receivedUserEmail);
+
     try {
       const response = await api.friendRequest(
         sentUserEmail,
@@ -367,8 +365,8 @@ function AuthContextProvider(props) {
 
   auth.deleteAccount = async function (password) {
     try {
-      console.log('attempt to delete account...')
-      console.log(auth.user._id)
+      console.log("attempt to delete account...");
+      console.log(auth.user._id);
       const response = await api.deleteAccount(auth.user._id, password);
       if (response.status === 200) {
         authReducer({
@@ -379,7 +377,7 @@ function AuthContextProvider(props) {
         });
         history.push("/");
       }
-      return true
+      return true;
     } catch (error) {
       console.log(error.response.data.errorMessage);
       auth.setErrorMessage(error.response.data.errorMessage);
@@ -389,7 +387,6 @@ function AuthContextProvider(props) {
 
   auth.resetPassword = async function (email) {
     try {
-
       const response = await api.resetPassword(email);
       if (response.status === 200) {
         authReducer({
@@ -400,7 +397,6 @@ function AuthContextProvider(props) {
         });
         history.push("/");
       }
-
     } catch (error) {
       console.log(error);
       //auth.setErrorMessage(error.response.data.errorMessage);
@@ -450,7 +446,7 @@ function AuthContextProvider(props) {
   };
 
   auth.getLoggedIn = async function () {
-    try{
+    try {
       const response = await api.getLoggedIn();
       if (response.status === 200) {
         authReducer({
@@ -461,8 +457,8 @@ function AuthContextProvider(props) {
           },
         });
       }
-    }catch(err){
-      console.log(err)
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -534,13 +530,13 @@ function AuthContextProvider(props) {
         history.push("/");
       }
     } catch (error) {
-      //console.log(error.response.data.errorMessage);
-      //auth.setErrorMessage(error.response.data.errorMessage);
+      console.log(error.response.data.errorMessage);
+      auth.setErrorMessage(error.response.data.errorMessage);
     }
   };
 
   auth.logoutUser = async function () {
-    try{
+    try {
       const response = await api.logoutUser();
       history.push("/");
       if (response.status === 200) {
@@ -549,9 +545,9 @@ function AuthContextProvider(props) {
           payload: null,
         });
       }
-    }catch(err){
-      console.log('react: logout failed!')
-      console.log(err)
+    } catch (err) {
+      console.log("react: logout failed!");
+      console.log(err);
     }
   };
 
@@ -581,8 +577,12 @@ function AuthContextProvider(props) {
         console.log(response.data.newUser);
         // history.push("/lobby/"+lobbyCode);
       }
+      // game.hostNewLobby();
+      return "user";
     } catch (error) {
       console.log(error);
+      auth.setErrorMessage(error.response.data.errorMessage);
+      return "bad";
     }
   };
 
