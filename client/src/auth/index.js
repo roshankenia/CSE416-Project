@@ -533,13 +533,18 @@ function AuthContextProvider(props) {
   };
 
   auth.logoutUser = async function () {
-    const response = await api.logoutUser();
-    history.push("/");
-    if (response.status === 200) {
-      authReducer({
-        type: AuthActionType.LOGOUT_USER,
-        payload: null,
-      });
+    try{
+      const response = await api.logoutUser();
+      history.push("/");
+      if (response.status === 200) {
+        authReducer({
+          type: AuthActionType.LOGOUT_USER,
+          payload: null,
+        });
+      }
+    }catch(err){
+      console.log('react: logout failed!')
+      console.log(err)
     }
   };
 
