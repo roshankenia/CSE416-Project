@@ -44,11 +44,11 @@ export default function Sidebar() {
 
   const action = (
     <React.Fragment>
-      <Button color="secondary" size="small" onClick={handleClose}>
+      <Button color="secondary" size="large" onClick={handleClose}>
         JOIN
       </Button>
       <IconButton
-        size="small"
+        size="large"
         aria-label="close"
         color="inherit"
         onClick={handleClose}
@@ -397,7 +397,7 @@ export default function Sidebar() {
         open={open}
         autoHideDuration={6000}
         onClose={handleClose}
-        message={"u/Roshan" +"has invited you to the game"} 
+        message="u/Roshan has invited you to the game"
         action={action}
       />
     </div>
