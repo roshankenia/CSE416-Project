@@ -57,12 +57,16 @@ export default function Chat() {
     }
 
     const loadChannels = async () => {
-        fetch('/getChannels').then(async response => {
-            let data = await response//.json();
-            console.log('response from getChannels: ' + response)
-            console.log(response)
-            setState({ channels: data.channels });
-        })
+        try{
+            fetch('/getChannels').then(async response => {
+                let data = await response//.json();
+                console.log('response from getChannels: ' + response)
+                console.log(response)
+                setState({ channels: data.channels });
+            })
+        }catch(err){
+            console.log(err)
+        }
     }
 
     const handleChannelSelect = id => {

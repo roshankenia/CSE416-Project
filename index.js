@@ -117,7 +117,7 @@ io.on('connection', (socket) => { // socket object may be used to send specific 
 * @description This methos retirves the static channels
 */
 app.get('/getChannels', (req, res) => {
-  res.json({
+  res.status(400).json({
       channels: STATIC_CHANNELS
-  }).send()
+  })
 });
