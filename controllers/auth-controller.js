@@ -781,5 +781,6 @@ module.exports = {
   removeFriendRequest,
   removeFriend,
   findById,
-  findByEmail
+  findByEmail,
+  updateBio
 };
