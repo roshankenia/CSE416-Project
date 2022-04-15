@@ -54,21 +54,54 @@ var server = app.listen(PORT, function () {
 var io = require('socket.io')(server);
 const STATIC_CHANNELS = ['global_notifications', 'global_chat'];
 
-io.on('connection', (socket) => { /* socket object may be used to send specific messages to the new connected client */
-    console.log('new client connected');
-    socket.emit('connection', null);
+io.on('connection', (socket) => { // socket object may be used to send specific messages to the new connected client
+  console.log('new client connected');
+  socket.emit('connection', null);
+  socket.on('channel-join', id => {
+      console.log('channel join', id);
+      STATIC_CHANNELS.forEach(c => {
+          if (c.id === id) {
+              if (c.sockets.indexOf(socket.id) == (-1)) {
+                  c.sockets.push(socket.id);
+                  c.participants++;
+                  io.emit('channel', c);
+              }
+          } else {
+              let index = c.sockets.indexOf(socket.id);
+              if (index != (-1)) {
+                  c.sockets.splice(index, 1);
+                  c.participants--;
+                  io.emit('channel', c);
+              }
+          }
+      });
+
+      return id;
+  });
+  socket.on('send-message', message => {
+      io.emit('message', message);
+  });
+
+  socket.on('disconnect', () => {
+      STATIC_CHANNELS.forEach(c => {
+          let index = c.sockets.indexOf(socket.id);
+          if (index != (-1)) {
+              c.sockets.splice(index, 1);
+              c.participants--;
+              io.emit('channel', c);
+          }
+      });
+  });
+
 });
-//websocket server
-
-// const io = require("socket.io")(3000)
-// const io = require("socket.io")(8000,{
-//   cors: {
-//     // origin:["https://cse-416-jart.herokuapp.com"]
-//     origin:["http://localhost:3001"]
-//   }
-// })
 
 
-// io.on('connection', (socket) => {
-//   console.log("CONNECTION TO WEBSOCKET" + socket.id);
-// });
+
+/**
+* @description This methos retirves the static channels
+*/
+app.get('/getChannels', (req, res) => {
+  res.json({
+      channels: STATIC_CHANNELS
+  })
+});
