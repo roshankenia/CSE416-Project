@@ -11,6 +11,7 @@ const UserSchema = new Schema(
     username: { type: String, required: true },
     email: { type: String, required: false },
     passwordHash: { type: String, required: false },
+    bio: { type: String, required: false },
     likedPosts: { type: [String], required: false },
     dislikedPosts: { type: [String], required: false },
     likedComments: { type: [String], required: false },
