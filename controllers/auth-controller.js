@@ -644,6 +644,7 @@ changePassword = async (req, res) => {
 resetPassword = async (req, res) => {
    try {
   
+    require('dotenv').config()
     const sgMail = require('@sendgrid/mail')
     
     sgMail.setApiKey(process.env.SENDGRID_API_KEY)
