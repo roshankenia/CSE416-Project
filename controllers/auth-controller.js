@@ -620,7 +620,7 @@ changePassword = async (req, res) => {
 
 
 resetPassword = async (req, res) => {
-  // try {
+   try {
   
   const data = {
     from: 'nikolaterranthe1@gmail.com',
@@ -642,11 +642,11 @@ resetPassword = async (req, res) => {
   //   });
   // }
 
-  We should generate a random password here but for now it is hardcoded
+  //We should generate a random password here but for now it is hardcoded
   const tempPassword = "12345678";
-  We would then email the generated password to the given email address here
+  //We would then email the generated password to the given email address here
 
-  Hashing the new password and changing the user's password to the new password
+  //Hashing the new password and changing the user's password to the new password
   const saltRounds = 10;
   const salt = await bcrypt.genSalt(saltRounds);
   const newPasswordHash = await bcrypt.hash(tempPassword, salt);
