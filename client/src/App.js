@@ -23,6 +23,7 @@ import Chat from './chat/Chat'
 const socket = io.connect('/');
 socket.on('connection', () => {
   console.log(`I'm connected with the back-end\nI'm connected with the back-end\nI'm connected with the back-end\n(repeated 3 times)`);
+  console.log(socket)
 });
 
 const theme = createTheme({
