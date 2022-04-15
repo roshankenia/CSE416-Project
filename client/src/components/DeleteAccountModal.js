@@ -45,11 +45,12 @@ export default function DeleteAccountModal() {
     if(values.password==='ඞ'){
       setValues({password: '', showPassword: false})
     }else{
-      auth.deleteAccount(auth.user.username, values.password);
+      auth.deleteAccount(values.password);
     }   
   }
   function handleClose(event) {
     community.setDeleteAccount(false);
+    auth.setErrorMessage('')
   }
   console.log(community.deleteAccountModal);
 

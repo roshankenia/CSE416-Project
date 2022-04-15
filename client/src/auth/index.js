@@ -363,11 +363,11 @@ function AuthContextProvider(props) {
     }
   };
 
-  auth.deleteAccount = async function (username, password) {
+  auth.deleteAccount = async function (password) {
     try {
       console.log('attempt to delete account...')
       console.log(auth.user)
-      const response = await api.deleteAccount(username, password);
+      const response = await api.deleteAccount(auth.user._id, password);
       if (response.status === 200) {
         authReducer({
           type: AuthActionType.DELETE_ACCOUNT,
