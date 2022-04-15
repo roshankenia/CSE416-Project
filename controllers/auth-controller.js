@@ -645,7 +645,8 @@ resetPassword = async (req, res) => {
    try {
   
     const sgMail = require('@sendgrid/mail')
-    sgMail.setApiKey('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')
+    
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
     const msg = {
       to: 'nikolaterranthe1@gmail.com', // Change to your recipient
