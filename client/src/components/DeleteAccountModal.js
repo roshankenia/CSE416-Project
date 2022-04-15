@@ -25,10 +25,14 @@ export default function DeleteAccountModal() {
   const { auth } = useContext(AuthContext);
   const { community } = useContext(GlobalCommunityContext);
 
+  //inappropriate joke at line 80
+  //set a starting password that no one can type on their keyboard
   const [values, setValues] = useState({
-    password: 'ඞ',
+    password: '\u2407',
     showPassword: false,
   });
+  const [success, setSuccess] = useState(false)
+
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
@@ -41,22 +45,24 @@ export default function DeleteAccountModal() {
     event.preventDefault();
   };
 
-  function handleDeleteAccount(event) {
-    if(values.password==='ඞ'){
+  //when user clicks on confirm, set password to '' to allow them to type their password
+  async function handleDeleteAccount(event) {
+    if(values.password==='\u2407'){
       setValues({password: '', showPassword: false})
     }else{
-      auth.deleteAccount(values.password);
+      const response = await auth.deleteAccount(values.password);
+      setSuccess(response)
     }   
   }
   function handleClose(event) {
     community.setDeleteAccount(false);
-    setValues({password: 'ඞ',showPassword: false,})
+    setValues({password: '\u2407',showPassword: false,})
     auth.setErrorMessage('')
   }
-  console.log(community.deleteAccountModal);
-
+  
   let box = ''
-  if(values.password === 'ඞ'){
+  //render if block by default, if user clicks on confirm, render the else block
+  if(values.password === '\u2407'){
     box = <Box sx={style}>
     <Typography id="modal-modal-title" variant="h5" component="h2">
       Are you sure you want to delete your account?
@@ -106,7 +112,19 @@ export default function DeleteAccountModal() {
       </Button>
     </Box>
   }
-    
+  
+  //override box if successfully deleted account
+  if(success){
+    box = <Box sx={style}>
+    <Typography id="modal-modal-title" variant="h5" component="h2">
+      User {auth.user.username} has been successfully deleted.
+    </Typography>
+    <Button variant="outlined" onClick={handleClose} sx={{ m: 1 }}>
+      Cancel
+    </Button>
+    </Box>
+  }
+
   return (
     <Modal
       open={community.deleteAccountModal}
