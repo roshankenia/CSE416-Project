@@ -3,10 +3,6 @@ const User = require("../models/user-model");
 const bcrypt = require("bcryptjs");
 const express = require("express");
 const router = express.Router();
-//email stuff
-const mailgun = require("mailgun-js");
-const DOMAIN = 'cse-416-jart.herokuapp.com';
-const mg = mailgun({apiKey: '1c7007196cc83982ba328dc5430ec592-162d1f80-c371ade5', domain: DOMAIN});
 
 getLoggedIn = async (req, res) => {
   try {
@@ -648,16 +644,26 @@ changePassword = async (req, res) => {
 resetPassword = async (req, res) => {
    try {
   
-  const data = {
-    from: 'nikolaterranthe1@gmail.com',
-    to: 'tianrun.liu@stonybrook.edu',
-    subject: 'Hello',
-    text: 'Testing some Mailgun awesomness!'
-  };
-  mg.messages().send(data, function (error, body) {
-    console.log('mail error: ' + error)
-    console.log(body);
-  });
+    const sgMail = require('@sendgrid/mail')
+    sgMail.setApiKey('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')
+
+    const msg = {
+      to: 'nikolaterranthe1@gmail.com', // Change to your recipient
+      from: 'tianrun.liu@stonybrook.edu', // Change to your verified sender
+      subject: 'Sending with SendGrid is Fun',
+      text: 'and easy to do anywhere, even with Node.js',
+      html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+    }
+
+    sgMail
+      .send(msg)
+      .then((response) => {
+        console.log(response[0].statusCode)
+        console.log(response[0].headers)
+      })
+      .catch((error) => {
+        console.error(error)
+      })
 
   const { email } = req.body;
 
