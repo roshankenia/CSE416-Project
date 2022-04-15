@@ -363,9 +363,11 @@ function AuthContextProvider(props) {
     }
   };
 
-  auth.deleteAccount = async function (username, password) {
+  auth.deleteAccount = async function (password) {
     try {
-      const response = await api.deleteAccount(username, password);
+      console.log('attempt to delete account...')
+      console.log(auth.user._id)
+      const response = await api.deleteAccount(auth.user._id, password);
       if (response.status === 200) {
         authReducer({
           type: AuthActionType.DELETE_ACCOUNT,
@@ -377,7 +379,8 @@ function AuthContextProvider(props) {
       }
     } catch (error) {
       console.log(error.response.data.errorMessage);
-      //auth.setErrorMessage(error.response.data.errorMessage);
+      auth.setErrorMessage(error.response.data.errorMessage);
+      return false;
     }
   };
 
@@ -422,7 +425,6 @@ function AuthContextProvider(props) {
         return true;
       }
     } catch (error) {
-      console.log(error);
       console.log(error.response.data.errorMessage);
       auth.setErrorMessage(error.response.data.errorMessage);
       return false;

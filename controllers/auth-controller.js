@@ -651,11 +651,14 @@ resetPassword = async (req, res) => {
 };
 
 // @Jeff Hu - user wants to delete their account
-deleteAccount = async (req, res) => {
+deleteAccount = async (req, res) => {//
   try {
-    const { username, password } = req.body;
+    const { _id, password } = req.body;
 
-    const currentUser = await User.findOne({ username: username });
+    console.log(_id)
+    console.log(password)
+
+    const currentUser = await User.findOne({ _id: _id });
     console.log("currentUser: " + currentUser);
     if (!currentUser) {
       return res.status(401).json({
@@ -672,17 +675,15 @@ deleteAccount = async (req, res) => {
     if (!passwordCorrect) {
       console.log("Incorrect password");
       return res.status(401).json({
-        errorMessage: "Wrong password provided.",
+        errorMessage: "There is an impostor among us ඞ.",
       });
     }
 
-    // mongoose finds user by username and deletes user from database
-    // not sure if this is the best way to delete from database
-    const deletedUser = await User.findOneAndDelete({ username: username });
+    const deletedUser = await User.findOneAndDelete({ _id: _id });
     if (!deletedUser) {
       return res.status(401).json({
         errorMessage:
-          "Current User's username not found in database and user could not be deleted.",
+          "The User's does not exist in the database and could not be deleted.",
       });
     }
 
