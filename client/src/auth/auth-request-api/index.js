@@ -83,7 +83,7 @@ export const resetPassword = (email) => {
 
 //id set as 
 export const deleteAccount = (_id, password) => {
-  return api.delete("/deleteAccount/", {
+  return api.post("/deleteAccount/", {
     _id : _id,
     password: password,
   });
