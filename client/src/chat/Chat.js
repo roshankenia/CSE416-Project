@@ -7,7 +7,7 @@ import { Button } from '@mui/material';
 import axios from "axios";
 axios.defaults.withCredentials = true;
 const api = axios.create({
-  baseURL: "https://cse-416-jart.herokuapp.com/",
+  baseURL: "https://cse-416-jart.herokuapp.com/game",
 });
 
 export default function Chat() {

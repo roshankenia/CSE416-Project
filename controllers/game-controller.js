@@ -411,6 +411,24 @@ deleteLobbyById = async (req, res) => {
   }
 };
 
+var STATIC_CHANNELS = [{
+  name: 'Global chat',
+  participants: 0,
+  id: 1,
+  sockets: []
+}, {
+  name: 'Funny',
+  participants: 0,
+  id: 2,
+  sockets: []
+}];
+
+getStaticChannels = async (req, res) => {
+  res.status(200).json({
+      channels: STATIC_CHANNELS
+  })
+}
+
 module.exports = {
   createGame,
   getGameById,
@@ -423,4 +441,5 @@ module.exports = {
   getLobbyById,
   updateLobby,
   deleteLobbyById,
+  getStaticChannels
 };

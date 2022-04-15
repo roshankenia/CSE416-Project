@@ -36,4 +36,9 @@ router.get('/defaultimages', auth.verify, GameController.getDefaultImages);
 //handles an update default images request
 router.put('/defaultimages', auth.verify, GameController.updateDefaultImages);
 
+/**
+* @description This methos retirves the static channels
+*/
+router.get('/getChannels', GameController.getStaticChannels);
+
 module.exports = router;

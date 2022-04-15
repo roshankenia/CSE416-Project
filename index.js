@@ -38,19 +38,19 @@ const db = require("./db");
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 // Right before your app.listen(), add this:
+// I don't know what it does but this removes the ability of add get routes in this file -@Terran
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 
 // PUT THE SERVER IN LISTENING MODE
-// app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
 var server = app.listen(PORT, function () {
   var host = server.address().address;
   var port = server.address().port;
   console.log("running at http://" + host + ":" + port);
 });
 
-
+// websocket stuff
 var io = require('socket.io')(server);
 var STATIC_CHANNELS = [{
   name: 'Global chat',
@@ -110,19 +110,3 @@ io.on('connection', (socket) => { // socket object may be used to send specific 
   });
 
 });
-
-
-
-/**
-* @description This methos retirves the static channels
-*/
-app.get('/getChannels', (req, res) => {
-  res.status(400).json({
-      channels: STATIC_CHANNELS
-  })
-});
-
-//test response
-app.get('/', (req, res) => {
-  res.send('GET request to the homepage')
-})
