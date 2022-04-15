@@ -7,10 +7,15 @@ import AuthContext from "../auth";
 import PostFeed from "./PostFeed.js";
 import Sticky from "react-stickynode";
 import Button from "@mui/material/Button";
+import Snackbar from "@mui/material/Snackbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function ProfileScreen() {
   const { community } = useContext(GlobalCommunityContext);
   const { auth } = useContext(AuthContext);
+  const [notifyOpen, setNotifyOpen] = React.useState(false);
+
   const handleBackToCommunities = (event) => {
     event.stopPropagation();
     community.setScreen("communities");
@@ -18,8 +23,34 @@ export default function ProfileScreen() {
 
   const handleSendFriendRequest = (event) => {
     event.stopPropagation();
-    
+    console.log("send from: " + auth.user.email)
+    console.log("send to: " + community.userProfile.email)
+    let receivedUserEmail = community.userProfile.email;
+    let sentUserEmail = auth.user.email;
+    auth.sendFriendRequest(sentUserEmail, receivedUserEmail);
+    setNotifyOpen(true)
   }
+
+  const handleNotifyClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setNotifyOpen(false);
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleNotifyClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   const welcomeTag = (
     <Typography
@@ -82,10 +113,17 @@ export default function ProfileScreen() {
           borderRadius: 50,
         }}
         sx={{ mb: 0.5, height: "5%", width: "15%" }}
-        // onClick={handleHostNewGame}
+        onClick={handleSendFriendRequest}
       >
         + Add Friend
       </Button>
+      <Snackbar
+        open={notifyOpen}
+        autoHideDuration={3000}
+        message="Friend Request Sent"
+        onClose={handleNotifyClose}
+        action={action}
+      />
 
       <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
         <Typography style={{ fontSize: "32px" }}>
