@@ -4,13 +4,6 @@ const bcrypt = require("bcryptjs");
 const express = require("express");
 const router = express.Router();
 
-import axios from "axios";
-axios.defaults.withCredentials = true;
-const api = axios.create({
-  baseURL: "https://cse-416-jart.herokuapp.com/auth",
-});
-
-
 getLoggedIn = async (req, res) => {
   try {
     let userId = auth.verifyUser(req);
@@ -635,12 +628,6 @@ resetPassword = async (req, res) => {
     text : "Text body",
     html : "<b>this is sent by router</b> version of the body!"})
 
-    api.post( API_URL+"/messages",
-    {from : "nikolaterranthe1@gamil.com",
-    to : "tianrun.liu@stonybrook.edu",
-    subject : "This is subject",
-    text : "Text body",
-    html : "<b>this is sent by axios</b> version of the body!"})
     //#endregion email stuff
 
     // const { email } = req.body;
