@@ -121,3 +121,8 @@ app.get('/getChannels', (req, res) => {
       channels: STATIC_CHANNELS
   })
 });
+
+//test response
+app.get('/', (req, res) => {
+  res.send('GET request to the homepage')
+})

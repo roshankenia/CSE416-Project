@@ -3,6 +3,13 @@ import { ChannelList } from './ChannelList';
 import { MessagesPanel } from './MessagesPanel';
 import io from "socket.io-client";
 import { Button } from '@mui/material';
+
+import axios from "axios";
+axios.defaults.withCredentials = true;
+const api = axios.create({
+  baseURL: "https://cse-416-jart.herokuapp.com/",
+});
+
 export default function Chat() {
 
     // let state = {
@@ -56,14 +63,20 @@ export default function Chat() {
         setState({ channels: state.channels, socket: socket, channel: state.channel });
     }
 
+    const getChannels = (username, password) => {
+        return api.get(`/getChannels`);
+    };
+
     const loadChannels = async () => {
         try{
-            fetch('/getChannels').then(async response => {
-                let data = await response//.json();
-                console.log('response from getChannels: ' + response)
-                console.log(response)
-                setState({ channels: data.channels });
-            })
+            let response = await getChannels() ;
+            console.log(response)
+            // .then(async response => {
+            //     let data = await response//.json();
+            //     console.log('response from getChannels: ' + response)
+            //     console.log(response)
+            //     setState({ channels: data.channels });
+            // })
         }catch(err){
             console.log(err)
         }
