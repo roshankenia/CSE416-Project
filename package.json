@@ -8,6 +8,7 @@
     "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.6.2",
     "@types/react-stickynode": "^4.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
@@ -16,7 +17,6 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
-    "mailgun-js": "^0.22.0",
     "mongoose": "^5.7.5",
     "nodemon": "^2.0.15",
     "react-stickynode": "^4.0.0",

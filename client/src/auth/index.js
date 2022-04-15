@@ -3,6 +3,8 @@ import { useHistory } from "react-router-dom";
 import api from "./auth-request-api";
 import { GlobalCommunityContext } from "../community";
 
+
+
 const AuthContext = createContext();
 console.log("create AuthContext: " + AuthContext);
 
@@ -387,16 +389,24 @@ function AuthContextProvider(props) {
 
   auth.resetPassword = async function (email) {
     try {
-      const response = await api.resetPassword(email);
-      if (response.status === 200) {
-        authReducer({
-          type: AuthActionType.RESET_PASSWORD,
-          payload: {
-            user: response.data.user,
-          },
-        });
-        history.push("/");
-      }
+
+      // const sgMail = require('@sendgrid/mail')
+      // sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+      // const msg = {
+      //   to: 'nikolaterranthe1@gmail.com', // Change to your recipient
+      //   from: 'tianrun.liu@stonybrook.edu', // Change to your verified sender
+      //   subject: 'ffffffffffff',
+      //   text: 'and easy to do anywhere, even with Node.js',
+      //   html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+      // }
+      // sgMail
+      //   .send(msg)
+      //   .then(() => {
+      //     console.log('Email sent')
+      //   })
+      //   .catch((error) => {
+      //     console.error(error)
+      //   })
     } catch (error) {
       console.log(error);
       //auth.setErrorMessage(error.response.data.errorMessage);

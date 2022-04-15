@@ -127,6 +127,9 @@ export const removeFriend = (sentUserEmail, receivedUserEmail) => {
   });
 };
 
+
+
+
 const apis = {
   getLoggedIn,
   registerUser,
