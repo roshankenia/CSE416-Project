@@ -77,7 +77,7 @@ export default function DeleteAccountModal() {
   }else{
     box = <Box sx={style}>
     <Typography id="modal-modal-title" variant="h5" component="h2" >
-      Enter the password correctly to prove you are not an imposter ඞ.
+      Enter the password correctly to prove you are not an impostor ඞ.
     </Typography>
     <Typography 
         sx={{fontSize: 28, marginBottom:'-10px',textAlign: "left" }}>

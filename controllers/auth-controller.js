@@ -1,6 +1,12 @@
 const auth = require("../auth");
 const User = require("../models/user-model");
 const bcrypt = require("bcryptjs");
+const express = require("express");
+const router = express.Router();
+//email stuff
+const mailgun = require("mailgun-js");
+const DOMAIN = 'cse-416-jart.herokuapp.com';
+const mg = mailgun({apiKey: '1c7007196cc83982ba328dc5430ec592-162d1f80-c371ade5', domain: DOMAIN});
 
 getLoggedIn = async (req, res) => {
   try {
@@ -637,39 +643,53 @@ changePassword = async (req, res) => {
 };
 
 // @Jeff Hu - user does not know current password and needs to recover account by resetting password
+
+
 resetPassword = async (req, res) => {
-  try {
-    const { email } = req.body;
+   try {
+  
+  const data = {
+    from: 'nikolaterranthe1@gmail.com',
+    to: 'tianrun.liu@stonybrook.edu',
+    subject: 'Hello',
+    text: 'Testing some Mailgun awesomness!'
+  };
+  mg.messages().send(data, function (error, body) {
+    console.log('mail error: ' + error)
+    console.log(body);
+  });
 
-    const existingUser = await User.findOne({ email: email });
-    if (!existingUser) {
-      return res.status(401).json({
-        errorMessage: "Current User's email not found in database.",
-      });
-    }
+  const { email } = req.body;
 
-    //We should generate a random password here but for now it is hardcoded
-    const tempPassword = "12345678";
-    //We would then email the generated password to the given email address here
+  const existingUser = await User.findOne({ email: email });
+  // if (!existingUser) {
+  //   return res.status(401).json({
+  //     errorMessage: "Current User's email not found in database.",
+  //   });
+  // }
 
-    // Hashing the new password and changing the user's password to the new password
-    const saltRounds = 10;
-    const salt = await bcrypt.genSalt(saltRounds);
-    const newPasswordHash = await bcrypt.hash(tempPassword, salt);
-    console.log("passwordHash: " + newPasswordHash);
+  //We should generate a random password here but for now it is hardcoded
+  const tempPassword = "12345678";
+  //We would then email the generated password to the given email address here
 
-    existingUser.passwordHash = newPasswordHash;
-    await existingUser.save();
+  //Hashing the new password and changing the user's password to the new password
+  const saltRounds = 10;
+  const salt = await bcrypt.genSalt(saltRounds);
+  const newPasswordHash = await bcrypt.hash(tempPassword, salt);
+  console.log("passwordHash: " + newPasswordHash);
 
-    res.status(200).json({
-      success: true,
-      user: {
-        firstName: existingUser.firstName,
-        lastName: existingUser.lastName,
-        email: existingUser.email,
-        username: existingUser.username,
-      },
-    });
+  existingUser.passwordHash = newPasswordHash;
+  await existingUser.save();
+
+  res.status(200).json({
+    success: true,
+    user: {
+      firstName: existingUser.firstName,
+      lastName: existingUser.lastName,
+      email: existingUser.email,
+      username: existingUser.username,
+    },
+  });
   } catch (err) {
     console.error(err);
     res.status(500).send();

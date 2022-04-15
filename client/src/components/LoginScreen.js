@@ -29,6 +29,10 @@ export default function LoginScreen() {
     auth.loginUser(data.get("username"), data.get("password"));
   };
 
+  function handleReset() {
+    auth.resetPassword('abc')
+  }
+
   return (
     <Box
       style={{
@@ -169,7 +173,8 @@ export default function LoginScreen() {
                   <Link
                     href="#"
                     variant="body2"
-                    sx={{ color: "gray", textDecoration: "line-through" }}
+                    sx={{ }}
+                    onClick={handleReset}
                   >
                     Forgot password?
                   </Link>
