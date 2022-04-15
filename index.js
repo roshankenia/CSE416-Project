@@ -51,7 +51,13 @@ var server = app.listen(PORT, function () {
 });
 
 
+var io = require('socket.io')(server);
+const STATIC_CHANNELS = ['global_notifications', 'global_chat'];
 
+io.on('connection', (socket) => { /* socket object may be used to send specific messages to the new connected client */
+    console.log('new client connected');
+    socket.emit('connection', null);
+});
 //websocket server
 
 // const io = require("socket.io")(3000)
