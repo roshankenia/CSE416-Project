@@ -45,7 +45,6 @@ export default function ChangePasswordModal() {
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
-    console.log(auth.errorMessage)
   };
   const handleClickShowPassword = (prop) => (event) => {
     setValues({

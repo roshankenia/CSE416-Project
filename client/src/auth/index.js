@@ -365,6 +365,8 @@ function AuthContextProvider(props) {
 
   auth.deleteAccount = async function (username, password) {
     try {
+      console.log('attempt to delete account...')
+      console.log(auth.user)
       const response = await api.deleteAccount(username, password);
       if (response.status === 200) {
         authReducer({
@@ -377,7 +379,8 @@ function AuthContextProvider(props) {
       }
     } catch (error) {
       console.log(error.response.data.errorMessage);
-      //auth.setErrorMessage(error.response.data.errorMessage);
+      auth.setErrorMessage(error.response.data.errorMessage);
+      return false;
     }
   };
 
@@ -422,7 +425,6 @@ function AuthContextProvider(props) {
         return true;
       }
     } catch (error) {
-      console.log(error);
       console.log(error.response.data.errorMessage);
       auth.setErrorMessage(error.response.data.errorMessage);
       return false;
