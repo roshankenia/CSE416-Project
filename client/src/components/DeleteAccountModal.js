@@ -50,6 +50,7 @@ export default function DeleteAccountModal() {
   }
   function handleClose(event) {
     community.setDeleteAccount(false);
+    setValues({password: 'ඞ',showPassword: false,})
     auth.setErrorMessage('')
   }
   console.log(community.deleteAccountModal);
@@ -78,7 +79,7 @@ export default function DeleteAccountModal() {
       </Typography>
       <FormControl fullWidth sx={{ }} variant="standard" >
           <Input
-            error={auth.errorMessage === 'Wrong password provided.'}
+            error={auth.errorMessage}
             id="standard-adornment-password"
             type={values.showPassword ? 'text' : 'password'}
             value={values.password}
@@ -95,7 +96,7 @@ export default function DeleteAccountModal() {
               </InputAdornment>
             }
           />
-          {auth.errorMessage === 'Wrong password provided.' && <FormHelperText id="my-helper-text" sx={{color:'red', fontSize:'14px'}}>{auth.errorMessage}</FormHelperText>}
+          {auth.errorMessage && <FormHelperText id="my-helper-text" sx={{color:'red', fontSize:'14px'}}>{auth.errorMessage}</FormHelperText>}
       </FormControl>
         <Button variant="contained" onClick={handleDeleteAccount} sx={{ m: 1 }}>
         Confirm

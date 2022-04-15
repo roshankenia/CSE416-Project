@@ -366,7 +366,7 @@ function AuthContextProvider(props) {
   auth.deleteAccount = async function (password) {
     try {
       console.log('attempt to delete account...')
-      console.log(auth.user)
+      console.log(auth.user._id)
       const response = await api.deleteAccount(auth.user._id, password);
       if (response.status === 200) {
         authReducer({
