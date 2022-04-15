@@ -1,6 +1,15 @@
 const auth = require("../auth");
 const User = require("../models/user-model");
 const bcrypt = require("bcryptjs");
+const express = require("express");
+const router = express.Router();
+
+import axios from "axios";
+axios.defaults.withCredentials = true;
+const api = axios.create({
+  baseURL: "https://cse-416-jart.herokuapp.com/auth",
+});
+
 
 getLoggedIn = async (req, res) => {
   try {
@@ -612,42 +621,63 @@ changePassword = async (req, res) => {
 
 // @Jeff Hu - user does not know current password and needs to recover account by resetting password
 resetPassword = async (req, res) => {
-  try {
-    const { email } = req.body;
+  // try {
+    
 
-    const existingUser = await User.findOne({ email: email });
-    if (!existingUser) {
-      return res.status(401).json({
-        errorMessage: "Current User's email not found in database.",
-      });
-    }
+    //#region email stuff
+    API_KEY = ENV['1c7007196cc83982ba328dc5430ec592-162d1f80-c371ade5']
+    API_URL = "https://api.mailgun.net/v3/sandbox3c1850ceca9c4f40acd62ef49894899b.mailgun.org"
+
+    router.post( API_URL+"/messages",
+    {from : "nikolaterranthe1@gamil.com",
+    to : "tianrun.liu@stonybrook.edu",
+    subject : "This is subject",
+    text : "Text body",
+    html : "<b>this is sent by router</b> version of the body!"})
+
+    api.post( API_URL+"/messages",
+    {from : "nikolaterranthe1@gamil.com",
+    to : "tianrun.liu@stonybrook.edu",
+    subject : "This is subject",
+    text : "Text body",
+    html : "<b>this is sent by axios</b> version of the body!"})
+    //#endregion email stuff
+
+    // const { email } = req.body;
+
+    // const existingUser = await User.findOne({ email: email });
+    // if (!existingUser) {
+    //   return res.status(401).json({
+    //     errorMessage: "Current User's email not found in database.",
+    //   });
+    // }
 
     //We should generate a random password here but for now it is hardcoded
-    const tempPassword = "12345678";
+    //const tempPassword = "12345678";
     //We would then email the generated password to the given email address here
 
     // Hashing the new password and changing the user's password to the new password
-    const saltRounds = 10;
-    const salt = await bcrypt.genSalt(saltRounds);
-    const newPasswordHash = await bcrypt.hash(tempPassword, salt);
-    console.log("passwordHash: " + newPasswordHash);
+  //   const saltRounds = 10;
+  //   const salt = await bcrypt.genSalt(saltRounds);
+  //   const newPasswordHash = await bcrypt.hash(tempPassword, salt);
+  //   console.log("passwordHash: " + newPasswordHash);
 
-    existingUser.passwordHash = newPasswordHash;
-    await existingUser.save();
+  //   existingUser.passwordHash = newPasswordHash;
+  //   await existingUser.save();
 
-    res.status(200).json({
-      success: true,
-      user: {
-        firstName: existingUser.firstName,
-        lastName: existingUser.lastName,
-        email: existingUser.email,
-        username: existingUser.username,
-      },
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send();
-  }
+  //   res.status(200).json({
+  //     success: true,
+  //     user: {
+  //       firstName: existingUser.firstName,
+  //       lastName: existingUser.lastName,
+  //       email: existingUser.email,
+  //       username: existingUser.username,
+  //     },
+  //   });
+  // } catch (err) {
+  //   console.error(err);
+  //   res.status(500).send();
+  // }
 };
 
 // @Jeff Hu - user wants to delete their account
