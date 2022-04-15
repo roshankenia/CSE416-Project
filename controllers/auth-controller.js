@@ -3,6 +3,10 @@ const User = require("../models/user-model");
 const bcrypt = require("bcryptjs");
 const express = require("express");
 const router = express.Router();
+//email stuff
+const mailgun = require("mailgun-js");
+const DOMAIN = 'cse-416-jart.herokuapp.com';
+const mg = mailgun({apiKey: '1c7007196cc83982ba328dc5430ec592-162d1f80-c371ade5', domain: DOMAIN});
 
 getLoggedIn = async (req, res) => {
   try {
@@ -613,22 +617,20 @@ changePassword = async (req, res) => {
 };
 
 // @Jeff Hu - user does not know current password and needs to recover account by resetting password
+
+
 resetPassword = async (req, res) => {
   // try {
-    
-
-    //#region email stuff
-    API_KEY = ENV['1c7007196cc83982ba328dc5430ec592-162d1f80-c371ade5']
-    API_URL = "https://api.mailgun.net/v3/sandbox3c1850ceca9c4f40acd62ef49894899b.mailgun.org"
-
-    router.post( API_URL+"/messages",
-    {from : "nikolaterranthe1@gamil.com",
-    to : "tianrun.liu@stonybrook.edu",
-    subject : "This is subject",
-    text : "Text body",
-    html : "<b>this is sent by router</b> version of the body!"})
-
-    //#endregion email stuff
+  
+  const data = {
+    from: 'nikolaterranthe1@gmail.com',
+    to: 'tianrun.liu@stonybrook.edu',
+    subject: 'Hello',
+    text: 'Testing some Mailgun awesomness!'
+  };
+  mg.messages().send(data, function (error, body) {
+    console.log(body);
+  });
 
     // const { email } = req.body;
 

@@ -127,17 +127,6 @@ export const removeFriend = (sentUserEmail, receivedUserEmail) => {
   });
 };
 
-API_KEY = ENV['1c7007196cc83982ba328dc5430ec592-162d1f80-c371ade5']
-API_URL = "https://api.mailgun.net/v3/sandbox3c1850ceca9c4f40acd62ef49894899b.mailgun.org"
-
-export const sendEmail = () =>{
-  return  apis.post( API_URL+"/messages",
-  {from : "nikolaterranthe1@gamil.com",
-  to : "tianrun.liu@stonybrook.edu",
-  subject : "This is subject",
-  text : "Text body",
-  html : "<b>this is sent by router</b> version of the body!"})
-}
 const apis = {
   getLoggedIn,
   registerUser,

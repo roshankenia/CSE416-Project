@@ -387,17 +387,16 @@ function AuthContextProvider(props) {
 
   auth.resetPassword = async function (email) {
     try {
-      const response = await api.sendEmail();
-      //const response = await api.resetPassword(email);
-      // if (response.status === 200) {
-      //   authReducer({
-      //     type: AuthActionType.RESET_PASSWORD,
-      //     payload: {
-      //       user: response.data.user,
-      //     },
-      //   });
-      //   history.push("/");
-      // }
+      const response = await api.resetPassword(email);
+      if (response.status === 200) {
+        authReducer({
+          type: AuthActionType.RESET_PASSWORD,
+          payload: {
+            user: response.data.user,
+          },
+        });
+        history.push("/");
+      }
     } catch (error) {
       console.log(error);
       //auth.setErrorMessage(error.response.data.errorMessage);
