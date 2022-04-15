@@ -32,6 +32,32 @@ getLoggedIn = async (req, res) => {
   }
 };
 
+updateBio = async (req, res) => {
+  try {
+    const { username, bio } = req.body;
+
+    const currentUser = await User.findOne({ username: username });
+    console.log("currentUser: " + currentUser);
+    if (!currentUser) {
+      return res.status(401).json({
+        errorMessage: "Current User's username not found in database.",
+      });
+    }
+
+    currentUser.bio = bio;
+    await currentUser.save();
+
+    res.status(200).json({
+      success: true,
+      user: currentUser,
+      bio: bio
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
 findById = async (req, res) => {
   console.log("Find User with id: " + JSON.stringify(req.params.id));
 
@@ -755,5 +781,6 @@ module.exports = {
   removeFriendRequest,
   removeFriend,
   findById,
-  findByEmail
+  findByEmail,
+  updateBio
 };

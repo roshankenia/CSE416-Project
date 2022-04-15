@@ -53,6 +53,8 @@ export default function ProfileScreen() {
     </React.Fragment>
   );
 
+  console.log(auth.user.bio)
+
   const welcomeTag = (
     <Typography
       style={{
@@ -67,11 +69,6 @@ export default function ProfileScreen() {
       {"u/" + community.userProfile.username}
     </Typography>
   );
-  console.log(auth)
-  console.log(auth.email)
-  console.log(auth.user._id)
-  console.log(community.userProfile.friends)
-  console.log(community.userProfile._id)
 
   let notFriendOrSelf = true;
   if (community.userProfile._id === auth.user._id){
@@ -122,7 +119,7 @@ export default function ProfileScreen() {
         <Grid item xs={5} alignItems="flex-start">
           {welcomeTag}
         </Grid>
-  
+
         <Button
           variant="contained"
           color="success"
@@ -193,8 +190,11 @@ export default function ProfileScreen() {
         </Grid>
         <Grid item xs={5} alignItems="flex-start">
           {welcomeTag}
+          <Typography fontSize={"30px"}>
+            
+          </Typography>
         </Grid>
-  
+            
         <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
           <Typography style={{ fontSize: "32px" }}>
             {community.communityList}
