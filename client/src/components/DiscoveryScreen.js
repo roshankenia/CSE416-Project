@@ -106,8 +106,6 @@ export default function DiscoveryScreen() {
   return (
     <Box
       style={{
-        width: "100vw",
-        height: "100vh",
         backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
       }}
     >
