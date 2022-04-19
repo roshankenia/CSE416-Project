@@ -125,4 +125,9 @@ io.on("connection", (socket) => {
     console.log("sending players to users in lobby ", lobbyID);
     socket.to(lobbyID).emit("add-players", players, lobbyID);
   });
+
+  socket.on("leave-lobby", (username, lobbyID) => {
+    console.log(username, "is leaving", lobbyID);
+    socket.to(lobbyID).emit("remove-player", username, lobbyID);
+  });
 });
