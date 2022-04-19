@@ -120,4 +120,9 @@ io.on("connection", (socket) => {
     socket.join(lobbyID);
     socket.to(lobbyID).emit("new-player", username);
   });
+
+  socket.on("consolidate-players", (players, lobbyID) => {
+    console.log("sending players to users");
+    socket.to(lobbyID).emit("add-players", players);
+  });
 });
