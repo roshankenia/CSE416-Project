@@ -118,11 +118,11 @@ io.on("connection", (socket) => {
   socket.on("join-lobby", (username, lobbyID) => {
     console.log(username, " has joined lobby ", lobbyID);
     socket.join(lobbyID);
-    socket.to(lobbyID).emit("new-player", username);
+    socket.to(lobbyID).emit("new-player", username, lobbyID);
   });
 
   socket.on("consolidate-players", (players, lobbyID) => {
-    console.log("sending players to users");
-    socket.to(lobbyID).emit("add-players", players);
+    console.log("sending players to users in lobby ", lobbyID);
+    socket.to(lobbyID).emit("add-players", players, lobbyID);
   });
 });
