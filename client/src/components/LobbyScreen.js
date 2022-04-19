@@ -64,25 +64,25 @@ export default function LobbyScreen() {
   };
 
   const handleLeave = (event) => {
-    history.push("/");
+    game.leaveLobby();
   };
 
   let lobbyTable = (
     <TableBody>
-      {inlobby.map((user) => (
-        <TableRow key={user.username} sx={{}}>
-          <TableCell align="left">{user.host && <StarIcon />}</TableCell>
+      {game.players.map((username) => (
+        <TableRow key={username} sx={{}}>
+          {/* <TableCell align="left">{user.host && <StarIcon />}</TableCell>
           <TableCell align="left" style={{ fontSize: "48px" }}>
             {user.position}
-          </TableCell>
+          </TableCell> */}
           <TableCell align="left" style={{ fontSize: "48px" }}>
-            {user.username}
+            {username}
           </TableCell>
-          <TableCell align="left" style={{ fontSize: "48px" }}>
+          {/* <TableCell align="left" style={{ fontSize: "48px" }}>
             {user.ready && (
               <Typography style={{ fontSize: "48px" }}>Ready!</Typography>
             )}
-          </TableCell>
+          </TableCell> */}
         </TableRow>
       ))}
     </TableBody>
@@ -146,7 +146,7 @@ export default function LobbyScreen() {
                     fontSize: "10px",
                     borderRadius: 20,
                   }}
-                  sx={{ mr:2, mt: 1, width: "25%" }}
+                  sx={{ mr: 2, mt: 1, width: "25%" }}
                 >
                   invite
                 </Button>

@@ -6,19 +6,19 @@ import LobbyScreen from "./LobbyScreen";
 import GameContext from "../game";
 import { GameScreen, VoteToPublishScreen } from ".";
 
-export default function GameWrapper(){
+export default function GameWrapper() {
   const { game } = useContext(GameContext);
 
-  console.log(game)
+  console.log(game);
 
-  if (game.voting){
-    console.log("Entering voting phase")
-    return <VoteToPublishScreen />
-  } else if (game.lobby) {
+  if (game.screen == "voting") {
+    console.log("Entering voting phase");
+    return <VoteToPublishScreen />;
+  } else if (game.screen == "lobby") {
     console.log(game.lobby);
     return <LobbyScreen />;
-  } else if (game.game){
-    console.log('Implement This part in GameScreen')
-    return <GameScreen/>;
+  } else if (game.screen == "game") {
+    console.log("Implement This part in GameScreen");
+    return <GameScreen />;
   }
 }

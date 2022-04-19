@@ -8,10 +8,9 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import AuthContext from "../auth";
-import Snackbar from '@mui/material/Snackbar';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-
+import Snackbar from "@mui/material/Snackbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function Sidebar() {
   const { game } = useContext(GameContext);
@@ -24,23 +23,33 @@ export default function Sidebar() {
     setOpen(true);
   };
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
     setOpen(false);
   };
 
-  const handleJoin =(event,reason) => {
+  const handleJoin = (event, reason) => {
     // Join game room logic here
-  }
+  };
 
-  const handleAddFriend = (event)=>{
+  const handleAddFriend = (event) => {
     event.preventDefault();
-    console.log("handleAddFriend")
+    console.log("handleAddFriend");
     const data = new FormData(event.currentTarget);
-    auth.sendFriendRequest(auth.user.email, data.get("email"))
-  }
+    auth.sendFriendRequest(auth.user.email, data.get("email"));
+  };
+
+  const handleLobbyJoin = (event) => {
+    event.preventDefault();
+    console.log("new lobby");
+    const data = new FormData(event.currentTarget);
+    let lobbyID = data.get("lobbyCode");
+    console.log("lobby join from sidebar:", lobbyID);
+
+    game.joinLobby(lobbyID);
+  };
 
   const handleHostNewGame = (event, name) => {
     event.preventDefault();
@@ -84,11 +93,7 @@ export default function Sidebar() {
           <Typography align="center" style={{ fontSize: "32px" }}>
             Add a friend c:
           </Typography>
-          <Box
-            component="form"
-            onSubmit={handleAddFriend}
-            noValidate
-            >
+          <Box component="form" onSubmit={handleAddFriend} noValidate>
             <Box
               m="auto"
               textAlign="center"
@@ -126,7 +131,7 @@ export default function Sidebar() {
             </Box>
             <Box textAlign="center">
               <Button
-                type = "submit"
+                type="submit"
                 variant="contained"
                 color="success"
                 size="small"
@@ -205,58 +210,62 @@ export default function Sidebar() {
           <Typography align="center" style={{ fontSize: "32px" }}>
             Join A Lobby
           </Typography>
-          <Box
-            m="auto"
-            textAlign="center"
-            style={{
-              border: "3px solid",
-              borderColor: "black",
-              color: "black",
-              backgroundColor: "white",
-              fontSize: "32px",
-              borderRadius: 40,
-              outline: "none",
-              width: "85%",
-            }}
-          >
-            <TextField
-              align="center"
-              id="lobbyCode"
-              label="Enter Lobby Code:"
-              autoFocus
-              variant="standard"
-              InputProps={{
-                disableUnderline: true,
-                style: {
-                  fontSize: 20,
-                  paddingLeft: 20,
-                  paddingBottom: 10,
-                },
-              }}
-              InputLabelProps={{
-                style: { fontSize: 30, paddingLeft: 20 },
-                shrink: true,
-              }}
-            />
-          </Box>
-          <Box textAlign="center">
-            <Button
-              variant="contained"
-              color="success"
-              size="small"
+          <Box component="form" onSubmit={handleLobbyJoin} noValidate>
+            <Box
+              m="auto"
+              textAlign="center"
               style={{
-                fontWeight: 600,
                 border: "3px solid",
                 borderColor: "black",
-                backgroundColor: "#46EC2B",
                 color: "black",
-                fontSize: "20px",
-                borderRadius: 20,
+                backgroundColor: "white",
+                fontSize: "32px",
+                borderRadius: 40,
+                outline: "none",
+                width: "85%",
               }}
-              sx={{ mt: 1, mb: 0.5, width: "25%" }}
             >
-              Join
-            </Button>
+              <TextField
+                align="center"
+                id="lobbyCode"
+                name="lobbyCode"
+                label="Enter Lobby Code:"
+                autoFocus
+                variant="standard"
+                InputProps={{
+                  disableUnderline: true,
+                  style: {
+                    fontSize: 20,
+                    paddingLeft: 20,
+                    paddingBottom: 10,
+                  },
+                }}
+                InputLabelProps={{
+                  style: { fontSize: 30, paddingLeft: 20 },
+                  shrink: true,
+                }}
+              />
+            </Box>
+            <Box textAlign="center">
+              <Button
+                type="submit"
+                variant="contained"
+                color="success"
+                size="small"
+                style={{
+                  fontWeight: 600,
+                  border: "3px solid",
+                  borderColor: "black",
+                  backgroundColor: "#46EC2B",
+                  color: "black",
+                  fontSize: "20px",
+                  borderRadius: 20,
+                }}
+                sx={{ mt: 1, mb: 0.5, width: "25%" }}
+              >
+                Join
+              </Button>
+            </Box>
           </Box>
         </Box>
       </ListItem>
@@ -373,7 +382,7 @@ export default function Sidebar() {
                 fontSize: "20px",
                 borderRadius: 20,
               }}
-              sx={{ ml:2,mb: 0.5, width: "25%" }}
+              sx={{ ml: 2, mb: 0.5, width: "25%" }}
             >
               Join
             </Button>
@@ -390,7 +399,7 @@ export default function Sidebar() {
                 fontSize: "20px",
                 borderRadius: 20,
               }}
-              sx={{ ml:2,mb: 0.5, width: "25%" }}
+              sx={{ ml: 2, mb: 0.5, width: "25%" }}
             >
               Reject
             </Button>
@@ -398,15 +407,15 @@ export default function Sidebar() {
         </Box>
       </ListItem>
       <div>
-      <Button onClick={handleClick}>Sample Invite</Button>
-      <Snackbar
-        open={open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        message="u/Roshan has invited you to the game"
-        action={action}
-      />
-    </div>
+        <Button onClick={handleClick}>Sample Invite</Button>
+        <Snackbar
+          open={open}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          message="u/Roshan has invited you to the game"
+          action={action}
+        />
+      </div>
     </List>
   );
 }
