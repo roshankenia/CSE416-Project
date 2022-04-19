@@ -18,6 +18,7 @@ export default function Sidebar() {
   const { auth } = useContext(AuthContext);
 
   const [open, setOpen] = React.useState(false);
+  const [gameInviteOpen, setGameInviteOpen] = React.useState(false);
 
   const handleClick = () => {
     setOpen(true);
@@ -29,6 +30,10 @@ export default function Sidebar() {
 
     setOpen(false);
   };
+
+  const handleJoin =(event,reason) => {
+    // Join game room logic here
+  }
 
   const handleAddFriend = (event)=>{
     event.preventDefault();
@@ -44,6 +49,7 @@ export default function Sidebar() {
 
   const action = (
     <React.Fragment>
+      {/* On click here will join the game lobby (button) */}
       <Button color="secondary" size="large" onClick={handleClose}>
         JOIN
       </Button>

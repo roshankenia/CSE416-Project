@@ -56,6 +56,7 @@ export default function LobbyScreen() {
       game.createNewGame();
     }
   };
+  
 
   //not implemented, should return a model
   const handleInvite = (event) => {
@@ -156,6 +157,11 @@ export default function LobbyScreen() {
       ))}
     </List>
   );
+
+  function sendGameInvite(event, receivedUser) {
+  
+    // Add logic to send the game 
+  }
 
   return (
     <Grid
