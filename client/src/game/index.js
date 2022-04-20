@@ -83,7 +83,7 @@ function GameContextProvider(props) {
       case GameActionType.JOIN_LOBBY: {
         return setGame({
           game: game.game,
-          lobby: payload.lobbyID,
+          lobby: payload.lobby,
           voting: game.voting,
           players: payload.players,
           readyPlayers: game.readyPlayers,
@@ -116,19 +116,26 @@ function GameContextProvider(props) {
   };
 
   useEffect(() => {
-    socket.on("new-player", async (username, lobbyID) => {
+    socket.on("disconnect", () => {
+      socket.removeAllListeners();
+    });
+
+    const newP = async (username, lobbyID) => {
       console.log("new player joined");
       let players = game.players;
-      players.push(username);
+      if (!players.includes(username)) {
+        players.push(username);
+      }
       gameReducer({
         type: GameActionType.UPDATE_PLAYERS,
         payload: players,
       });
 
       socket.emit("consolidate-players", players, lobbyID);
-    });
+    };
+    socket.once("new-player", newP);
 
-    socket.on("add-players", async (add, lobbyID) => {
+    const addP = async (add, lobbyID) => {
       console.log("adding all unknown players");
       let players = game.players;
       for (var i = 0; i < add.length; i++) {
@@ -141,9 +148,10 @@ function GameContextProvider(props) {
         type: GameActionType.UPDATE_PLAYERS,
         payload: players,
       });
-    });
+    };
+    socket.once("add-players", addP);
 
-    socket.on("remove-player", async (username, lobbyID) => {
+    const removeP = async (username, lobbyID) => {
       console.log("removing user", username);
       let players = game.players;
 
@@ -156,8 +164,16 @@ function GameContextProvider(props) {
         type: GameActionType.UPDATE_PLAYERS,
         payload: players,
       });
-    });
-  }, []);
+    };
+
+    socket.once("remove-player", removeP);
+
+    return () => {
+      socket.off("new-player", newP);
+      socket.off("add-players", addP);
+      socket.off("remove-player", removeP);
+    };
+  }, [game]);
 
   game.createNewGame = async function () {
     try {
@@ -184,11 +200,12 @@ function GameContextProvider(props) {
   game.leaveLobby = async function () {
     try {
       let lobbyID = game.lobby;
+      console.log("Leaving lobby:", lobbyID);
+      socket.emit("leave-lobby", auth.user.username, lobbyID);
       gameReducer({
         type: GameActionType.LEAVE_LOBBY,
         payload: null,
       });
-      socket.emit("leave-lobby", auth.user.username, lobbyID);
       history.push("/");
     } catch {
       console.log("Failed to leave lobby");
@@ -201,7 +218,7 @@ function GameContextProvider(props) {
       players.push(auth.user.username);
       gameReducer({
         type: GameActionType.JOIN_LOBBY,
-        payload: { lobbyID: lobbyID, players: players },
+        payload: { lobby: lobbyID, players: players },
       });
       history.push("/game/" + lobbyID);
     } catch {

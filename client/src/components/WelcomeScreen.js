@@ -3,6 +3,8 @@ import { GlobalCommunityContext } from "../community";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { useHistory } from "react-router-dom";
+
 //import { io} from "socket.io-client"
 
 //Testing websockets please leave
@@ -10,6 +12,21 @@ import Typography from "@mui/material/Typography";
 //const socket = io('http://localhost:3000')
 
 export default function WelcomeScreen() {
+  const history = useHistory();
+
+  const handleLogin = (event) => {
+    event.stopPropagation();
+    history.push("/login/");
+  };
+  const handleRegister = (event) => {
+    event.stopPropagation();
+    history.push("/register/");
+  };
+
+  const handleGuest = (event) => {
+    event.stopPropagation();
+    history.push("/guest/");
+  };
   return (
     <Box
       style={{ backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')" }}
@@ -30,7 +47,7 @@ export default function WelcomeScreen() {
             variant="contained"
             color="success"
             size="large"
-            href="/register/"
+            onClick={handleRegister}
             style={{
               fontWeight: 600,
               border: "3px solid",
@@ -49,7 +66,7 @@ export default function WelcomeScreen() {
             variant="contained"
             color="success"
             size="large"
-            href="/login/"
+            onClick={handleLogin}
             style={{
               fontWeight: 600,
               border: "3px solid",
@@ -68,7 +85,7 @@ export default function WelcomeScreen() {
             variant="contained"
             color="success"
             size="large"
-            href="/guest/"
+            onClick={handleGuest}
             style={{
               fontWeight: 600,
               border: "3px solid",
