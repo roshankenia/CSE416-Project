@@ -31,21 +31,22 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 // konva stuff
 import { Stage, Layer, Rect, Text, Circle, Line, Star } from "react-konva";
+import { BsEraserFill } from "react-icons/bs";
 
 export default function GameScreen() {
   const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
 
+  //#region css
+  const buttonCSS = {color:'black', fontSize:'40pt'}
+  //#endregion css
+
   //#region game control
 
-  //We would get this data from our game context in actual implementation
-  //This is just hardcoded for now
-  // THIS DATA SHOULD BE TAKEN FROM THE GAME OBJECT PASSED IN GameContext
+  //#region not-timer
   const roomCode = "imadethiscodeup";
   // ******* change gameMode as "story" or "comic" to get different game screens *******
   // const gameMode = "comic"
-  // WILL NOT BE IMPLEMENTED IN FINAL PROJECT
-  // SIMPLY USED FOR DEMONSTRATION PURPOSES
   const [gameMode, setGameMode] = useState(true);
   const handleGameMode = (event) => {
     event.stopPropagation();
@@ -96,9 +97,10 @@ export default function GameScreen() {
       },
     },
   }));
+  //#endregion not-timer
 
   //#region timer: some timer code i found online
-  const [seconds, setSeconds] = useState(10);
+  const [seconds, setSeconds] = useState(69420);
 
   React.useEffect(() => {
     let interval = null;
@@ -116,13 +118,18 @@ export default function GameScreen() {
       }
     }
     return () => clearInterval(interval);
-  });
+  },[]);
+  //#endregion timer
 
+  //probably most important function
   const handleSubmit = (event) => {
+    console.log('hihihihih')
     event.preventDefault();
+    let imageData = stageRef.current.toDataURL();
+    console.log(imageData)
     setTimeout(() => setSeconds(0), 1000);
   };
-  //#endregion timer
+
 
   //#endregion game control
 
@@ -130,6 +137,7 @@ export default function GameScreen() {
   const [tool, setTool] = React.useState("pen");
   const [lines, setLines] = React.useState([]);
   const isDrawing = React.useRef(false);
+  const stageRef = React.useRef(null);
 
   const handleMouseDown = (e) => {
     isDrawing.current = true;
@@ -156,6 +164,8 @@ export default function GameScreen() {
   const handleMouseUp = () => {
     isDrawing.current = false;
   };
+
+  
   //#endregion
 
   //#region game elements to render
@@ -190,9 +200,7 @@ export default function GameScreen() {
     </Typography>
   );
 
-  {
-    /* List of current panels drawn goes here */
-  }
+  /* List of current panels drawn goes here */
   const gamePanels = (
     <List style={flexContainer}>
       <Box
@@ -348,14 +356,15 @@ export default function GameScreen() {
               border: 3,
             }}
           >
-            <EditIcon fontSize="large" />
-            <BrushIcon fontSize="large" />
-            <FormatColorFillIcon fontSize="large" />
+            <Button sx={buttonCSS} onClick={(e) => {setTool('pen');}}><EditIcon fontSize="large" /></Button>
+            <Button sx={buttonCSS} onClick={(e) => {setTool('pen');}}><BrushIcon fontSize="large" /></Button>
+            <Button sx={buttonCSS} onClick={(e) => {setTool('eraser');}}><BsEraserFill fontSize="large" /></Button>
+            {/* <FormatColorFillIcon fontSize="large" />
             <ImageSearchIcon fontSize="large" />
             <OpenInFullIcon fontSize="large" />
             <TextFormatIcon fontSize="large" />
             <ColorizeIcon fontSize="large" />
-            <ClearIcon fontSize="large" />
+            <ClearIcon fontSize="large" /> */}
           </Box>
         </List>
       ) : (
@@ -364,9 +373,9 @@ export default function GameScreen() {
     </Grid>
   );
 
-  {
-    /* Drawing/Writing Canvas */
-  }
+  /* Drawing/Writing Canvas */
+
+
   let gameWorkSpace = "";
   if (gameMode) {
     gameWorkSpace = (
@@ -379,41 +388,32 @@ export default function GameScreen() {
             border: 3,
           }}
         >
-          <div>
-            <Stage
-              width={window.innerWidth}
-              height={window.innerHeight}
-              onMouseDown={handleMouseDown}
-              onMousemove={handleMouseMove}
-              onMouseup={handleMouseUp}
-            >
-              <Layer>
-                <Text text="Just start drawing" x={5} y={30} />
-                {lines.map((line, i) => (
-                  <Line
-                    key={i}
-                    points={line.points}
-                    stroke="#df4b26"
-                    strokeWidth={5}
-                    tension={0.5}
-                    lineCap="round"
-                    globalCompositeOperation={
-                      line.tool === "eraser" ? "destination-out" : "source-over"
-                    }
-                  />
-                ))}
-              </Layer>
-            </Stage>
-            <select
-              value={tool}
-              onChange={(e) => {
-                setTool(e.target.value);
-              }}
-            >
-              <option value="pen">Pen</option>
-              <option value="eraser">Eraser</option>
-            </select>
-          </div>
+
+          <Stage
+      width={600}
+      height={600}
+      onMouseDown={handleMouseDown}
+      onMousemove={handleMouseMove}
+      onMouseup={handleMouseUp}
+      ref={stageRef}
+      >
+      <Layer>
+        <Text text="Starts drawing here" x={5} y={30} />
+        {lines.map((line, i) => (
+          <Line
+            key={i}
+            points={line.points}
+            stroke="#df4b26"
+            strokeWidth={5}
+            tension={0.5}
+            lineCap="round"
+            globalCompositeOperation={
+              line.tool === "eraser" ? "destination-out" : "source-over"
+            }
+          />
+        ))}
+      </Layer>
+      </Stage>
         </Box>
       </Grid>
     );
@@ -484,6 +484,7 @@ export default function GameScreen() {
     );
   }
 
+  //right handside buttons
   let gameUtils = "";
   if (gameMode) {
     gameUtils = (
@@ -588,6 +589,7 @@ export default function GameScreen() {
         </Button>
         <Button
           sx={{
+            
             width: 450,
             height: 75,
             margin: 1,
@@ -600,7 +602,7 @@ export default function GameScreen() {
             border: 3,
             color: "black",
           }}
-          onClick={handleSubmit}
+           onClick={handleSubmit}
         >
           <Typography fontSize={"32px"}>Submit</Typography>
         </Button>
@@ -758,6 +760,8 @@ export default function GameScreen() {
   );
   //#endregion
     
+
+
   return (
     <Grid
     container
