@@ -144,8 +144,8 @@ io.on("connection", (socket) => {
     var WinnerCountdown = setInterval(function(){
     console.log(username, "TESTING TIME", counter,lobbyID);
     io.to(lobbyID).emit("counter", counter);
-    io.to(lobbyID).emit("count1", {count: counter});
-    io.to(lobbyID).emit("count2");
+    // io.to(lobbyID).emit("count1", {count: counter});
+    // io.to(lobbyID).emit("count2");
     counter--
       if (counter === 0) {
         console.log("counter hit 0")
