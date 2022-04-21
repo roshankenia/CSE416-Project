@@ -65,6 +65,53 @@ export default function LobbyScreen() {
     }
   };
 
+  let startButton = (
+    <Button
+      disabled={true}
+      variant="contained"
+      color="success"
+      size="small"
+      align="center"
+      onClick={(event) => handleStartGame(event)}
+      style={{
+        fontWeight: 600,
+        border: "3px solid",
+        borderColor: "black",
+        backgroundColor: "green",
+        color: "black",
+        fontSize: "30px",
+        borderRadius: 20,
+        opacity: 0.3,
+      }}
+      sx={{ ml: 3, mt: 2, width: "30%", height: "40px" }}
+    >
+      Start
+    </Button>
+  );
+  if (auth.user.username == game.host) {
+    startButton = (
+      <Button
+        variant="contained"
+        color="success"
+        size="small"
+        align="center"
+        onClick={(event) => handleStartGame(event)}
+        style={{
+          fontWeight: 600,
+          border: "3px solid",
+          borderColor: "black",
+          backgroundColor: "green",
+          color: "black",
+          fontSize: "30px",
+          borderRadius: 20,
+        }}
+        sx={{ ml: 3, mt: 2, width: "30%", height: "40px" }}
+      >
+        Start
+      </Button>
+    );
+  }
+
   let lobbyTable = (
     <TableBody>
       {game.players.map((username) => (
@@ -350,25 +397,7 @@ export default function LobbyScreen() {
               >
                 Ready Up
               </Button>
-              <Button
-                variant="contained"
-                color="success"
-                size="small"
-                align="center"
-                onClick={(event) => handleStartGame(event)}
-                style={{
-                  fontWeight: 600,
-                  border: "3px solid",
-                  borderColor: "black",
-                  backgroundColor: "green",
-                  color: "black",
-                  fontSize: "30px",
-                  borderRadius: 20,
-                }}
-                sx={{ ml: 3, mt: 2, width: "30%", height: "40px" }}
-              >
-                Start
-              </Button>
+              {startButton}
             </ListItem>
           </Box>
         </List>
