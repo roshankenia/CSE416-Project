@@ -131,4 +131,9 @@ io.on("connection", (socket) => {
     socket.leave(lobbyID);
     socket.to(lobbyID).emit("remove-player", username, lobbyID);
   });
+
+  socket.on("readyOrUnready", (username, lobbyID) => {
+    console.log(username, "is readying or unreadying");
+    socket.to(lobbyID).emit("playerReady", username);
+  });
 });
