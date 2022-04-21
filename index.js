@@ -121,9 +121,9 @@ io.on("connection", (socket) => {
     socket.to(lobbyID).emit("new-player", username, lobbyID);
   });
 
-  socket.on("consolidate-players", (players, lobbyID) => {
+  socket.on("consolidate-players", (players, readyPlayers, lobbyID) => {
     console.log("sending players to users in lobby ", lobbyID);
-    socket.to(lobbyID).emit("add-players", players, lobbyID);
+    socket.to(lobbyID).emit("add-players", players, readyPlayers, lobbyID);
   });
 
   socket.on("leave-lobby", (username, lobbyID) => {
@@ -132,8 +132,8 @@ io.on("connection", (socket) => {
     socket.to(lobbyID).emit("remove-player", username, lobbyID);
   });
 
-  socket.on("readyOrUnready", (username, lobbyID) => {
+  socket.on("ready-unready", (username, lobbyID) => {
     console.log(username, "is readying or unreadying");
-    socket.to(lobbyID).emit("playerReady", username);
+    socket.to(lobbyID).emit("player-ready", username);
   });
 });
