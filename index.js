@@ -147,7 +147,7 @@ io.on("connection", (socket) => {
     // io.to(lobbyID).emit("count1", {count: counter});
     // io.to(lobbyID).emit("count2");
     counter--
-      if (counter === 0) {
+      if (counter <= 0) {
         console.log("counter hit 0")
         socket.to(lobbyID).emit("end-time");
         clearInterval(WinnerCountdown);
