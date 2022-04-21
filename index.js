@@ -137,20 +137,23 @@ io.on("connection", (socket) => {
     socket.to(lobbyID).emit("player-ready", username);
   });
 
-  socket.on("timer", (username, time, lobbyID) => {
-    var counter = time
-    var WinnerCountdown = setInterval(function(){
+
+  const emitCounter = function(username, counter, lobbyID){
     console.log(username, "TESTING TIME", counter,lobbyID);
-    socket.to(lobbyID).emit("counter", counter);
-    socket.to(lobbyID).emit("count1", {count: counter});
-    socket.to(lobbyID).emit("count2");
+    io.to(lobbyID).emit("counter", counter);
+    io.to(lobbyID).emit("count1", {count: counter});
+    io.to(lobbyID).emit("count2");
     counter--
       if (counter === 0) {
         console.log("counter hit 0")
         socket.to(lobbyID).emit("end-time");
         clearInterval(WinnerCountdown);
       }
-    }, 1000);
+  }
+
+  socket.on("timer", (username, time, lobbyID) => {
+    var counter = time
+    var WinnerCountdown = setInterval(emitCounter(username, counter,  lobbyID), 1000);
   });
 
 
