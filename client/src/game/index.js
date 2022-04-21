@@ -15,6 +15,7 @@ export const GameActionType = {
   JOIN_LOBBY: "JOIN_LOBBY",
   UPDATE_PLAYERS: "UPDATE_PLAYERS",
   LEAVE_LOBBY: "LEAVE_LOBBY",
+  ADD_READY: "ADD_READY",
 };
 
 function GameContextProvider(props) {
@@ -95,8 +96,8 @@ function GameContextProvider(props) {
           game: game.game,
           lobby: game.lobby,
           voting: game.voting,
-          players: payload,
-          readyPlayers: game.readyPlayers,
+          players: payload.players,
+          readyPlayers: payload.readyPlayers,
           screen: game.screen,
         });
       }
@@ -107,6 +108,16 @@ function GameContextProvider(props) {
           voting: game.voting,
           players: [],
           readyPlayers: [],
+          screen: game.screen,
+        });
+      }
+      case GameActionType.ADD_READY: {
+        return setGame({
+          game: game.game,
+          lobby: game.lobby,
+          voting: game.voting,
+          players: game.players,
+          readyPlayers: payload,
           screen: game.screen,
         });
       }
@@ -128,25 +139,36 @@ function GameContextProvider(props) {
       }
       gameReducer({
         type: GameActionType.UPDATE_PLAYERS,
-        payload: players,
+        payload: { players: players, readyPlayers: game.readyPlayers },
       });
 
-      socket.emit("consolidate-players", players, lobbyID);
+      let readyPlayers = game.readyPlayers;
+
+      socket.emit("consolidate-players", players, readyPlayers, lobbyID);
     };
     socket.once("new-player", newP);
 
-    const addP = async (add, lobbyID) => {
+    const addP = async (addPlayer, addReady, lobbyID) => {
       console.log("adding all unknown players");
       let players = game.players;
-      for (var i = 0; i < add.length; i++) {
-        let a = add[i];
+      for (var i = 0; i < addPlayer.length; i++) {
+        let a = addPlayer[i];
         if (!players.includes(a)) {
           players.push(a);
         }
       }
+
+      let readyPlayers = game.readyPlayers;
+      for (var i = 0; i < addReady.length; i++) {
+        let a = addReady[i];
+        if (!readyPlayers.includes(a)) {
+          readyPlayers.push(a);
+        }
+      }
+
       gameReducer({
         type: GameActionType.UPDATE_PLAYERS,
-        payload: players,
+        payload: { players: players, readyPlayers: readyPlayers },
       });
     };
     socket.once("add-players", addP);
@@ -160,21 +182,60 @@ function GameContextProvider(props) {
         players.splice(index, 1);
       }
 
+      let readyPlayers = game.readyPlayers;
+      const readyIndex = readyPlayers.indexOf(username);
+      if (readyIndex > -1) {
+        readyPlayers.splice(index, 1);
+      }
+
       gameReducer({
         type: GameActionType.UPDATE_PLAYERS,
-        payload: players,
+        payload: { players: players, readyPlayers: readyPlayers },
       });
     };
 
     socket.once("remove-player", removeP);
 
+    const readyP = async (username) => {
+      let readyPlayers = game.readyPlayers;
+      console.log("trying to ready a player");
+      if (!readyPlayers.includes(username)) {
+        console.log("readying", username);
+        readyPlayers.push(username);
+      } else {
+        console.log("unreadying", username);
+        readyPlayers.splice(readyPlayers.indexOf(username), 1);
+      }
+      gameReducer({
+        type: GameActionType.ADD_READY,
+        payload: readyPlayers,
+      });
+    };
+
+    socket.once("player-ready", readyP);
+
     return () => {
       socket.off("new-player", newP);
       socket.off("add-players", addP);
       socket.off("remove-player", removeP);
+      socket.off("player-ready", readyP);
     };
   }, [game]);
 
+  game.readyUp = async function () {
+    let readyPlayers = game.readyPlayers;
+    if (!readyPlayers.includes(auth.user.username)) {
+      readyPlayers.push(auth.user.username);
+    } else {
+      readyPlayers.splice(readyPlayers.indexOf(auth.user.username), 1);
+    }
+    gameReducer({
+      type: GameActionType.ADD_READY,
+      payload: readyPlayers,
+    });
+
+    socket.emit("ready-unready", auth.user.username, game.lobby);
+  };
   game.createNewGame = async function () {
     try {
       let id = "madeupgameid";

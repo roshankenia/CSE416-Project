@@ -35,28 +35,9 @@ export default function LobbyScreen() {
 
   const users = [auth.user.username, "Terran", "someone", "$_$", "another"];
 
-  const [inlobby, setInLobby] = useState([
-    { position: 1, username: users[0], host: true, ready: false },
-    { position: 2, username: "u/Terran", host: false, ready: true },
-    { position: 3, username: "xx", host: false, ready: true },
-    { position: 4, username: "zz", host: false, ready: true },
-  ]);
-
-  const [, updateState] = React.useState();
-  const forceUpdate = React.useCallback(() => updateState({}), []);
-
   const handleStartGame = (event) => {
-    let ready = 1;
-    for (let i = 0; i < inlobby.length; i++) {
-      if (inlobby[i].ready == false) {
-        ready = 0;
-      }
-    }
-    if (ready) {
-      game.createNewGame();
-    }
+    game.createNewGame();
   };
-  
 
   //not implemented, should return a model
   const handleInvite = (event) => {
@@ -65,6 +46,18 @@ export default function LobbyScreen() {
 
   const handleLeave = (event) => {
     game.leaveLobby();
+  };
+  const handleToggleReady = (event) => {
+    game.readyUp();
+  };
+
+  const isReady = (username) => {
+    console.log("ready users:", game.readyPlayers);
+    if (game.readyPlayers.includes(username)) {
+      return "Ready";
+    } else {
+      return "Not Ready";
+    }
   };
 
   let lobbyTable = (
@@ -78,32 +71,13 @@ export default function LobbyScreen() {
           <TableCell align="left" style={{ fontSize: "48px" }}>
             {username}
           </TableCell>
-          {/* <TableCell align="left" style={{ fontSize: "48px" }}>
-            {user.ready && (
-              <Typography style={{ fontSize: "48px" }}>Ready!</Typography>
-            )}
-          </TableCell> */}
+          <TableCell align="left" style={{ fontSize: "48px" }}>
+            {isReady(username)}
+          </TableCell>
         </TableRow>
       ))}
     </TableBody>
   );
-
-  const handleToggleReady = (event) => {
-    let newlobby = inlobby;
-    for (let i = 0; i < inlobby.length; i++) {
-      console.log(inlobby[i].ready);
-      if (inlobby[i].username == auth.user.username) {
-        newlobby[i].ready = !inlobby[i].ready;
-      }
-    }
-    setInLobby(newlobby);
-    forceUpdate();
-  };
-
-  //does nothing
-  const nothing = (event) => {
-    console.log("nothing");
-  };
 
   let userCard = (
     <List sx={{ width: "100%" }}>
@@ -159,8 +133,7 @@ export default function LobbyScreen() {
   );
 
   function sendGameInvite(event, receivedUser) {
-  
-    // Add logic to send the game 
+    // Add logic to send the game
   }
 
   return (
@@ -324,12 +297,11 @@ export default function LobbyScreen() {
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableHead>
                     <TableRow>
-                      <TableCell align="left"></TableCell>
                       <TableCell align="left" style={{ fontSize: "48px" }}>
-                        #
+                        Username
                       </TableCell>
                       <TableCell align="left" style={{ fontSize: "48px" }}>
-                        Name
+                        Ready?
                       </TableCell>
                       <TableCell align="left"></TableCell>
                     </TableRow>
