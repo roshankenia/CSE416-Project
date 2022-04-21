@@ -34,11 +34,11 @@ export default function LobbyScreen() {
   const users = [auth.user.username, "Terran", "someone", "$_$", "another"];
 
   //TODO make input for setting time 
-  const handleSetTimer =(event, timer) =>{
+  const handleSetTimer =(event, ) =>{
     const data = new FormData(event.currentTarget);
     event.preventDefault();
     console.log("setting the timer for the game", data.get("timer"), game.lobby)
-    game.setTimer(timer,game.lobby);
+    game.setTimer(data.get("timer"),game.lobby);
   }
 
   const handleStartGame = (event) => {

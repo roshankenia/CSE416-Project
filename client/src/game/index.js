@@ -263,7 +263,7 @@ function GameContextProvider(props) {
 
     //TODO
     const counter = async (count)=>{
-      console.log(count)
+      console.log("inside the counter" ,count)
       $('#timer').append(count + '<br /><br />');
       gameReducer({
         type: GameActionType.CREATE_NEW_GAME,
@@ -409,9 +409,9 @@ function GameContextProvider(props) {
     }
   };
 
-  //TIMER CODE
+  //TIMER CODE- make sure time only starts when start game happens
   game.setTimer = async function(time, lobbyID){
-    console.log("inside game.setTimer");
+    console.log("inside game.setTimer", time);
     socket.emit("timer", auth.user.username, time, lobbyID);
   };
 
