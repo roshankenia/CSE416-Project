@@ -20,6 +20,7 @@ export const AuthActionType = {
   CREATE_GUEST: "CREATE_GUEST",
   SEARCH_USERS: "SEARCH_USERS",
   SET_FRIENDS_AND_REQUESTS: "SET_FRIENDS_AND_REQUESTS",
+  UPDATE_BIO: "UPDATE_BIO"
 };
 
 function AuthContextProvider(props) {
@@ -162,6 +163,17 @@ function AuthContextProvider(props) {
           searchUsers: auth.searchUsers,
           friends: payload.friends,
           friendRequests: payload.friendRequests,
+        });
+      }
+      case AuthActionType.UPDATE_BIO: {
+        return setAuth({
+          user: payload.user,
+          loggedIn: true,
+          errorMessage: auth.errorMessage,
+          isGuest: auth.isGuest,
+          searchUsers: auth.searchUsers,
+          friends: auth.friends,
+          friendRequests: auth.friendRequests,
         });
       }
       default:
@@ -409,6 +421,31 @@ function AuthContextProvider(props) {
       return false
     }
   };
+
+  auth.updateBio = async function (
+    username,
+    bio
+  ) {
+    try {
+      const response = await api.updateBio(
+        username,
+        bio
+      )
+      if (response.status === 200){
+        authReducer({
+          type: AuthActionType.UPDATE_BIO,
+          payload: {
+            user: response.data.user
+          }
+        })
+        return true;
+      } 
+    } catch (error) {
+      console.log(error.response.data.errorMessage);
+      auth.setErrorMessage(error.response.data.errorMessage);
+      return false;
+    }
+  }
 
   auth.changePassword = async function (
     username,
