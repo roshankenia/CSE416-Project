@@ -136,4 +136,9 @@ io.on("connection", (socket) => {
     console.log(username, "is readying or unreadying");
     socket.to(lobbyID).emit("player-ready", username);
   });
+
+  socket.on("update-host", (host, lobbyID) => {
+    console.log("sending host:", host);
+    socket.to(lobbyID).emit("add-host", host);
+  });
 });
