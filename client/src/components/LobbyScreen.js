@@ -31,8 +31,6 @@ export default function LobbyScreen() {
 
   const history = useHistory();
 
-  const roomCode = "imadethiscodeup";
-
   const users = [auth.user.username, "Terran", "someone", "$_$", "another"];
 
   const handleStartGame = (event) => {
@@ -51,8 +49,15 @@ export default function LobbyScreen() {
     game.readyUp();
   };
 
+  const isHost = (username) => {
+    if (username == game.host) {
+      return username + " (Host)";
+    } else {
+      return username;
+    }
+  };
+
   const isReady = (username) => {
-    console.log("ready users:", game.readyPlayers);
     if (game.readyPlayers.includes(username)) {
       return "Ready";
     } else {
@@ -69,7 +74,7 @@ export default function LobbyScreen() {
             {user.position}
           </TableCell> */}
           <TableCell align="left" style={{ fontSize: "48px" }}>
-            {username}
+            {isHost(username)}
           </TableCell>
           <TableCell align="left" style={{ fontSize: "48px" }}>
             {isReady(username)}
@@ -167,12 +172,7 @@ export default function LobbyScreen() {
           >
             <ListItem key="room_code" align="center">
               <Typography align="center" style={{ fontSize: "32px" }}>
-                Room Code
-              </Typography>
-            </ListItem>
-            <ListItem key="_id" align="center">
-              <Typography align="center" style={{ fontSize: "32px" }}>
-                #{roomCode}
+                Room Code #{game.lobby}
               </Typography>
             </ListItem>
             <ListItem key="invite">
