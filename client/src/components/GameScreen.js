@@ -137,9 +137,11 @@ export default function GameScreen() {
       width: "75%",
       height: 400
     }}>
-    <div
-    id = "timer">
-      
+    <div>
+      <textarea id = "timer"
+      placeholder="Timer Place Holder">
+
+      </textarea>
       
     </div>
     </Box>

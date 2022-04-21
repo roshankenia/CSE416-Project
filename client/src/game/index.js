@@ -261,10 +261,13 @@ function GameContextProvider(props) {
 
     socket.once("player-ready", readyP);
 
-    //TODO
-    const counter = async (count)=>{
+    //TODO create another game action type?
+    const countDown = async (count)=>{
+      const display = document.getElementById('timer')
       console.log("inside the counter" ,count)
-      $('#timer').append(count + '<br /><br />');
+      // $('#timer').append(count + '<br /><br />');
+      // $('#timer').append($('<li>').text(count));
+      display.value = count
       gameReducer({
         type: GameActionType.CREATE_NEW_GAME,
         timer: count
@@ -274,14 +277,14 @@ function GameContextProvider(props) {
     // socket.on('counter', function(count){
     //   $('#timer').append($('<li>').text(count));
     // });
-    socket.on('counter', counter);
+    socket.once('counter', countDown);
 
     return () => {
       socket.off("new-player", newP);
       socket.off("add-players", addP);
       socket.off("remove-player", removeP);
       socket.off("player-ready", readyP);
-      socket.off("counter", counter)
+      socket.off("counter", countDown)
       socket.off("add-host", addH);
     };
   }, [game]);

@@ -145,6 +145,7 @@ io.on("connection", (socket) => {
       socket.to(lobbyID).emit('counter', counter);
       counter--
       if (counter === 0) {
+        console.log("counter hit 0")
         socket.to(lobbyID).emit('end-time', "Congratulations You WON!!");
         clearInterval(WinnerCountdown);
       }

@@ -118,6 +118,14 @@ export default function LobbyScreen() {
         set Timer
         </Button>
       </Box>
+
+      <div>
+      <textarea id = "timer"
+      placeholder="Timer Place Holder">
+
+      </textarea>
+      
+    </div>
     </Box>
   );
 
