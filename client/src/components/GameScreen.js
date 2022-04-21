@@ -121,32 +121,6 @@ export default function GameScreen() {
   },[]);
   //#endregion timer
   
-//TODO replace the region Timer
-  let timer = (
-    <Box
-    justifyContent="center"
-    alignItems="center"
-    style={{
-      border: "3px solid",
-      borderColor: "black",
-      color: "black",
-      backgroundColor: "#E39090",
-      fontSize: "20px",
-      outline: "none",
-      borderRadius: 20,
-      width: "75%",
-      height: 400
-    }}>
-    <div>
-      <textarea id = "timer"
-      placeholder="Timer Place Holder">
-
-      </textarea>
-      
-    </div>
-    </Box>
-  );
-
   //probably most important function
   const handleSubmit = (event) => {
     console.log('hihihihih')
@@ -526,7 +500,7 @@ export default function GameScreen() {
             color: "black",
           }}
         >
-          <Typography fontSize={"32px"}>Time Left: </Typography>
+          <Typography fontSize={"32px"}>Time Left: {game.timer}</Typography>
           
         </Button>
         <Button
@@ -653,7 +627,7 @@ export default function GameScreen() {
             color: "black",
           }}
         >
-          <Typography fontSize={"32px"}>Time Left: {seconds}</Typography>
+          <Typography fontSize={"32px"}>Time Left: {game.timer}</Typography>
         </Button>
         <Button
           sx={{
@@ -763,7 +737,7 @@ export default function GameScreen() {
           color: "black",
         }}
       >
-        <Typography fontSize={"32px"}>Time Left: {seconds}</Typography>
+        <Typography fontSize={"32px"}>Time Left: {game.timer}</Typography>
       </Button>
 
       <Button
@@ -805,7 +779,6 @@ export default function GameScreen() {
         <Grid item xs="12" align="center">
             {gameModeButton}
             {gameCurrentPlayer}
-            {timer}
             {/* List of current panels drawn goes here */}
             {gamePanels}
             {/* Bottom half of screen */}

@@ -18,6 +18,7 @@ export const GameActionType = {
   LEAVE_LOBBY: "LEAVE_LOBBY",
   ADD_READY: "ADD_READY",
   ADD_HOST: "ADD_HOST",
+  UPDATE_TIMER: "UPDATE_TIMER"
 };
 
 function GameContextProvider(props) {
@@ -55,6 +56,18 @@ function GameContextProvider(props) {
           screen: "lobby",
           timer: null,
           host: auth.user.username,
+        });
+      }
+      case GameActionType.UPDATE_TIMER: {
+        return setGame({
+          game: game.game,
+          lobby: game.lobby,
+          voting: game.voting,
+          players: game.players,
+          readyPlayers: game.readyPlayers,
+          screen: game.screen,
+          timer: payload,
+          host: game.host,
         });
       }
       case GameActionType.CREATE_NEW_GAME: {
@@ -263,21 +276,24 @@ function GameContextProvider(props) {
 
     //TODO create another game action type?
     const countDown = async (count)=>{
-      const display = document.getElementById('timer')
+      // const display = document.getElementById('timer')
       console.log("inside the counter" ,count)
       // $('#timer').append(count + '<br /><br />');
       // $('#timer').append($('<li>').text(count));
-      display.value = count
+      // display.value = count
       gameReducer({
-        type: GameActionType.CREATE_NEW_GAME,
-        timer: count
+        type: GameActionType.UPDATE_TIMER,
+        payload: count
       });
-
     };
-    // socket.on('counter', function(count){
-    //   $('#timer').append($('<li>').text(count));
+
+    socket.once("counter", countDown);
+
+    // socket.on("count1", function(data){
+    //   console.log(data.count)
     // });
-    socket.once('counter', countDown);
+
+    // socket.on("count2", console.log("made it here !!!"));
 
     return () => {
       socket.off("new-player", newP);
@@ -286,6 +302,7 @@ function GameContextProvider(props) {
       socket.off("player-ready", readyP);
       socket.off("counter", countDown)
       socket.off("add-host", addH);
+      // socket.off('count1');
     };
   }, [game]);
 
@@ -413,9 +430,9 @@ function GameContextProvider(props) {
   };
 
   //TIMER CODE- make sure time only starts when start game happens
-  game.setTimer = async function(time, lobbyID){
+  game.setTimer = async function(time){
     console.log("inside game.setTimer", time);
-    socket.emit("timer", auth.user.username, time, lobbyID);
+    socket.emit("timer", auth.user.username, time, game.lobby);
   };
 
   return (

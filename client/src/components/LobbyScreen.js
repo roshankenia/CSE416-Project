@@ -37,8 +37,20 @@ export default function LobbyScreen() {
   const handleSetTimer =(event, ) =>{
     const data = new FormData(event.currentTarget);
     event.preventDefault();
-    console.log("setting the timer for the game", data.get("timer"), game.lobby)
-    game.setTimer(data.get("timer"),game.lobby);
+    console.log("setting the timer for the game", data.get("timer"))
+    try{
+      const intTimer = parseInt(data.get("timer")) 
+      if(Number.isInteger(intTimer)){
+        game.setTimer(intTimer);
+      }
+      else{
+        console.log(data.get("timer"), "Not an integer");
+      }
+    }
+    catch{
+      console.log("Not an int")
+    }
+    
   }
 
   const handleStartGame = (event) => {
@@ -119,11 +131,10 @@ export default function LobbyScreen() {
         </Button>
       </Box>
 
-      <div>
-      <textarea id = "timer"
+      <div id = "timer"
       placeholder="Timer Place Holder">
 
-      </textarea>
+     
       
     </div>
     </Box>
