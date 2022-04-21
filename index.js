@@ -136,4 +136,18 @@ io.on("connection", (socket) => {
     console.log(username, "is readying or unreadying");
     socket.to(lobbyID).emit("player-ready", username);
   });
+
+  socket.on("timer", (username, time, lobbyID) => {
+    console.log(username, "TESTING TIME", time);
+    var WinnerCountdown = setInterval(function(){
+      socket.to(lobbyID).emit('counter', counter);
+      counter--
+      if (counter === 0) {
+        socket.to(lobbyID).emit('end-time', "Congratulations You WON!!");
+        clearInterval(WinnerCountdown);
+      }
+    }, 1000);
+  });
+
+
 });

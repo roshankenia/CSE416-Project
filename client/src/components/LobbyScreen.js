@@ -35,6 +35,14 @@ export default function LobbyScreen() {
 
   const users = [auth.user.username, "Terran", "someone", "$_$", "another"];
 
+  //TODO make input for setting time lobbyID = roomCode
+  const handleSetTimer =(event, timer, lobbyID) =>{
+    const data = new FormData(event.currentTarget);
+    event.preventDefault();
+    console.log("setting the timer for the game", data.get("timer"), roomCode)
+    game.setTimer(timer,roomCode);
+  }
+
   const handleStartGame = (event) => {
     game.createNewGame();
   };
@@ -59,6 +67,56 @@ export default function LobbyScreen() {
       return "Not Ready";
     }
   };
+
+  let timerInput = (
+    <Box component="form" onSubmit={handleSetTimer} noValidate>
+      
+      <Box>
+        <TextField 
+        align="center"
+        id="timer"
+        name="timer"
+        label="Time in Seconds:"
+        autoFocus
+        variant="standard"
+        InputProps={{
+          disableUnderline: true,
+          style: {
+            fontSize: 20,
+            paddingLeft: 20,
+            paddingBottom: 10,
+          },
+        }}
+        InputLabelProps={{
+          style: { fontSize: 30, paddingLeft: 20 },
+          shrink: true,
+        }}
+        />
+      </Box>
+      <Box textAlign="center">
+        <Button
+          type="submit"
+          variant="contained"
+          color="success"
+          size="small"    
+          style={{
+            fontWeight: 600,
+            border: "3px solid",
+            borderColor: "black",
+            backgroundColor: "#46EC2B",
+            color: "black",
+            fontSize: "20px",
+            borderRadius: 20,
+          }}
+          sx={{ mt: 1, mb: 0.5, width: "25%" }}
+        >
+        set Timer
+        </Button>
+      </Box>
+    </Box>
+        
+    
+  );
 
   let lobbyTable = (
     <TableBody>
@@ -291,6 +349,7 @@ export default function LobbyScreen() {
               width: "75%",
             }}
           >
+            {timerInput}
             {/* This is the table */}
             <ListItem key="inlobby">
               <TableContainer>

@@ -33,6 +33,7 @@ function GameContextProvider(props) {
     players: [],
     readyPlayers: [],
     screen: "lobby",
+    timer: null
   });
   const history = useHistory();
 
@@ -49,6 +50,7 @@ function GameContextProvider(props) {
           players: game.players,
           readyPlayers: game.readyPlayers,
           screen: "lobby",
+          timer: null
         });
       }
       case GameActionType.CREATE_NEW_GAME: {
@@ -59,6 +61,7 @@ function GameContextProvider(props) {
           players: game.players,
           readyPlayers: game.readyPlayers,
           screen: "game",
+          timer: game.timer
         });
       }
       case GameActionType.ENTER_VOTING: {
@@ -69,6 +72,7 @@ function GameContextProvider(props) {
           players: game.players,
           readyPlayers: game.readyPlayers,
           screen: "voting",
+          timer: 60
         });
       }
       case GameActionType.EXIT_VOTING: {
@@ -79,6 +83,7 @@ function GameContextProvider(props) {
           players: game.players,
           readyPlayers: game.readyPlayers,
           screen: "lobby",
+          timer: null
         });
       }
       case GameActionType.JOIN_LOBBY: {
@@ -89,6 +94,7 @@ function GameContextProvider(props) {
           players: payload.players,
           readyPlayers: game.readyPlayers,
           screen: "lobby",
+          timer: null
         });
       }
       case GameActionType.UPDATE_PLAYERS: {
@@ -99,6 +105,7 @@ function GameContextProvider(props) {
           players: payload.players,
           readyPlayers: payload.readyPlayers,
           screen: game.screen,
+          timer: null
         });
       }
       case GameActionType.LEAVE_LOBBY: {
@@ -109,6 +116,7 @@ function GameContextProvider(props) {
           players: [],
           readyPlayers: [],
           screen: game.screen,
+          timer: null
         });
       }
       case GameActionType.ADD_READY: {
@@ -119,6 +127,7 @@ function GameContextProvider(props) {
           players: game.players,
           readyPlayers: payload,
           screen: game.screen,
+          timer: null
         });
       }
       default:
@@ -214,11 +223,22 @@ function GameContextProvider(props) {
 
     socket.once("player-ready", readyP);
 
+    //TODO
+    const counter = async (count)=>{
+      gameReducer({
+        type: GameActionType.CREATE_NEW_GAME,
+        timer: count
+      });
+
+    };
+    socket.on('counter', counter);
+
     return () => {
       socket.off("new-player", newP);
       socket.off("add-players", addP);
       socket.off("remove-player", removeP);
       socket.off("player-ready", readyP);
+      socket.off("counter", counter)
     };
   }, [game]);
 
@@ -339,6 +359,11 @@ function GameContextProvider(props) {
     } catch {
       console.log("error buddy");
     }
+  };
+
+  //TIMER CODE
+  game.setTimer = async function(lobbyID, time){
+    socket.emit("timer", auth.user.username, time, lobbyID);
   };
 
   return (

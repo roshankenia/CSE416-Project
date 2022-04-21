@@ -100,7 +100,7 @@ export default function GameScreen() {
   //#endregion not-timer
 
   //#region timer: some timer code i found online
-  const [seconds, setSeconds] = useState(69420);
+  const [seconds, setSeconds] = useState(game.timer);
 
   React.useEffect(() => {
     let interval = null;
@@ -120,6 +120,13 @@ export default function GameScreen() {
     return () => clearInterval(interval);
   },[]);
   //#endregion timer
+  
+//TODO replace the region Timer
+  let timer = (
+    <li>
+      {game.timer}
+    </li>
+  );
 
   //probably most important function
   const handleSubmit = (event) => {
