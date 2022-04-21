@@ -143,6 +143,7 @@ io.on("connection", (socket) => {
     console.log(username, "TESTING TIME", counter,lobbyID);
     socket.to(lobbyID).emit("counter", counter);
     socket.to(lobbyID).emit("count1", {count: counter});
+    socket.to(lobbyID).emit("count2");
     counter--
       if (counter === 0) {
         console.log("counter hit 0")
