@@ -138,7 +138,10 @@ io.on("connection", (socket) => {
   });
 
 
-  const emitCounter = function(username, counter, lobbyID){
+  
+  socket.on("timer", (username, time, lobbyID) => {
+    var counter = time
+    var WinnerCountdown = setInterval(function(){
     console.log(username, "TESTING TIME", counter,lobbyID);
     io.to(lobbyID).emit("counter", counter);
     io.to(lobbyID).emit("count1", {count: counter});
@@ -149,11 +152,7 @@ io.on("connection", (socket) => {
         socket.to(lobbyID).emit("end-time");
         clearInterval(WinnerCountdown);
       }
-  }
-
-  socket.on("timer", (username, time, lobbyID) => {
-    var counter = time
-    var WinnerCountdown = setInterval(emitCounter(username, counter,  lobbyID), 1000);
+    }, 1000);
   });
 
 
