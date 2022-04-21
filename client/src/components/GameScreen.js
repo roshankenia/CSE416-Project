@@ -100,7 +100,7 @@ export default function GameScreen() {
   //#endregion not-timer
 
   //#region timer: some timer code i found online
-  const [seconds, setSeconds] = useState(game.timer);
+  const [seconds, setSeconds] = useState(6490);
 
   React.useEffect(() => {
     let interval = null;
@@ -123,9 +123,26 @@ export default function GameScreen() {
   
 //TODO replace the region Timer
   let timer = (
-    <li>
-      {game.timer}
-    </li>
+    <Box
+    justifyContent="center"
+    alignItems="center"
+    style={{
+      border: "3px solid",
+      borderColor: "black",
+      color: "black",
+      backgroundColor: "#E39090",
+      fontSize: "20px",
+      outline: "none",
+      borderRadius: 20,
+      width: "75%",
+      height: 400
+    }}>
+    <div
+    id = "timer">
+      
+      
+    </div>
+    </Box>
   );
 
   //probably most important function
@@ -507,7 +524,8 @@ export default function GameScreen() {
             color: "black",
           }}
         >
-          <Typography fontSize={"32px"}>Time Left: {seconds}</Typography>
+          <Typography fontSize={"32px"}>Time Left: </Typography>
+          
         </Button>
         <Button
           sx={{
@@ -781,9 +799,11 @@ export default function GameScreen() {
         backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
     }}
     >
+      
         <Grid item xs="12" align="center">
             {gameModeButton}
             {gameCurrentPlayer}
+            {timer}
             {/* List of current panels drawn goes here */}
             {gamePanels}
             {/* Bottom half of screen */}

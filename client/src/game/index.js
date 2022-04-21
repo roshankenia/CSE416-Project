@@ -4,6 +4,7 @@ import api from "./game-request-api";
 import AuthContext from "../auth";
 import io from "socket.io-client";
 import { SocketContext } from "../socket";
+import $ from 'jquery'; 
 
 export const GameContext = createContext({});
 
@@ -262,12 +263,17 @@ function GameContextProvider(props) {
 
     //TODO
     const counter = async (count)=>{
+      console.log(count)
+      $('#timer').append(count + '<br /><br />');
       gameReducer({
         type: GameActionType.CREATE_NEW_GAME,
         timer: count
       });
 
     };
+    // socket.on('counter', function(count){
+    //   $('#timer').append($('<li>').text(count));
+    // });
     socket.on('counter', counter);
 
     return () => {
@@ -404,7 +410,8 @@ function GameContextProvider(props) {
   };
 
   //TIMER CODE
-  game.setTimer = async function(lobbyID, time){
+  game.setTimer = async function(time, lobbyID){
+    console.log("inside game.setTimer");
     socket.emit("timer", auth.user.username, time, lobbyID);
   };
 

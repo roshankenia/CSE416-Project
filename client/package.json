@@ -13,6 +13,7 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.22.0",
+    "jquery": "^3.6.0",
     "konva": "^8.3.5",
     "package.json": "^2.0.1",
     "react": "^17.0.2",
