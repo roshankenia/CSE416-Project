@@ -141,11 +141,12 @@ io.on("connection", (socket) => {
     var counter = time
     var WinnerCountdown = setInterval(function(){
     console.log(username, "TESTING TIME", counter,lobbyID);
-    socket.to(lobbyID).emit('counter', counter);
+    socket.to(lobbyID).emit("counter", counter);
+    socket.to(lobbyID).emit("count1");
     counter--
       if (counter === 0) {
         console.log("counter hit 0")
-        socket.to(lobbyID).emit('end-time');
+        socket.to(lobbyID).emit("end-time");
         clearInterval(WinnerCountdown);
       }
     }, 1000);
