@@ -150,4 +150,8 @@ io.on("connection", (socket) => {
   });
 
 
+  socket.on("update-host", (host, lobbyID) => {
+    console.log("sending host:", host);
+    socket.to(lobbyID).emit("add-host", host);
+  });
 });

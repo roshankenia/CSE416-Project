@@ -16,6 +16,7 @@ export const GameActionType = {
   UPDATE_PLAYERS: "UPDATE_PLAYERS",
   LEAVE_LOBBY: "LEAVE_LOBBY",
   ADD_READY: "ADD_READY",
+  ADD_HOST: "ADD_HOST",
 };
 
 function GameContextProvider(props) {
@@ -33,7 +34,8 @@ function GameContextProvider(props) {
     players: [],
     readyPlayers: [],
     screen: "lobby",
-    timer: null
+    timer: null,
+    host: null,
   });
   const history = useHistory();
 
@@ -45,12 +47,13 @@ function GameContextProvider(props) {
       case GameActionType.CREATE_NEW_LOBBY: {
         return setGame({
           game: null,
-          lobby: payload,
+          lobby: payload.lobbyID,
           voting: game.voting,
-          players: game.players,
+          players: payload.players,
           readyPlayers: game.readyPlayers,
           screen: "lobby",
-          timer: null
+          timer: null,
+          host: auth.user.username,
         });
       }
       case GameActionType.CREATE_NEW_GAME: {
@@ -61,7 +64,8 @@ function GameContextProvider(props) {
           players: game.players,
           readyPlayers: game.readyPlayers,
           screen: "game",
-          timer: game.timer
+          timer: game.timer,
+          host: game.host,
         });
       }
       case GameActionType.ENTER_VOTING: {
@@ -72,7 +76,8 @@ function GameContextProvider(props) {
           players: game.players,
           readyPlayers: game.readyPlayers,
           screen: "voting",
-          timer: 60
+          timer: 60,
+          host: game.host,
         });
       }
       case GameActionType.EXIT_VOTING: {
@@ -83,7 +88,8 @@ function GameContextProvider(props) {
           players: game.players,
           readyPlayers: game.readyPlayers,
           screen: "lobby",
-          timer: null
+          timer: null,
+          host: game.host,
         });
       }
       case GameActionType.JOIN_LOBBY: {
@@ -94,7 +100,8 @@ function GameContextProvider(props) {
           players: payload.players,
           readyPlayers: game.readyPlayers,
           screen: "lobby",
-          timer: null
+          timer: null,
+          host: game.host,
         });
       }
       case GameActionType.UPDATE_PLAYERS: {
@@ -105,7 +112,8 @@ function GameContextProvider(props) {
           players: payload.players,
           readyPlayers: payload.readyPlayers,
           screen: game.screen,
-          timer: null
+          timer: null,
+          host: game.host,
         });
       }
       case GameActionType.LEAVE_LOBBY: {
@@ -116,7 +124,8 @@ function GameContextProvider(props) {
           players: [],
           readyPlayers: [],
           screen: game.screen,
-          timer: null
+          timer: null,
+          host: game.host,
         });
       }
       case GameActionType.ADD_READY: {
@@ -127,7 +136,19 @@ function GameContextProvider(props) {
           players: game.players,
           readyPlayers: payload,
           screen: game.screen,
-          timer: null
+          timer: null,
+          host: game.host,
+        });
+      }
+      case GameActionType.ADD_HOST: {
+        return setGame({
+          game: game.game,
+          lobby: game.lobby,
+          voting: game.voting,
+          players: game.players,
+          readyPlayers: game.readyPlayers,
+          screen: game.screen,
+          host: payload,
         });
       }
       default:
@@ -154,8 +175,24 @@ function GameContextProvider(props) {
       let readyPlayers = game.readyPlayers;
 
       socket.emit("consolidate-players", players, readyPlayers, lobbyID);
+
+      if (auth.user.username == game.host) {
+        socket.emit("update-host", auth.user.username, lobbyID);
+      }
     };
     socket.once("new-player", newP);
+
+    const addH = async (host) => {
+      console.log("adding host:", host);
+      if (host != game.host) {
+        gameReducer({
+          type: GameActionType.ADD_HOST,
+          payload: host,
+        });
+      }
+    };
+
+    socket.once("add-host", addH);
 
     const addP = async (addPlayer, addReady, lobbyID) => {
       console.log("adding all unknown players");
@@ -239,6 +276,7 @@ function GameContextProvider(props) {
       socket.off("remove-player", removeP);
       socket.off("player-ready", readyP);
       socket.off("counter", counter)
+      socket.off("add-host", addH);
     };
   }, [game]);
 
@@ -311,8 +349,11 @@ function GameContextProvider(props) {
 
   game.hostNewLobby = async function () {
     try {
-      let id = "madeuplobbyid";
-      let lobby = "lobbyOBJ";
+      let id = Math.floor(100000 + Math.random() * 900000);
+      let lobbyID = "" + id;
+      console.log("creating a lobby with id:", lobbyID);
+      let players = game.players;
+      players.push(auth.user.username);
       // backend stuff
       // const response = await api.createGame();
       // console.log("createNewGame response: " + response);
@@ -320,9 +361,10 @@ function GameContextProvider(props) {
       //   let game = response.data.game;
       gameReducer({
         type: GameActionType.CREATE_NEW_LOBBY,
-        payload: lobby,
+        payload: { lobbyID: lobbyID, players: players },
       });
-      history.push("/game/" + id);
+      history.push("/game/" + lobbyID);
+      socket.emit("join-lobby", auth.user.username, lobbyID);
       //}
     } catch {
       console.log("API FAILED TO CREATE A LOBBY MONGODB INSTANCE");
