@@ -15,6 +15,7 @@ export default function ProfileScreen() {
   const { community } = useContext(GlobalCommunityContext);
   const { auth } = useContext(AuthContext);
   const [notifyOpen, setNotifyOpen] = React.useState(false);
+  const [bio, setBio] = React.useState(auth.user.bio)
   
 
   const handleBackToCommunities = (event) => {
@@ -40,6 +41,15 @@ export default function ProfileScreen() {
     setNotifyOpen(false);
   };
 
+  async function handleUpdateBio(event) {
+    setBio("Updated Bio")
+    console.log(auth.user)
+    console.log(event)
+    console.log("you have reached handleUpdateBio in profilescreen.js")
+    let response = await auth.updateBio(auth.user.username, bio)
+    console.log(response)
+  }
+
   const action = (
     <React.Fragment>
       <IconButton
@@ -52,8 +62,6 @@ export default function ProfileScreen() {
       </IconButton>
     </React.Fragment>
   );
-
-  console.log(auth.user.bio)
 
   const welcomeTag = (
     <Typography
@@ -70,23 +78,25 @@ export default function ProfileScreen() {
     </Typography>
   );
 
-  let notFriendOrSelf = true;
+  let isSelf = false;
+  let isFriend = false;
   if (community.userProfile._id === auth.user._id){
-    notFriendOrSelf = false
-  } else {
+    isSelf = true 
+  } 
+  if (!isSelf){
     for (var i = 0; i < community.userProfile.friends.length; i++){
       if (auth.user._id === community.userProfile.friends[i]){
-        notFriendOrSelf = false
+        isFriend = true
       }
     }
     for (var j = 0; j < community.userProfile.requests.length; j++){
       if (auth.user._id === community.userProfile.requests[j]){
-        notFriendOrSelf = false
+        isFriend = true
       }
     }
   }
-
-  if (notFriendOrSelf){
+  
+  if(isSelf){
     return (
       <Grid
         container
@@ -118,8 +128,11 @@ export default function ProfileScreen() {
         </Grid>
         <Grid item xs={5} alignItems="flex-start">
           {welcomeTag}
+          <Typography fontSize={"30px"}>
+            {auth.user.bio}
+          </Typography>
+          
         </Grid>
-
         <Button
           variant="contained"
           color="success"
@@ -134,17 +147,58 @@ export default function ProfileScreen() {
             borderRadius: 50,
           }}
           sx={{ mb: 0.5, height: "5%", width: "15%" }}
-          onClick={handleSendFriendRequest}
+          onClick={handleUpdateBio}
         >
-          + Add Friend
+          Update Bio
         </Button>
-        <Snackbar
-          open={notifyOpen}
-          autoHideDuration={3000}
-          message="Friend Request Sent"
-          onClose={handleNotifyClose}
-          action={action}
-        />
+        <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
+          <Typography style={{ fontSize: "32px" }}>
+            {community.communityList}
+          </Typography>
+          <PostFeed />
+        </Grid>
+  
+        <div class="sticky">
+          <Sidebar />
+        </div>
+      </Grid>
+    );
+  } else if(isFriend){
+    return (
+      <Grid
+        container
+        justifyContent="center"
+        style={{
+          backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
+        }}
+      >
+        <Grid item xs={12}>
+          <Button
+            variant="contained"
+            color="success"
+            size="small"
+            align="center"
+            onClick={handleBackToCommunities}
+            style={{
+              fontWeight: 600,
+              border: "3px solid",
+              borderColor: "black",
+              backgroundColor: "orange",
+              color: "black",
+              fontSize: "10px",
+              borderRadius: 20,
+            }}
+            sx={{ mt: 2 }}
+          >
+            Back to Communities
+          </Button>
+        </Grid>
+        <Grid item xs={5} alignItems="flex-start">
+          {welcomeTag}
+          <Typography fontSize={"30px"}>
+            No Bio Yet
+          </Typography>
+        </Grid>
   
         <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
           <Typography style={{ fontSize: "32px" }}>
@@ -191,10 +245,36 @@ export default function ProfileScreen() {
         <Grid item xs={5} alignItems="flex-start">
           {welcomeTag}
           <Typography fontSize={"30px"}>
-            
+            No Bio Yet
           </Typography>
         </Grid>
-            
+
+        <Button
+          variant="contained"
+          color="success"
+          size="small"
+          style={{
+            fontWeight: 600,
+            border: "3px solid",
+            borderColor: "black",
+            backgroundColor: "#46EC2B",
+            color: "black",
+            fontSize: "24px",
+            borderRadius: 50,
+          }}
+          sx={{ mb: 0.5, height: "5%", width: "15%" }}
+          onClick={handleSendFriendRequest}
+        >
+          + Add Friend
+        </Button>
+        <Snackbar
+          open={notifyOpen}
+          autoHideDuration={3000}
+          message="Friend Request Sent"
+          onClose={handleNotifyClose}
+          action={action}
+        />
+  
         <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
           <Typography style={{ fontSize: "32px" }}>
             {community.communityList}
