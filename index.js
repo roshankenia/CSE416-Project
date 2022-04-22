@@ -117,14 +117,17 @@ io.on("connection", (socket) => {
   });
 
   socket.on("draw-lines", (lines, lobbyID) => {
+    console.log("sending lines to:", lobbyID);
     io.to(lobbyID).emit("sync-lines", lines);
   });
 
   socket.on("draw-rectangles", (rectangles, lobbyID) => {
+    console.log("sending rectangles to:", lobbyID);
     io.to(lobbyID).emit("sync-rectangles", rectangles);
   });
 
   socket.on("draw-circles", (circles, lobbyID) => {
+    console.log("sending circles to:", lobbyID);
     io.to(lobbyID).emit("sync-circles", circles);
   });
 
