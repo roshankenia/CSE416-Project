@@ -13,7 +13,11 @@ const app = express();
 // app.use(cors());
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:4000", "https://cse-416-jart.herokuapp.com/"],
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:4000",
+      "https://cse-416-jart.herokuapp.com/",
+    ],
     credentials: true,
   })
 );
@@ -94,27 +98,35 @@ io.on("connection", (socket) => {
     console.log(username, "is readying or unreadying");
     socket.to(lobbyID).emit("player-ready", username);
   });
-  
+
   socket.on("timer", (username, time, lobbyID) => {
-    let counter = time
-    let WinnerCountdown = setInterval(function(){
-    io.to(lobbyID).emit("counter", counter);
-    counter--
+    let counter = time;
+    let WinnerCountdown = setInterval(function () {
+      io.to(lobbyID).emit("counter", counter);
+      counter--;
       if (counter <= 0) {
-        console.log("counter hit 0")
+        console.log("counter hit 0");
         socket.to(lobbyID).emit("end-time");
         clearInterval(WinnerCountdown);
       }
     }, 1000);
   });
 
-  socket.on("start-game", (players, lobbyID) =>{
-    io.to(lobbyID).emit("game-started", players)
-  })
+  socket.on("start-game", (players, lobbyID) => {
+    io.to(lobbyID).emit("game-started", players);
+  });
 
-  socket.on("draw-lines", (lines, lobbyID) =>{
-    io.to(lobbyID).emit("sync-lines", lines)
-  })
+  socket.on("draw-lines", (lines, lobbyID) => {
+    io.to(lobbyID).emit("sync-lines", lines);
+  });
+
+  socket.on("draw-rectangles", (rectangles, lobbyID) => {
+    io.to(lobbyID).emit("sync-rectangles", rectangles);
+  });
+
+  socket.on("draw-circles", (circles, lobbyID) => {
+    io.to(lobbyID).emit("sync-circles", circles);
+  });
 
   socket.on("update-host", (host, lobbyID) => {
     console.log("sending host:", host);
