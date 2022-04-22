@@ -588,8 +588,7 @@ updateBio = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      user: currentUser,
-      bio: bio
+      user: currentUser
     });
   } catch (err) {
     console.error(err);

@@ -14,9 +14,7 @@ import CloseIcon from "@mui/icons-material/Close";
 export default function ProfileScreen() {
   const { community } = useContext(GlobalCommunityContext);
   const { auth } = useContext(AuthContext);
-  const [notifyOpen, setNotifyOpen] = React.useState(false);
-  const [bio, setBio] = React.useState(auth.user.bio)
-  
+  const [notifyOpen, setNotifyOpen] = React.useState(false);  
 
   const handleBackToCommunities = (event) => {
     event.stopPropagation();
@@ -42,11 +40,12 @@ export default function ProfileScreen() {
   };
 
   async function handleUpdateBio(event) {
-    setBio("Updated Bio")
+    let newBio = "Updated Bio"
     console.log(auth.user.bio)
     console.log(event)
     console.log("you have reached handleUpdateBio in profilescreen.js")
-    let response = await auth.updateBio(auth.user.username, bio)
+    console.log(community.userProfile)
+    let response = await auth.updateBio(auth.user.username, newBio)
     console.log(response)
   }
 
@@ -80,9 +79,9 @@ export default function ProfileScreen() {
 
   let isSelf = false;
   let isFriend = false;
+  console.log(community.userProfile._id)
+  console.log(auth.user._id)
   if (community.userProfile._id === auth.user._id){
-    console.log(community.userProfile._id)
-    console.log(auth.user._id)
     isSelf = true 
   } 
   if (!isSelf){
@@ -99,7 +98,13 @@ export default function ProfileScreen() {
   }
   console.log(isSelf)
   console.log(isFriend)
-  
+  // const bioToPrint = "This is a test bio"
+  console.log(community.userProfile.bio)
+  let bioToPrint = community.userProfile.bio
+  if (community.userProfile.bio == ""){
+    bioToPrint = "No Bio Yet"
+  }
+
   if(isSelf){
     return (
       <Grid
@@ -133,7 +138,7 @@ export default function ProfileScreen() {
         <Grid item xs={5} alignItems="flex-start">
           {welcomeTag}
           <Typography fontSize={"30px"}>
-            {auth.user.bio}
+            {bioToPrint}
           </Typography>
           
         </Grid>
@@ -200,7 +205,7 @@ export default function ProfileScreen() {
         <Grid item xs={5} alignItems="flex-start">
           {welcomeTag}
           <Typography fontSize={"30px"}>
-            No Bio Yet
+            {bioToPrint}
           </Typography>
         </Grid>
   
@@ -249,7 +254,7 @@ export default function ProfileScreen() {
         <Grid item xs={5} alignItems="flex-start">
           {welcomeTag}
           <Typography fontSize={"30px"}>
-            No Bio Yet
+            {bioToPrint}
           </Typography>
         </Grid>
 
