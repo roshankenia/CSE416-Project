@@ -33,9 +33,13 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { Stage, Layer, Rect, Text, Circle, Line, Star } from "react-konva";
 import { BsEraserFill } from "react-icons/bs";
 
+//socket
+import { SocketContext } from "../socket";
+
 export default function GameScreen() {
   const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
+  const socket = useContext(SocketContext);
 
   //#region css
   const buttonCSS = {color:'black', fontSize:'40pt'}
@@ -58,7 +62,6 @@ export default function GameScreen() {
   };
 
   const charactersLeft = 147;
-  const players = [auth.user.username, "Terran", "xx", "zz"];
 
   const flexContainer = {
     display: "flex",
@@ -69,7 +72,7 @@ export default function GameScreen() {
     justifyContent: "center",
   };
 
-  const [currentPlayer, setCurrentPlayer] = useState(players[0]);
+  const [currentPlayer, setCurrentPlayer] = useState(game.players[0]);
 
   const [alignment, setAlignment] = React.useState("left");
   const [formats, setFormats] = React.useState(() => ["italic"]);
@@ -100,38 +103,40 @@ export default function GameScreen() {
   //#endregion not-timer
 
   //#region timer: some timer code i found online
-  const [seconds, setSeconds] = useState(6490);
+  // const [seconds, setSeconds] = useState(6490);
 
-  React.useEffect(() => {
-    let interval = null;
-    if (seconds > 0) {
-      interval = setInterval(() => {
-        setSeconds((seconds) => seconds - 1);
-      }, 1000);
-    } else {
-      if (players.indexOf(currentPlayer) == 3) {
-        setSeconds("Vote To Publish!");
-        game.enterVoting();
-      } else {
-        setCurrentPlayer(players[players.indexOf(currentPlayer) + 1]);
-        setSeconds(10);
-      }
-    }
-    return () => clearInterval(interval);
-  },[]);
+  // React.useEffect(() => {
+  //   let interval = null;
+  //   if (seconds > 0) {
+  //     interval = setInterval(() => {
+  //       setSeconds((seconds) => seconds - 1);
+  //     }, 1000);
+  //   } else {
+  //     if (players.indexOf(currentPlayer) == 3) {
+  //       setSeconds("Vote To Publish!");
+  //       game.enterVoting();
+  //     } else {
+  //       setCurrentPlayer(players[players.indexOf(currentPlayer) + 1]);
+  //       setSeconds(10);
+  //     }
+  //   }
+  //   return () => clearInterval(interval);
+  // },[]);
   //#endregion timer
   
   //probably most important function
   const handleSubmit = (event) => {
-    console.log('hihihihih')
     event.preventDefault();
     let imageData = stageRef.current.toDataURL();
     console.log(imageData)
-    setTimeout(() => setSeconds(0), 1000);
+    //setTimeout(() => setSeconds(0), 1000);
   };
 
 
   //#endregion game control
+
+
+
 
   //#region KONVA functions
   const [tool, setTool] = React.useState("pen");
@@ -159,14 +164,27 @@ export default function GameScreen() {
     // replace last
     lines.splice(lines.length - 1, 1, lastLine);
     setLines(lines.concat());
+    socket.emit("draw-lines", lines, game.lobby)
   };
 
   const handleMouseUp = () => {
     isDrawing.current = false;
   };
 
-  
   //#endregion
+
+  useEffect(() => {
+    const syncL = async (lines) => {
+      console.log('lines\n!!!!!!!!')
+      console.log(lines)
+      setLines(lines)
+    };
+    socket.on("sync-lines", syncL);
+
+    return () => {
+      socket.off("sync-lines", syncL);
+    };
+  }, []);
 
   //#region game elements to render
   const gameModeButton = (
@@ -720,7 +738,30 @@ export default function GameScreen() {
           backgroundColor: "white",
           border: 3,
         }}
-      ></Box>
+      >
+        <Stage
+      width={600}
+      height={600}
+      ref={stageRef}
+      >
+      <Layer>
+        <Text text="Starts drawing here" x={5} y={30} />
+        {lines.map((line, i) => (
+          <Line
+            key={i}
+            points={line.points}
+            stroke="#df4b26"
+            strokeWidth={5}
+            tension={0.5}
+            lineCap="round"
+            globalCompositeOperation={
+              line.tool === "eraser" ? "destination-out" : "source-over"
+            }
+          />
+        ))}
+      </Layer>
+      </Stage>
+      </Box>
     </Grid>
   );
 
@@ -761,8 +802,6 @@ export default function GameScreen() {
   );
   //#endregion
     
-
-
   return (
     <Grid
     container

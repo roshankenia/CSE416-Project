@@ -18,7 +18,6 @@ import {
 } from "./components";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import io from "socket.io-client";
-import Chat from "./chat/Chat";
 
 import { SocketContext, socket } from "./socket";
 
@@ -66,7 +65,6 @@ const App = () => {
                       <Route path="/guest/" exact component={GuestScreen} />
                       <Route path="/game/:id" exact component={GameWrapper} />
                       <Route path="/reset" exact component={ResetScreen} />
-                      <Route path="/test" exact component={Chat} />
                     </Switch>
                   </Box>
                 </Box>

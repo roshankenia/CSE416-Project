@@ -13,7 +13,7 @@ const app = express();
 // app.use(cors());
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://cse-416-jart.herokuapp.com/"],
+    origin: ["http://localhost:3000", "http://localhost:4000", "https://cse-416-jart.herokuapp.com/"],
     credentials: true,
   })
 );
@@ -52,22 +52,11 @@ var server = app.listen(PORT, function () {
   console.log("running at http://" + host + ":" + port);
 });
 
-// websocket stuff
+//comment the line below to start a local websocket server (express functionality unaffected)
 var io = require("socket.io")(server);
-var STATIC_CHANNELS = [
-  {
-    name: "Global chat",
-    participants: 0,
-    id: 1,
-    sockets: [],
-  },
-  {
-    name: "Funny",
-    participants: 0,
-    id: 2,
-    sockets: [],
-  },
-];
+
+//uncomment the line below to start a local websocket server
+//var io = require("socket.io")(5000, {cors:{origin: ["http://localhost:3000"]}});
 
 //by pass cors stuff
 app.use((req, res, next) => {
@@ -79,40 +68,9 @@ io.on("connection", (socket) => {
   // socket object may be used to send specific messages to the new connected client
   console.log("new client connected");
   socket.emit("connection", null);
-  socket.on("channel-join", (id) => {
-    console.log("channel join", id);
-    STATIC_CHANNELS.forEach((c) => {
-      if (c.id === id) {
-        if (c.sockets.indexOf(socket.id) == -1) {
-          c.sockets.push(socket.id);
-          c.participants++;
-          io.emit("channel", c);
-        }
-      } else {
-        let index = c.sockets.indexOf(socket.id);
-        if (index != -1) {
-          c.sockets.splice(index, 1);
-          c.participants--;
-          io.emit("channel", c);
-        }
-      }
-    });
 
-    return id;
-  });
   socket.on("send-message", (message) => {
     io.emit("message", message);
-  });
-
-  socket.on("disconnect", () => {
-    STATIC_CHANNELS.forEach((c) => {
-      let index = c.sockets.indexOf(socket.id);
-      if (index != -1) {
-        c.sockets.splice(index, 1);
-        c.participants--;
-        io.emit("channel", c);
-      }
-    });
   });
 
   socket.on("join-lobby", (username, lobbyID) => {
@@ -136,16 +94,11 @@ io.on("connection", (socket) => {
     console.log(username, "is readying or unreadying");
     socket.to(lobbyID).emit("player-ready", username);
   });
-
-
   
   socket.on("timer", (username, time, lobbyID) => {
-    var counter = time
-    var WinnerCountdown = setInterval(function(){
-    console.log(username, "TESTING TIME", counter,lobbyID);
+    let counter = time
+    let WinnerCountdown = setInterval(function(){
     io.to(lobbyID).emit("counter", counter);
-    // io.to(lobbyID).emit("count1", {count: counter});
-    // io.to(lobbyID).emit("count2");
     counter--
       if (counter <= 0) {
         console.log("counter hit 0")
@@ -155,6 +108,13 @@ io.on("connection", (socket) => {
     }, 1000);
   });
 
+  socket.on("start-game", (players, lobbyID) =>{
+    io.to(lobbyID).emit("game-started", players)
+  })
+
+  socket.on("draw-lines", (lines, lobbyID) =>{
+    io.to(lobbyID).emit("sync-lines", lines)
+  })
 
   socket.on("update-host", (host, lobbyID) => {
     console.log("sending host:", host);

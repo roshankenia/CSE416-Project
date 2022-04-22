@@ -24,7 +24,13 @@ import {
 } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import AuthContext from "../auth";
+//slider
+import { styled } from '@mui/material/styles';
+import Slider from '@mui/material/Slider';
+import MuiInput from '@mui/material/Input';
+import VolumeUp from '@mui/icons-material/VolumeUp';
 
+//put all the lobby settings stuff on the right side!!!
 export default function LobbyScreen() {
   const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
@@ -33,35 +39,52 @@ export default function LobbyScreen() {
 
   const users = [auth.user.username, "Terran", "someone", "$_$", "another"];
 
-  //TODO make input for setting time 
-  const handleSetTimer =(event, ) =>{
-    const data = new FormData(event.currentTarget);
-    event.preventDefault();
-    console.log("setting the timer for the game", data.get("timer"))
-    try{
-      const intTimer = parseInt(data.get("timer")) 
-      if(Number.isInteger(intTimer)){
-        game.setTimer(intTimer);
-      }
-      else{
-        console.log(data.get("timer"), "Not an integer");
-      }
+  //#region slider
+  const Input = styled(MuiInput)`
+    width: 42px;
+  `;
+  //value is turn time, might need to rename it
+  const [value, setValue] = React.useState(20);
+
+  const marks = [
+    {
+      value: 10,
+      label: '30 sec',
+    },
+    {
+      value: 20,
+      label: '1 min',
+    },
+    {
+      value: 40,
+      label: '2 min',
+    },
+    {
+      value: 60,
+      label: '3 min',
+    },
+    {
+      value: 80,
+      label: '4 min',
+    },
+    {
+      value: 100,
+      label: '5 min',
+    },
+  ];
+
+  const handleSetTimer =(event, newValue) =>{
+    if(newValue >= 10 && newValue <= 100){
+      setValue(newValue);
     }
-    catch{
-      console.log("Not an int")
-    }
-    
   }
+  //#endregion slider
 
-  const handleStartGame = (event) => {
-    game.createNewGame();
-  };
-
+  //#region invite/action
   //not implemented, should return a model
   const handleInvite = (event) => {
     console.log("nothing");
   };
-
   const handleLeave = (event) => {
     game.leaveLobby();
   };
@@ -84,65 +107,21 @@ export default function LobbyScreen() {
       return "Not Ready";
     }
   };
+  //#endregion invite/control
 
-  let timerInput = (
-    <Box component="form" onSubmit={handleSetTimer} noValidate>
-      
-      <Box>
-        <TextField 
-        align="center"
-        id="timer"
-        name="timer"
-        label="Time in Seconds:"
-        autoFocus
-        variant="standard"
-        InputProps={{
-          disableUnderline: true,
-          style: {
-            fontSize: 20,
-            paddingLeft: 20,
-            paddingBottom: 10,
-          },
-        }}
-        InputLabelProps={{
-          style: { fontSize: 30, paddingLeft: 20 },
-          shrink: true,
-        }}
-        />
-      </Box>
-      <Box textAlign="center">
-        <Button
-          type="submit"
-          variant="contained"
-          color="success"
-          size="small"    
-          style={{
-            fontWeight: 600,
-            border: "3px solid",
-            borderColor: "black",
-            backgroundColor: "#46EC2B",
-            color: "black",
-            fontSize: "20px",
-            borderRadius: 20,
-          }}
-          sx={{ mt: 1, mb: 0.5, width: "25%" }}
-        >
-        set Timer
-        </Button>
-      </Box>
+  //Note, time is the slider value times 3 
+  const handleStartGame = (event) => {
+    console.log(game)
+    game.setTimer(value * 3);
+    console.log('game timer(in seconds): ' + game.timer)
+    game.createNewGame();
+  };
 
-      <div id = "timer"
-      placeholder="Timer Place Holder">
-
-     
-      
-    </div>
-    </Box>
-  );
-
+  //#region uncategorized render components
   let startButton = (
+    <div style={{ width: "100%", marginRight: "-100%", opacity : auth.user.username !== game.host || game.readyPlayers.length !== game.players.length? 0.3 : 1 }}>
     <Button
-      disabled={true}
+      disabled={auth.user.username !== game.host || game.readyPlayers.length !== game.players.length}
       variant="contained"
       color="success"
       size="small"
@@ -156,36 +135,13 @@ export default function LobbyScreen() {
         color: "black",
         fontSize: "30px",
         borderRadius: 20,
-        opacity: 0.3,
       }}
       sx={{ ml: 3, mt: 2, width: "30%", height: "40px" }}
     >
       Start
     </Button>
+    </div>
   );
-  if (auth.user.username == game.host) {
-    startButton = (
-      <Button
-        variant="contained"
-        color="success"
-        size="small"
-        align="center"
-        onClick={(event) => handleStartGame(event)}
-        style={{
-          fontWeight: 600,
-          border: "3px solid",
-          borderColor: "black",
-          backgroundColor: "green",
-          color: "black",
-          fontSize: "30px",
-          borderRadius: 20,
-        }}
-        sx={{ ml: 3, mt: 2, width: "30%", height: "40px" }}
-      >
-        Start
-      </Button>
-    );
-  }
 
   let lobbyTable = (
     <TableBody>
@@ -262,11 +218,32 @@ export default function LobbyScreen() {
   function sendGameInvite(event, receivedUser) {
     // Add logic to send the game
   }
+  //#endregion uncategorized render components
+
+  //#region right side components
+  const timeSlider = <Box sx={{ width: 400 }}>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item>
+                  <Typography id="input-slider" gutterBottom>
+                    Timer
+                  </Typography>
+                </Grid>
+                <Grid item xs>
+                  <Slider
+                    value={typeof value === 'number' ? value : 10}
+                    onChange={handleSetTimer}
+                    aria-labelledby="input-slider"
+                    marks={marks}
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+  //#endregion right side
 
   return (
     <Grid
       container
-      spacing={2}
+      spacing={1}
       justifyContent="center"
       alignItems="center"
       style={{
@@ -276,7 +253,7 @@ export default function LobbyScreen() {
       }}
     >
       {/* This grid shows the room code and invitation stuff */}
-      <Grid item xs={4} align="center">
+      <Grid item xs={3} align="center">
         <List>
           <Box
             justifyContent="center"
@@ -306,7 +283,7 @@ export default function LobbyScreen() {
           </Box>
         </List>
       </Grid>
-      {/* This grid renders the right side of the webpage*/}
+      {/* This grid renders the middle side of the webpage*/}
       <Grid item xs={6}>
         <List sx={{ justifyContent: "center" }}>
           <ListItem key="game_lobby" align="center">
@@ -413,7 +390,6 @@ export default function LobbyScreen() {
               width: "75%",
             }}
           >
-            {timerInput}
             {/* This is the table */}
             <ListItem key="inlobby">
               <TableContainer>
@@ -478,7 +454,32 @@ export default function LobbyScreen() {
           </Box>
         </List>
       </Grid>
-      <Grid item xs={6}></Grid>
+      {/* This grid renders the right side of the webpage(host only)*/}
+      {auth.user.username == game.host && <Grid item xs={3}>
+        <List>
+          <Box
+            justifyContent="center"
+            alignItems="center"
+            style={{
+              border: "3px solid",
+              borderColor: "black",
+              color: "black",
+              backgroundColor: "#E39090",
+              fontSize: "20px",
+              outline: "none",
+              borderRadius: 20,
+              width: "75%",
+            }}
+          >
+            <ListItem align="center" >
+              <Typography sx={{fontSize:50}}>Game Settings:</Typography>
+            </ListItem>
+            <ListItem align="center">
+              {timeSlider}
+            </ListItem>
+          </Box>
+        </List>
+      </Grid>}
       <Grid item xs={8} align="center"></Grid>
     </Grid>
   );

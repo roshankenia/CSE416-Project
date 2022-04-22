@@ -37,7 +37,7 @@ function GameContextProvider(props) {
     readyPlayers: [],
     screen: "lobby",
     timer: null,
-    host: null,
+    host: null
   });
   const history = useHistory();
 
@@ -72,10 +72,11 @@ function GameContextProvider(props) {
       }
       case GameActionType.CREATE_NEW_GAME: {
         return setGame({
-          game: payload,
-          lobby: null,
+          game: payload.game,
+          //need lobbyID to keep socket connection
+          lobby: game.lobby,
           voting: game.voting,
-          players: game.players,
+          players: payload.players,
           readyPlayers: game.readyPlayers,
           screen: "game",
           timer: game.timer,
@@ -277,7 +278,6 @@ function GameContextProvider(props) {
     //TODO create another game action type?
     const countDown = async (count)=>{
       // const display = document.getElementById('timer')
-      console.log("inside the counter" ,count)
       // $('#timer').append(count + '<br /><br />');
       // $('#timer').append($('<li>').text(count));
       // display.value = count
@@ -290,10 +290,28 @@ function GameContextProvider(props) {
     socket.once("counter", countDown);
 
     // socket.on("count1", function(data){
-    //   console.log(data.count)
     // });
 
-    // socket.on("count2", console.log("made it here !!!"));
+    //pass real game obj when backend is ready
+    const gameStart = async (game) => {
+      console.log(game)
+      let fakeGameObj = {game: 'random bullshit go!', players: game}
+      gameReducer({
+        type: GameActionType.CREATE_NEW_GAME,
+        payload: fakeGameObj,
+      })
+    }
+    //right now it passes player array
+    socket.once("game-started", gameStart)
+    
+    
+    // const syncL = async (lines) => {
+    //   console.log('lines\n!!!!!!!!')
+    //   console.log(lines)
+      
+    // };
+    // socket.on("sync-lines", syncL);
+
 
     return () => {
       socket.off("new-player", newP);
@@ -302,6 +320,7 @@ function GameContextProvider(props) {
       socket.off("player-ready", readyP);
       socket.off("counter", countDown)
       socket.off("add-host", addH);
+      socket.off("game-started", gameStart)
       // socket.off('count1');
     };
   }, [game]);
@@ -320,32 +339,32 @@ function GameContextProvider(props) {
 
     socket.emit("ready-unready", auth.user.username, game.lobby);
   };
+
   game.createNewGame = async function () {
     try {
       let id = "madeupgameid";
-      let newgame = "gameOBJ";
+      let newgame = {game: "gameOBJ", players: game.players};
       // backend stuff
       // const response = await api.createGame();
-      // console.log("createNewGame response: " + response);
       // if (response.status === 201) {
       //   let game = response.data.game;
       gameReducer({
         type: GameActionType.CREATE_NEW_GAME,
         payload: newgame,
       });
-      console.log("inside game.createNewGame");
-      console.log(game);
       history.push("/game/" + id);
       //}
+      console.log('new game created:')
+      console.log(game)
     } catch {
       console.log("API FAILED TO CREATE A GAME MONGODB INSTANCE");
     }
+    socket.emit("start-game", game.players, game.lobby);
   };
 
   game.leaveLobby = async function () {
     try {
       let lobbyID = game.lobby;
-      console.log("Leaving lobby:", lobbyID);
       socket.emit("leave-lobby", auth.user.username, lobbyID);
       gameReducer({
         type: GameActionType.LEAVE_LOBBY,
@@ -377,12 +396,10 @@ function GameContextProvider(props) {
     try {
       let id = Math.floor(100000 + Math.random() * 900000);
       let lobbyID = "" + id;
-      console.log("creating a lobby with id:", lobbyID);
       let players = game.players;
       players.push(auth.user.username);
       // backend stuff
       // const response = await api.createGame();
-      // console.log("createNewGame response: " + response);
       // if (response.status === 201) {
       //   let game = response.data.game;
       gameReducer({
@@ -404,8 +421,6 @@ function GameContextProvider(props) {
         type: GameActionType.ENTER_VOTING,
         payload: null,
       });
-      console.log("inside game.enterVoting");
-      console.log(game);
       history.push("/game/" + id);
       //}
     } catch {
@@ -420,8 +435,6 @@ function GameContextProvider(props) {
         type: GameActionType.EXIT_VOTING,
         payload: null,
       });
-      console.log("inside game.exitVoting");
-      console.log(game);
       history.push("/");
       //}
     } catch {
@@ -431,7 +444,7 @@ function GameContextProvider(props) {
 
   //TIMER CODE- make sure time only starts when start game happens
   game.setTimer = async function(time){
-    console.log("inside game.setTimer", time);
+    console.log('set timer... ' + time)
     socket.emit("timer", auth.user.username, time, game.lobby);
   };
 
