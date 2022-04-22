@@ -200,6 +200,7 @@ registerUser = async (req, res) => {
     const passwordHash = await bcrypt.hash(password, salt);
     console.log("passwordHash: " + passwordHash);
 
+    const bio = ""
     const newUser = new User({
       guest,
       firstName,
@@ -207,6 +208,7 @@ registerUser = async (req, res) => {
       email,
       passwordHash,
       username,
+      bio
     });
     const savedUser = await newUser.save();
     console.log("new user saved: " + savedUser._id);
@@ -568,6 +570,7 @@ searchUsers = async (req, res) => {
 //#endregion friend stuff
 
 //#region account settings
+
 updateBio = async (req, res) => {
   try {
     const { username, bio } = req.body;

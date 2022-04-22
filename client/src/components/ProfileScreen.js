@@ -43,7 +43,7 @@ export default function ProfileScreen() {
 
   async function handleUpdateBio(event) {
     setBio("Updated Bio")
-    console.log(auth.user)
+    console.log(auth.user.bio)
     console.log(event)
     console.log("you have reached handleUpdateBio in profilescreen.js")
     let response = await auth.updateBio(auth.user.username, bio)
@@ -81,6 +81,8 @@ export default function ProfileScreen() {
   let isSelf = false;
   let isFriend = false;
   if (community.userProfile._id === auth.user._id){
+    console.log(community.userProfile._id)
+    console.log(auth.user._id)
     isSelf = true 
   } 
   if (!isSelf){
@@ -95,6 +97,8 @@ export default function ProfileScreen() {
       }
     }
   }
+  console.log(isSelf)
+  console.log(isFriend)
   
   if(isSelf){
     return (
