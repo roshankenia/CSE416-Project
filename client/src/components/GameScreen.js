@@ -173,11 +173,13 @@ export default function GameScreen() {
 
   //#endregion
 
+  //the websocket codes
   useEffect(() => {
     const syncL = async (lines) => {
-      console.log('lines\n!!!!!!!!')
-      console.log(lines)
-      setLines(lines)
+      //need better drawer check
+      if(auth.user.username != currentPlayer){
+        setLines(lines)
+      }
     };
     socket.on("sync-lines", syncL);
 
