@@ -41,7 +41,7 @@ export default function WaitingScreen(props) {
   const { auth } = useContext(AuthContext);
   const socket = useContext(SocketContext);
 
-  let { stageRef, lines } = props;
+  let { stageRef, lines, rectangles, circles } = props;
   const flexContainer = {
     display: "flex",
     flexDirection: "row",
@@ -77,6 +77,32 @@ export default function WaitingScreen(props) {
                 }
               />
             ))}
+            {rectangles.map((value) => {
+              return (
+                <Rect
+                  x={value.x}
+                  y={value.y}
+                  width={value.width}
+                  height={value.height}
+                  fill="transparent"
+                  stroke={value.stroke}
+                  strokeWidth={value.strokeWidth}
+                />
+              );
+            })}
+            {circles.map((value) => {
+              return (
+                <Circle
+                  x={value.x}
+                  y={value.y}
+                  width={value.width}
+                  height={value.height}
+                  fill="transparent"
+                  stroke={value.stroke}
+                  strokeWidth={value.strokeWidth}
+                />
+              );
+            })}
           </Layer>
         </Stage>
       </Box>

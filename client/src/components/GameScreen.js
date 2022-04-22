@@ -147,6 +147,8 @@ export default function GameScreen() {
   const stageRef = React.useRef(null);
   const [color, setColor] = React.useState("#000000");
   const [strokeWidth, setStrokeWidth] = React.useState(1);
+  const [rectangles, setRectangles] = useState([]);
+  const [circles, setCircles] = useState([]);
 
   const changeColor = (event, color) => {
     event.stopPropagation();
@@ -155,11 +157,46 @@ export default function GameScreen() {
 
   const handleMouseDown = (e) => {
     isDrawing.current = true;
-    const pos = e.target.getStage().getPointerPosition();
-    setLines([
-      ...lines,
-      { tool, strokeWidth: strokeWidth, stroke: color, points: [pos.x, pos.y] },
-    ]);
+    if (tool == "pen" || tool == "eraser") {
+      const pos = e.target.getStage().getPointerPosition();
+      setLines([
+        ...lines,
+        {
+          tool,
+          strokeWidth: strokeWidth,
+          stroke: color,
+          points: [pos.x, pos.y],
+        },
+      ]);
+    } else if (tool == "rectangle") {
+      const { x, y } = e.target.getStage().getPointerPosition();
+      setRectangles([
+        ...rectangles,
+        {
+          x,
+          y,
+          width: 0,
+          height: 0,
+          key: rectangles.length + 1,
+          stroke: color,
+          strokeWidth: strokeWidth,
+        },
+      ]);
+    } else if (tool == "circle") {
+      const { x, y } = e.target.getStage().getPointerPosition();
+      setCircles([
+        ...circles,
+        {
+          x,
+          y,
+          width: 0,
+          height: 0,
+          key: circles.length + 1,
+          stroke: color,
+          strokeWidth: strokeWidth,
+        },
+      ]);
+    }
   };
 
   const handleMouseMove = (e) => {
@@ -167,19 +204,57 @@ export default function GameScreen() {
     if (!isDrawing.current) {
       return;
     }
-    const stage = e.target.getStage();
-    const point = stage.getPointerPosition();
-    let lastLine = lines[lines.length - 1];
-    // add point
-    lastLine.points = lastLine.points.concat([point.x, point.y]);
+    if (tool == "pen" || tool == "eraser") {
+      const stage = e.target.getStage();
+      const point = stage.getPointerPosition();
+      let lastLine = lines[lines.length - 1];
+      // add point
+      lastLine.points = lastLine.points.concat([point.x, point.y]);
 
-    // replace last
-    lines.splice(lines.length - 1, 1, lastLine);
-    setLines(lines.concat());
-    socket.emit("draw-lines", lines, game.lobby);
+      // replace last
+      lines.splice(lines.length - 1, 1, lastLine);
+      setLines(lines.concat());
+      socket.emit("draw-lines", lines, game.lobby);
+    } else if (tool == "rectangle") {
+      const sx = rectangles[rectangles.length - 1].x;
+      const sy = rectangles[rectangles.length - 1].y;
+      const key = rectangles[rectangles.length - 1].key;
+      const { x, y } = e.target.getStage().getPointerPosition();
+
+      let lastRectangle = {
+        x: sx,
+        y: sy,
+        width: x - sx,
+        height: y - sy,
+        key: key,
+        stroke: color,
+        strokeWidth: strokeWidth,
+      };
+      rectangles.splice(rectangles.length - 1, 1, lastRectangle);
+      setRectangles(rectangles.concat());
+      socket.emit("draw-rectangles", rectangles, game.lobby);
+    } else if (tool == "circle") {
+      const sx = circles[circles.length - 1].x;
+      const sy = circles[circles.length - 1].y;
+      const key = circles[circles.length - 1].key;
+      const { x, y } = e.target.getStage().getPointerPosition();
+
+      let lastCircle = {
+        x: sx,
+        y: sy,
+        width: Math.abs(x - sx),
+        height: Math.abs(y - sy),
+        key: key,
+        stroke: color,
+        strokeWidth: strokeWidth,
+      };
+      circles.splice(circles.length - 1, 1, lastCircle);
+      setCircles(circles.concat());
+      socket.emit("draw-circles", circles, game.lobby);
+    }
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (e) => {
     isDrawing.current = false;
   };
 
@@ -190,14 +265,32 @@ export default function GameScreen() {
     const syncL = async (lines) => {
       //need better drawer check
       if (auth.user.username != currentPlayer) {
-        console.log(lines);
         setLines(lines);
       }
     };
     socket.on("sync-lines", syncL);
 
+    const syncR = async (rectangles) => {
+      if (auth.user.username != currentPlayer) {
+        console.log(rectangles);
+        setRectangles(rectangles);
+      }
+    };
+
+    socket.on("sync-rectangles", syncR);
+
+    const syncC = async (circles) => {
+      if (auth.user.username != currentPlayer) {
+        setCircles(circles);
+      }
+    };
+
+    socket.on("sync-circles", syncC);
+
     return () => {
       socket.off("sync-lines", syncL);
+      socket.off("sync-rectangles", syncR);
+      socket.off("sync-circles", syncC);
     };
   }, []);
 
@@ -354,7 +447,6 @@ export default function GameScreen() {
   );
 
   /* Drawing/Writing Canvas */
-
   let gameWorkSpace = "";
   if (gameMode) {
     gameWorkSpace = (
@@ -390,6 +482,32 @@ export default function GameScreen() {
                   }
                 />
               ))}
+              {rectangles.map((value) => {
+                return (
+                  <Rect
+                    x={value.x}
+                    y={value.y}
+                    width={value.width}
+                    height={value.height}
+                    fill="transparent"
+                    stroke={value.stroke}
+                    strokeWidth={value.strokeWidth}
+                  />
+                );
+              })}
+              {circles.map((value) => {
+                return (
+                  <Circle
+                    x={value.x}
+                    y={value.y}
+                    width={value.width}
+                    height={value.height}
+                    fill="transparent"
+                    stroke={value.stroke}
+                    strokeWidth={value.strokeWidth}
+                  />
+                );
+              })}
             </Layer>
           </Stage>
         </Box>
@@ -658,7 +776,14 @@ export default function GameScreen() {
   );
 
   if (auth.user.username != currentPlayer) {
-    currentDisplay = <WaitingScreen stageRef={stageRef} lines={lines} />;
+    currentDisplay = (
+      <WaitingScreen
+        stageRef={stageRef}
+        lines={lines}
+        circles={circles}
+        rectangles={rectangles}
+      />
+    );
   }
 
   return (

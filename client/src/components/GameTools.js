@@ -18,7 +18,8 @@ import { BsEraserFill } from "react-icons/bs";
 import { SocketContext } from "../socket";
 
 import SquareIcon from "@mui/icons-material/Square";
-
+import CropSquareIcon from "@mui/icons-material/CropSquare";
+import CircleIcon from "@mui/icons-material/Circle";
 import Slider from "@mui/material/Slider";
 
 export default function GameTools(props) {
@@ -65,7 +66,7 @@ export default function GameTools(props) {
         }}
       >
         <Typography fontSize={"24px"}>Color</Typography>
-        <Grid container spacing={2} sx={{ width: "95%", mr: 2}}>
+        <Grid container spacing={2} sx={{ width: "95%", mr: 2 }}>
           <Grid item xs={3}>
             <IconButton
               size="small"
@@ -444,6 +445,22 @@ export default function GameTools(props) {
               }}
             >
               <BsEraserFill fontSize="large" />
+            </Button>
+            <Button
+              sx={buttonCSS}
+              onClick={(e) => {
+                setTool("rectangle");
+              }}
+            >
+              <CropSquareIcon fontSize="large" />
+            </Button>
+            <Button
+              sx={buttonCSS}
+              onClick={(e) => {
+                setTool("circle");
+              }}
+            >
+              <CircleIcon fontSize="large" />
             </Button>
             {/* <FormatColorFillIcon fontSize="large" />
             <ImageSearchIcon fontSize="large" />
