@@ -25,10 +25,10 @@ import {
 import StarIcon from "@mui/icons-material/Star";
 import AuthContext from "../auth";
 //slider
-import { styled } from '@mui/material/styles';
-import Slider from '@mui/material/Slider';
-import MuiInput from '@mui/material/Input';
-import VolumeUp from '@mui/icons-material/VolumeUp';
+import { styled } from "@mui/material/styles";
+import Slider from "@mui/material/Slider";
+import MuiInput from "@mui/material/Input";
+import VolumeUp from "@mui/icons-material/VolumeUp";
 
 //put all the lobby settings stuff on the right side!!!
 export default function LobbyScreen() {
@@ -49,35 +49,35 @@ export default function LobbyScreen() {
   const marks = [
     {
       value: 10,
-      label: '30 sec',
+      label: "30 sec",
     },
     {
       value: 20,
-      label: '1 min',
+      label: "1 min",
     },
     {
       value: 40,
-      label: '2 min',
+      label: "2 min",
     },
     {
       value: 60,
-      label: '3 min',
+      label: "3 min",
     },
     {
       value: 80,
-      label: '4 min',
+      label: "4 min",
     },
     {
       value: 100,
-      label: '5 min',
+      label: "5 min",
     },
   ];
 
-  const handleSetTimer =(event, newValue) =>{
-    if(newValue >= 10 && newValue <= 100){
+  const handleSetTimer = (event, newValue) => {
+    if (newValue >= 10 && newValue <= 100) {
       setValue(newValue);
     }
-  }
+  };
   //#endregion slider
 
   //#region invite/action
@@ -109,37 +109,50 @@ export default function LobbyScreen() {
   };
   //#endregion invite/control
 
-  //Note, time is the slider value times 3 
+  //Note, time is the slider value times 3
   const handleStartGame = (event) => {
-    console.log(game)
+    console.log(game);
     game.setTimer(value * 3);
-    console.log('game timer(in seconds): ' + game.timer)
+    console.log("game timer(in seconds): " + game.timer);
     game.createNewGame();
   };
 
   //#region uncategorized render components
   let startButton = (
-    <div style={{ width: "100%", marginRight: "-100%", opacity : auth.user.username !== game.host || game.readyPlayers.length !== game.players.length? 0.3 : 1 }}>
-    <Button
-      disabled={auth.user.username !== game.host || game.readyPlayers.length !== game.players.length}
-      variant="contained"
-      color="success"
-      size="small"
-      align="center"
-      onClick={(event) => handleStartGame(event)}
+    <div
       style={{
-        fontWeight: 600,
-        border: "3px solid",
-        borderColor: "black",
-        backgroundColor: "green",
-        color: "black",
-        fontSize: "30px",
-        borderRadius: 20,
+        width: "100%",
+        marginRight: "-100%",
+        opacity:
+          auth.user.username !== game.host ||
+          game.readyPlayers.length !== game.players.length
+            ? 0.3
+            : 1,
       }}
-      sx={{ ml: 3, mt: 2, width: "30%", height: "40px" }}
     >
-      Start
-    </Button>
+      <Button
+        disabled={
+          auth.user.username !== game.host ||
+          game.readyPlayers.length !== game.players.length
+        }
+        variant="contained"
+        color="success"
+        size="small"
+        align="center"
+        onClick={(event) => handleStartGame(event)}
+        style={{
+          fontWeight: 600,
+          border: "3px solid",
+          borderColor: "black",
+          backgroundColor: "green",
+          color: "black",
+          fontSize: "30px",
+          borderRadius: 20,
+        }}
+        sx={{ ml: 3, mt: 2, width: "30%", height: "40px" }}
+      >
+        Start
+      </Button>
     </div>
   );
 
@@ -221,23 +234,25 @@ export default function LobbyScreen() {
   //#endregion uncategorized render components
 
   //#region right side components
-  const timeSlider = <Box sx={{ width: 400 }}>
-              <Grid container spacing={2} alignItems="center">
-                <Grid item>
-                  <Typography id="input-slider" gutterBottom>
-                    Timer
-                  </Typography>
-                </Grid>
-                <Grid item xs>
-                  <Slider
-                    value={typeof value === 'number' ? value : 10}
-                    onChange={handleSetTimer}
-                    aria-labelledby="input-slider"
-                    marks={marks}
-                  />
-                </Grid>
-              </Grid>
-            </Box>
+  const timeSlider = (
+    <Box sx={{ width: 400 }}>
+      <Grid container spacing={2} alignItems="center">
+        <Grid item>
+          <Typography id="input-slider" gutterBottom>
+            Timer
+          </Typography>
+        </Grid>
+        <Grid item xs>
+          <Slider
+            value={typeof value === "number" ? value : 10}
+            onChange={handleSetTimer}
+            aria-labelledby="input-slider"
+            marks={marks}
+          />
+        </Grid>
+      </Grid>
+    </Box>
+  );
   //#endregion right side
 
   return (
@@ -455,31 +470,31 @@ export default function LobbyScreen() {
         </List>
       </Grid>
       {/* This grid renders the right side of the webpage(host only)*/}
-      {auth.user.username == game.host && <Grid item xs={3}>
-        <List>
-          <Box
-            justifyContent="center"
-            alignItems="center"
-            style={{
-              border: "3px solid",
-              borderColor: "black",
-              color: "black",
-              backgroundColor: "#E39090",
-              fontSize: "20px",
-              outline: "none",
-              borderRadius: 20,
-              width: "75%",
-            }}
-          >
-            <ListItem align="center" >
-              <Typography sx={{fontSize:50}}>Game Settings:</Typography>
-            </ListItem>
-            <ListItem align="center">
-              {timeSlider}
-            </ListItem>
-          </Box>
-        </List>
-      </Grid>}
+      {auth.user.username == game.host && (
+        <Grid item xs={3}>
+          <List>
+            <Box
+              justifyContent="center"
+              alignItems="center"
+              style={{
+                border: "3px solid",
+                borderColor: "black",
+                color: "black",
+                backgroundColor: "#E39090",
+                fontSize: "20px",
+                outline: "none",
+                borderRadius: 20,
+                width: "75%",
+              }}
+            >
+              <ListItem align="center">
+                <Typography sx={{ fontSize: 50 }}>Game Settings:</Typography>
+              </ListItem>
+              <ListItem align="center">{timeSlider}</ListItem>
+            </Box>
+          </List>
+        </Grid>
+      )}
       <Grid item xs={8} align="center"></Grid>
     </Grid>
   );

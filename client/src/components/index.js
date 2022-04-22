@@ -32,6 +32,7 @@ import Test from './Test'
 import GuestScreen from './GuestScreen'
 import FriendsScreen from './FriendsScreen'
 import ResetScreen from './ResetScreen'
+import GameTools from './GameTools'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -72,5 +73,6 @@ export {
     Test,
     GuestScreen,
     FriendsScreen,
-    ResetScreen
+    ResetScreen,
+    GameTools,
     }

@@ -29,6 +29,10 @@ import Paper from "@mui/material/Paper";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
+import WaitingScreen from "./WaitingScreen";
+import GameTools from "./GameTools";
+import IconButton from "@mui/material/IconButton";
+
 // konva stuff
 import { Stage, Layer, Rect, Text, Circle, Line, Star } from "react-konva";
 import { BsEraserFill } from "react-icons/bs";
@@ -36,13 +40,15 @@ import { BsEraserFill } from "react-icons/bs";
 //socket
 import { SocketContext } from "../socket";
 
+import SquareIcon from "@mui/icons-material/Square";
+
 export default function GameScreen() {
   const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
   const socket = useContext(SocketContext);
 
   //#region css
-  const buttonCSS = {color:'black', fontSize:'40pt'}
+  const buttonCSS = { color: "black", fontSize: "40pt" };
   //#endregion css
 
   //#region game control
@@ -123,31 +129,37 @@ export default function GameScreen() {
   //   return () => clearInterval(interval);
   // },[]);
   //#endregion timer
-  
+
   //probably most important function
   const handleSubmit = (event) => {
     event.preventDefault();
     let imageData = stageRef.current.toDataURL();
-    console.log(imageData)
+    console.log(imageData);
     //setTimeout(() => setSeconds(0), 1000);
   };
 
-
   //#endregion game control
-
-
-
 
   //#region KONVA functions
   const [tool, setTool] = React.useState("pen");
   const [lines, setLines] = React.useState([]);
   const isDrawing = React.useRef(false);
   const stageRef = React.useRef(null);
+  const [color, setColor] = React.useState("#000000");
+  const [strokeWidth, setStrokeWidth] = React.useState(1);
+
+  const changeColor = (event, color) => {
+    event.stopPropagation();
+    setColor(color);
+  };
 
   const handleMouseDown = (e) => {
     isDrawing.current = true;
     const pos = e.target.getStage().getPointerPosition();
-    setLines([...lines, { tool, points: [pos.x, pos.y] }]);
+    setLines([
+      ...lines,
+      { tool, strokeWidth: strokeWidth, stroke: color, points: [pos.x, pos.y] },
+    ]);
   };
 
   const handleMouseMove = (e) => {
@@ -164,7 +176,7 @@ export default function GameScreen() {
     // replace last
     lines.splice(lines.length - 1, 1, lastLine);
     setLines(lines.concat());
-    socket.emit("draw-lines", lines, game.lobby)
+    socket.emit("draw-lines", lines, game.lobby);
   };
 
   const handleMouseUp = () => {
@@ -177,8 +189,9 @@ export default function GameScreen() {
   useEffect(() => {
     const syncL = async (lines) => {
       //need better drawer check
-      if(auth.user.username != currentPlayer){
-        setLines(lines)
+      if (auth.user.username != currentPlayer) {
+        console.log(lines);
+        setLines(lines);
       }
     };
     socket.on("sync-lines", syncL);
@@ -314,87 +327,33 @@ export default function GameScreen() {
     </List>
   );
 
+  const isColorSelected = (buttonColor) => {
+    if (color == buttonColor) {
+      return "black";
+    } else {
+      return "white";
+    }
+  };
+
+  const handleSetStrokeWidth = (event, width) => {
+    setStrokeWidth(width);
+  };
+
   const gameTools = (
-    <Grid item xs="3" align="center">
-      {gameMode ? (
-        <List style={flexContainer}>
-          <Box
-            sx={{
-              width: 300,
-              height: 600,
-              margin: 1,
-              backgroundColor: "primary.dark",
-              borderRadius: 5,
-              border: 3,
-            }}
-          >
-            <List>
-              <Typography fontSize={"32px"}>Layers:</Typography>
-              <Button
-                sx={{
-                  width: 200,
-                  height: 75,
-                  margin: 1,
-                  backgroundColor: "white",
-                  "&:hover": {
-                    backgroundColor: "white",
-                    opacity: [0.9, 0.8, 0.7],
-                  },
-                  borderRadius: 5,
-                  border: 3,
-                  color: "black",
-                }}
-              >
-                <Typography fontSize={"32px"}>Layer 1</Typography>
-              </Button>
-              <Button
-                sx={{
-                  width: 200,
-                  height: 75,
-                  margin: 1,
-                  backgroundColor: "white",
-                  "&:hover": {
-                    backgroundColor: "white",
-                    opacity: [0.9, 0.8, 0.7],
-                  },
-                  borderRadius: 5,
-                  border: 3,
-                  color: "black",
-                }}
-              >
-                <Typography fontSize={"32px"}>Layer 2</Typography>
-              </Button>
-            </List>
-          </Box>
-          <Box
-            sx={{
-              width: 150,
-              height: 600,
-              margin: 1,
-              backgroundColor: "primary.dark",
-              borderRadius: 5,
-              border: 3,
-            }}
-          >
-            <Button sx={buttonCSS} onClick={(e) => {setTool('pen');}}><EditIcon fontSize="large" /></Button>
-            <Button sx={buttonCSS} onClick={(e) => {setTool('pen');}}><BrushIcon fontSize="large" /></Button>
-            <Button sx={buttonCSS} onClick={(e) => {setTool('eraser');}}><BsEraserFill fontSize="large" /></Button>
-            {/* <FormatColorFillIcon fontSize="large" />
-            <ImageSearchIcon fontSize="large" />
-            <OpenInFullIcon fontSize="large" />
-            <TextFormatIcon fontSize="large" />
-            <ColorizeIcon fontSize="large" />
-            <ClearIcon fontSize="large" /> */}
-          </Box>
-        </List>
-      ) : (
-        <Grid item xs="3" align="center"></Grid>
-      )}
-    </Grid>
+    <GameTools
+      buttonCSS={buttonCSS}
+      setTool={setTool}
+      gameMode={gameMode}
+      flexContainer={flexContainer}
+      tool={tool}
+      changeColor={changeColor}
+      isColorSelected={isColorSelected}
+      handleSetStrokeWidth={handleSetStrokeWidth}
+      strokeWidth={strokeWidth}
+    />
   );
 
   /* Drawing/Writing Canvas */
-
 
   let gameWorkSpace = "";
   if (gameMode) {
@@ -408,32 +367,31 @@ export default function GameScreen() {
             border: 3,
           }}
         >
-
           <Stage
-      width={600}
-      height={600}
-      onMouseDown={handleMouseDown}
-      onMousemove={handleMouseMove}
-      onMouseup={handleMouseUp}
-      ref={stageRef}
-      >
-      <Layer>
-        <Text text="Starts drawing here" x={5} y={30} />
-        {lines.map((line, i) => (
-          <Line
-            key={i}
-            points={line.points}
-            stroke="#df4b26"
-            strokeWidth={5}
-            tension={0.5}
-            lineCap="round"
-            globalCompositeOperation={
-              line.tool === "eraser" ? "destination-out" : "source-over"
-            }
-          />
-        ))}
-      </Layer>
-      </Stage>
+            width={600}
+            height={600}
+            onMouseDown={handleMouseDown}
+            onMousemove={handleMouseMove}
+            onMouseup={handleMouseUp}
+            ref={stageRef}
+          >
+            <Layer>
+              <Text text="Starts drawing here" x={5} y={30} />
+              {lines.map((line, i) => (
+                <Line
+                  key={i}
+                  points={line.points}
+                  stroke={line.stroke}
+                  strokeWidth={line.strokeWidth}
+                  tension={0.5}
+                  lineCap="round"
+                  globalCompositeOperation={
+                    line.tool === "eraser" ? "destination-out" : "source-over"
+                  }
+                />
+              ))}
+            </Layer>
+          </Stage>
         </Box>
       </Grid>
     );
@@ -521,7 +479,6 @@ export default function GameScreen() {
           }}
         >
           <Typography fontSize={"32px"}>Time Left: {game.timer}</Typography>
-          
         </Button>
         <Button
           sx={{
@@ -610,7 +567,6 @@ export default function GameScreen() {
         </Button>
         <Button
           sx={{
-            
             width: 450,
             height: 75,
             margin: 1,
@@ -623,7 +579,7 @@ export default function GameScreen() {
             border: 3,
             color: "black",
           }}
-           onClick={handleSubmit}
+          onClick={handleSubmit}
         >
           <Typography fontSize={"32px"}>Submit</Typography>
         </Button>
@@ -690,149 +646,41 @@ export default function GameScreen() {
   }
   //#endregion render elements
 
-  //#region wait elements
-  const waitChat = (
-    <Grid>
-      <Box
-        sx={{
-          width: 600,
-          height: 600,
-          backgroundColor: "white",
-          border: 3,
-          justifyContent: "space-between",
-        }}
-      >
-        <Typography fontSize={"32px"} sx={{ width: "100%" }}>
-          Terran: Hi!
-        </Typography>
-        <Typography fontSize={"32px"} sx={{ width: "100%" }}>
-          xx: Hi!
-        </Typography>
-        <TextField sx={{ top: "65%", width: "60%" }}></TextField>
-        <Button
-          
-          sx={{
-            marginLeft: 2,
-            width: "20%",
-            top: "65%",
-            backgroundColor: "yellow",
-            "&:hover": {
-              backgroundColor: "primary.main",
-              opacity: [0.9, 0.8, 0.7],
-            },
-            borderRadius: 5,
-            border: 3,
-            color: "black",
-          }}
-        >
-          <Typography fontSize={"32px"}>chat</Typography>
-        </Button>
-      </Box>
-    </Grid>
+  let currentDisplay = (
+    <List style={flexContainer} sx={{ justifyContent: "center" }}>
+      {/* Left of Canvas */}
+      {gameTools}
+      {/* Drawing Canvas */}
+      {gameWorkSpace}
+      {/* Right of Canvas */}
+      {gameUtils}
+    </List>
   );
 
-  const waitCenterPanel = (
-    <Grid item xs="6" align="center">
-      <Box
-        sx={{
-          width: 600,
-          height: 600,
-          backgroundColor: "white",
-          border: 3,
-        }}
-      >
-        <Stage
-      width={600}
-      height={600}
-      ref={stageRef}
-      >
-      <Layer>
-        <Text text="Starts drawing here" x={5} y={30} />
-        {lines.map((line, i) => (
-          <Line
-            key={i}
-            points={line.points}
-            stroke="#df4b26"
-            strokeWidth={5}
-            tension={0.5}
-            lineCap="round"
-            globalCompositeOperation={
-              line.tool === "eraser" ? "destination-out" : "source-over"
-            }
-          />
-        ))}
-      </Layer>
-      </Stage>
-      </Box>
-    </Grid>
-  );
+  if (auth.user.username != currentPlayer) {
+    currentDisplay = <WaitingScreen stageRef={stageRef} lines={lines} />;
+  }
 
-  const waitUtils = (
-    <Grid item xs="3" align="center">
-      <Button
-        sx={{
-          width: 450,
-          height: 75,
-          margin: 1,
-          backgroundColor: "#FF7F7F",
-          borderRadius: 5,
-          border: 3,
-          color: "black",
-        }}
-      >
-        <Typography fontSize={"32px"}>Time Left: {game.timer}</Typography>
-      </Button>
-
-      <Button
-        sx={{
-          width: 450,
-          height: 75,
-          margin: 1,
-          backgroundColor: "red",
-          "&:hover": {
-            backgroundColor: "primary.main",
-            opacity: [0.9, 0.8, 0.7],
-          },
-          borderRadius: 5,
-          border: 3,
-          color: "black",
-        }}
-      >
-        <Typography fontSize={"32px"}>Leave</Typography>
-      </Button>
-    </Grid>
-  );
-  //#endregion
-    
   return (
     <Grid
-    container
-    spacing={2}
-    justifyContent="center"
-    alignItems="center"
-    style={{
+      container
+      spacing={2}
+      justifyContent="center"
+      alignItems="center"
+      style={{
         width: "100vw",
         height: "100vh",
         backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
-    }}
+      }}
     >
-      
-        <Grid item xs="12" align="center">
-            {gameModeButton}
-            {gameCurrentPlayer}
-            {/* List of current panels drawn goes here */}
-            {gamePanels}
-            {/* Bottom half of screen */}
-            <List style={flexContainer} sx={{ justifyContent: "center" }}>
-            {/* Left of Canvas */}
-            {auth.user.username != currentPlayer ? waitChat : gameTools}
-            {/* Drawing Canvas */}
-            {auth.user.username != currentPlayer ? waitCenterPanel : gameWorkSpace}
-            {/* Right of Canvas */}
-            {auth.user.username != currentPlayer ? waitUtils : gameUtils}
-            </List>
-        </Grid>
+      <Grid item xs="12" align="center">
+        {gameModeButton}
+        {gameCurrentPlayer}
+        {/* List of current panels drawn goes here */}
+        {gamePanels}
+        {/* Bottom half of screen */}
+        {currentDisplay}
+      </Grid>
     </Grid>
-    );
-
+  );
 }
