@@ -43,7 +43,7 @@ export default function ProfileScreen() {
     // event.preventDefault();
     // community.setChangeBio(true);
     let newBio = "Updated Bio"
-    let response = await auth.updateBio(auth.user.username, newBio)
+    const response = await auth.updateBio(auth.user.username, newBio)
     console.log(response)
   }
 

@@ -580,6 +580,9 @@ searchUsers = async (req, res) => {
 updateBio = async (req, res) => {
   try {
     const { username, bio } = req.body;
+    console.log("body:", req.body)
+    console.log("username:", username)
+    console.log("bio:", bio)
 
     const currentUser = await User.findOne({ username: username });
     console.log("currentUser: " + currentUser);
