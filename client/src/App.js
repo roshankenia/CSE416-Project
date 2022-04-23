@@ -65,6 +65,7 @@ const App = () => {
                       <Route path="/guest/" exact component={GuestScreen} />
                       <Route path="/game/:id" exact component={GameWrapper} />
                       <Route path="/reset" exact component={ResetScreen} />
+                      <Route path="/test" exact component={Test} />
                     </Switch>
                   </Box>
                 </Box>

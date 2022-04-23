@@ -111,9 +111,9 @@ io.on("connection", (socket) => {
     io.to(lobbyID).emit("game-started", players);
   });
 
-  socket.on("draw-actions", (lines, lobbyID) => {
+  socket.on("draw-actions", (actions, lobbyID) => {
     console.log("sending actions to:", lobbyID);
-    io.to(lobbyID).emit("sync-actions", lines);
+    io.to(lobbyID).emit("sync-actions", actions);
   });
 
   socket.on("update-host", (host, lobbyID) => {

@@ -23,6 +23,7 @@ import CircleIcon from "@mui/icons-material/Circle";
 import Slider from "@mui/material/Slider";
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
+import TextFieldsIcon from '@mui/icons-material/TextFields';
 
 export default function GameTools(props) {
   const { game } = useContext(GameContext);
@@ -40,7 +41,8 @@ export default function GameTools(props) {
     handleSetStrokeWidth,
     strokeWidth,
     handleUndo,
-    handleRedo
+    handleRedo,
+    handleChangeText
   } = props;
 
   let strokeSlider = (
@@ -364,6 +366,18 @@ export default function GameTools(props) {
           </Grid>
         </Grid>
       </Box>
+      {tool == 'text' &&
+        <Box sx={{
+            margin: 1,
+            backgroundColor: "white",
+            borderRadius: 5,
+            border: 3,
+            color: "black",
+          }}>
+            <Typography fontSize={"24px"}>Text</Typography>
+          <TextField sx={{border:2, margin: 1}} defaultValue="Enter Text Here" onChange={handleChangeText}></TextField>
+        </Box>
+      }
       <Box
         sx={{
           margin: 1,
@@ -465,6 +479,14 @@ export default function GameTools(props) {
               }}
             >
               <CircleIcon fontSize="large" />
+            </Button>
+            <Button
+              sx={buttonCSS}
+              onClick={(e) => {
+                setTool("text");
+              }}
+            >
+              <TextFieldsIcon fontSize="large" />
             </Button>
             <Button
               sx={buttonCSS}

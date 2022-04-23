@@ -13,6 +13,8 @@ import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import TextFormatIcon from "@mui/icons-material/TextFormat";
 import ColorizeIcon from "@mui/icons-material/Colorize";
 import ClearIcon from "@mui/icons-material/Clear";
+import SquareIcon from "@mui/icons-material/Square";
+
 
 import { styled } from "@mui/material/styles";
 import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
@@ -33,14 +35,14 @@ import WaitingScreen from "./WaitingScreen";
 import GameTools from "./GameTools";
 import IconButton from "@mui/material/IconButton";
 
+
 // konva stuff
-import { Stage, Layer, Rect, Text, Circle, Line, Star, Shape } from "react-konva";
+import { Stage, Layer, Rect, Text, Circle, Line, Star, Shape, Image } from "react-konva";
+import useImage from "use-image";
 import { BsEraserFill } from "react-icons/bs";
 
 //socket
 import { SocketContext } from "../socket";
-
-import SquareIcon from "@mui/icons-material/Square";
 
 export default function GameScreen() {
   const { game } = useContext(GameContext);
@@ -58,6 +60,16 @@ export default function GameScreen() {
   // ******* change gameMode as "story" or "comic" to get different game screens *******
   // const gameMode = "comic"
   const [gameMode, setGameMode] = useState(true);
+
+  const [characterToggle, setCharacterToggle] = useState(false);
+  const toggleCharacters = () =>{
+    setCharacterToggle(!characterToggle)
+  }
+  const [bubbleToggle, setBubbleToggle] = useState(false);
+  const toggleBubbles = () =>{
+    setBubbleToggle(!bubbleToggle)
+  }
+
   const handleGameMode = (event) => {
     event.stopPropagation();
     if (gameMode) {
@@ -120,35 +132,51 @@ export default function GameScreen() {
 
   //#region KONVA functions
   const [tool, setTool] = React.useState("pen");
-  const isDrawing = React.useRef(false);
-  const stageRef = React.useRef(null);
   const [color, setColor] = React.useState("#000000");
   const [strokeWidth, setStrokeWidth] = React.useState(1);
-
   const [actions, setActions] = React.useState([]);
+  const [redos, setRedos] = React.useState([])
+  const [displayText, setDisplayText] = React.useState("Enter Text Here")
+
+  const isDrawing = React.useRef(false);
+  const stageRef = React.useRef(null);
+  const dragUrl = React.useRef();
+
+  const handleChangeText = (e) => {
+    const text = e.target.value
+    setDisplayText(text)
+  }
+
+  const URLImage = ({ image }) => {
+    const [img] = useImage(image.src);
+    return (
+      <Image
+        image={img}
+        x={image.x}
+        y={image.y}
+        // I will use offset to set origin to the center of the image
+        offsetX={img ? img.width / 2 : 0}
+        offsetY={img ? img.height / 2 : 0}
+      />
+    );
+  };
 
   const handleUndo = () => {
-    // if (actionStep === 0) {
-    //   return;
-    // }
-    // actionStep -= 1;
-    // const previous = actionStack[actionStep];
-    // console.log(previous)
-    // setState({
-    //   position: previous,
-    // });
+    if(actions.length){
+      let redo = actions.pop()
+      setActions(actions)
+      setRedos([...redos,redo])
+      socket.emit("draw-actions", actions, game.lobby);
+    }
   };
 
   const handleRedo = () => {
-    // if (actionStep === actionStack.length - 1) {
-    //   return;
-    // }
-    // actionStep += 1;
-    // const next = actionStack[actionStep];
-    // console.log(next)
-    // this.setState({
-    //   position: next,
-    // });
+    if(redos.length){
+      let action = redos.pop()
+      socket.emit("draw-actions", [...actions,action], game.lobby);
+      setActions([...actions,action])
+      setRedos(redos);
+    }
   };
 
   const changeColor = (event, color) => {
@@ -164,6 +192,7 @@ export default function GameScreen() {
         ...actions,
         {
           tool,
+          key: actions.length + 1,
           strokeWidth: strokeWidth,
           stroke: color,
           points: [pos.x, pos.y],
@@ -184,7 +213,6 @@ export default function GameScreen() {
           strokeWidth: strokeWidth,
         },
       ]);
-      //console.log("what?")
     } else if (tool == "circle") {
       const { x, y } = e.target.getStage().getPointerPosition();
       setActions([
@@ -200,6 +228,20 @@ export default function GameScreen() {
           strokeWidth: strokeWidth,
         },
       ]);
+    } else if (tool == "text") {
+      const { x, y } = e.target.getStage().getPointerPosition();
+      actions.push({
+        tool,
+        x,
+        y,
+        fontSize: strokeWidth,
+        fill: color,
+        key: actions.length + 1,
+        text: displayText,
+        draggable: true,
+      })
+      setActions(actions);
+      socket.emit("draw-actions", actions, game.lobby);
     }
   };
 
@@ -259,6 +301,7 @@ export default function GameScreen() {
 
   const handleMouseUp = (e) => {
     isDrawing.current = false;
+    setRedos([])
   };
 
   //#endregion
@@ -268,6 +311,7 @@ export default function GameScreen() {
     const syncA = async (actions) => {
       //need better drawer check
       if (auth.user.username != currentPlayer) {
+        console.log(actions)
         setActions(actions);
       }
     };
@@ -429,6 +473,7 @@ export default function GameScreen() {
       strokeWidth={strokeWidth}
       handleUndo={handleUndo}
       handleRedo={handleRedo}
+      handleChangeText={handleChangeText}
     />
   );
 
@@ -444,6 +489,22 @@ export default function GameScreen() {
             backgroundColor: "white",
             border: 3,
           }}
+          onDrop={(e) => {
+            e.preventDefault();
+            // register event position
+            stageRef.current.setPointersPositions(e);
+            // add image
+            actions.push(
+              {
+                ...stageRef.current.getPointerPosition(),
+                src: dragUrl.current,
+                key: actions.length + 1
+              }
+            )
+            setActions(actions);
+            socket.emit("draw-actions", actions, game.lobby);
+          }}
+          onDragOver={(e) => e.preventDefault()}
         >
           <Stage
             width={600}
@@ -452,13 +513,13 @@ export default function GameScreen() {
             onMousemove={handleMouseMove}
             onMouseup={handleMouseUp}
             ref={stageRef}
+            
           >
             <Layer>
               <Text text="Starts drawing here" x={5} y={30} />
               {actions.map((action) => {
                 if(action.tool === 'pen' || action.tool === 'eraser'){
                   return <Line
-                    // key={i}
                     points={action.points}
                     stroke={action.stroke}
                     strokeWidth={action.strokeWidth}
@@ -488,6 +549,16 @@ export default function GameScreen() {
                     stroke={action.stroke}
                     strokeWidth={action.strokeWidth}
                   />
+                }else if(action.tool === 'text'){
+                  return <Text
+                    x={action.x}
+                    y={action.y}
+                    text={action.text}
+                    fontSize={action.fontSize}
+                    fill={action.fill}
+                  />
+                }else{
+                  return <URLImage image={action} />;
                 }
               })}
             </Layer>
@@ -611,9 +682,29 @@ export default function GameScreen() {
             border: 3,
             color: "black",
           }}
+          onClick={toggleCharacters}
         >
           <Typography fontSize={"32px"}>Characters</Typography>
         </Button>
+        {characterToggle &&
+        <Box sx={{width: 450,
+          height: 200,
+          margin: 1,
+          backgroundColor: "primary.dark",
+          "&:hover": {
+            backgroundColor: "primary.main",
+            opacity: [0.9, 0.8, 0.7],
+          },
+          borderRadius: 5,
+          border: 3,
+          color: "black",}}>
+              <img src={require('../images/Trollface.png')}
+                   draggable="true"
+                   onDragStart={(e) => {
+                   dragUrl.current = e.target.src;
+               }} />
+          </Box>
+        }
         <Button
           sx={{
             width: 450,
@@ -628,9 +719,29 @@ export default function GameScreen() {
             border: 3,
             color: "black",
           }}
+          onClick={toggleBubbles}
         >
           <Typography fontSize={"32px"}>Speech Bubbles</Typography>
         </Button>
+        {bubbleToggle &&
+        <Box sx={{width: 450,
+          height: 200,
+          margin: 1,
+          backgroundColor: "primary.dark",
+          "&:hover": {
+            backgroundColor: "primary.main",
+            opacity: [0.9, 0.8, 0.7],
+          },
+          borderRadius: 5,
+          border: 3,
+          color: "black",}}>
+              <img src={require('../images/Speech_bubble.png')}
+                   draggable="true"
+                   onDragStart={(e) => {
+                   dragUrl.current = e.target.src;
+               }} />
+          </Box>
+        }
         <Button
           sx={{
             width: 450,
@@ -763,6 +874,7 @@ export default function GameScreen() {
       <WaitingScreen
         stageRef={stageRef}
         actions={actions}
+        URLImage={URLImage}
       />
     );
   }

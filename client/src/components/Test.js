@@ -23,7 +23,8 @@ import List from "@mui/material/List";
 import Grid from "@mui/material/Grid";
 
 import AuthContext from "../auth";
-
+import { Stage, Layer, Image, Line } from "react-konva";
+import useImage from "use-image";
 /*
     This module is used for testing stuff
     modules can be copy+pasted to other components
@@ -31,94 +32,135 @@ import AuthContext from "../auth";
     @Terran
 */
 const HomeScreen = () => {
-  const { innerWidth: width, innerHeight: height } = window;
-  const { community } = useContext(GlobalCommunityContext);
-  const { auth } = useContext(AuthContext);
-  
-  // //#region ************* Create community module ***************/
-  // const [name, setName] = useState("")
-  // /* default community name is "untitled" 
-  //  * -@Terran */ 
-  // function handleCreateNewCommunity() {
-  //   if(name){
-  //     community.createNewCommunity(name);
-  //   }else{
-  //     community.createNewCommunity("untitled")
-  //   }
-  // }
-  // /* handleBlur and handleKeyPress may be useful 
-  //  * depending on the future implementation 
-  //  * -@Terran */ 
-  // function handleBlur(event) {
-  //   // let id = event.target.id.substring("list-".length);if(text !== ""){store.changeListName(id, text.trim())}toggleEdit();
-  // }
-  // function handleKeyPress(event) {
-  //   // if (event.code === "Enter") {handleBlur(event)}
-  // }
-  // function updateCommunityName(event) {
-  //   setName(event.target.value);
-  // }
-  // const createCommunityRender = <Box>    
-  //                           <TextField id="outlined-basic" label="Community Name" variant="outlined" 
-  //                             onKeyPress={handleKeyPress}
-  //                             onBlur={handleBlur}
-  //                             onChange={updateCommunityName}/>            
-  //                           <Button variant="outlined" onClick={handleCreateNewCommunity}>Create new community</Button>
-  //                         </Box>
-  // //#endregion ************* End Create community module ***************/
 
-  // //#region ************* Delete community module ***************/
-  // /* delete a community with given name" 
-  //  * -@Terran */ 
-  // const [dName, setDName] = useState("")
-  // function handleDeleteCommunity() {
-  //   if(dName){
-  //     community.deleteCommunity(dName);
-  //   }
-  // }
-  // function updateDeleteName(event) {
-  //   setDName(event.target.value);
-  // }
-  // const deleteCommunityRender = <Box>    
-  //                           <TextField id="outlined-basic" label="delete Community Name" variant="outlined" 
-  //                             onChange={updateDeleteName}/>            
-  //                           <Button variant="outlined" onClick={handleDeleteCommunity}>Delete community</Button>
-  //                         </Box>
-  // //#endregion *************** delete community module ***************/
 
-  // //#region ************* Retrieve community module ***************/
-  // /* get all existing communities" 
-  //  * -@Terran */ 
-  // function handleGetCommunities() {
-  //   community.getCommunities()
-  // }
-  // let communityCards = "";
-  // if (community.communityList) {
-  //   communityCards = 
-  //         <List sx={{ width: '90%', left: '5%', bgcolor: 'light-gray' }}>
-  //         {
-  //             community.communityList.map((obj) => (
-  //                 <CommunityCard
-  //                     key={obj._id}
-  //                     Obj={obj}
-  //                 />
-  //             ))
-  //         }
-  //         </List>;
-  // }
-  // const getCommunitiesRender = <Box>    
-  //                           <Button variant="outlined" onClick={handleGetCommunities}>Get All Communities</Button>
-  //                           {communityCards}
-  //                         </Box>
-  // //#endregion *************** delete community module ***************/
+const URLImage = ({ image }) => {
+  const [img] = useImage(image.src);
   return (
-    <Grid container direction={'column'}>
-      <Typography fontSize={'34px'}>You have successfully changed your password</Typography>
-    {/* {createCommunityRender}
-    {deleteCommunityRender}
-    {getCommunitiesRender} */}
-    </Grid>
+    <Image
+      image={img}
+      x={image.x}
+      y={image.y}
+      crossOrigin="Anonymous"
+      // I will use offset to set origin to the center of the image
+      offsetX={img ? img.width / 2 : 0}
+      offsetY={img ? img.height / 2 : 0}
+    />
   );
+};
+
+  const dragUrl = React.useRef();
+  const stageRef = React.useRef();
+  const [images, setImages] = React.useState([]);
+
+  const [tool, setTool] = React.useState("pen");
+  const isDrawing = React.useRef(false);
+
+  const handleMouseDown = (e) => {
+    isDrawing.current = true;
+    const pos = e.target.getStage().getPointerPosition();
+    setImages([...images, { tool, points: [pos.x, pos.y] }]);
+  };
+
+  const handleMouseMove = (e) => {
+    // no drawing - skipping
+    if (!isDrawing.current) {
+      return;
+    }
+    const stage = e.target.getStage();
+    const point = stage.getPointerPosition();
+    let lastLine = images[images.length - 1];
+    // add point
+    lastLine.points = lastLine.points.concat([point.x, point.y]);
+
+    // replace last
+    images.splice(images.length - 1, 1, lastLine);
+    setImages(images.concat());
+  };
+
+  const handleMouseUp = () => {
+    isDrawing.current = false;
+  };
+
+  return (
+    <div>
+      Try to trag and image into the stage:
+      <br />
+      <img
+        alt="lion"
+        src="https://konvajs.org/assets/lion.png"
+        crossOrigin="Anonymous"
+        draggable="true"
+        onDragStart={(e) => {
+          dragUrl.current = e.target.src;
+        }}
+      />
+      <div
+        onDrop={(e) => {
+          e.preventDefault();
+          // register event position
+          stageRef.current.setPointersPositions(e);
+          // add image
+          setImages(
+            images.concat([
+              {
+                ...stageRef.current.getPointerPosition(),
+                src: dragUrl.current
+              }
+            ])
+          );
+
+        }}
+        onDragOver={(e) => e.preventDefault()}
+      >
+        <Stage
+          width={window.innerWidth}
+          height={window.innerHeight}
+          onMouseDown={handleMouseDown}
+          onMousemove={handleMouseMove}
+          onMouseup={handleMouseUp}
+          style={{ border: "1px solid grey" }}
+          ref={stageRef}
+        >
+          <Layer>
+            {images.map((image) => {
+              console.log(image);
+              if (image.tool === "pen" || image.tool === "eraser") {
+                return (
+                  <Line
+                    //key={i}
+                    points={image.points}
+                    stroke="#df4b26"
+                    strokeWidth={5}
+                    tension={0.5}
+                    lineCap="round"
+                    globalCompositeOperation={
+                      image.tool === "eraser"
+                        ? "destination-out"
+                        : "source-over"
+                    }
+                  />
+                );
+              } else {
+                return <URLImage image={image} />;
+              }
+            })}
+          </Layer>
+        </Stage>
+      </div>
+      <select
+        value={tool}
+        onChange={(e) => {
+          setTool(e.target.value);
+        }}
+      >
+        <option value="pen">Pen</option>
+        <option value="eraser">Eraser</option>
+      </select>
+    </div>
+  );
+
+
 };
 
 export default HomeScreen;
