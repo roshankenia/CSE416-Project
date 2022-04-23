@@ -39,13 +39,11 @@ export default function ProfileScreen() {
     setNotifyOpen(false);
   };
 
-  async function handleUpdateBio(event) {
+  async function handleOpenBioModal(event) {
+    // event.preventDefault();
+    // community.setChangeBio(true);
     let newBio = "Updated Bio"
-    console.log(auth.user.bio)
-    console.log(event)
-    console.log("you have reached handleUpdateBio in profilescreen.js")
-    console.log(community.userProfile)
-    let response = await auth.updateBio(auth.user.username, newBio)
+    const response = await auth.updateBio(auth.user.username, newBio)
     console.log(response)
   }
 
@@ -96,10 +94,7 @@ export default function ProfileScreen() {
       }
     }
   }
-  console.log(isSelf)
-  console.log(isFriend)
-  // const bioToPrint = "This is a test bio"
-  console.log(community.userProfile.bio)
+
   let bioToPrint = community.userProfile.bio
   if (community.userProfile.bio == ""){
     bioToPrint = "No Bio Yet"
@@ -156,7 +151,7 @@ export default function ProfileScreen() {
             borderRadius: 50,
           }}
           sx={{ mb: 0.5, height: "5%", width: "15%" }}
-          onClick={handleUpdateBio}
+          onClick={handleOpenBioModal}
         >
           Update Bio
         </Button>

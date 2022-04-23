@@ -41,7 +41,7 @@ export default function WaitingScreen(props) {
   const { auth } = useContext(AuthContext);
   const socket = useContext(SocketContext);
 
-  let { stageRef, actions } = props;
+  let { stageRef, actions, URLImage } = props;
   const flexContainer = {
     display: "flex",
     flexDirection: "row",
@@ -67,7 +67,6 @@ export default function WaitingScreen(props) {
             {actions.map((action) => {
               if(action.tool === 'pen' || action.tool === 'eraser'){
                 return <Line
-                  // key={i}
                   points={action.points}
                   stroke={action.stroke}
                   strokeWidth={action.strokeWidth}
@@ -97,6 +96,16 @@ export default function WaitingScreen(props) {
                   stroke={action.stroke}
                   strokeWidth={action.strokeWidth}
                 />
+              }else if(action.tool === 'text'){
+                return <Text
+                  x={action.x}
+                  y={action.y}
+                  text={action.text}
+                  fontSize={action.fontSize}
+                  fill={action.fill}
+                />
+              }else{
+                return <URLImage image={action} />;
               }
             })}
           </Layer>

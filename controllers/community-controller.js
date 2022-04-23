@@ -85,11 +85,14 @@ updateCommunityById = async (req, res) => {
         });
       }
 
-      if(req.body.community.communityName){
+      if (req.body.community.communityName) {
         community.communityName = req.body.community.communityName;
       }
       // this line check if user already in the community
-      if (req.body.community.communityMembers.length !== new Set(req.body.community.communityMembers).size) {
+      if (
+        req.body.community.communityMembers.length !==
+        new Set(req.body.community.communityMembers).size
+      ) {
         return res.status(401).json({
           success: false,
           message: "User is already in the community!",
@@ -117,7 +120,7 @@ getCommunityById = async (req, res) => {
     const id = req.params.id;
     console.log("Finding Community with id: " + JSON.stringify(id));
 
-    await Community.findOne({ _id : id }, (err, community) => {
+    await Community.findOne({ _id: id }, (err, community) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
@@ -259,22 +262,19 @@ updateStoryById = async (req, res) => {
 
 deleteStoryById = async (req, res) => {
   try {
-    await Story.findOneAndDelete(
-      { _id : req.params.id },
-      function (err, story) {
-        if (err) {
-          console.log(err);
-          return res.status(400).json({
-            errorMessage: "Story Not Deleted!",
-          });
-        } else {
-          console.log("Deleted : ", story);
-          return res.status(201).json({
-            Message: "Story Successfully Deleted!",
-          });
-        }
+    await Story.findOneAndDelete({ _id: req.params.id }, function (err, story) {
+      if (err) {
+        console.log(err);
+        return res.status(400).json({
+          errorMessage: "Story Not Deleted!",
+        });
+      } else {
+        console.log("Deleted : ", story);
+        return res.status(201).json({
+          Message: "Story Successfully Deleted!",
+        });
       }
-    );
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -373,22 +373,19 @@ getComicById = async (req, res) => {
 
 deleteComicById = async (req, res) => {
   try {
-    await Comic.findOneAndDelete(
-      { _id : req.params.id },
-      function (err, comic) {
-        if (err) {
-          console.log(err);
-          return res.status(400).json({
-            errorMessage: "Comic Not Deleted!",
-          });
-        } else {
-          console.log("Deleted : ", comic);
-          return res.status(201).json({
-            Message: "Comic Successfully Deleted!",
-          });
-        }
+    await Comic.findOneAndDelete({ _id: req.params.id }, function (err, comic) {
+      if (err) {
+        console.log(err);
+        return res.status(400).json({
+          errorMessage: "Comic Not Deleted!",
+        });
+      } else {
+        console.log("Deleted : ", comic);
+        return res.status(201).json({
+          Message: "Comic Successfully Deleted!",
+        });
       }
-    );
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -477,7 +474,7 @@ updatePost = async (req, res) => {
       if (postTitle) {
         post.postTitle = postTitle;
       }
-      if (postComic){
+      if (postComic) {
         post.postComic = postComic;
       }
       if (postStory) {
@@ -528,22 +525,19 @@ updatePost = async (req, res) => {
 
 deletePostById = async (req, res) => {
   try {
-    await Post.findOneAndDelete(
-      { _id : req.params.id },
-      function (err, post) {
-        if (err) {
-          console.log(err);
-          return res.status(400).json({
-            errorMessage: "Post Not Deleted!",
-          });
-        } else {
-          console.log("Deleted : ", post);
-          return res.status(201).json({
-            Message: "Post Successfully Deleted!",
-          });
-        }
+    await Post.findOneAndDelete({ _id: req.params.id }, function (err, post) {
+      if (err) {
+        console.log(err);
+        return res.status(400).json({
+          errorMessage: "Post Not Deleted!",
+        });
+      } else {
+        console.log("Deleted : ", post);
+        return res.status(201).json({
+          Message: "Post Successfully Deleted!",
+        });
       }
-    );
+    });
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -597,7 +591,7 @@ getCommentById = async (req, res) => {
     const id = req.params.id;
     console.log("Find Comment with id: " + JSON.stringify(id));
 
-    await Comment.find({ _id : id }, (err, comment) => {
+    await Comment.find({ _id: id }, (err, comment) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
@@ -660,7 +654,7 @@ updateCommentById = async (req, res) => {
 deleteCommentById = async (req, res) => {
   try {
     await Comment.findOneAndDelete(
-      { _id : req.params.id },
+      { _id: req.params.id },
       function (err, comment) {
         if (err) {
           console.log(err);
@@ -679,23 +673,28 @@ deleteCommentById = async (req, res) => {
     console.error(err);
     res.status(500).send();
   }
-}
+};
 
 //#endregion comment
 
 //#region query
 searchCommunityByName = async (req, res) => {
   try {
-    const name =  req.params.name;
+    const name = req.params.name;
     console.log("Finding Community with name: " + name);
 
-    await Community.find({ communityName : { "$regex": name, "$options": "i" } }, (err, community) => {
-      if (err) {
-        return res.status(400).json({ success: false, error: err });
+    await Community.find(
+      { communityName: { $regex: name, $options: "i" } },
+      (err, community) => {
+        if (err) {
+          return res.status(400).json({ success: false, error: err });
+        }
+        console.log("Found community: " + JSON.stringify(community));
+        return res
+          .status(200)
+          .json({ success: true, communityList: community });
       }
-      console.log("Found community: " + JSON.stringify(community));
-      return res.status(200).json({ success: true, communityList: community });
-    }).catch((err) => console.log(err));
+    ).catch((err) => console.log(err));
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -704,57 +703,69 @@ searchCommunityByName = async (req, res) => {
 
 searchPostByTitle = async (req, res) => {
   try {
-    const title =  req.params.title;
+    const title = req.params.title;
     console.log("Finding Post with title: " + title);
 
-    await Post.find({ postTitle : { "$regex": title, "$options": "i" }, $or:[ {communityPublished : true} , {discoveryPublished:true}] }, (err, post) => {
-      if (err) {
-        return res.status(400).json({ success: false, error: err });
+    await Post.find(
+      {
+        postTitle: { $regex: title, $options: "i" },
+        $or: [{ communityPublished: true }, { discoveryPublished: true }],
+      },
+      (err, post) => {
+        if (err) {
+          return res.status(400).json({ success: false, error: err });
+        }
+        console.log("Found post: " + JSON.stringify(post));
+        return res.status(200).json({ success: true, postList: post });
       }
-      console.log("Found post: " + JSON.stringify(post));
-      return res.status(200).json({ success: true, postList: post });
-    }).catch((err) => console.log(err));
+    ).catch((err) => console.log(err));
   } catch (err) {
     console.error(err);
     res.status(500).send();
   }
-}
+};
 
 searchComicByAuthor = async (req, res) => {
   try {
-    const author =  req.params.author;
+    const author = req.params.author;
     console.log("Finding Comic with title: " + author);
 
-    await Comic.find({ authors : { "$regex": author, "$options": "i" } }, (err, comic) => {
-      if (err) {
-        return res.status(400).json({ success: false, error: err });
+    await Comic.find(
+      { authors: { $regex: author, $options: "i" } },
+      (err, comic) => {
+        if (err) {
+          return res.status(400).json({ success: false, error: err });
+        }
+        console.log("Found comic: " + JSON.stringify(comic));
+        return res.status(200).json({ success: true, comicList: comic });
       }
-      console.log("Found comic: " + JSON.stringify(comic));
-      return res.status(200).json({ success: true, comicList: comic });
-    }).catch((err) => console.log(err));
+    ).catch((err) => console.log(err));
   } catch (err) {
     console.error(err);
     res.status(500).send();
   }
-}
+};
 
 searchStoryByAuthor = async (req, res) => {
   try {
-    const author =  req.params.author;
+    const author = req.params.author;
     console.log("Finding Comic with title: " + author);
 
-    await Story.find({ authors : { "$regex": author, "$options": "i" } }, (err, story) => {
-      if (err) {
-        return res.status(400).json({ success: false, error: err });
+    await Story.find(
+      { authors: { $regex: author, $options: "i" } },
+      (err, story) => {
+        if (err) {
+          return res.status(400).json({ success: false, error: err });
+        }
+        console.log("Found story: " + JSON.stringify(story));
+        return res.status(200).json({ success: true, storyList: story });
       }
-      console.log("Found story: " + JSON.stringify(story));
-      return res.status(200).json({ success: true, storyList: story });
-    }).catch((err) => console.log(err));
+    ).catch((err) => console.log(err));
   } catch (err) {
     console.error(err);
     res.status(500).send();
   }
-}
+};
 
 //#endregion query
 
@@ -783,5 +794,5 @@ module.exports = {
   searchCommunityByName,
   searchPostByTitle,
   searchComicByAuthor,
-  searchStoryByAuthor
+  searchStoryByAuthor,
 };

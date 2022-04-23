@@ -19,10 +19,56 @@ const style = {
 };
 export default function ChangeBioModal() {
   const { auth } = useContext(AuthContext);
+  const { community } = useContext(GlobalCommunityContext);
+
+  const [newBio, setNewBio] = useState('')
+
+  function handleChange(event) {
+    setNewBio(event.target.value)
+  }
+
+  function handleClose(event) {
+    setNewBio('')
+    setSuccess(false)
+    auth.setErrorMessage('')
+    community.setChangeBio(false);
+  }
+
+  function handleChangeBio(event) {
+    console.log("Bio would've been updated")
+    // let response = await auth.updateBio(auth.user.username, newBio)
+    // console.log(response)
+  }
+
 
   return (
-    <Modal>
-      to be completed
+    <Modal
+      open={community.changeBioModal}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description">
+        <Box>
+          <Typography 
+            sx={{fontSize: 28, marginBottom:'-10px'}}>
+            New Biography:
+          </Typography>
+          <FormControl fullWidth sx={{ }} variant="standard" >
+              <Input
+                id="standard-adornment-biography"
+                onChange={handleChange}
+              />
+          </FormControl>
+          <Button
+            variant="contained"
+            onClick={handleChangeBio}
+            sx={{ m: 1 }}
+          >
+            Confirm
+          </Button>
+          <Button variant="outlined" onClick={handleClose} sx={{ m: 1 }}>
+            Close
+          </Button>
+        </Box>
     </Modal>
   );
 }

@@ -6,7 +6,7 @@ const CommunitySchema = new Schema(
     {   
         communityName: { type: String, required: true },
         communityMembers: {type: [String], required: true},
-        communityPosts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}],
+        communityPosts: {type: [{type: mongoose.Schema.Types.ObjectId, ref: 'Post'}], required: true},
     },
     { timestamps: true },
 )
