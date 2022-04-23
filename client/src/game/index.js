@@ -18,7 +18,8 @@ export const GameActionType = {
   LEAVE_LOBBY: "LEAVE_LOBBY",
   ADD_READY: "ADD_READY",
   ADD_HOST: "ADD_HOST",
-  UPDATE_TIMER: "UPDATE_TIMER"
+  UPDATE_TIMER: "UPDATE_TIMER",
+  NEXT_TURN:"NEXT_TURN"
 };
 
 function GameContextProvider(props) {
@@ -37,7 +38,9 @@ function GameContextProvider(props) {
     readyPlayers: [],
     screen: "lobby",
     timer: null,
-    host: null
+    host: null,
+    turn: null,
+    currentPlayer: null
   });
   const history = useHistory();
 
@@ -56,6 +59,8 @@ function GameContextProvider(props) {
           screen: "lobby",
           timer: null,
           host: auth.user.username,
+          turn: null,
+          currentPlayer: null
         });
       }
       case GameActionType.UPDATE_TIMER: {
@@ -68,6 +73,8 @@ function GameContextProvider(props) {
           screen: game.screen,
           timer: payload,
           host: game.host,
+          turn: game.turn,
+          currentPlayer: game.currentPlayer
         });
       }
       case GameActionType.CREATE_NEW_GAME: {
@@ -81,6 +88,8 @@ function GameContextProvider(props) {
           screen: "game",
           timer: game.timer,
           host: game.host,
+          turn: 0,
+          currentPlayer: game.players[0]
         });
       }
       case GameActionType.ENTER_VOTING: {
@@ -93,6 +102,8 @@ function GameContextProvider(props) {
           screen: "voting",
           timer: 60,
           host: game.host,
+          turn: null,
+          currentPlayer: null
         });
       }
       case GameActionType.EXIT_VOTING: {
@@ -105,6 +116,8 @@ function GameContextProvider(props) {
           screen: "lobby",
           timer: null,
           host: game.host,
+          turn: null,
+          currentPlayer: null
         });
       }
       case GameActionType.JOIN_LOBBY: {
@@ -117,6 +130,8 @@ function GameContextProvider(props) {
           screen: "lobby",
           timer: null,
           host: game.host,
+          turn: null,
+          currentPlayer: null
         });
       }
       case GameActionType.UPDATE_PLAYERS: {
@@ -129,6 +144,8 @@ function GameContextProvider(props) {
           screen: game.screen,
           timer: null,
           host: game.host,
+          turn: null,
+          currentPlayer: null
         });
       }
       case GameActionType.LEAVE_LOBBY: {
@@ -141,6 +158,8 @@ function GameContextProvider(props) {
           screen: game.screen,
           timer: null,
           host: game.host,
+          turn: null,
+          currentPlayer: null
         });
       }
       case GameActionType.ADD_READY: {
@@ -153,6 +172,21 @@ function GameContextProvider(props) {
           screen: game.screen,
           timer: null,
           host: game.host,
+          turn: null,
+          currentPlayer: null
+        });
+      }
+      case GameActionType.NEXT_TURN: {
+        return setGame({
+          game: game.game,
+          lobby: game.lobby,
+          voting: game.voting,
+          players: game.players,
+          readyPlayers: game.readyPlayers,
+          screen: game.screen,
+          host: game.host,
+          turn: payload.turn,
+          currentPlayer: payload.currentPlayer
         });
       }
       case GameActionType.ADD_HOST: {
@@ -164,6 +198,8 @@ function GameContextProvider(props) {
           readyPlayers: game.readyPlayers,
           screen: game.screen,
           host: payload,
+          turn: null,
+          currentPlayer: null
         });
       }
       default:
@@ -275,12 +311,8 @@ function GameContextProvider(props) {
 
     socket.once("player-ready", readyP);
 
-    //TODO create another game action type?
+  
     const countDown = async (count)=>{
-      // const display = document.getElementById('timer')
-      // $('#timer').append(count + '<br /><br />');
-      // $('#timer').append($('<li>').text(count));
-      // display.value = count
       gameReducer({
         type: GameActionType.UPDATE_TIMER,
         payload: count
@@ -288,9 +320,6 @@ function GameContextProvider(props) {
     };
 
     socket.once("counter", countDown);
-
-    // socket.on("count1", function(data){
-    // });
 
     //pass real game obj when backend is ready
     const gameStart = async (game) => {
@@ -303,6 +332,24 @@ function GameContextProvider(props) {
     }
     //right now it passes player array
     socket.once("game-started", gameStart)
+
+//TODO Alan heck to see which turn it is, who is the current player
+    const changeTurn = async (time)=>{
+      console.log("Inside Change Turn / end Time the game turn value is ", game.turn)
+      console.log("Check to make sure all players are organized the same", game.players)
+      
+      let currentTurn = game.turn;
+      let currPlayer = game.players[currentTurn%(game.players.length)]
+      let nextTurn = {turn: game.turn + 1, currentPlayer: currPlayer};
+      gameReducer({
+        type: GameActionType.NEXT_TURN,
+        payload:nextTurn
+      })
+
+      console.log("The game timer is after we change turns is", time)
+      socket.emit("timer", auth.user.username, time, game.lobby);
+    }
+    socket.once("end-time", changeTurn);
     
     
     // const syncL = async (lines) => {
@@ -321,6 +368,7 @@ function GameContextProvider(props) {
       socket.off("counter", countDown)
       socket.off("add-host", addH);
       socket.off("game-started", gameStart)
+      socket.off("end-time", changeTurn)
       // socket.off('count1');
     };
   }, [game]);
@@ -447,6 +495,8 @@ function GameContextProvider(props) {
     console.log('set timer... ' + time)
     socket.emit("timer", auth.user.username, time, game.lobby);
   };
+
+
 
   return (
     <GameContext.Provider

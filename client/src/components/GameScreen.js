@@ -77,8 +77,10 @@ export default function GameScreen() {
     alignItems: "center",
     justifyContent: "center",
   };
+//TODO Alan update to useState(game.players[game.currentPlayer])
+// const [currentPlayer, setCurrentPlayer] = useState(game.players[0]);
 
-  const [currentPlayer, setCurrentPlayer] = useState(game.players[0]);
+  const [currentPlayer, setCurrentPlayer] = useState(game.currentPlayer);
 
   const [alignment, setAlignment] = React.useState("left");
   const [formats, setFormats] = React.useState(() => ["italic"]);
@@ -267,7 +269,7 @@ export default function GameScreen() {
   useEffect(() => {
     const syncA = async (actions) => {
       //need better drawer check
-      if (auth.user.username != currentPlayer) {
+      if (auth.user.username != game.currentPlayer) {
         setActions(actions);
       }
     };
@@ -306,7 +308,7 @@ export default function GameScreen() {
 
   const gameCurrentPlayer = (
     <Typography fontSize={"64px"}>
-      {currentPlayer} is currently {gameMode ? "Drawing" : "Writing"}...
+      {game.currentPlayer} is currently {gameMode ? "Drawing" : "Writing"}...
     </Typography>
   );
 
@@ -758,7 +760,8 @@ export default function GameScreen() {
   );
 
   //waiting switch
-  if (auth.user.username != currentPlayer) {
+  if (auth.user.username != game.currentPlayer) {
+    console.log("Switching display for", game.currentPlayer)
     currentDisplay = (
       <WaitingScreen
         stageRef={stageRef}
