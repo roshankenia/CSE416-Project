@@ -95,15 +95,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on("timer", (username, time, lobbyID) => {
-    let currentTurn = game.turn;
-    let currPlayer = game.players[currentTurn%(game.players.length)]
     let counter = time;
     let WinnerCountdown = setInterval(function () {
       io.to(lobbyID).emit("counter", counter);
       counter--;
       if (counter <= 0) {
         console.log("counter hit 0");
-        io.to(lobbyID).emit("end-time", time, currPlayer, currentTurn);
+        io.to(lobbyID).emit("end-time", time);
         clearInterval(WinnerCountdown);
       }
     }, 1000);

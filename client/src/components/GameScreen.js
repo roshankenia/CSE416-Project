@@ -313,6 +313,7 @@ export default function GameScreen() {
     const syncA = async (actions) => {
       //need better drawer check
       if (auth.user.username != game.currentPlayer) {
+        console.log("Different players")
         setActions(actions);
       }
     };

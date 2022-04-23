@@ -89,7 +89,7 @@ function GameContextProvider(props) {
           timer: game.timer,
           host: game.host,
           turn: 0,
-          currentPlayer: game.players[0]
+          currentPlayer: payload.players[0]
         });
       }
       case GameActionType.ENTER_VOTING: {
@@ -322,9 +322,9 @@ function GameContextProvider(props) {
     socket.once("counter", countDown);
 
     //pass real game obj when backend is ready
-    const gameStart = async (game) => {
-      console.log(game)
-      let fakeGameObj = {game: 'random bullshit go!', players: game}
+    const gameStart = async (players) => {
+      console.log(players)
+      let fakeGameObj = {game: 'random bullshit go!', players: players}
       gameReducer({
         type: GameActionType.CREATE_NEW_GAME,
         payload: fakeGameObj,
@@ -333,21 +333,25 @@ function GameContextProvider(props) {
     //right now it passes player array
     socket.once("game-started", gameStart)
 
-//TODO Alan heck to see which turn it is, who is the current player
+//TODO Alan heck to see which turn it is, who is the current
     const changeTurn = async (time)=>{
       console.log("Inside Change Turn / end Time the game turn value is ", game.turn)
       console.log("Check to make sure all players are organized the same", game.players)
-      
-      let currentTurn = game.turn;
-      let currPlayer = game.players[currentTurn%(game.players.length)]
-      let nextTurn = {turn: game.turn + 1, currentPlayer: currPlayer};
+      // check if game.turn == amount of panels
+      let sortedArray = game.players.sort()
+      let currentTurn = game.turn + 1;
+      let currPlayer = sortedArray[currentTurn%(game.players.length)]
+      let nextTurn = {turn: currentTurn, currentPlayer: currPlayer};
       gameReducer({
         type: GameActionType.NEXT_TURN,
         payload:nextTurn
       })
 
       console.log("The game timer is after we change turns is", time)
-      socket.emit("timer", auth.user.username, time, game.lobby);
+      if(auth.user.username === game.host){
+        console.log("Host calles timer again");
+        socket.emit("timer", auth.user.username, time, game.lobby);
+      }
     }
     socket.once("end-time", changeTurn);
     
@@ -389,9 +393,10 @@ function GameContextProvider(props) {
   };
 
   game.createNewGame = async function () {
+    let sortPlayers = game.players.sort()
     try {
       let id = "madeupgameid";
-      let newgame = {game: "gameOBJ", players: game.players};
+      let newgame = {game: "gameOBJ", players: sortPlayers};
       // backend stuff
       // const response = await api.createGame();
       // if (response.status === 201) {
@@ -407,7 +412,7 @@ function GameContextProvider(props) {
     } catch {
       console.log("API FAILED TO CREATE A GAME MONGODB INSTANCE");
     }
-    socket.emit("start-game", game.players, game.lobby);
+    socket.emit("start-game", sortPlayers, game.lobby);
   };
 
   game.leaveLobby = async function () {
