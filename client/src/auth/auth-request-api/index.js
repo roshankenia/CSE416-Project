@@ -65,10 +65,10 @@ export const updateBio = (
   username,
   bio
 ) => {
-  return api.post("/updateBio/"), {
+  return api.post("/updateBio/", {
     username: username,
     bio: bio
-  }
+  })
 }
 
 // @Jeff Hu front end request auth apis TO DO

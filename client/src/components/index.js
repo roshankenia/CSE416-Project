@@ -1,4 +1,5 @@
 import AppBanner from './AppBanner'
+import ChangeBioModal from './ChangeBioModal'
 import ChangePasswordModal from './ChangePasswordModal'
 import CommentCard from './CommentCard'
 import CommunityCard from './CommunityCard'
@@ -41,6 +42,7 @@ import GameTools from './GameTools'
 */
 export { 
     AppBanner,
+    ChangeBioModal,
     ChangePasswordModal,
     CommentCard,
     CommunitiesScreen,

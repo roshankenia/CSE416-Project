@@ -10,6 +10,8 @@ import Button from "@mui/material/Button";
 import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import ChangeBioModal from "./ChangeBioModal";
+import Box from "@mui/material/Box";
 
 export default function ProfileScreen() {
   const { community } = useContext(GlobalCommunityContext);
@@ -39,12 +41,14 @@ export default function ProfileScreen() {
     setNotifyOpen(false);
   };
 
-  async function handleOpenBioModal(event) {
-    // event.preventDefault();
-    // community.setChangeBio(true);
-    let newBio = "Updated Bio"
-    const response = await auth.updateBio(auth.user.username, newBio)
-    console.log(response)
+  function handleOpenBioModal(event) {
+    event.preventDefault();
+    community.setChangeBio(true);
+    console.log("reached here")
+    console.log(community.changeBioModal)
+    // let newBio = "Updated Bio"
+    // const response = await auth.updateBio(auth.user.username, newBio)
+    // console.log(response)
   }
 
   const action = (
@@ -96,6 +100,8 @@ export default function ProfileScreen() {
   }
 
   let bioToPrint = community.userProfile.bio
+  console.log(community.userProfile)
+  console.log(auth.user)
   if (community.userProfile.bio == ""){
     bioToPrint = "No Bio Yet"
   }
@@ -165,7 +171,9 @@ export default function ProfileScreen() {
         <div class="sticky">
           <Sidebar />
         </div>
+        <ChangeBioModal/>
       </Grid>
+      
     );
   } else if(isFriend){
     return (

@@ -24,20 +24,23 @@ export default function ChangeBioModal() {
   const [newBio, setNewBio] = useState('')
 
   function handleChange(event) {
+    console.log(event.target.value)
     setNewBio(event.target.value)
+    
   }
 
   function handleClose(event) {
     setNewBio('')
-    setSuccess(false)
+    // setSuccess(false)
     auth.setErrorMessage('')
     community.setChangeBio(false);
   }
 
-  function handleChangeBio(event) {
-    console.log("Bio would've been updated")
-    // let response = await auth.updateBio(auth.user.username, newBio)
-    // console.log(response)
+  async function handleChangeBio(event) {
+    const response = await auth.updateBio(auth.user.username, newBio)
+    console.log("MAKE IT HERE PELASEEEEEEEEEEE")
+    console.log(response)
+    handleClose()
   }
 
 
@@ -46,7 +49,9 @@ export default function ChangeBioModal() {
       open={community.changeBioModal}
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description">
+      aria-describedby="modal-modal-description"
+      style={{display:'flex',alignItems:'center',justifyContent:'center'}}
+      >
         <Box>
           <Typography 
             sx={{fontSize: 28, marginBottom:'-10px'}}>
