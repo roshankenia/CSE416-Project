@@ -113,7 +113,7 @@ io.on("connection", (socket) => {
 
   socket.on("draw-actions", (actions, lobbyID) => {
     console.log("sending actions to:", lobbyID);
-    io.to(lobbyID).emit("sync-actions", actions);
+    socket.to(lobbyID).emit("sync-actions", actions);
   });
 
   socket.on("update-host", (host, lobbyID) => {
