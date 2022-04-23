@@ -425,6 +425,8 @@ function AuthContextProvider(props) {
   auth.updateBio = async function (username, bio) {
     try {
       const response = await api.updateBio(username, bio);
+      console.log("from index.js response:", response)
+      console.log("from index.js response status:", response.status)
       if (response.status === 200) {
         authReducer({
           type: AuthActionType.UPDATE_BIO,
