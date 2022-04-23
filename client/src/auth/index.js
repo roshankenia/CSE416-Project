@@ -20,7 +20,7 @@ export const AuthActionType = {
   CREATE_GUEST: "CREATE_GUEST",
   SEARCH_USERS: "SEARCH_USERS",
   SET_FRIENDS_AND_REQUESTS: "SET_FRIENDS_AND_REQUESTS",
-  UPDATE_BIO: "UPDATE_BIO"
+  UPDATE_BIO: "UPDATE_BIO",
 };
 
 function AuthContextProvider(props) {
@@ -181,7 +181,7 @@ function AuthContextProvider(props) {
     }
   };
 
-//#region friend functions
+  //#region friend functions
   auth.addFriendByEmail = async function (email) {
     console.log("Adding friend By Email");
     let response = await api.findByEmail(email);
@@ -375,8 +375,8 @@ function AuthContextProvider(props) {
       console.log(response);
     }
   };
-//#endregion friend functions
-  
+  //#endregion friend functions
+
   auth.deleteAccount = async function (password) {
     try {
       console.log("attempt to delete account...");
@@ -400,10 +400,10 @@ function AuthContextProvider(props) {
   };
 
   auth.resetPassword = async function (email) {
-    if(email.indexOf('@') === -1){
-      console.log('what?>')
-      auth.setErrorMessage('Please enter a valid email address!')
-      return false
+    if (email.indexOf("@") === -1) {
+      console.log("what?>");
+      auth.setErrorMessage("Please enter a valid email address!");
+      return false;
     }
     try {
       const response = await api.resetPassword(email);
@@ -418,34 +418,28 @@ function AuthContextProvider(props) {
       return true;
     } catch (error) {
       console.log(error);
-      return false
+      return false;
     }
   };
 
-  auth.updateBio = async function (
-    username,
-    bio
-  ) {
+  auth.updateBio = async function (username, bio) {
     try {
-      const response = await api.updateBio(
-        username,
-        bio
-      )
-      if (response.status === 200){
+      const response = await api.updateBio(username, bio);
+      if (response.status === 200) {
         authReducer({
           type: AuthActionType.UPDATE_BIO,
           payload: {
-            user: response.data.user
-          }
-        })
+            user: response.data.user,
+          },
+        });
         return true;
-      } 
+      }
     } catch (error) {
       console.log(error.response.data.errorMessage);
       auth.setErrorMessage(error.response.data.errorMessage);
       return false;
     }
-  }
+  };
 
   auth.changePassword = async function (
     username,
@@ -494,7 +488,7 @@ function AuthContextProvider(props) {
       const response = await api.getLoggedIn();
       if (response.status === 200) {
         authReducer({
-          type: AuthActionType.SET_LOGGED_IN,
+          type: AuthActionType.GET_LOGGED_IN,
           payload: {
             loggedIn: response.data.loggedIn,
             user: response.data.user,
