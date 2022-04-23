@@ -34,11 +34,6 @@ app.use("/api", communityRouter);
 const gameRouter = require("./routes/game-router");
 app.use("/play", gameRouter);
 
-/* Will not need this in the future @Terran
- const top5listsRouter = require('./routes/top5lists-router')
- app.use('/api', top5listsRouter)
-*/
-
 // INITIALIZE OUR DATABASE OBJECT
 const db = require("./db");
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
@@ -116,19 +111,9 @@ io.on("connection", (socket) => {
     io.to(lobbyID).emit("game-started", players);
   });
 
-  socket.on("draw-lines", (lines, lobbyID) => {
-    console.log("sending lines to:", lobbyID);
-    io.to(lobbyID).emit("sync-lines", lines);
-  });
-
-  socket.on("draw-rectangles", (rectangles, lobbyID) => {
-    console.log("sending rectangles to:", lobbyID);
-    io.to(lobbyID).emit("sync-rectangles", rectangles);
-  });
-
-  socket.on("draw-circles", (circles, lobbyID) => {
-    console.log("sending circles to:", lobbyID);
-    io.to(lobbyID).emit("sync-circles", circles);
+  socket.on("draw-actions", (lines, lobbyID) => {
+    console.log("sending actions to:", lobbyID);
+    io.to(lobbyID).emit("sync-actions", lines);
   });
 
   socket.on("update-host", (host, lobbyID) => {

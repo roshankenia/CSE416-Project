@@ -21,6 +21,8 @@ import SquareIcon from "@mui/icons-material/Square";
 import CropSquareIcon from "@mui/icons-material/CropSquare";
 import CircleIcon from "@mui/icons-material/Circle";
 import Slider from "@mui/material/Slider";
+import UndoIcon from '@mui/icons-material/Undo';
+import RedoIcon from '@mui/icons-material/Redo';
 
 export default function GameTools(props) {
   const { game } = useContext(GameContext);
@@ -37,6 +39,8 @@ export default function GameTools(props) {
     isColorSelected,
     handleSetStrokeWidth,
     strokeWidth,
+    handleUndo,
+    handleRedo
   } = props;
 
   let strokeSlider = (
@@ -461,6 +465,18 @@ export default function GameTools(props) {
               }}
             >
               <CircleIcon fontSize="large" />
+            </Button>
+            <Button
+              sx={buttonCSS}
+              onClick={(e) => handleUndo()}
+            >
+              <UndoIcon fontSize="large"/>
+            </Button>
+            <Button
+              sx={buttonCSS}
+              onClick={(e) => handleRedo()}
+            >
+              <RedoIcon fontSize="large"/>
             </Button>
             {/* <FormatColorFillIcon fontSize="large" />
             <ImageSearchIcon fontSize="large" />

@@ -41,7 +41,7 @@ export default function WaitingScreen(props) {
   const { auth } = useContext(AuthContext);
   const socket = useContext(SocketContext);
 
-  let { stageRef, lines, rectangles, circles } = props;
+  let { stageRef, actions } = props;
   const flexContainer = {
     display: "flex",
     flexDirection: "row",
@@ -64,44 +64,40 @@ export default function WaitingScreen(props) {
         <Stage width={600} height={600} ref={stageRef}>
           <Layer>
             <Text text="Starts drawing here" x={5} y={30} />
-            {lines.map((line, i) => (
-              <Line
-                key={i}
-                points={line.points}
-                stroke={line.stroke}
-                strokeWidth={line.strokeWidth}
-                tension={0.5}
-                lineCap="round"
-                globalCompositeOperation={
-                  line.tool === "eraser" ? "destination-out" : "source-over"
-                }
-              />
-            ))}
-            {rectangles.map((value) => {
-              return (
-                <Rect
-                  x={value.x}
-                  y={value.y}
-                  width={value.width}
-                  height={value.height}
-                  fill="transparent"
-                  stroke={value.stroke}
-                  strokeWidth={value.strokeWidth}
+            {actions.map((action) => {
+              if(action.tool === 'pen' || action.tool === 'eraser'){
+                return <Line
+                  // key={i}
+                  points={action.points}
+                  stroke={action.stroke}
+                  strokeWidth={action.strokeWidth}
+                  tension={0.5}
+                  lineCap="round"
+                  globalCompositeOperation={
+                    action.tool === "eraser" ? "destination-out" : "source-over"
+                  }
                 />
-              );
-            })}
-            {circles.map((value) => {
-              return (
-                <Circle
-                  x={value.x}
-                  y={value.y}
-                  width={value.width}
-                  height={value.height}
+              }else if(action.tool === 'rectangle'){
+                return <Rect
+                  x={action.x}
+                  y={action.y}
+                  width={action.width}
+                  height={action.height}
                   fill="transparent"
-                  stroke={value.stroke}
-                  strokeWidth={value.strokeWidth}
+                  stroke={action.stroke}
+                  strokeWidth={action.strokeWidth}
                 />
-              );
+              }else if(action.tool === 'circle'){
+                return <Circle
+                  x={action.x}
+                  y={action.y}
+                  width={action.width}
+                  height={action.height}
+                  fill="transparent"
+                  stroke={action.stroke}
+                  strokeWidth={action.strokeWidth}
+                />
+              }
             })}
           </Layer>
         </Stage>

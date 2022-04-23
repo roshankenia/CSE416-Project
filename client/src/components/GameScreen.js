@@ -34,7 +34,7 @@ import GameTools from "./GameTools";
 import IconButton from "@mui/material/IconButton";
 
 // konva stuff
-import { Stage, Layer, Rect, Text, Circle, Line, Star } from "react-konva";
+import { Stage, Layer, Rect, Text, Circle, Line, Star, Shape } from "react-konva";
 import { BsEraserFill } from "react-icons/bs";
 
 //socket
@@ -108,28 +108,6 @@ export default function GameScreen() {
   }));
   //#endregion not-timer
 
-  //#region timer: some timer code i found online
-  // const [seconds, setSeconds] = useState(6490);
-
-  // React.useEffect(() => {
-  //   let interval = null;
-  //   if (seconds > 0) {
-  //     interval = setInterval(() => {
-  //       setSeconds((seconds) => seconds - 1);
-  //     }, 1000);
-  //   } else {
-  //     if (players.indexOf(currentPlayer) == 3) {
-  //       setSeconds("Vote To Publish!");
-  //       game.enterVoting();
-  //     } else {
-  //       setCurrentPlayer(players[players.indexOf(currentPlayer) + 1]);
-  //       setSeconds(10);
-  //     }
-  //   }
-  //   return () => clearInterval(interval);
-  // },[]);
-  //#endregion timer
-
   //probably most important function
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -142,13 +120,36 @@ export default function GameScreen() {
 
   //#region KONVA functions
   const [tool, setTool] = React.useState("pen");
-  const [lines, setLines] = React.useState([]);
   const isDrawing = React.useRef(false);
   const stageRef = React.useRef(null);
   const [color, setColor] = React.useState("#000000");
   const [strokeWidth, setStrokeWidth] = React.useState(1);
-  const [rectangles, setRectangles] = useState([]);
-  const [circles, setCircles] = useState([]);
+
+  const [actions, setActions] = React.useState([]);
+
+  const handleUndo = () => {
+    // if (actionStep === 0) {
+    //   return;
+    // }
+    // actionStep -= 1;
+    // const previous = actionStack[actionStep];
+    // console.log(previous)
+    // setState({
+    //   position: previous,
+    // });
+  };
+
+  const handleRedo = () => {
+    // if (actionStep === actionStack.length - 1) {
+    //   return;
+    // }
+    // actionStep += 1;
+    // const next = actionStack[actionStep];
+    // console.log(next)
+    // this.setState({
+    //   position: next,
+    // });
+  };
 
   const changeColor = (event, color) => {
     event.stopPropagation();
@@ -159,8 +160,8 @@ export default function GameScreen() {
     isDrawing.current = true;
     if (tool == "pen" || tool == "eraser") {
       const pos = e.target.getStage().getPointerPosition();
-      setLines([
-        ...lines,
+      setActions([
+        ...actions,
         {
           tool,
           strokeWidth: strokeWidth,
@@ -170,28 +171,31 @@ export default function GameScreen() {
       ]);
     } else if (tool == "rectangle") {
       const { x, y } = e.target.getStage().getPointerPosition();
-      setRectangles([
-        ...rectangles,
+      setActions([
+        ...actions,
         {
+          tool,
           x,
           y,
           width: 0,
           height: 0,
-          key: rectangles.length + 1,
+          key: actions.length + 1,
           stroke: color,
           strokeWidth: strokeWidth,
         },
       ]);
+      //console.log("what?")
     } else if (tool == "circle") {
       const { x, y } = e.target.getStage().getPointerPosition();
-      setCircles([
-        ...circles,
+      setActions([
+        ...actions,
         {
+          tool,
           x,
           y,
           width: 0,
           height: 0,
-          key: circles.length + 1,
+          key: actions.length + 1,
           stroke: color,
           strokeWidth: strokeWidth,
         },
@@ -207,21 +211,20 @@ export default function GameScreen() {
     if (tool == "pen" || tool == "eraser") {
       const stage = e.target.getStage();
       const point = stage.getPointerPosition();
-      let lastLine = lines[lines.length - 1];
+      let lastLine = actions[actions.length - 1];
       // add point
       lastLine.points = lastLine.points.concat([point.x, point.y]);
-
       // replace last
-      lines.splice(lines.length - 1, 1, lastLine);
-      setLines(lines.concat());
-      socket.emit("draw-lines", lines, game.lobby);
+      actions.splice(actions.length - 1, 1, lastLine);
+      setActions(actions.concat());
     } else if (tool == "rectangle") {
-      const sx = rectangles[rectangles.length - 1].x;
-      const sy = rectangles[rectangles.length - 1].y;
-      const key = rectangles[rectangles.length - 1].key;
+      const sx = actions[actions.length - 1].x;
+      const sy = actions[actions.length - 1].y;
+      const key = actions[actions.length - 1].key;
       const { x, y } = e.target.getStage().getPointerPosition();
 
       let lastRectangle = {
+        tool,
         x: sx,
         y: sy,
         width: x - sx,
@@ -230,16 +233,16 @@ export default function GameScreen() {
         stroke: color,
         strokeWidth: strokeWidth,
       };
-      rectangles.splice(rectangles.length - 1, 1, lastRectangle);
-      setRectangles(rectangles.concat());
-      socket.emit("draw-rectangles", rectangles, game.lobby);
+      actions.splice(actions.length - 1, 1, lastRectangle);
+      setActions(actions.concat());
     } else if (tool == "circle") {
-      const sx = circles[circles.length - 1].x;
-      const sy = circles[circles.length - 1].y;
-      const key = circles[circles.length - 1].key;
+      const sx = actions[actions.length - 1].x;
+      const sy = actions[actions.length - 1].y;
+      const key = actions[actions.length - 1].key;
       const { x, y } = e.target.getStage().getPointerPosition();
 
       let lastCircle = {
+        tool,
         x: sx,
         y: sy,
         width: Math.abs(x - sx),
@@ -248,10 +251,10 @@ export default function GameScreen() {
         stroke: color,
         strokeWidth: strokeWidth,
       };
-      circles.splice(circles.length - 1, 1, lastCircle);
-      setCircles(circles.concat());
-      socket.emit("draw-circles", circles, game.lobby);
+      actions.splice(actions.length - 1, 1, lastCircle);
+      setActions(actions.concat());
     }
+    socket.emit("draw-actions", actions, game.lobby);
   };
 
   const handleMouseUp = (e) => {
@@ -262,35 +265,16 @@ export default function GameScreen() {
 
   //the websocket codes
   useEffect(() => {
-    const syncL = async (lines) => {
+    const syncA = async (actions) => {
       //need better drawer check
       if (auth.user.username != currentPlayer) {
-        setLines(lines);
+        setActions(actions);
       }
     };
-    socket.on("sync-lines", syncL);
-
-    const syncR = async (rectangles) => {
-      if (auth.user.username != currentPlayer) {
-        console.log(rectangles);
-        setRectangles(rectangles);
-      }
-    };
-
-    socket.on("sync-rectangles", syncR);
-
-    const syncC = async (circles) => {
-      if (auth.user.username != currentPlayer) {
-        setCircles(circles);
-      }
-    };
-
-    socket.on("sync-circles", syncC);
+    socket.on("sync-actions", syncA);
 
     return () => {
-      socket.off("sync-lines", syncL);
-      socket.off("sync-rectangles", syncR);
-      socket.off("sync-circles", syncC);
+      socket.off("sync-actions", syncA);
     };
   }, []);
 
@@ -443,6 +427,8 @@ export default function GameScreen() {
       isColorSelected={isColorSelected}
       handleSetStrokeWidth={handleSetStrokeWidth}
       strokeWidth={strokeWidth}
+      handleUndo={handleUndo}
+      handleRedo={handleRedo}
     />
   );
 
@@ -469,44 +455,40 @@ export default function GameScreen() {
           >
             <Layer>
               <Text text="Starts drawing here" x={5} y={30} />
-              {lines.map((line, i) => (
-                <Line
-                  key={i}
-                  points={line.points}
-                  stroke={line.stroke}
-                  strokeWidth={line.strokeWidth}
-                  tension={0.5}
-                  lineCap="round"
-                  globalCompositeOperation={
-                    line.tool === "eraser" ? "destination-out" : "source-over"
-                  }
-                />
-              ))}
-              {rectangles.map((value) => {
-                return (
-                  <Rect
-                    x={value.x}
-                    y={value.y}
-                    width={value.width}
-                    height={value.height}
-                    fill="transparent"
-                    stroke={value.stroke}
-                    strokeWidth={value.strokeWidth}
+              {actions.map((action) => {
+                if(action.tool === 'pen' || action.tool === 'eraser'){
+                  return <Line
+                    // key={i}
+                    points={action.points}
+                    stroke={action.stroke}
+                    strokeWidth={action.strokeWidth}
+                    tension={0.5}
+                    lineCap="round"
+                    globalCompositeOperation={
+                      action.tool === "eraser" ? "destination-out" : "source-over"
+                    }
                   />
-                );
-              })}
-              {circles.map((value) => {
-                return (
-                  <Circle
-                    x={value.x}
-                    y={value.y}
-                    width={value.width}
-                    height={value.height}
+                }else if(action.tool === 'rectangle'){
+                  return <Rect
+                    x={action.x}
+                    y={action.y}
+                    width={action.width}
+                    height={action.height}
                     fill="transparent"
-                    stroke={value.stroke}
-                    strokeWidth={value.strokeWidth}
+                    stroke={action.stroke}
+                    strokeWidth={action.strokeWidth}
                   />
-                );
+                }else if(action.tool === 'circle'){
+                  return <Circle
+                    x={action.x}
+                    y={action.y}
+                    width={action.width}
+                    height={action.height}
+                    fill="transparent"
+                    stroke={action.stroke}
+                    strokeWidth={action.strokeWidth}
+                  />
+                }
               })}
             </Layer>
           </Stage>
@@ -775,13 +757,12 @@ export default function GameScreen() {
     </List>
   );
 
+  //waiting switch
   if (auth.user.username != currentPlayer) {
     currentDisplay = (
       <WaitingScreen
         stageRef={stageRef}
-        lines={lines}
-        circles={circles}
-        rectangles={rectangles}
+        actions={actions}
       />
     );
   }
