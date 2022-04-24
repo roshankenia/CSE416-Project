@@ -13,7 +13,6 @@ export default function HomeWrapper() {
   const { community } = useContext(GlobalCommunityContext);
 
   console.log("HomeWrapper auth.loggedIn: " + auth.loggedIn);
-  //const { community } = useContext(GlobalStoreContext);
 
   if (auth.isGuest) {
     console.log(auth.isGuest);
