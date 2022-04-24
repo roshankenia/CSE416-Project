@@ -333,27 +333,7 @@ function GameContextProvider(props) {
     //right now it passes player array
     socket.once("game-started", gameStart)
 
-//TODO Alan heck to see which turn it is, who is the current
-    const changeTurn = async (time)=>{
-      console.log("Inside Change Turn / end Time the game turn value is ", game.turn)
-      console.log("Check to make sure all players are organized the same", game.players)
-      // check if game.turn == amount of panels
-      let sortedArray = game.players.sort()
-      let currentTurn = game.turn + 1;
-      let currPlayer = sortedArray[currentTurn%(game.players.length)]
-      let nextTurn = {turn: currentTurn, currentPlayer: currPlayer};
-      gameReducer({
-        type: GameActionType.NEXT_TURN,
-        payload:nextTurn
-      })
 
-      console.log("The game timer is after we change turns is", time)
-      if(auth.user.username === game.host){
-        console.log("Host calles timer again");
-        socket.emit("timer", auth.user.username, time, game.lobby);
-      }
-    }
-    socket.once("end-time", changeTurn);
     
     
     // const syncL = async (lines) => {
@@ -372,7 +352,7 @@ function GameContextProvider(props) {
       socket.off("counter", countDown)
       socket.off("add-host", addH);
       socket.off("game-started", gameStart)
-      socket.off("end-time", changeTurn)
+      
       // socket.off('count1');
     };
   }, [game]);
@@ -466,6 +446,13 @@ function GameContextProvider(props) {
       console.log("API FAILED TO CREATE A LOBBY MONGODB INSTANCE");
     }
   };
+
+  game.changeTurn = function(nextTurn){
+    gameReducer({
+        type: GameActionType.NEXT_TURN,
+        payload: nextTurn
+      })
+  }
 
   game.enterVoting = async function () {
     try {
