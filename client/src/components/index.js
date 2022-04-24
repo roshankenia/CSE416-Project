@@ -34,6 +34,7 @@ import GuestScreen from './GuestScreen'
 import FriendsScreen from './FriendsScreen'
 import ResetScreen from './ResetScreen'
 import GameTools from './GameTools'
+import Timer from './Timer'
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -77,4 +78,5 @@ export {
     FriendsScreen,
     ResetScreen,
     GameTools,
+    Timer,
     }

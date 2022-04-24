@@ -33,6 +33,8 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { Stage, Layer, Rect, Text, Circle, Line, Star } from "react-konva";
 import { BsEraserFill } from "react-icons/bs";
 
+import Timer from "./Timer";
+
 //socket
 import { SocketContext } from "../socket";
 
@@ -65,46 +67,56 @@ export default function WaitingScreen(props) {
           <Layer>
             <Text text="Starts drawing here" x={5} y={30} />
             {actions.map((action) => {
-              if(action.tool === 'pen' || action.tool === 'eraser'){
-                return <Line
-                  points={action.points}
-                  stroke={action.stroke}
-                  strokeWidth={action.strokeWidth}
-                  tension={0.5}
-                  lineCap="round"
-                  globalCompositeOperation={
-                    action.tool === "eraser" ? "destination-out" : "source-over"
-                  }
-                />
-              }else if(action.tool === 'rectangle'){
-                return <Rect
-                  x={action.x}
-                  y={action.y}
-                  width={action.width}
-                  height={action.height}
-                  fill="transparent"
-                  stroke={action.stroke}
-                  strokeWidth={action.strokeWidth}
-                />
-              }else if(action.tool === 'circle'){
-                return <Circle
-                  x={action.x}
-                  y={action.y}
-                  width={action.width}
-                  height={action.height}
-                  fill="transparent"
-                  stroke={action.stroke}
-                  strokeWidth={action.strokeWidth}
-                />
-              }else if(action.tool === 'text'){
-                return <Text
-                  x={action.x}
-                  y={action.y}
-                  text={action.text}
-                  fontSize={action.fontSize}
-                  fill={action.fill}
-                />
-              }else{
+              if (action.tool === "pen" || action.tool === "eraser") {
+                return (
+                  <Line
+                    points={action.points}
+                    stroke={action.stroke}
+                    strokeWidth={action.strokeWidth}
+                    tension={0.5}
+                    lineCap="round"
+                    globalCompositeOperation={
+                      action.tool === "eraser"
+                        ? "destination-out"
+                        : "source-over"
+                    }
+                  />
+                );
+              } else if (action.tool === "rectangle") {
+                return (
+                  <Rect
+                    x={action.x}
+                    y={action.y}
+                    width={action.width}
+                    height={action.height}
+                    fill="transparent"
+                    stroke={action.stroke}
+                    strokeWidth={action.strokeWidth}
+                  />
+                );
+              } else if (action.tool === "circle") {
+                return (
+                  <Circle
+                    x={action.x}
+                    y={action.y}
+                    width={action.width}
+                    height={action.height}
+                    fill="transparent"
+                    stroke={action.stroke}
+                    strokeWidth={action.strokeWidth}
+                  />
+                );
+              } else if (action.tool === "text") {
+                return (
+                  <Text
+                    x={action.x}
+                    y={action.y}
+                    text={action.text}
+                    fontSize={action.fontSize}
+                    fill={action.fill}
+                  />
+                );
+              } else {
                 return <URLImage image={action} />;
               }
             })}
@@ -164,7 +176,7 @@ export default function WaitingScreen(props) {
           color: "black",
         }}
       >
-        <Typography fontSize={"32px"}>Time Left: {game.timer}</Typography>
+        <Timer />
       </Button>
 
       <Button
