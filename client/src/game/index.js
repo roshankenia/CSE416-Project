@@ -40,7 +40,8 @@ function GameContextProvider(props) {
     timer: null,
     host: null,
     turn: null,
-    currentPlayer: null
+    currentPlayer: null,
+    panelNumber: null
   });
   const history = useHistory();
 
@@ -60,7 +61,8 @@ function GameContextProvider(props) {
           timer: null,
           host: auth.user.username,
           turn: null,
-          currentPlayer: null
+          currentPlayer: null,
+          panelNumber: null
         });
       }
       case GameActionType.UPDATE_TIMER: {
@@ -74,7 +76,8 @@ function GameContextProvider(props) {
           timer: payload,
           host: game.host,
           turn: game.turn,
-          currentPlayer: game.currentPlayer
+          currentPlayer: game.currentPlayer,
+          panelNumber: game.panelNumber
         });
       }
       case GameActionType.CREATE_NEW_GAME: {
@@ -89,7 +92,8 @@ function GameContextProvider(props) {
           timer: game.timer,
           host: game.host,
           turn: 0,
-          currentPlayer: payload.players[0]
+          currentPlayer: payload.players[0],
+          panelNumber: payload.players.length * 3
         });
       }
       case GameActionType.ENTER_VOTING: {
@@ -103,7 +107,8 @@ function GameContextProvider(props) {
           timer: 60,
           host: game.host,
           turn: null,
-          currentPlayer: null
+          currentPlayer: null,
+          panelNumber: null
         });
       }
       case GameActionType.EXIT_VOTING: {
@@ -117,7 +122,8 @@ function GameContextProvider(props) {
           timer: null,
           host: game.host,
           turn: null,
-          currentPlayer: null
+          currentPlayer: null,
+          panelNumber: game.panelNumber
         });
       }
       case GameActionType.JOIN_LOBBY: {
@@ -131,7 +137,8 @@ function GameContextProvider(props) {
           timer: null,
           host: game.host,
           turn: null,
-          currentPlayer: null
+          currentPlayer: null,
+          panelNumber: null
         });
       }
       case GameActionType.UPDATE_PLAYERS: {
@@ -145,7 +152,8 @@ function GameContextProvider(props) {
           timer: null,
           host: game.host,
           turn: null,
-          currentPlayer: null
+          currentPlayer: null,
+          panelNumber: null
         });
       }
       case GameActionType.LEAVE_LOBBY: {
@@ -159,7 +167,8 @@ function GameContextProvider(props) {
           timer: null,
           host: game.host,
           turn: null,
-          currentPlayer: null
+          currentPlayer: null,
+          panelNumber: null
         });
       }
       case GameActionType.ADD_READY: {
@@ -173,7 +182,8 @@ function GameContextProvider(props) {
           timer: null,
           host: game.host,
           turn: null,
-          currentPlayer: null
+          currentPlayer: null,
+          panelNumber: null
         });
       }
       case GameActionType.NEXT_TURN: {
@@ -186,7 +196,8 @@ function GameContextProvider(props) {
           screen: game.screen,
           host: game.host,
           turn: payload.turn,
-          currentPlayer: payload.currentPlayer
+          currentPlayer: payload.currentPlayer,
+          panelNumber: game.panelNumber
         });
       }
       case GameActionType.ADD_HOST: {
@@ -199,7 +210,8 @@ function GameContextProvider(props) {
           screen: game.screen,
           host: payload,
           turn: null,
-          currentPlayer: null
+          currentPlayer: null,
+          panelNumber: null
         });
       }
       default:
@@ -312,14 +324,14 @@ function GameContextProvider(props) {
     socket.once("player-ready", readyP);
 
   
-    const countDown = async (count)=>{
-      gameReducer({
-        type: GameActionType.UPDATE_TIMER,
-        payload: count
-      });
-    };
+    // const countDown = async (count)=>{
+    //   gameReducer({
+    //     type: GameActionType.UPDATE_TIMER,
+    //     payload: count
+    //   });
+    // };
 
-    socket.once("counter", countDown);
+    // socket.once("counter", countDown);
 
     //pass real game obj when backend is ready
     const gameStart = async (players) => {
@@ -335,22 +347,29 @@ function GameContextProvider(props) {
 
 //TODO Alan heck to see which turn it is, who is the current
     const changeTurn = async (time)=>{
+      console.log(game.panelNumber)
       console.log("Inside Change Turn / end Time the game turn value is ", game.turn)
       console.log("Check to make sure all players are organized the same", game.players)
       // check if game.turn == amount of panels
-      let sortedArray = game.players.sort()
-      let currentTurn = game.turn + 1;
-      let currPlayer = sortedArray[currentTurn%(game.players.length)]
-      let nextTurn = {turn: currentTurn, currentPlayer: currPlayer};
-      gameReducer({
-        type: GameActionType.NEXT_TURN,
-        payload:nextTurn
-      })
+      if(game.panelNumber-1 == game.turn){
+        console.log(game.panelNumber)
+        game.enterVoting();
+      }
+      else{
+        let sortedArray = game.players.sort()
+        let currentTurn = game.turn + 1;
+        let currPlayer = sortedArray[currentTurn%(game.players.length)]
+        let nextTurn = {turn: currentTurn, currentPlayer: currPlayer};
+        gameReducer({
+          type: GameActionType.NEXT_TURN,
+          payload:nextTurn
+        })
 
-      console.log("The game timer is after we change turns is", time)
-      if(auth.user.username === game.host){
-        console.log("Host calles timer again");
-        socket.emit("timer", auth.user.username, time, game.lobby);
+        console.log("The game timer is after we change turns is", time)
+        if(auth.user.username === game.host){
+          console.log("Host calles timer again");
+          socket.emit("timer", auth.user.username, time, game.lobby);
+        }
       }
     }
     socket.once("end-time", changeTurn);
@@ -369,7 +388,7 @@ function GameContextProvider(props) {
       socket.off("add-players", addP);
       socket.off("remove-player", removeP);
       socket.off("player-ready", readyP);
-      socket.off("counter", countDown)
+      // socket.off("counter", countDown)
       socket.off("add-host", addH);
       socket.off("game-started", gameStart)
       socket.off("end-time", changeTurn)

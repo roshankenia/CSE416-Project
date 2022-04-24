@@ -93,6 +93,7 @@ export default function GameScreen() {
 // const [currentPlayer, setCurrentPlayer] = useState(game.players[0]);
 
   const [currentPlayer, setCurrentPlayer] = useState(game.currentPlayer);
+  const [timer, setTimer] = useState(null)
 
   const [alignment, setAlignment] = React.useState("left");
   const [formats, setFormats] = React.useState(() => ["italic"]);
@@ -319,10 +320,20 @@ export default function GameScreen() {
     };
     socket.on("sync-actions", syncA);
 
+    //TODO Alan
+    const countDown = async (count)=>{
+      console.log("Inside the countDown", count)
+      setTimer(count)
+    };
+
+    socket.once("counter", countDown);
+
     return () => {
       socket.off("sync-actions", syncA);
+      socket.off("counter", countDown)
+
     };
-  }, []);
+  }, [timer]);
 
   //#region game elements to render
   const gameModeButton = (
@@ -651,7 +662,7 @@ export default function GameScreen() {
             color: "black",
           }}
         >
-          <Typography fontSize={"32px"}>Time Left: {game.timer}</Typography>
+          <Typography fontSize={"32px"}>Time Left: {timer}</Typography>
         </Button>
         <Button
           sx={{
@@ -816,7 +827,7 @@ export default function GameScreen() {
             color: "black",
           }}
         >
-          <Typography fontSize={"32px"}>Time Left: {game.timer}</Typography>
+          <Typography fontSize={"32px"}>Time Left: {timer}</Typography>
         </Button>
         <Button
           sx={{
