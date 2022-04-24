@@ -59,8 +59,8 @@ export default function Timer(props) {
 
   const [timer, setTimer] = useState(null);
 
+  let { stageRef } = props;
   useEffect(() => {
-    
     const countDown = async (count) => {
       console.log("Inside the countDown", count);
       setTimer(count);
@@ -82,10 +82,10 @@ export default function Timer(props) {
       if (game.panelNumber == game.turn) {
         game.enterVoting();
       } else {
-        // let imageData = stageRef.current.toDataURL();
-        // console.log(imageData);
+        let imageData = stageRef.current.toDataURL();
+        console.log(imageData);
 
-        game.changeTurn("");
+        game.changeTurn(imageData);
         if (auth.user.username === game.host) {
           socket.emit("timer", auth.user.username, time, game.lobby);
         }
@@ -97,7 +97,7 @@ export default function Timer(props) {
       socket.off("counter", countDown);
       socket.off("end-time", changeTurn);
     };
-  }, [timer]);
+  }, [timer, stageRef]);
 
   return <Typography fontSize={"32px"}>Time Left: {timer}</Typography>;
 }
