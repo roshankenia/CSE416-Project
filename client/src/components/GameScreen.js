@@ -197,6 +197,12 @@ export default function GameScreen() {
     }
   };
 
+  const handleClear = () => {
+    setActions([]);
+    setRedos([]);
+    socket.emit("draw-actions", auth.user._id, [], game.lobby);
+  };
+
   const changeColor = (event, color) => {
     event.stopPropagation();
     setColor(color);
@@ -416,13 +422,15 @@ export default function GameScreen() {
 
   /* List of current panels drawn goes here */
   const gamePanels = (
-    <ImageList sx={{ width: "95%" }} cols={4}>
-      {game.panels.map((picture) => (
-        <ImageListItem key={picture}>
-          <img src={picture} loading="lazy" />
-        </ImageListItem>
-      ))}
-    </ImageList>
+    <Box sx={{ width: "70%", height: "70%" }}>
+      <ImageList sx={{ width: "95%" }} cols={6}>
+        {game.panels.map((picture) => (
+          <ImageListItem key={picture}>
+            <img src={picture} loading="lazy" />
+          </ImageListItem>
+        ))}
+      </ImageList>
+    </Box>
   );
 
   const isColorSelected = (buttonColor) => {
@@ -466,6 +474,7 @@ export default function GameScreen() {
       handleUndo={handleUndo}
       handleRedo={handleRedo}
       handleChangeText={handleChangeText}
+      handleClear={handleClear}
     />
   );
 
@@ -505,7 +514,7 @@ export default function GameScreen() {
             ref={stageRef}
           >
             <Layer>
-              <Text text="Starts drawing here" x={5} y={30} />
+              <Rect x={0} y={0} width={600} height={600} fill="white" />
               {actions.map((action) => {
                 if (action.tool === "pen" || action.tool === "eraser") {
                   return (
@@ -660,7 +669,11 @@ export default function GameScreen() {
             color: "black",
           }}
         >
-          <Timer stageRef={stageRef} />
+          <Timer
+            stageRef={stageRef}
+            actions={actions}
+            setActions={setActions}
+          />
         </Button>
         <Button
           sx={{
@@ -857,7 +870,11 @@ export default function GameScreen() {
             color: "black",
           }}
         >
-          <Timer stageRef={stageRef}/>
+          <Timer
+            stageRef={stageRef}
+            actions={actions}
+            setActions={setActions}
+          />
         </Button>
         <Button
           sx={{
@@ -918,6 +935,7 @@ export default function GameScreen() {
         stageRef={stageRef}
         actions={actions}
         URLImage={URLImage}
+        setActions={setActions}
       />
     );
   }

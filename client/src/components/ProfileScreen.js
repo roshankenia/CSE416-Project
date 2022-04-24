@@ -16,7 +16,7 @@ import Box from "@mui/material/Box";
 export default function ProfileScreen() {
   const { community } = useContext(GlobalCommunityContext);
   const { auth } = useContext(AuthContext);
-  const [notifyOpen, setNotifyOpen] = React.useState(false);  
+  const [notifyOpen, setNotifyOpen] = React.useState(false);
 
   const handleBackToCommunities = (event) => {
     event.stopPropagation();
@@ -25,13 +25,13 @@ export default function ProfileScreen() {
 
   const handleSendFriendRequest = (event) => {
     event.stopPropagation();
-    console.log("send from: " + auth.user.email)
-    console.log("send to: " + community.userProfile.email)
+    console.log("send from: " + auth.user.email);
+    console.log("send to: " + community.userProfile.email);
     let receivedUserEmail = community.userProfile.email;
     let sentUserEmail = auth.user.email;
     auth.sendFriendRequest(sentUserEmail, receivedUserEmail);
-    setNotifyOpen(true)
-  }
+    setNotifyOpen(true);
+  };
 
   const handleNotifyClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -44,8 +44,8 @@ export default function ProfileScreen() {
   function handleOpenBioModal(event) {
     event.preventDefault();
     community.setChangeBio(true);
-    console.log("reached here")
-    console.log(community.changeBioModal)
+    console.log("reached here");
+    console.log(community.changeBioModal);
     // let newBio = "Updated Bio"
     // const response = await auth.updateBio(auth.user.username, newBio)
     // console.log(response)
@@ -81,32 +81,32 @@ export default function ProfileScreen() {
 
   let isSelf = false;
   let isFriend = false;
-  console.log(community.userProfile._id)
-  console.log(auth.user._id)
-  if (community.userProfile._id === auth.user._id){
-    isSelf = true 
-  } 
-  if (!isSelf){
-    for (var i = 0; i < community.userProfile.friends.length; i++){
-      if (auth.user._id === community.userProfile.friends[i]){
-        isFriend = true
+  console.log(community.userProfile._id);
+  console.log(auth.user._id);
+  if (community.userProfile._id === auth.user._id) {
+    isSelf = true;
+  }
+  if (!isSelf) {
+    for (var i = 0; i < community.userProfile.friends.length; i++) {
+      if (auth.user._id === community.userProfile.friends[i]) {
+        isFriend = true;
       }
     }
-    for (var j = 0; j < community.userProfile.requests.length; j++){
-      if (auth.user._id === community.userProfile.requests[j]){
-        isFriend = true
+    for (var j = 0; j < community.userProfile.requests.length; j++) {
+      if (auth.user._id === community.userProfile.requests[j]) {
+        isFriend = true;
       }
     }
   }
 
-  let bioToPrint = community.userProfile.bio
-  console.log(community.userProfile)
-  console.log(auth.user)
-  if (community.userProfile.bio == ""){
-    bioToPrint = "No Bio Yet"
+  let bioToPrint = community.userProfile.bio;
+  console.log(community.userProfile);
+  console.log(auth.user);
+  if (community.userProfile.bio == "") {
+    bioToPrint = "No Bio Yet";
   }
 
-  if(isSelf){
+  if (isSelf) {
     return (
       <Grid
         container
@@ -138,10 +138,7 @@ export default function ProfileScreen() {
         </Grid>
         <Grid item xs={5} alignItems="flex-start">
           {welcomeTag}
-          <Typography fontSize={"30px"}>
-            {bioToPrint}
-          </Typography>
-          
+          <Typography fontSize={"30px"}>{bioToPrint}</Typography>
         </Grid>
         <Button
           variant="contained"
@@ -162,19 +159,16 @@ export default function ProfileScreen() {
           Update Bio
         </Button>
         <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
-          <Typography style={{ fontSize: "32px" }}>
-            {community.communityList}
-          </Typography>
           <PostFeed />
         </Grid>
-  
+
         <div class="sticky">
           <Sidebar />
         </div>
-        <ChangeBioModal/>
+        <ChangeBioModal />
       </Grid>
     );
-  } else if(isFriend){
+  } else if (isFriend) {
     return (
       <Grid
         container
@@ -206,18 +200,16 @@ export default function ProfileScreen() {
         </Grid>
         <Grid item xs={5} alignItems="flex-start">
           {welcomeTag}
-          <Typography fontSize={"30px"}>
-            {bioToPrint}
-          </Typography>
+          <Typography fontSize={"30px"}>{bioToPrint}</Typography>
         </Grid>
-  
+
         <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
           <Typography style={{ fontSize: "32px" }}>
             {community.communityList}
           </Typography>
           <PostFeed />
         </Grid>
-  
+
         <div class="sticky">
           <Sidebar />
         </div>
@@ -255,9 +247,7 @@ export default function ProfileScreen() {
         </Grid>
         <Grid item xs={5} alignItems="flex-start">
           {welcomeTag}
-          <Typography fontSize={"30px"}>
-            {bioToPrint}
-          </Typography>
+          <Typography fontSize={"30px"}>{bioToPrint}</Typography>
         </Grid>
 
         <Button
@@ -285,19 +275,18 @@ export default function ProfileScreen() {
           onClose={handleNotifyClose}
           action={action}
         />
-  
+
         <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
           <Typography style={{ fontSize: "32px" }}>
             {community.communityList}
           </Typography>
           <PostFeed />
         </Grid>
-  
+
         <div class="sticky">
           <Sidebar />
         </div>
       </Grid>
     );
   }
-  
 }

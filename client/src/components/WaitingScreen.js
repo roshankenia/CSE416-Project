@@ -43,7 +43,7 @@ export default function WaitingScreen(props) {
   const { auth } = useContext(AuthContext);
   const socket = useContext(SocketContext);
 
-  let { stageRef, actions, URLImage } = props;
+  let { stageRef, actions, setActions, URLImage } = props;
   const flexContainer = {
     display: "flex",
     flexDirection: "row",
@@ -65,7 +65,7 @@ export default function WaitingScreen(props) {
       >
         <Stage width={600} height={600} ref={stageRef}>
           <Layer>
-            <Text text="Starts drawing here" x={5} y={30} />
+            <Rect x={0} y={0} width={600} height={600} fill="white" />
             {actions.map((action) => {
               if (action.tool === "pen" || action.tool === "eraser") {
                 return (
@@ -176,7 +176,7 @@ export default function WaitingScreen(props) {
           color: "black",
         }}
       >
-        <Timer />
+        <Timer stageRef={stageRef} actions={actions} setActions={setActions} />
       </Button>
 
       <Button

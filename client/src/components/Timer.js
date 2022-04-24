@@ -59,7 +59,7 @@ export default function Timer(props) {
 
   const [timer, setTimer] = useState(null);
 
-  let { stageRef } = props;
+  let { stageRef, actions, setActions } = props;
   useEffect(() => {
     const countDown = async (count) => {
       console.log("Inside the countDown", count);
@@ -82,7 +82,9 @@ export default function Timer(props) {
       if (game.panelNumber - 1 == game.turn) {
         game.enterVoting();
       } else {
+        console.log("stageref:", stageRef);
         let imageData = stageRef.current.toDataURL();
+        setActions([]);
         console.log(imageData);
 
         game.changeTurn(imageData);
@@ -97,7 +99,7 @@ export default function Timer(props) {
       socket.off("counter", countDown);
       socket.off("end-time", changeTurn);
     };
-  }, [timer, stageRef]);
+  }, [timer, stageRef, actions]);
 
   return <Typography fontSize={"32px"}>Time Left: {timer}</Typography>;
 }

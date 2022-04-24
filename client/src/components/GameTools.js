@@ -25,6 +25,7 @@ import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import VignetteRoundedIcon from "@mui/icons-material/VignetteRounded";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function GameTools(props) {
   const { game } = useContext(GameContext);
@@ -47,6 +48,7 @@ export default function GameTools(props) {
     handleUndo,
     handleRedo,
     handleChangeText,
+    handleClear,
   } = props;
 
   let strokeSlider = (
@@ -750,6 +752,7 @@ export default function GameTools(props) {
           <Box
             sx={{
               height: 600,
+              width: "50%",
               margin: 1,
               backgroundColor: "primary.dark",
               borderRadius: 5,
@@ -763,14 +766,6 @@ export default function GameTools(props) {
               }}
             >
               <EditIcon fontSize="large" />
-            </Button>
-            <Button
-              sx={buttonCSS}
-              onClick={(e) => {
-                setTool("pen");
-              }}
-            >
-              <BrushIcon fontSize="large" />
             </Button>
             <Button
               sx={buttonCSS}
@@ -817,6 +812,9 @@ export default function GameTools(props) {
             </Button>
             <Button sx={buttonCSS} onClick={(e) => handleRedo()}>
               <RedoIcon fontSize="large" />
+            </Button>
+            <Button sx={buttonCSS} onClick={(e) => handleClear()}>
+              <DeleteIcon fontSize="large" />
             </Button>
             {/* <FormatColorFillIcon fontSize="large" />
             <ImageSearchIcon fontSize="large" />
