@@ -54,6 +54,9 @@ import { BsEraserFill } from "react-icons/bs";
 //socket
 import { SocketContext } from "../socket";
 
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
+
 export default function GameScreen() {
   const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
@@ -78,6 +81,11 @@ export default function GameScreen() {
   const [bubbleToggle, setBubbleToggle] = useState(false);
   const toggleBubbles = () => {
     setBubbleToggle(!bubbleToggle);
+  };
+
+  const [themeToggle, setThemeToggle] = useState(false);
+  const toggleThemes = () => {
+    setThemeToggle(!themeToggle);
   };
 
   const handleGameMode = (event) => {
@@ -757,9 +765,55 @@ export default function GameScreen() {
             border: 3,
             color: "black",
           }}
+          onClick={toggleThemes}
         >
           <Typography fontSize={"32px"}>Themes</Typography>
         </Button>
+        {themeToggle && (
+          <Box
+            sx={{
+              margin: 1,
+              backgroundColor: "primary.dark",
+              "&:hover": {
+                backgroundColor: "primary.main",
+                opacity: [0.9, 0.8, 0.7],
+              },
+              borderRadius: 5,
+              border: 3,
+              color: "black",
+            }}
+          >
+            <ImageList sx={{ width: "95%" }} cols={3}>
+              <ImageListItem key={1}>
+                <img
+                  src={require("../images/background1.png")}
+                  draggable="true"
+                  onDragStart={(e) => {
+                    dragUrl.current = e.target.src;
+                  }}
+                />
+              </ImageListItem>
+              <ImageListItem key={2}>
+                <img
+                  src={require("../images/background2.png")}
+                  draggable="true"
+                  onDragStart={(e) => {
+                    dragUrl.current = e.target.src;
+                  }}
+                />
+              </ImageListItem>
+              <ImageListItem key={3}>
+                <img
+                  src={require("../images/background3.png")}
+                  draggable="true"
+                  onDragStart={(e) => {
+                    dragUrl.current = e.target.src;
+                  }}
+                />
+              </ImageListItem>
+            </ImageList>
+          </Box>
+        )}
         <Button
           sx={{
             width: 450,
@@ -781,8 +835,6 @@ export default function GameScreen() {
         {characterToggle && (
           <Box
             sx={{
-              width: 450,
-              height: 200,
               margin: 1,
               backgroundColor: "primary.dark",
               "&:hover": {
@@ -794,13 +846,19 @@ export default function GameScreen() {
               color: "black",
             }}
           >
-            <img
-              src={require("../images/Trollface.png")}
-              draggable="true"
-              onDragStart={(e) => {
-                dragUrl.current = e.target.src;
-              }}
-            />
+            <ImageList sx={{ width: "95%" }} cols={3}>
+              {[1, 2, 3, 4, 5, 6].map((picture) => (
+                <ImageListItem key={picture}>
+                  <img
+                    src={require("../images/Trollface.png")}
+                    draggable="true"
+                    onDragStart={(e) => {
+                      dragUrl.current = e.target.src;
+                    }}
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList>
           </Box>
         )}
         <Button
@@ -824,8 +882,6 @@ export default function GameScreen() {
         {bubbleToggle && (
           <Box
             sx={{
-              width: 450,
-              height: 200,
               margin: 1,
               backgroundColor: "primary.dark",
               "&:hover": {
@@ -837,49 +893,21 @@ export default function GameScreen() {
               color: "black",
             }}
           >
-            <img
-              src={require("../images/Speech_bubble.png")}
-              draggable="true"
-              onDragStart={(e) => {
-                dragUrl.current = e.target.src;
-              }}
-            />
+            <ImageList sx={{ width: "95%" }} cols={3}>
+              {[1, 2, 3, 4, 5, 6].map((picture) => (
+                <ImageListItem key={picture}>
+                  <img
+                    src={require("../images/Speech_bubble.png")}
+                    draggable="true"
+                    onDragStart={(e) => {
+                      dragUrl.current = e.target.src;
+                    }}
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList>
           </Box>
         )}
-        <Button
-          sx={{
-            width: 450,
-            height: 75,
-            margin: 1,
-            backgroundColor: "primary.dark",
-            "&:hover": {
-              backgroundColor: "primary.main",
-              opacity: [0.9, 0.8, 0.7],
-            },
-            borderRadius: 5,
-            border: 3,
-            color: "black",
-          }}
-        >
-          <Typography fontSize={"32px"}>Your Recent Shapes</Typography>
-        </Button>
-        <Button
-          sx={{
-            width: 450,
-            height: 75,
-            margin: 1,
-            backgroundColor: "yellow",
-            "&:hover": {
-              backgroundColor: "yellow",
-              opacity: [0.9, 0.8, 0.7],
-            },
-            borderRadius: 5,
-            border: 3,
-            color: "black",
-          }}
-        >
-          <Typography fontSize={"32px"}>Save Selected As Shape</Typography>
-        </Button>
         <Button
           sx={{
             width: 450,
