@@ -373,19 +373,45 @@ export default function GameScreen() {
     };
     socket.on("sync-actions", syncA);
 
+    //TODO Alan heck to see which turn it is, who is the current
+    const changeTurn = async (time) => {
+      console.log(
+        "Inside Change Turn / end Time the game turn value is ",
+        game.turn
+      );
+      console.log(
+        "Check to make sure all players are organized the same",
+        game.players
+      );
+      // check if game.turn == amount of panels
+      if (game.panelNumber == game.turn) {
+        game.enterVoting();
+      } else {
+        let imageData = stageRef.current.toDataURL();
+        console.log(imageData);
+
+        let sortedArray = game.players.sort();
+        console.log(sortedArray);
+        let currentTurn = game.turn + 1;
+        let currPlayer = sortedArray[currentTurn % game.players.length];
+        console.log(currPlayer);
+        game.changeTurn(currentTurn, currPlayer, imageData);
+        if (auth.user.username === game.host) {
+          socket.emit("timer", auth.user.username, time, game.lobby);
+        }
+      }
+    };
+    socket.once("end-time", changeTurn);
+
     return () => {
       socket.off("sync-actions", syncA);
+      socket.off("end-time", changeTurn);
     };
   }, []);
 
   //probably most important function
   const handleSubmit = (event) => {
     event.preventDefault();
-    let imageData = stageRef.current.toDataURL();
-    console.log(imageData);
-    //need some where to store timer
-    socket.emit("timer", auth.user.username, 1, game.lobby);
-    //setTimeout(() => setSeconds(0), 1000);
   };
 
   //#region game elements to render
@@ -422,96 +448,13 @@ export default function GameScreen() {
 
   /* List of current panels drawn goes here */
   const gamePanels = (
-    <List style={flexContainer}>
-      <Box
-        sx={{
-          width: 150,
-          height: 150,
-          margin: 1,
-          backgroundColor: "white",
-          "&:hover": {
-            backgroundColor: "white",
-            opacity: [0.9, 0.8, 0.7],
-          },
-          border: 3,
-        }}
-      />
-      <Box
-        sx={{
-          width: 150,
-          height: 150,
-          margin: 1,
-          backgroundColor: "white",
-          "&:hover": {
-            backgroundColor: "white",
-            opacity: [0.9, 0.8, 0.7],
-          },
-          border: 3,
-        }}
-      >
-        {gameMode ? (
-          ""
-        ) : (
-          <Typography fontSize={"10px"}>
-            Fiona lived in her parents’ house, in the town where she and Grant
-            went to university. It was a big, bay-windowed house that seemed to
-            Grant both luxurious and disorderly, with rugs crooked on the floors
-            and cup rings bitten into the table varnish.
-          </Typography>
-        )}
-      </Box>
-      <Box
-        sx={{
-          width: 150,
-          height: 150,
-          margin: 1,
-          backgroundColor: "white",
-          "&:hover": {
-            backgroundColor: "white",
-            opacity: [0.9, 0.8, 0.7],
-          },
-          border: 3,
-        }}
-      >
-        {gameMode ? (
-          ""
-        ) : (
-          <Typography fontSize={"10px"}>
-            Her mother was Icelandic—a powerful woman with a froth of white hair
-            and indignant far-left politics. The father was an important
-            cardiologist, revered around the hospital but happily subservient at
-            home, where he would listen to his wife’s strange tirades with an
-            absentminded smile.
-          </Typography>
-        )}
-      </Box>
-      <Box
-        sx={{
-          width: 150,
-          height: 150,
-          margin: 1,
-          backgroundColor: "white",
-          "&:hover": {
-            backgroundColor: "white",
-            opacity: [0.9, 0.8, 0.7],
-          },
-          border: 3,
-        }}
-      >
-        {gameMode ? (
-          ""
-        ) : (
-          <Typography fontSize={"10px"}>
-            Fiona had her own little car and a pile of cashmere sweaters, but
-            she wasn’t in a sorority, and her mother’s political activity was
-            probably the reason. Not that she cared. Sororities were a joke to
-            her, and so was politics—though she liked to play “The Four
-            Insurgent Generals” on the phonograph, and sometimes also the
-            “Internationale,” very loud.
-          </Typography>
-        )}
-      </Box>
-    </List>
+    <ImageList sx={{ width: "95%" }} cols={4}>
+      {game.panels.map((picture) => (
+        <ImageListItem key={picture}>
+          <img src={picture} loading="lazy" />
+        </ImageListItem>
+      ))}
+    </ImageList>
   );
 
   const isColorSelected = (buttonColor) => {

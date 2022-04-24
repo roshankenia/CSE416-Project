@@ -43,6 +43,7 @@ function GameContextProvider(props) {
     currentPlayer: null,
     panelNumber: null,
     communityName: null,
+    panels: [],
   });
   const history = useHistory();
 
@@ -65,6 +66,7 @@ function GameContextProvider(props) {
           currentPlayer: null,
           panelNumber: null,
           communityName: payload.communityName,
+          panels: game.panels,
         });
       }
       case GameActionType.UPDATE_TIMER: {
@@ -81,6 +83,7 @@ function GameContextProvider(props) {
           currentPlayer: game.currentPlayer,
           panelNumber: game.panelNumber,
           communityName: game.communityName,
+          panels: game.panels,
         });
       }
       case GameActionType.CREATE_NEW_GAME: {
@@ -98,6 +101,7 @@ function GameContextProvider(props) {
           currentPlayer: payload.players[0],
           panelNumber: payload.players.length * 3,
           communityName: game.communityName,
+          panels: game.panels,
         });
       }
       case GameActionType.ENTER_VOTING: {
@@ -114,6 +118,7 @@ function GameContextProvider(props) {
           currentPlayer: null,
           panelNumber: null,
           communityName: game.communityName,
+          panels: game.panels,
         });
       }
       case GameActionType.EXIT_VOTING: {
@@ -130,6 +135,7 @@ function GameContextProvider(props) {
           currentPlayer: null,
           panelNumber: game.panelNumber,
           communityName: game.communityName,
+          panels: game.panels,
         });
       }
       case GameActionType.JOIN_LOBBY: {
@@ -146,6 +152,7 @@ function GameContextProvider(props) {
           currentPlayer: null,
           panelNumber: null,
           communityName: game.communityName,
+          panels: game.panels,
         });
       }
       case GameActionType.UPDATE_PLAYERS: {
@@ -162,6 +169,7 @@ function GameContextProvider(props) {
           currentPlayer: null,
           panelNumber: null,
           communityName: game.communityName,
+          panels: game.panels,
         });
       }
       case GameActionType.LEAVE_LOBBY: {
@@ -178,6 +186,7 @@ function GameContextProvider(props) {
           currentPlayer: null,
           panelNumber: null,
           communityName: game.communityName,
+          panels: game.panels,
         });
       }
       case GameActionType.ADD_READY: {
@@ -194,6 +203,7 @@ function GameContextProvider(props) {
           currentPlayer: null,
           panelNumber: null,
           communityName: game.communityName,
+          panels: game.panels,
         });
       }
       case GameActionType.NEXT_TURN: {
@@ -209,6 +219,7 @@ function GameContextProvider(props) {
           currentPlayer: payload.currentPlayer,
           panelNumber: game.panelNumber,
           communityName: game.communityName,
+          panels: payload.panels,
         });
       }
       case GameActionType.ADD_HOST: {
@@ -224,6 +235,7 @@ function GameContextProvider(props) {
           currentPlayer: null,
           panelNumber: null,
           communityName: game.communityName,
+          panels: game.panels,
         });
       }
       default:
@@ -471,10 +483,12 @@ function GameContextProvider(props) {
     }
   };
 
-  game.changeTurn = function (nextTurn) {
+  game.changeTurn = function (turn, currentPlayer, newPanel) {
+    let panels = game.panels;
+    panels.push(newPanel);
     gameReducer({
       type: GameActionType.NEXT_TURN,
-      payload: nextTurn,
+      payload: { turn: turn, currentPlayer: currentPlayer, panels: panels },
     });
   };
 
