@@ -101,6 +101,7 @@ io.on("connection", (socket) => {
       counter--;
       if (counter <= 0) {
         console.log("counter hit 0");
+        console.log("emitting end-time to lobby:", lobbyID);
         io.to(lobbyID).emit("end-time", time);
         clearInterval(WinnerCountdown);
       }
