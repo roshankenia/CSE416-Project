@@ -43,6 +43,18 @@ export default function ChangeBioModal() {
     handleClose()
   }
 
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    textAlign: "left",
+    p: 4,
+  };  
 
   return (
     <Modal
@@ -52,7 +64,7 @@ export default function ChangeBioModal() {
       aria-describedby="modal-modal-description"
       style={{display:'flex',alignItems:'center',justifyContent:'center'}}
       >
-        <Box>
+        <Box sx={style}>
           <Typography 
             sx={{fontSize: 28, marginBottom:'-10px'}}>
             New Biography:

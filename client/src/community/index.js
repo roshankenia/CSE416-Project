@@ -248,7 +248,7 @@ function GlobalCommunityContextProvider(props) {
         return community;
     }
   };
-  //hard coded for now
+  
   community.setUserProfile = async function (user) {
     communityReducer({
       type: GlobalCommunityActionType.SET_USER_PROFILE,
