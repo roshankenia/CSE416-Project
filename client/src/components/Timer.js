@@ -79,7 +79,7 @@ export default function Timer(props) {
         game.players
       );
       // check if game.turn == amount of panels
-      if (game.panelNumber == game.turn) {
+      if (game.panelNumber - 1 == game.turn) {
         game.enterVoting();
       } else {
         let imageData = stageRef.current.toDataURL();
