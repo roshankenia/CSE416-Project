@@ -21,9 +21,9 @@ import SquareIcon from "@mui/icons-material/Square";
 import CropSquareIcon from "@mui/icons-material/CropSquare";
 import CircleIcon from "@mui/icons-material/Circle";
 import Slider from "@mui/material/Slider";
-import UndoIcon from '@mui/icons-material/Undo';
-import RedoIcon from '@mui/icons-material/Redo';
-import TextFieldsIcon from '@mui/icons-material/TextFields';
+import UndoIcon from "@mui/icons-material/Undo";
+import RedoIcon from "@mui/icons-material/Redo";
+import TextFieldsIcon from "@mui/icons-material/TextFields";
 
 export default function GameTools(props) {
   const { game } = useContext(GameContext);
@@ -40,9 +40,12 @@ export default function GameTools(props) {
     isColorSelected,
     handleSetStrokeWidth,
     strokeWidth,
+    handleSetFill,
+    fill,
+    isFillSelected,
     handleUndo,
     handleRedo,
-    handleChangeText
+    handleChangeText,
   } = props;
 
   let strokeSlider = (
@@ -72,7 +75,7 @@ export default function GameTools(props) {
         }}
       >
         <Typography fontSize={"24px"}>Color</Typography>
-        <Grid container spacing={2} sx={{ width: "95%", mr: 2 }}>
+        <Grid container sx={{ width: "95%", mr: 2 }}>
           <Grid item xs={3}>
             <IconButton
               size="small"
@@ -295,11 +298,11 @@ export default function GameTools(props) {
           <Grid item xs={3}>
             <IconButton
               size="small"
-              style={{ color: "#d9d9d9" }}
-              onClick={(event) => changeColor(event, "#d9d9d9")}
+              style={{ color: "#ffffff" }}
+              onClick={(event) => changeColor(event, "#ffffff")}
               sx={{
                 border: 1,
-                borderColor: isColorSelected("#d9d9d9"),
+                borderColor: isColorSelected("#ffffff"),
               }}
             >
               <SquareIcon
@@ -366,18 +369,330 @@ export default function GameTools(props) {
           </Grid>
         </Grid>
       </Box>
-      {tool == 'text' &&
-        <Box sx={{
+      {tool == "text" && (
+        <Box
+          sx={{
             margin: 1,
             backgroundColor: "white",
             borderRadius: 5,
             border: 3,
             color: "black",
-          }}>
-            <Typography fontSize={"24px"}>Text</Typography>
-          <TextField sx={{border:2, margin: 1}} defaultValue="Enter Text Here" onChange={handleChangeText}></TextField>
+          }}
+        >
+          <Typography fontSize={"24px"}>Text</Typography>
+          <TextField
+            sx={{ border: 2, margin: 1 }}
+            defaultValue="Enter Text Here"
+            onChange={handleChangeText}
+          ></TextField>
         </Box>
-      }
+      )}
+      {(tool == "rectangle" || tool == "circle") && (
+        <Box
+          sx={{
+            margin: 1,
+            backgroundColor: "white",
+            borderRadius: 5,
+            border: 3,
+            color: "black",
+          }}
+        >
+          <Typography fontSize={"24px"}>Fill</Typography>
+          <Grid container sx={{ width: "95%", mr: 2 }}>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#ff0000" }}
+                onClick={(event) => handleSetFill(event, "#ff0000")}
+                sx={{
+                  border: 1,
+                  borderColor: isFillSelected("#ff0000"),
+                }}
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#ff5900" }}
+                onClick={(event) => handleSetFill(event, "#ff5900")}
+                sx={{
+                  border: 1,
+                  borderColor: isFillSelected("#ff5900"),
+                }}
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#ff9900" }}
+                onClick={(event) => handleSetFill(event, "#ff9900")}
+                sx={{
+                  border: 1,
+                  borderColor: isFillSelected("#ff9900"),
+                }}
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#f6ff00" }}
+                onClick={(event) => handleSetFill(event, "#f6ff00")}
+                sx={{
+                  border: 1,
+                  borderColor: isFillSelected("#f6ff00"),
+                }}
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#a6ff00" }}
+                onClick={(event) => handleSetFill(event, "#a6ff00")}
+                sx={{
+                  border: 1,
+                  borderColor: isFillSelected("#a6ff00"),
+                }}
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#62ff00" }}
+                onClick={(event) => handleSetFill(event, "#62ff00")}
+                sx={{
+                  border: 1,
+                  borderColor: isFillSelected("#62ff00"),
+                }}
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#00ff84" }}
+                onClick={(event) => handleSetFill(event, "#00ff84")}
+                sx={{
+                  border: 1,
+                  borderColor: isFillSelected("#00ff84"),
+                }}
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#00ffd9" }}
+                onClick={(event) => handleSetFill(event, "#00ffd9")}
+                sx={{
+                  border: 1,
+                  borderColor: isFillSelected("#00ffd9"),
+                }}
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#0048ff" }}
+                onClick={(event) => handleSetFill(event, "#0048ff")}
+                sx={{
+                  border: 1,
+                  borderColor: isFillSelected("#0048ff"),
+                }}
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#6a00ff" }}
+                onClick={(event) => handleSetFill(event, "#6a00ff")}
+                sx={{
+                  border: 1,
+                  borderColor: isFillSelected("#6a00ff"),
+                }}
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#a600ff" }}
+                onClick={(event) => handleSetFill(event, "#a600ff")}
+                sx={{
+                  border: 1,
+                  borderColor: isFillSelected("#a600ff"),
+                }}
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#ff00e6" }}
+                onClick={(event) => handleSetFill(event, "#ff00e6")}
+                sx={{
+                  border: 1,
+                  borderColor: isFillSelected("#ff00e6"),
+                }}
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#ffffff" }}
+                onClick={(event) => handleSetFill(event, "#ffffff")}
+                sx={{
+                  border: 1,
+                  borderColor: isFillSelected("#ffffff"),
+                }}
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#a1a1a1" }}
+                onClick={(event) => handleSetFill(event, "#a1a1a1")}
+                sx={{
+                  border: 1,
+                  borderColor: isFillSelected("#a1a1a1"),
+                }}
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#5c5c5c" }}
+                onClick={(event) => handleSetFill(event, "#5c5c5c")}
+                sx={{
+                  border: 1,
+                  borderColor: isFillSelected("#5c5c5c"),
+                }}
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#000000" }}
+                onClick={(event) => handleSetFill(event, "#000000")}
+                sx={{
+                  border: 1,
+                  borderColor: isFillSelected("#000000"),
+                }}
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+          </Grid>
+        </Box>
+      )}
       <Box
         sx={{
           margin: 1,
@@ -488,17 +803,11 @@ export default function GameTools(props) {
             >
               <TextFieldsIcon fontSize="large" />
             </Button>
-            <Button
-              sx={buttonCSS}
-              onClick={(e) => handleUndo()}
-            >
-              <UndoIcon fontSize="large"/>
+            <Button sx={buttonCSS} onClick={(e) => handleUndo()}>
+              <UndoIcon fontSize="large" />
             </Button>
-            <Button
-              sx={buttonCSS}
-              onClick={(e) => handleRedo()}
-            >
-              <RedoIcon fontSize="large"/>
+            <Button sx={buttonCSS} onClick={(e) => handleRedo()}>
+              <RedoIcon fontSize="large" />
             </Button>
             {/* <FormatColorFillIcon fontSize="large" />
             <ImageSearchIcon fontSize="large" />

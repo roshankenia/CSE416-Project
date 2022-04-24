@@ -137,6 +137,7 @@ export default function GameScreen() {
   const [tool, setTool] = React.useState("pen");
   const [color, setColor] = React.useState("#000000");
   const [strokeWidth, setStrokeWidth] = React.useState(1);
+  const [fill, setFill] = React.useState("#ffffff");
   const [actions, setActions] = React.useState([]);
   const [redos, setRedos] = React.useState([]);
   const [displayText, setDisplayText] = React.useState("Enter Text Here");
@@ -219,6 +220,7 @@ export default function GameScreen() {
           key: actions.length + 1,
           stroke: color,
           strokeWidth: strokeWidth,
+          fill: fill
         },
       ]);
     } else if (tool == "circle") {
@@ -234,6 +236,7 @@ export default function GameScreen() {
           key: actions.length + 1,
           stroke: color,
           strokeWidth: strokeWidth,
+          fill: fill
         },
       ]);
     } else if (tool == "text") {
@@ -282,6 +285,7 @@ export default function GameScreen() {
         key: key,
         stroke: color,
         strokeWidth: strokeWidth,
+        fill: fill
       };
       actions.splice(actions.length - 1, 1, lastRectangle);
       setActions(actions.concat());
@@ -300,6 +304,7 @@ export default function GameScreen() {
         key: key,
         stroke: color,
         strokeWidth: strokeWidth,
+        fill: fill
       };
       actions.splice(actions.length - 1, 1, lastCircle);
       setActions(actions.concat());
@@ -473,8 +478,20 @@ export default function GameScreen() {
     }
   };
 
+  const isFillSelected = (fillColor) =>{
+    if (fill == fillColor) {
+      return "black";
+    } else {
+      return "white";
+    }
+  }
+
   const handleSetStrokeWidth = (event, width) => {
     setStrokeWidth(width);
+  };
+
+  const handleSetFill = (event, fill) => {
+    setFill(fill);
   };
 
   const gameTools = (
@@ -488,6 +505,9 @@ export default function GameScreen() {
       isColorSelected={isColorSelected}
       handleSetStrokeWidth={handleSetStrokeWidth}
       strokeWidth={strokeWidth}
+      fill={fill}
+      handleSetFill={handleSetFill}
+      isFillSelected={isFillSelected}
       handleUndo={handleUndo}
       handleRedo={handleRedo}
       handleChangeText={handleChangeText}
@@ -554,7 +574,7 @@ export default function GameScreen() {
                       y={action.y}
                       width={action.width}
                       height={action.height}
-                      fill="transparent"
+                      fill={action.fill}
                       stroke={action.stroke}
                       strokeWidth={action.strokeWidth}
                     />
@@ -566,7 +586,7 @@ export default function GameScreen() {
                       y={action.y}
                       width={action.width}
                       height={action.height}
-                      fill="transparent"
+                      fill={action.fill}
                       stroke={action.stroke}
                       strokeWidth={action.strokeWidth}
                     />
