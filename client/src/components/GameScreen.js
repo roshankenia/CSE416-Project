@@ -92,8 +92,6 @@ export default function GameScreen() {
 //TODO Alan update to useState(game.players[game.currentPlayer])
 // const [currentPlayer, setCurrentPlayer] = useState(game.players[0]);
 
-  const [currentPlayer, setCurrentPlayer] = useState(game.currentPlayer);
-
   const [alignment, setAlignment] = React.useState("left");
   const [formats, setFormats] = React.useState(() => ["italic"]);
 
@@ -122,13 +120,7 @@ export default function GameScreen() {
   }));
   //#endregion not-timer
 
-  //probably most important function
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    let imageData = stageRef.current.toDataURL();
-    console.log(imageData);
-    //setTimeout(() => setSeconds(0), 1000);
-  };
+  
 
   //#endregion game control
 
@@ -168,14 +160,14 @@ export default function GameScreen() {
       let redo = actions.pop()
       setActions(actions)
       setRedos([...redos,redo])
-      socket.emit("draw-actions", actions, game.lobby);
+      socket.emit("draw-actions", auth.user._id, actions, game.lobby);
     }
   };
 
   const handleRedo = () => {
     if(redos.length){
       let action = redos.pop()
-      socket.emit("draw-actions", [...actions,action], game.lobby);
+      socket.emit("draw-actions", auth.user._id, [...actions,action], game.lobby);
       setActions([...actions,action])
       setRedos(redos);
     }
@@ -243,7 +235,7 @@ export default function GameScreen() {
         draggable: true,
       })
       setActions(actions);
-      socket.emit("draw-actions", actions, game.lobby);
+      socket.emit("draw-actions",auth.user._id, actions, game.lobby);
     }
   };
 
@@ -298,7 +290,8 @@ export default function GameScreen() {
       actions.splice(actions.length - 1, 1, lastCircle);
       setActions(actions.concat());
     }
-    socket.emit("draw-actions", actions, game.lobby);
+    console.log(game.currentPlayer)
+    socket.emit("draw-actions", auth.user._id, actions, game.lobby);
   };
 
   const handleMouseUp = (e) => {
@@ -310,19 +303,45 @@ export default function GameScreen() {
 
   //the websocket codes
   useEffect(() => {
-    const syncA = async (actions) => {
-      //need better drawer check
-      if (auth.user.username != game.currentPlayer) {
-        console.log("Different players")
+    const syncA = async (userId, actions) => {
+      if (userId != auth.user._id) {
         setActions(actions);
       }
     };
     socket.on("sync-actions", syncA);
 
+    //TODO Alan heck to see which turn it is, who is the current
+    const changeTurn = async (time)=>{
+      console.log("Inside Change Turn / end Time the game turn value is ", game.turn)
+      console.log("Check to make sure all players are organized the same", game.players)
+      // check if game.turn == amount of panels
+      let sortedArray = game.players.sort()
+      console.log(sortedArray)
+      let currentTurn = game.turn + 1;
+      let currPlayer = sortedArray[currentTurn%(game.players.length)]
+      console.log(currPlayer)
+      game.changeTurn({turn: currentTurn, currentPlayer: currPlayer})
+      if(auth.user.username === game.host){
+        socket.emit("timer", auth.user.username, time, game.lobby);
+      }
+    }
+    socket.once("end-time", changeTurn);
+
     return () => {
       socket.off("sync-actions", syncA);
+      socket.off("end-time", changeTurn);
     };
   }, []);
+
+  //probably most important function
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    let imageData = stageRef.current.toDataURL();
+    console.log(imageData);
+    //need some where to store timer
+    socket.emit("timer", auth.user.username, 1, game.lobby);
+    //setTimeout(() => setSeconds(0), 1000);
+  };
 
   //#region game elements to render
   const gameModeButton = (
@@ -504,7 +523,7 @@ export default function GameScreen() {
               }
             )
             setActions(actions);
-            socket.emit("draw-actions", actions, game.lobby);
+            socket.emit("draw-actions", auth.user._id, actions, game.lobby);
           }}
           onDragOver={(e) => e.preventDefault()}
         >
@@ -872,7 +891,6 @@ export default function GameScreen() {
 
   //waiting switch
   if (auth.user.username != game.currentPlayer) {
-    console.log("Switching display for", game.currentPlayer)
     currentDisplay = (
       <WaitingScreen
         stageRef={stageRef}
