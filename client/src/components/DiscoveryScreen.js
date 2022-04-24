@@ -118,9 +118,6 @@ export default function DiscoveryScreen() {
         {/* <Grid item xs={6}></Grid> */}
 
         <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
-          <Typography style={{ fontSize: "32px" }}>
-            {community.communityList}
-          </Typography>
           <PostFeed />
         </Grid>
 

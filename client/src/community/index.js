@@ -147,11 +147,11 @@ function GlobalCommunityContextProvider(props) {
         return setCommunity({
           communityList: community.communityList,
           currentCommunity: community.currentCommunity,
-          communityPosts: community.communityPosts,
+          communityPosts: payload.communityPosts,
           search: community.search,
           errorMessage: community.errorMessage,
           sort: community.sort,
-          screen: payload,
+          screen: payload.screen,
           deleteAccountModal: community.deleteAccountModal,
           changePasswordModal: community.changePasswordModal,
           feedbackModal: community.feedbackModal,
@@ -265,7 +265,7 @@ function GlobalCommunityContextProvider(props) {
         return community;
     }
   };
-  
+
   community.setUserProfile = async function (user) {
     communityReducer({
       type: GlobalCommunityActionType.SET_USER_PROFILE,
@@ -273,9 +273,55 @@ function GlobalCommunityContextProvider(props) {
     });
   };
   community.setScreen = async function (screen) {
+    let communityPosts = [];
+    if (screen == "discovery") {
+      for (let j = 0; j < community.communityList.length; j++) {
+        let curCumm = community.communityList[j];
+
+        try {
+          for (let i = 0; i < curCumm.communityPosts.length; i++) {
+            let postID = curCumm.communityPosts[i];
+            const response = await api.getPostById(postID);
+            let post = response.data.post;
+            if (post.postComic) {
+              const comicResponse = await api.getComicById(post.postComic);
+              console.log("comic:", comicResponse.data.comic);
+              post.data = comicResponse.data.comic;
+            }
+            communityPosts.push(post);
+          }
+          console.log("posts found:", communityPosts);
+        } catch (err) {
+          console.log("could not obtain posts:", err);
+        }
+      }
+    } else if (screen == "profile") {
+      for (let j = 0; j < community.communityList.length; j++) {
+        let curCumm = community.communityList[j];
+
+        try {
+          for (let i = 0; i < curCumm.communityPosts.length; i++) {
+            let postID = curCumm.communityPosts[i];
+            const response = await api.getPostById(postID);
+            let post = response.data.post;
+            if (post.postComic) {
+              const comicResponse = await api.getComicById(post.postComic);
+              console.log("comic:", comicResponse.data.comic);
+              post.data = comicResponse.data.comic;
+            }
+            if (post.data.authors.includes(auth.user.username)) {
+              communityPosts.push(post);
+            }
+          }
+          console.log("posts found:", communityPosts);
+        } catch (err) {
+          console.log("could not obtain posts:", err);
+        }
+      }
+    }
     communityReducer({
       type: GlobalCommunityActionType.SET_SCREEN,
-      payload: screen,
+      payload: { screen: screen, communityPosts: communityPosts },
     });
   };
   community.setCommunity = async function (community) {
