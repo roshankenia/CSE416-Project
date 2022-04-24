@@ -15,7 +15,6 @@ import ColorizeIcon from "@mui/icons-material/Colorize";
 import ClearIcon from "@mui/icons-material/Clear";
 import SquareIcon from "@mui/icons-material/Square";
 
-
 import { styled } from "@mui/material/styles";
 import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
 import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
@@ -33,11 +32,21 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 import WaitingScreen from "./WaitingScreen";
 import GameTools from "./GameTools";
+import Timer from "./Timer";
 import IconButton from "@mui/material/IconButton";
 
-
 // konva stuff
-import { Stage, Layer, Rect, Text, Circle, Line, Star, Shape, Image } from "react-konva";
+import {
+  Stage,
+  Layer,
+  Rect,
+  Text,
+  Circle,
+  Line,
+  Star,
+  Shape,
+  Image,
+} from "react-konva";
 import useImage from "use-image";
 import { BsEraserFill } from "react-icons/bs";
 
@@ -62,13 +71,13 @@ export default function GameScreen() {
   const [gameMode, setGameMode] = useState(true);
 
   const [characterToggle, setCharacterToggle] = useState(false);
-  const toggleCharacters = () =>{
-    setCharacterToggle(!characterToggle)
-  }
+  const toggleCharacters = () => {
+    setCharacterToggle(!characterToggle);
+  };
   const [bubbleToggle, setBubbleToggle] = useState(false);
-  const toggleBubbles = () =>{
-    setBubbleToggle(!bubbleToggle)
-  }
+  const toggleBubbles = () => {
+    setBubbleToggle(!bubbleToggle);
+  };
 
   const handleGameMode = (event) => {
     event.stopPropagation();
@@ -89,11 +98,10 @@ export default function GameScreen() {
     alignItems: "center",
     justifyContent: "center",
   };
-//TODO Alan update to useState(game.players[game.currentPlayer])
-// const [currentPlayer, setCurrentPlayer] = useState(game.players[0]);
+  //TODO Alan update to useState(game.players[game.currentPlayer])
+  // const [currentPlayer, setCurrentPlayer] = useState(game.players[0]);
 
   const [currentPlayer, setCurrentPlayer] = useState(game.currentPlayer);
-  const [timer, setTimer] = useState(null)
 
   const [alignment, setAlignment] = React.useState("left");
   const [formats, setFormats] = React.useState(() => ["italic"]);
@@ -123,8 +131,6 @@ export default function GameScreen() {
   }));
   //#endregion not-timer
 
-  
-
   //#endregion game control
 
   //#region KONVA functions
@@ -132,17 +138,17 @@ export default function GameScreen() {
   const [color, setColor] = React.useState("#000000");
   const [strokeWidth, setStrokeWidth] = React.useState(1);
   const [actions, setActions] = React.useState([]);
-  const [redos, setRedos] = React.useState([])
-  const [displayText, setDisplayText] = React.useState("Enter Text Here")
+  const [redos, setRedos] = React.useState([]);
+  const [displayText, setDisplayText] = React.useState("Enter Text Here");
 
   const isDrawing = React.useRef(false);
   const stageRef = React.useRef(null);
   const dragUrl = React.useRef();
 
   const handleChangeText = (e) => {
-    const text = e.target.value
-    setDisplayText(text)
-  }
+    const text = e.target.value;
+    setDisplayText(text);
+  };
 
   const URLImage = ({ image }) => {
     const [img] = useImage(image.src);
@@ -159,19 +165,24 @@ export default function GameScreen() {
   };
 
   const handleUndo = () => {
-    if(actions.length){
-      let redo = actions.pop()
-      setActions(actions)
-      setRedos([...redos,redo])
+    if (actions.length) {
+      let redo = actions.pop();
+      setActions(actions);
+      setRedos([...redos, redo]);
       socket.emit("draw-actions", auth.user._id, actions, game.lobby);
     }
   };
 
   const handleRedo = () => {
-    if(redos.length){
-      let action = redos.pop()
-      socket.emit("draw-actions", auth.user._id, [...actions,action], game.lobby);
-      setActions([...actions,action])
+    if (redos.length) {
+      let action = redos.pop();
+      socket.emit(
+        "draw-actions",
+        auth.user._id,
+        [...actions, action],
+        game.lobby
+      );
+      setActions([...actions, action]);
       setRedos(redos);
     }
   };
@@ -236,9 +247,9 @@ export default function GameScreen() {
         key: actions.length + 1,
         text: displayText,
         draggable: true,
-      })
+      });
       setActions(actions);
-      socket.emit("draw-actions",auth.user._id, actions, game.lobby);
+      socket.emit("draw-actions", auth.user._id, actions, game.lobby);
     }
   };
 
@@ -293,13 +304,13 @@ export default function GameScreen() {
       actions.splice(actions.length - 1, 1, lastCircle);
       setActions(actions.concat());
     }
-    console.log(game.currentPlayer)
+    console.log(game.currentPlayer);
     socket.emit("draw-actions", auth.user._id, actions, game.lobby);
   };
 
   const handleMouseUp = (e) => {
     isDrawing.current = false;
-    setRedos([])
+    setRedos([]);
   };
 
   //#endregion
@@ -313,41 +324,10 @@ export default function GameScreen() {
     };
     socket.on("sync-actions", syncA);
 
-    const countDown = async (count)=>{
-      console.log("Inside the countDown", count)
-      setTimer(count)
-    };
-
-    socket.once("counter", countDown);
-
-    //TODO Alan heck to see which turn it is, who is the current
-    const changeTurn = async (time)=>{
-      console.log("Inside Change Turn / end Time the game turn value is ", game.turn)
-      console.log("Check to make sure all players are organized the same", game.players)
-      // check if game.turn == amount of panels
-      if(game.panelNumber == game.turn){
-        game.enterVoting()
-      }
-      else{
-        let sortedArray = game.players.sort()
-        console.log(sortedArray)
-        let currentTurn = game.turn + 1;
-        let currPlayer = sortedArray[currentTurn%(game.players.length)]
-        console.log(currPlayer)
-        game.changeTurn({turn: currentTurn, currentPlayer: currPlayer})
-        if(auth.user.username === game.host){
-          socket.emit("timer", auth.user.username, time, game.lobby);
-        }
-      }
-    }
-    socket.once("end-time", changeTurn);
-
     return () => {
       socket.off("sync-actions", syncA);
-      socket.off("end-time", changeTurn);
-      socket.off("counter",countDown)
     };
-  }, [timer]);
+  }, []);
 
   //probably most important function
   const handleSubmit = (event) => {
@@ -531,13 +511,11 @@ export default function GameScreen() {
             // register event position
             stageRef.current.setPointersPositions(e);
             // add image
-            actions.push(
-              {
-                ...stageRef.current.getPointerPosition(),
-                src: dragUrl.current,
-                key: actions.length + 1
-              }
-            )
+            actions.push({
+              ...stageRef.current.getPointerPosition(),
+              src: dragUrl.current,
+              key: actions.length + 1,
+            });
             setActions(actions);
             socket.emit("draw-actions", auth.user._id, actions, game.lobby);
           }}
@@ -550,51 +528,60 @@ export default function GameScreen() {
             onMousemove={handleMouseMove}
             onMouseup={handleMouseUp}
             ref={stageRef}
-            
           >
             <Layer>
               <Text text="Starts drawing here" x={5} y={30} />
               {actions.map((action) => {
-                if(action.tool === 'pen' || action.tool === 'eraser'){
-                  return <Line
-                    points={action.points}
-                    stroke={action.stroke}
-                    strokeWidth={action.strokeWidth}
-                    tension={0.5}
-                    lineCap="round"
-                    globalCompositeOperation={
-                      action.tool === "eraser" ? "destination-out" : "source-over"
-                    }
-                  />
-                }else if(action.tool === 'rectangle'){
-                  return <Rect
-                    x={action.x}
-                    y={action.y}
-                    width={action.width}
-                    height={action.height}
-                    fill="transparent"
-                    stroke={action.stroke}
-                    strokeWidth={action.strokeWidth}
-                  />
-                }else if(action.tool === 'circle'){
-                  return <Circle
-                    x={action.x}
-                    y={action.y}
-                    width={action.width}
-                    height={action.height}
-                    fill="transparent"
-                    stroke={action.stroke}
-                    strokeWidth={action.strokeWidth}
-                  />
-                }else if(action.tool === 'text'){
-                  return <Text
-                    x={action.x}
-                    y={action.y}
-                    text={action.text}
-                    fontSize={action.fontSize}
-                    fill={action.fill}
-                  />
-                }else{
+                if (action.tool === "pen" || action.tool === "eraser") {
+                  return (
+                    <Line
+                      points={action.points}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                      tension={0.5}
+                      lineCap="round"
+                      globalCompositeOperation={
+                        action.tool === "eraser"
+                          ? "destination-out"
+                          : "source-over"
+                      }
+                    />
+                  );
+                } else if (action.tool === "rectangle") {
+                  return (
+                    <Rect
+                      x={action.x}
+                      y={action.y}
+                      width={action.width}
+                      height={action.height}
+                      fill="transparent"
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                    />
+                  );
+                } else if (action.tool === "circle") {
+                  return (
+                    <Circle
+                      x={action.x}
+                      y={action.y}
+                      width={action.width}
+                      height={action.height}
+                      fill="transparent"
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                    />
+                  );
+                } else if (action.tool === "text") {
+                  return (
+                    <Text
+                      x={action.x}
+                      y={action.y}
+                      text={action.text}
+                      fontSize={action.fontSize}
+                      fill={action.fill}
+                    />
+                  );
+                } else {
                   return <URLImage image={action} />;
                 }
               })}
@@ -686,7 +673,7 @@ export default function GameScreen() {
             color: "black",
           }}
         >
-          <Typography fontSize={"32px"}>Time Left: {timer}</Typography>
+          <Timer />
         </Button>
         <Button
           sx={{
@@ -723,25 +710,31 @@ export default function GameScreen() {
         >
           <Typography fontSize={"32px"}>Characters</Typography>
         </Button>
-        {characterToggle &&
-        <Box sx={{width: 450,
-          height: 200,
-          margin: 1,
-          backgroundColor: "primary.dark",
-          "&:hover": {
-            backgroundColor: "primary.main",
-            opacity: [0.9, 0.8, 0.7],
-          },
-          borderRadius: 5,
-          border: 3,
-          color: "black",}}>
-              <img src={require('../images/Trollface.png')}
-                   draggable="true"
-                   onDragStart={(e) => {
-                   dragUrl.current = e.target.src;
-               }} />
+        {characterToggle && (
+          <Box
+            sx={{
+              width: 450,
+              height: 200,
+              margin: 1,
+              backgroundColor: "primary.dark",
+              "&:hover": {
+                backgroundColor: "primary.main",
+                opacity: [0.9, 0.8, 0.7],
+              },
+              borderRadius: 5,
+              border: 3,
+              color: "black",
+            }}
+          >
+            <img
+              src={require("../images/Trollface.png")}
+              draggable="true"
+              onDragStart={(e) => {
+                dragUrl.current = e.target.src;
+              }}
+            />
           </Box>
-        }
+        )}
         <Button
           sx={{
             width: 450,
@@ -760,25 +753,31 @@ export default function GameScreen() {
         >
           <Typography fontSize={"32px"}>Speech Bubbles</Typography>
         </Button>
-        {bubbleToggle &&
-        <Box sx={{width: 450,
-          height: 200,
-          margin: 1,
-          backgroundColor: "primary.dark",
-          "&:hover": {
-            backgroundColor: "primary.main",
-            opacity: [0.9, 0.8, 0.7],
-          },
-          borderRadius: 5,
-          border: 3,
-          color: "black",}}>
-              <img src={require('../images/Speech_bubble.png')}
-                   draggable="true"
-                   onDragStart={(e) => {
-                   dragUrl.current = e.target.src;
-               }} />
+        {bubbleToggle && (
+          <Box
+            sx={{
+              width: 450,
+              height: 200,
+              margin: 1,
+              backgroundColor: "primary.dark",
+              "&:hover": {
+                backgroundColor: "primary.main",
+                opacity: [0.9, 0.8, 0.7],
+              },
+              borderRadius: 5,
+              border: 3,
+              color: "black",
+            }}
+          >
+            <img
+              src={require("../images/Speech_bubble.png")}
+              draggable="true"
+              onDragStart={(e) => {
+                dragUrl.current = e.target.src;
+              }}
+            />
           </Box>
-        }
+        )}
         <Button
           sx={{
             width: 450,
@@ -851,7 +850,7 @@ export default function GameScreen() {
             color: "black",
           }}
         >
-          <Typography fontSize={"32px"}>Time Left: {timer}</Typography>
+          <Timer />
         </Button>
         <Button
           sx={{
@@ -912,7 +911,6 @@ export default function GameScreen() {
         stageRef={stageRef}
         actions={actions}
         URLImage={URLImage}
-        timer={timer}
       />
     );
   }

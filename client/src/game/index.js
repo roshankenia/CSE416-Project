@@ -4,7 +4,7 @@ import api from "./game-request-api";
 import AuthContext from "../auth";
 import io from "socket.io-client";
 import { SocketContext } from "../socket";
-import $ from 'jquery'; 
+import $ from "jquery";
 
 export const GameContext = createContext({});
 
@@ -19,7 +19,7 @@ export const GameActionType = {
   ADD_READY: "ADD_READY",
   ADD_HOST: "ADD_HOST",
   UPDATE_TIMER: "UPDATE_TIMER",
-  NEXT_TURN:"NEXT_TURN"
+  NEXT_TURN: "NEXT_TURN",
 };
 
 function GameContextProvider(props) {
@@ -41,7 +41,8 @@ function GameContextProvider(props) {
     host: null,
     turn: null,
     currentPlayer: null,
-    panelNumber: null
+    panelNumber: null,
+    communityName: null,
   });
   const history = useHistory();
 
@@ -62,7 +63,8 @@ function GameContextProvider(props) {
           host: auth.user.username,
           turn: null,
           currentPlayer: null,
-          panelNumber: null
+          panelNumber: null,
+          communityName: payload.communityName,
         });
       }
       case GameActionType.UPDATE_TIMER: {
@@ -77,7 +79,8 @@ function GameContextProvider(props) {
           host: game.host,
           turn: game.turn,
           currentPlayer: game.currentPlayer,
-          panelNumber: game.panelNumber
+          panelNumber: game.panelNumber,
+          communityName: game.communityName,
         });
       }
       case GameActionType.CREATE_NEW_GAME: {
@@ -93,7 +96,8 @@ function GameContextProvider(props) {
           host: game.host,
           turn: 0,
           currentPlayer: payload.players[0],
-          panelNumber: payload.players.length * 3
+          panelNumber: payload.players.length * 3,
+          communityName: game.communityName,
         });
       }
       case GameActionType.ENTER_VOTING: {
@@ -108,7 +112,8 @@ function GameContextProvider(props) {
           host: game.host,
           turn: null,
           currentPlayer: null,
-          panelNumber: null
+          panelNumber: null,
+          communityName: game.communityName,
         });
       }
       case GameActionType.EXIT_VOTING: {
@@ -123,7 +128,8 @@ function GameContextProvider(props) {
           host: game.host,
           turn: null,
           currentPlayer: null,
-          panelNumber: game.panelNumber
+          panelNumber: game.panelNumber,
+          communityName: game.communityName,
         });
       }
       case GameActionType.JOIN_LOBBY: {
@@ -138,7 +144,8 @@ function GameContextProvider(props) {
           host: game.host,
           turn: null,
           currentPlayer: null,
-          panelNumber: null
+          panelNumber: null,
+          communityName: game.communityName,
         });
       }
       case GameActionType.UPDATE_PLAYERS: {
@@ -153,7 +160,8 @@ function GameContextProvider(props) {
           host: game.host,
           turn: null,
           currentPlayer: null,
-          panelNumber: null
+          panelNumber: null,
+          communityName: game.communityName,
         });
       }
       case GameActionType.LEAVE_LOBBY: {
@@ -168,7 +176,8 @@ function GameContextProvider(props) {
           host: game.host,
           turn: null,
           currentPlayer: null,
-          panelNumber: null
+          panelNumber: null,
+          communityName: game.communityName,
         });
       }
       case GameActionType.ADD_READY: {
@@ -183,7 +192,8 @@ function GameContextProvider(props) {
           host: game.host,
           turn: null,
           currentPlayer: null,
-          panelNumber: null
+          panelNumber: null,
+          communityName: game.communityName,
         });
       }
       case GameActionType.NEXT_TURN: {
@@ -197,7 +207,8 @@ function GameContextProvider(props) {
           host: game.host,
           turn: payload.turn,
           currentPlayer: payload.currentPlayer,
-          panelNumber: game.panelNumber
+          panelNumber: game.panelNumber,
+          communityName: game.communityName,
         });
       }
       case GameActionType.ADD_HOST: {
@@ -211,7 +222,8 @@ function GameContextProvider(props) {
           host: payload,
           turn: null,
           currentPlayer: null,
-          panelNumber: null
+          panelNumber: null,
+          communityName: game.communityName,
         });
       }
       default:
@@ -323,7 +335,6 @@ function GameContextProvider(props) {
 
     socket.once("player-ready", readyP);
 
-  
     // const countDown = async (count)=>{
     //   gameReducer({
     //     type: GameActionType.UPDATE_TIMER,
@@ -335,24 +346,22 @@ function GameContextProvider(props) {
 
     //pass real game obj when backend is ready
     const gameStart = async (players) => {
-      console.log(players)
-      let fakeGameObj = {game: 'random bullshit go!', players: players}
+      console.log(players);
+      let fakeGameObj = { game: "random bullshit go!", players: players };
       gameReducer({
         type: GameActionType.CREATE_NEW_GAME,
         payload: fakeGameObj,
-      })
-    }
+      });
+    };
     //right now it passes player array
-    socket.once("game-started", gameStart)
+    socket.once("game-started", gameStart);
 
-    
     // const syncL = async (lines) => {
     //   console.log('lines\n!!!!!!!!')
     //   console.log(lines)
-      
+
     // };
     // socket.on("sync-lines", syncL);
-
 
     return () => {
       socket.off("new-player", newP);
@@ -361,8 +370,8 @@ function GameContextProvider(props) {
       socket.off("player-ready", readyP);
       // socket.off("counter", countDown)
       socket.off("add-host", addH);
-      socket.off("game-started", gameStart)
-      
+      socket.off("game-started", gameStart);
+
       // socket.off('count1');
     };
   }, [game]);
@@ -383,10 +392,10 @@ function GameContextProvider(props) {
   };
 
   game.createNewGame = async function () {
-    let sortPlayers = game.players.sort()
+    let sortPlayers = game.players.sort();
     try {
       let id = "madeupgameid";
-      let newgame = {game: "gameOBJ", players: sortPlayers};
+      let newgame = { game: "gameOBJ", players: sortPlayers };
       // backend stuff
       // const response = await api.createGame();
       // if (response.status === 201) {
@@ -397,8 +406,8 @@ function GameContextProvider(props) {
       });
       history.push("/game/" + id);
       //}
-      console.log('new game created:')
-      console.log(game)
+      console.log("new game created:");
+      console.log(game);
     } catch {
       console.log("API FAILED TO CREATE A GAME MONGODB INSTANCE");
     }
@@ -435,7 +444,7 @@ function GameContextProvider(props) {
     socket.emit("join-lobby", auth.user.username, lobbyID);
   };
 
-  game.hostNewLobby = async function () {
+  game.hostNewLobby = async function (communityName) {
     try {
       let id = Math.floor(100000 + Math.random() * 900000);
       let lobbyID = "" + id;
@@ -445,9 +454,14 @@ function GameContextProvider(props) {
       // const response = await api.createGame();
       // if (response.status === 201) {
       //   let game = response.data.game;
+      console.log("creating lobby for:", communityName);
       gameReducer({
         type: GameActionType.CREATE_NEW_LOBBY,
-        payload: { lobbyID: lobbyID, players: players },
+        payload: {
+          lobbyID: lobbyID,
+          players: players,
+          communityName: communityName,
+        },
       });
       history.push("/game/" + lobbyID);
       socket.emit("join-lobby", auth.user.username, lobbyID);
@@ -457,12 +471,12 @@ function GameContextProvider(props) {
     }
   };
 
-  game.changeTurn = function(nextTurn){
+  game.changeTurn = function (nextTurn) {
     gameReducer({
-        type: GameActionType.NEXT_TURN,
-        payload: nextTurn
-      })
-  }
+      type: GameActionType.NEXT_TURN,
+      payload: nextTurn,
+    });
+  };
 
   game.enterVoting = async function () {
     try {
@@ -493,12 +507,10 @@ function GameContextProvider(props) {
   };
 
   //TIMER CODE- make sure time only starts when start game happens
-  game.setTimer = async function(time){
-    console.log('set timer... ' + time)
+  game.setTimer = async function (time) {
+    console.log("set timer... " + time);
     socket.emit("timer", auth.user.username, time, game.lobby);
   };
-
-
 
   return (
     <GameContext.Provider

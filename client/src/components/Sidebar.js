@@ -51,11 +51,6 @@ export default function Sidebar() {
     game.joinLobby(lobbyID);
   };
 
-  const handleHostNewGame = (event, name) => {
-    event.preventDefault();
-    game.hostNewLobby();
-  };
-
   const action = (
     <React.Fragment>
       {/* On click here will join the game lobby (button) */}
@@ -149,46 +144,6 @@ export default function Sidebar() {
                 Add
               </Button>
             </Box>
-          </Box>
-        </Box>
-      </ListItem>
-      <ListItem key="host">
-        <Box
-          justifyContent="center"
-          alignItems="center"
-          style={{
-            border: "3px solid",
-            borderColor: "black",
-            color: "black",
-            backgroundColor: "#E39090",
-            fontSize: "20px",
-            outline: "none",
-            borderRadius: 20,
-            width: "75%",
-          }}
-        >
-          <Typography align="center" style={{ fontSize: "32px" }}>
-            Host New Game
-          </Typography>
-          <Box textAlign="center">
-            <Button
-              variant="contained"
-              color="success"
-              size="small"
-              style={{
-                fontWeight: 600,
-                border: "3px solid",
-                borderColor: "black",
-                backgroundColor: "#46EC2B",
-                color: "black",
-                fontSize: "24px",
-                borderRadius: 50,
-              }}
-              sx={{ mb: 0.5, width: "25%" }}
-              onClick={handleHostNewGame}
-            >
-              +
-            </Button>
           </Box>
         </Box>
       </ListItem>
