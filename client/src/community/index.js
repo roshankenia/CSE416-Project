@@ -282,28 +282,38 @@ function GlobalCommunityContextProvider(props) {
     //first obtain all posts for this community
     let communityPosts = [];
     console.log(community);
-    try {
-      for (let i = 0; i < community.communityPosts.length; i++) {
-        let postID = community.communityPosts[i];
-        const response = await api.getPostById(postID);
-        let post = response.data.post;
-        if (post.postComic) {
-          const comicResponse = await api.getComicById(post.postComic);
-          console.log("comic:", comicResponse.data.comic);
-          post.data = comicResponse.data.comic;
-        }
-        communityPosts.push(post);
-      }
-      console.log("posts found:", communityPosts);
+    if (community == null) {
       communityReducer({
         type: GlobalCommunityActionType.SET_COMMUNITY,
         payload: {
-          currentCommunity: community.communityName,
-          communityPosts: communityPosts,
+          currentCommunity: null,
+          communityPosts: null,
         },
       });
-    } catch (err) {
-      console.log("could not obtain posts:", err);
+    } else {
+      try {
+        for (let i = 0; i < community.communityPosts.length; i++) {
+          let postID = community.communityPosts[i];
+          const response = await api.getPostById(postID);
+          let post = response.data.post;
+          if (post.postComic) {
+            const comicResponse = await api.getComicById(post.postComic);
+            console.log("comic:", comicResponse.data.comic);
+            post.data = comicResponse.data.comic;
+          }
+          communityPosts.push(post);
+        }
+        console.log("posts found:", communityPosts);
+        communityReducer({
+          type: GlobalCommunityActionType.SET_COMMUNITY,
+          payload: {
+            currentCommunity: community.communityName,
+            communityPosts: communityPosts,
+          },
+        });
+      } catch (err) {
+        console.log("could not obtain posts:", err);
+      }
     }
   };
   community.setDeleteAccount = async function (deleteAccount) {

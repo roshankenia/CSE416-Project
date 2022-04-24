@@ -104,7 +104,7 @@ io.on("connection", (socket) => {
         io.to(lobbyID).emit("end-time", time);
         clearInterval(WinnerCountdown);
       }
-    }, 10000);
+    }, 1000);
   });
 
   socket.on("start-game", (players, lobbyID) => {
