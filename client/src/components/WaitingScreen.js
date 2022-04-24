@@ -40,8 +40,9 @@ export default function WaitingScreen(props) {
   const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
   const socket = useContext(SocketContext);
+  
 
-  let { stageRef, actions, URLImage } = props;
+  let { stageRef, actions, URLImage, timer } = props;
   const flexContainer = {
     display: "flex",
     flexDirection: "row",
@@ -164,7 +165,7 @@ export default function WaitingScreen(props) {
           color: "black",
         }}
       >
-        <Typography fontSize={"32px"}>Time Left: {game.timer}</Typography>
+        <Typography fontSize={"32px"}>Time Left: {timer}</Typography>
       </Button>
 
       <Button
