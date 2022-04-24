@@ -61,7 +61,7 @@ export default function CommunityScreen() {
             style={{ fontSize: "48px" }}
             sx={{ ml: 20 }}
           >
-            {community.communityList}
+            {community.currentCommunity}
           </Typography>
           <Button
             variant="contained"

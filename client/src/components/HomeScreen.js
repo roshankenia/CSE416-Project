@@ -133,24 +133,16 @@ const HomeScreen = () => {
       Friends
     </Button>
   );
-
-  const communities = [
-    "J/Stickman",
-    "J/Rage Comics",
-    "J/Memes",
-    "J/Spiderman",
-    "J/Random",
-  ];
   let communityCard = <List></List>;
   communityCard = (
     <List>
-      {communities.map((name) => (
-        <ListItem key={name}>
+      {community.communityList.map((com) => (
+        <ListItem key={com}>
           <Button
             variant="contained"
             color="success"
             size="large"
-            onClick={(event) => handleOpenCommunity(event, name)}
+            onClick={(event) => handleOpenCommunity(event, com)}
             style={{
               fontWeight: 600,
               border: "3px solid",
@@ -165,7 +157,7 @@ const HomeScreen = () => {
             <Grid container>
               <Grid item xs={8}>
                 <Typography align="center" style={{ fontSize: "48px" }}>
-                  {name}
+                  {"J/" + com.communityName}
                 </Typography>
               </Grid>
               <Grid item xs={2}></Grid>
@@ -226,7 +218,7 @@ const HomeScreen = () => {
               borderRadius: 20,
               outline: "none",
               width: "96%",
-              marginTop:2
+              marginTop: 2,
             }}
           >
             <Box style={{ width: "96%" }}>
