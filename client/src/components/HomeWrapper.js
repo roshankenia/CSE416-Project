@@ -20,7 +20,7 @@ export default function HomeWrapper() {
     return <HomeScreen />;
   } else {
     if (auth.loggedIn) {
-      if (community.communityList) {
+      if (community.currentCommunity) {
         return <CommunityScreen />;
       } else {
         if (community.screen == "communities") {

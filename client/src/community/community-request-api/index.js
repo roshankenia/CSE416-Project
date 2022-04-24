@@ -24,20 +24,27 @@ export const createCommunity = (name, members) => {
 };
 
 export const getCommunityList = () => {
-  return api.get(`/communitylist`, {
-  });
+  return api.get(`/communitylist`, {});
 };
 
 export const updateCommunityById = (id, community) => {
   return api.put(`/community/${id}`, {
-    community: community
-  })
+    community: community,
+  });
 };
 
 export const deleteCommunity = (name) => {
   return api.post(`/deletecommunity`, {
-    communityName: name
+    communityName: name,
   });
+};
+
+export const getPostById = (id) => {
+  return api.get(`/post/${id}`);
+};
+
+export const getComicById = (id) => {
+  return api.get(`/comic/${id}`);
 };
 
 const apis = {
@@ -45,7 +52,9 @@ const apis = {
   getCommunityList,
   updateCommunityById,
   // for testing purpose
-  deleteCommunity
+  deleteCommunity,
+  getPostById,
+  getComicById
 };
 
 export default apis;
@@ -118,7 +127,3 @@ export default apis;
 //     listView: listView,
 //     username: null,
 //   });
-
-
-
-

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import api from "./community-request-api";
 import AuthContext from "../auth";
@@ -35,6 +35,7 @@ function GlobalCommunityContextProvider(props) {
   const [community, setCommunity] = useState({
     communityList: null,
     currentCommunity: null,
+    communityPosts: null,
     search: null,
     errorMessage: null,
     sort: "newest date",
@@ -48,13 +49,19 @@ function GlobalCommunityContextProvider(props) {
   });
   const history = useHistory();
 
+  useEffect(() => {
+    // call api or anything
+    community.getCommunities();
+  }, []);
+
   const communityReducer = (action) => {
     const { type, payload } = action;
     switch (type) {
       case GlobalCommunityActionType.CREATE_NEW_COMMUNITY: {
         return setCommunity({
           communityList: community.communityList,
-          currentCommunity: payload,
+          currentCommunity: payload.currentCommunity,
+          communityPosts: payload.communityPosts,
           search: community.search,
           errorMessage: community.errorMessage,
           sort: community.sort,
@@ -71,6 +78,7 @@ function GlobalCommunityContextProvider(props) {
         return setCommunity({
           communityList: payload,
           currentCommunity: community.currentCommunity,
+          communityPosts: community.communityPosts,
           search: community.search,
           errorMessage: community.errorMessage,
           sort: community.sort,
@@ -87,6 +95,7 @@ function GlobalCommunityContextProvider(props) {
         return setCommunity({
           communityList: payload,
           currentCommunity: community.currentCommunity,
+          communityPosts: community.communityPosts,
           search: community.search,
           errorMessage: community.errorMessage,
           sort: community.sort,
@@ -104,6 +113,7 @@ function GlobalCommunityContextProvider(props) {
         return setCommunity({
           communityList: null,
           currentCommunity: null,
+          communityPosts: null,
           search: community.search,
           errorMessage: community.errorMessage,
           sort: community.sort,
@@ -118,8 +128,9 @@ function GlobalCommunityContextProvider(props) {
       }
       case GlobalCommunityActionType.SET_COMMUNITY: {
         return setCommunity({
-          communityList: payload,
-          currentCommunity: community.currentCommunity,
+          communityList: community.communityList,
+          currentCommunity: payload.currentCommunity,
+          communityPosts: payload.communityPosts,
           search: community.search,
           errorMessage: community.errorMessage,
           sort: community.sort,
@@ -136,6 +147,7 @@ function GlobalCommunityContextProvider(props) {
         return setCommunity({
           communityList: community.communityList,
           currentCommunity: community.currentCommunity,
+          communityPosts: community.communityPosts,
           search: community.search,
           errorMessage: community.errorMessage,
           sort: community.sort,
@@ -152,6 +164,7 @@ function GlobalCommunityContextProvider(props) {
         return setCommunity({
           communityList: community.communityList,
           currentCommunity: community.currentCommunity,
+          communityPosts: community.communityPosts,
           search: community.search,
           errorMessage: community.errorMessage,
           sort: community.sort,
@@ -168,6 +181,7 @@ function GlobalCommunityContextProvider(props) {
         return setCommunity({
           communityList: community.communityList,
           currentCommunity: community.currentCommunity,
+          communityPosts: community.communityPosts,
           search: community.search,
           errorMessage: community.errorMessage,
           sort: community.sort,
@@ -184,6 +198,7 @@ function GlobalCommunityContextProvider(props) {
         return setCommunity({
           communityList: community.communityList,
           currentCommunity: community.currentCommunity,
+          communityPosts: community.communityPosts,
           search: community.search,
           errorMessage: community.errorMessage,
           sort: community.sort,
@@ -200,6 +215,7 @@ function GlobalCommunityContextProvider(props) {
         return setCommunity({
           communityList: community.communityList,
           currentCommunity: community.currentCommunity,
+          communityPosts: community.communityPosts,
           search: community.search,
           errorMessage: community.errorMessage,
           sort: community.sort,
@@ -216,6 +232,7 @@ function GlobalCommunityContextProvider(props) {
         return setCommunity({
           communityList: community.communityList,
           currentCommunity: community.currentCommunity,
+          communityPosts: community.communityPosts,
           search: community.search,
           errorMessage: community.errorMessage,
           sort: community.sort,
@@ -261,11 +278,33 @@ function GlobalCommunityContextProvider(props) {
       payload: screen,
     });
   };
-  community.setCommunity = async function (name) {
-    communityReducer({
-      type: GlobalCommunityActionType.SET_COMMUNITY,
-      payload: name,
-    });
+  community.setCommunity = async function (community) {
+    //first obtain all posts for this community
+    let communityPosts = [];
+    console.log(community);
+    try {
+      for (let i = 0; i < community.communityPosts.length; i++) {
+        let postID = community.communityPosts[i];
+        const response = await api.getPostById(postID);
+        let post = response.data.post;
+        if (post.postComic) {
+          const comicResponse = await api.getComicById(post.postComic);
+          console.log("comic:", comicResponse.data.comic);
+          post.data = comicResponse.data.comic;
+        }
+        communityPosts.push(post);
+      }
+      console.log("posts found:", communityPosts);
+      communityReducer({
+        type: GlobalCommunityActionType.SET_COMMUNITY,
+        payload: {
+          currentCommunity: community.communityName,
+          communityPosts: communityPosts,
+        },
+      });
+    } catch (err) {
+      console.log("could not obtain posts:", err);
+    }
   };
   community.setDeleteAccount = async function (deleteAccount) {
     communityReducer({
@@ -305,9 +344,11 @@ function GlobalCommunityContextProvider(props) {
         let community = response.data.community;
         communityReducer({
           type: GlobalCommunityActionType.CREATE_NEW_COMMUNITY,
-          payload: community,
+          payload: {
+            currentCommunity: community.communityName,
+            communityPosts: [],
+          },
         });
-        history.push("/community/" + community._id);
       }
     } catch {
       console.log("API FAILED TO CREATE A NEW COMMUNITY");
