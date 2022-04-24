@@ -173,7 +173,6 @@ export default function ProfileScreen() {
         </div>
         <ChangeBioModal/>
       </Grid>
-      
     );
   } else if(isFriend){
     return (

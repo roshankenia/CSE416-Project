@@ -20,7 +20,7 @@ export const AuthActionType = {
   CREATE_GUEST: "CREATE_GUEST",
   SEARCH_USERS: "SEARCH_USERS",
   SET_FRIENDS_AND_REQUESTS: "SET_FRIENDS_AND_REQUESTS",
-  UPDATE_BIO: "UPDATE_BIO",
+  // UPDATE_BIO: "UPDATE_BIO",
 };
 
 function AuthContextProvider(props) {
@@ -165,17 +165,17 @@ function AuthContextProvider(props) {
           friendRequests: payload.friendRequests,
         });
       }
-      case AuthActionType.UPDATE_BIO: {
-        return setAuth({
-          user: payload.user,
-          loggedIn: true,
-          errorMessage: auth.errorMessage,
-          isGuest: auth.isGuest,
-          searchUsers: auth.searchUsers,
-          friends: auth.friends,
-          friendRequests: auth.friendRequests,
-        });
-      }
+      // case AuthActionType.UPDATE_BIO: {
+      //   return setAuth({
+      //     user: payload.user,
+      //     loggedIn: true,
+      //     errorMessage: auth.errorMessage,
+      //     isGuest: auth.isGuest,
+      //     searchUsers: auth.searchUsers,
+      //     friends: auth.friends,
+      //     friendRequests: auth.friendRequests,
+      //   });
+      // }
       default:
         return auth;
     }
@@ -428,17 +428,18 @@ function AuthContextProvider(props) {
       console.log("from index.js response:", response)
       console.log("from index.js response status:", response.status)
       if (response.status === 200) {
-        authReducer({
-          type: AuthActionType.UPDATE_BIO,
-          payload: {
-            user: response.data.user,
-          },
-        });
+        // authReducer({
+        //   type: AuthActionType.UPDATE_BIO,
+        //   payload: {
+        //     user: response.data.user,
+        //   },
+        // });
+        community.setUserProfile(response.data.user);
         return true;
       }
     } catch (error) {
-      console.log(error.response.data.errorMessage);
-      auth.setErrorMessage(error.response.data.errorMessage);
+      // console.log(error.response.data.errorMessage);
+      // auth.setErrorMessage(error.response.data.errorMessage);
       return false;
     }
   };
