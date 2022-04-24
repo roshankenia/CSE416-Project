@@ -106,54 +106,12 @@ export default function VoteToPublishScreen(){
         event.stopPropagation();
         if (voteVal == "scrap"){
             handleExitVoting()
-        } else if (voteVal == "comm"){
-            console.log("POSTED TO COMMUNITY SUCCESS")
-        } else if (voteVal == "commdis"){
-            console.log("POSTED TO COMM AND DISCOVERY SUCCESS")
+        } else if (voteVal == "comm" || voteVal == "commdis"){
+            community.makePost(voteVal, title, dateTime, game)
         } else {
             console.log("Improper voting value")
         }
     }
-    // async function handleWrapComic(event) {
-    //     const response = await community.createComic({
-    //         authors: players, 
-    //         panels: panelString,
-    //     })
-    //     console.log(response)
-    //     comic = response;
-    // }
-
-    // function handleWrapPostComm(event) {
-    //     event.stopPropagation()
-    //     console.log("POSTED TO COMMUNITY")
-    //     const response = await community.createPost({
-    //         postTitle: title, 
-    //         postComic: comic, 
-    //         likes: 0, 
-    //         dislikes: 0,
-    //         communityPublished: true,
-    //         discoveryPublished: false,
-    //         dateAndTime: dateTime,
-    //         communityName: game.communityName,
-    //     })
-    // }
-
-    // function handleWrapPostCommDis(event) {
-    //     event.stopPropagation()
-    //     console.log("POSTED TO COMMUNITY AND DISCOVERY")
-    //     // const response = await community.createPost({
-    //     //     postTitle: title, 
-    //     //     postComic: comic, 
-    //     //     likes: 0, 
-    //     //     dislikes: 0,
-    //     //     communityPublished: true,
-    //     //     discoveryPublished: true,
-    //     //     dateAndTime: dateTime,
-    //     //     communityName: game.communityName,
-    //     // })
-    // }
-
-    
 
     return <Grid
                 container
@@ -249,141 +207,6 @@ export default function VoteToPublishScreen(){
                             </Box>
                         </Grid>
                     </List>
-                    {/* <List style={flexContainer}>
-                        <Typography fontSize={"36px"}>
-                            Scrap Project?
-                        </Typography>
-                        <Button
-                            // onClick={}
-                            sx={{
-                                width: 100,
-                                height: 50,
-                                margin: 1,
-                                backgroundColor: 'green',
-                                '&:hover': {
-                                backgroundColor: 'green',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                borderRadius: 5,
-                                border: 3,
-                                color: "black"
-                            }}
-                        >
-                            <Typography>
-                                Yes
-                            </Typography>
-                        </Button>
-                        <Button
-                            // onClick={}
-                            sx={{
-                                width: 100,
-                                height: 50,
-                                margin: 1,
-                                backgroundColor: 'red',
-                                '&:hover': {
-                                backgroundColor: 'red',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                borderRadius: 5,
-                                border: 3,
-                                color: "black"
-                            }}
-                        >
-                            <Typography>
-                                No
-                            </Typography>
-                        </Button>
-                    </List>
-                    <List style={flexContainer}>
-                        <Typography fontSize={"36px"}>
-                            Post To Community?
-                        </Typography>
-                        <Button
-                            // onClick={}
-                            sx={{
-                                width: 100,
-                                height: 50,
-                                margin: 1,
-                                backgroundColor: 'green',
-                                '&:hover': {
-                                backgroundColor: 'green',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                borderRadius: 5,
-                                border: 3,
-                                color: "black"
-                            }}
-                        >
-                            <Typography>
-                                Yes
-                            </Typography>
-                        </Button>
-                        <Button
-                            // onClick={}
-                            sx={{
-                                width: 100,
-                                height: 50,
-                                margin: 1,
-                                backgroundColor: 'red',
-                                '&:hover': {
-                                backgroundColor: 'red',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                borderRadius: 5,
-                                border: 3,
-                                color: "black"
-                            }}
-                        >
-                            <Typography>
-                                No
-                            </Typography>
-                        </Button>
-                    </List>
-                    <List style={flexContainer}>
-                        <Typography fontSize={"36px"}>
-                            Post To Community and Discovery?
-                        </Typography>
-                        <Button
-                            // onClick={}
-                            sx={{
-                                width: 100,
-                                height: 50,
-                                margin: 1,
-                                backgroundColor: 'green',
-                                '&:hover': {
-                                backgroundColor: 'green',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                borderRadius: 5,
-                                border: 3,
-                                color: "black"
-                            }}
-                        >
-                            <Typography>
-                                Yes
-                            </Typography>
-                        </Button>
-                        <Button
-                            // onClick={}
-                            sx={{
-                                width: 100,
-                                height: 50,
-                                margin: 1,
-                                backgroundColor: 'red',
-                                '&:hover': {
-                                backgroundColor: 'red',
-                                opacity: [0.9, 0.8, 0.7],
-                                },
-                                borderRadius: 5,
-                                border: 3,
-                                color: "black"
-                            }}
-                        >
-                            <Typography>
-                                No
-                            </Typography>
-                        </Button>
-                    </List> */}
                     <Box sx={style}>
                         <Typography 
                             sx={{fontSize: 28, marginBottom:'-10px'}}>
@@ -434,5 +257,5 @@ export default function VoteToPublishScreen(){
                 </Button>
                         
             </Grid>
-
+    
 }

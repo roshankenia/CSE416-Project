@@ -453,6 +453,59 @@ function GlobalCommunityContextProvider(props) {
     }
   };
 
+  community.makePost = async function (voteVal, title, dateTime, game) {
+    let response = await api.createComic({
+      authors: game.players, 
+      panels: game.panels,
+    })
+    if (response.status === 200){
+      console.log("Made comic: ", response.data.comic)
+      let comicID = response.data.comic._id;
+      if (voteVal == "comm"){
+        let postResponse = await api.createPost({
+          postTitle: title, 
+          postComic: comicID, 
+          postStory: null,
+          likes: 0, 
+          dislikes: 0,
+          communityPublished: true,
+          discoveryPublished: false,
+          dateAndTime: dateTime,
+          communityName: game.communityName,
+        })
+        if (postResponse.status === 200) {
+          console.log("Made post: ", postResponse.data.post)
+          let postID = postResponse.data.post._id;
+          let response = await api.searchCommunityByName(game.communityName)
+          console.log("Search Comm By Name returns: ", response)
+          if (response.status === 200) {
+            console.log("Found designated community")
+            let newComm = response.communityList
+            newComm.communityPosts.push(postID)
+            let response = await api.updateCommunityById(postID, newComm)
+            if (response.status === 200){
+              console.log("Post sucessfully pushed to community")
+            }
+          }
+        }
+      } else if (voteVal == "commDis"){
+        // let postResponse = await api.createPost({
+        //   postTitle: title, 
+        //   postComic: comicID, 
+        //   postStory: null,
+        //   likes: 0, 
+        //   dislikes: 0,
+        //   communityPublished: true,
+        //   discoveryPublished: true,
+        //   dateAndTime: dateTime,
+        //   communityName: game.communityName,
+        // })
+        console.log("Community and Discovery Post Pushing TO BE DONE")
+      }
+      
+    }
+  }
+
   return (
     <GlobalCommunityContext.Provider
       value={{

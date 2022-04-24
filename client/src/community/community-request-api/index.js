@@ -47,10 +47,48 @@ export const getComicById = (id) => {
   return api.get(`/comic/${id}`);
 };
 
+export const createComic = (authors, panels) => {
+  return api.post(`/comic`, {
+    authors: authors,
+    panels: panels,
+  });
+}
+
+export const createPost = (
+  postTitle, 
+  postComic, 
+  postStory, 
+  likes, 
+  dislikes, 
+  communityPublished, 
+  discoveryPublished, 
+  dateAndTime, 
+  communityName
+) => {
+  return api.post(`/post`, {
+    postTitle: postTitle, 
+    postComic: postComic,
+    postStory: postStory, 
+    likes: likes, 
+    dislikes: dislikes,
+    communityPublished: communityPublished,
+    discoveryPublished: discoveryPublished,
+    dateAndTime: dateAndTime,
+    communityName: communityName,
+  });
+}
+
+export const searchCommunityByName = (name) =>{
+  return api.get(`/searchcommunitybyname/${name}`)
+}
+
 const apis = {
   createCommunity,
   getCommunityList,
   updateCommunityById,
+  createComic,
+  createPost,
+  searchCommunityByName,
   // for testing purpose
   deleteCommunity,
   getPostById,
