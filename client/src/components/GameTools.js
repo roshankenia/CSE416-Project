@@ -24,6 +24,7 @@ import Slider from "@mui/material/Slider";
 import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
+import VignetteRoundedIcon from "@mui/icons-material/VignetteRounded";
 
 export default function GameTools(props) {
   const { game } = useContext(GameContext);
@@ -387,7 +388,7 @@ export default function GameTools(props) {
           ></TextField>
         </Box>
       )}
-      {(tool == "rectangle" || tool == "circle") && (
+      {(tool == "rectangle" || tool == "circle" || tool == "ellipse") && (
         <Box
           sx={{
             margin: 1,
@@ -794,6 +795,14 @@ export default function GameTools(props) {
               }}
             >
               <CircleIcon fontSize="large" />
+            </Button>
+            <Button
+              sx={buttonCSS}
+              onClick={(e) => {
+                setTool("ellipse");
+              }}
+            >
+              <VignetteRoundedIcon fontSize="large" />
             </Button>
             <Button
               sx={buttonCSS}

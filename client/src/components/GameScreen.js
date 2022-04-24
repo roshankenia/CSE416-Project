@@ -46,6 +46,7 @@ import {
   Star,
   Shape,
   Image,
+  Ellipse,
 } from "react-konva";
 import useImage from "use-image";
 import { BsEraserFill } from "react-icons/bs";
@@ -220,7 +221,23 @@ export default function GameScreen() {
           key: actions.length + 1,
           stroke: color,
           strokeWidth: strokeWidth,
-          fill: fill
+          fill: fill,
+        },
+      ]);
+    } else if (tool == "ellipse") {
+      const { x, y } = e.target.getStage().getPointerPosition();
+      setActions([
+        ...actions,
+        {
+          tool,
+          x,
+          y,
+          width: 0,
+          height: 0,
+          key: actions.length + 1,
+          stroke: color,
+          strokeWidth: strokeWidth,
+          fill: fill,
         },
       ]);
     } else if (tool == "circle") {
@@ -236,7 +253,7 @@ export default function GameScreen() {
           key: actions.length + 1,
           stroke: color,
           strokeWidth: strokeWidth,
-          fill: fill
+          fill: fill,
         },
       ]);
     } else if (tool == "text") {
@@ -285,9 +302,28 @@ export default function GameScreen() {
         key: key,
         stroke: color,
         strokeWidth: strokeWidth,
-        fill: fill
+        fill: fill,
       };
       actions.splice(actions.length - 1, 1, lastRectangle);
+      setActions(actions.concat());
+    } else if (tool == "ellipse") {
+      const sx = actions[actions.length - 1].x;
+      const sy = actions[actions.length - 1].y;
+      const key = actions[actions.length - 1].key;
+      const { x, y } = e.target.getStage().getPointerPosition();
+
+      let lastEllipse = {
+        tool,
+        x: sx,
+        y: sy,
+        width: Math.abs(x - sx),
+        height: Math.abs(y - sy),
+        key: key,
+        stroke: color,
+        strokeWidth: strokeWidth,
+        fill: fill,
+      };
+      actions.splice(actions.length - 1, 1, lastEllipse);
       setActions(actions.concat());
     } else if (tool == "circle") {
       const sx = actions[actions.length - 1].x;
@@ -304,7 +340,7 @@ export default function GameScreen() {
         key: key,
         stroke: color,
         strokeWidth: strokeWidth,
-        fill: fill
+        fill: fill,
       };
       actions.splice(actions.length - 1, 1, lastCircle);
       setActions(actions.concat());
@@ -478,13 +514,13 @@ export default function GameScreen() {
     }
   };
 
-  const isFillSelected = (fillColor) =>{
+  const isFillSelected = (fillColor) => {
     if (fill == fillColor) {
       return "black";
     } else {
       return "white";
     }
-  }
+  };
 
   const handleSetStrokeWidth = (event, width) => {
     setStrokeWidth(width);
@@ -570,6 +606,18 @@ export default function GameScreen() {
                 } else if (action.tool === "rectangle") {
                   return (
                     <Rect
+                      x={action.x}
+                      y={action.y}
+                      width={action.width}
+                      height={action.height}
+                      fill={action.fill}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                    />
+                  );
+                } else if (action.tool === "ellipse") {
+                  return (
+                    <Ellipse
                       x={action.x}
                       y={action.y}
                       width={action.width}
