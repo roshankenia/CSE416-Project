@@ -372,40 +372,8 @@ export default function GameScreen() {
       }
     };
     socket.on("sync-actions", syncA);
-
-    //TODO Alan heck to see which turn it is, who is the current
-    const changeTurn = async (time) => {
-      console.log(
-        "Inside Change Turn / end Time the game turn value is ",
-        game.turn
-      );
-      console.log(
-        "Check to make sure all players are organized the same",
-        game.players
-      );
-      // check if game.turn == amount of panels
-      if (game.panelNumber == game.turn) {
-        game.enterVoting();
-      } else {
-        let imageData = stageRef.current.toDataURL();
-        console.log(imageData);
-
-        let sortedArray = game.players.sort();
-        console.log(sortedArray);
-        let currentTurn = game.turn + 1;
-        let currPlayer = sortedArray[currentTurn % game.players.length];
-        console.log(currPlayer);
-        game.changeTurn(currentTurn, currPlayer, imageData);
-        if (auth.user.username === game.host) {
-          socket.emit("timer", auth.user.username, time, game.lobby);
-        }
-      }
-    };
-    socket.once("end-time", changeTurn);
-
     return () => {
       socket.off("sync-actions", syncA);
-      socket.off("end-time", changeTurn);
     };
   }, []);
 
@@ -692,7 +660,7 @@ export default function GameScreen() {
             color: "black",
           }}
         >
-          <Timer />
+          <Timer stageRef={stageRef} />
         </Button>
         <Button
           sx={{
@@ -889,7 +857,7 @@ export default function GameScreen() {
             color: "black",
           }}
         >
-          <Timer />
+          <Timer stageRef={stageRef}/>
         </Button>
         <Button
           sx={{

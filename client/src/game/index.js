@@ -483,12 +483,25 @@ function GameContextProvider(props) {
     }
   };
 
-  game.changeTurn = function (turn, currentPlayer, newPanel) {
+  game.changeTurn = function (newPanel) {
     let panels = game.panels;
     panels.push(newPanel);
+    let currentTurn = game.turn + 1;
+    console.log("currentTurn:", currentTurn);
+
+    let sortedArray = game.players.sort();
+    console.log(sortedArray);
+
+    let currPlayer = sortedArray[currentTurn % game.players.length];
+    console.log(currPlayer);
+
     gameReducer({
       type: GameActionType.NEXT_TURN,
-      payload: { turn: turn, currentPlayer: currentPlayer, panels: panels },
+      payload: {
+        turn: currentTurn,
+        currentPlayer: currPlayer,
+        panels: panels,
+      },
     });
   };
 

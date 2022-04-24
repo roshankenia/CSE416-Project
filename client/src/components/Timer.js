@@ -52,7 +52,7 @@ import { BsEraserFill } from "react-icons/bs";
 //socket
 import { SocketContext } from "../socket";
 
-export default function Timer() {
+export default function Timer(props) {
   const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
   const socket = useContext(SocketContext);
@@ -60,6 +60,7 @@ export default function Timer() {
   const [timer, setTimer] = useState(null);
 
   useEffect(() => {
+    
     const countDown = async (count) => {
       console.log("Inside the countDown", count);
       setTimer(count);
@@ -67,8 +68,34 @@ export default function Timer() {
 
     socket.once("counter", countDown);
 
+    //TODO Alan heck to see which turn it is, who is the current
+    const changeTurn = async (time) => {
+      console.log(
+        "Inside Change Turn / end Time the game turn value is ",
+        game.turn
+      );
+      console.log(
+        "Check to make sure all players are organized the same",
+        game.players
+      );
+      // check if game.turn == amount of panels
+      if (game.panelNumber == game.turn) {
+        game.enterVoting();
+      } else {
+        // let imageData = stageRef.current.toDataURL();
+        // console.log(imageData);
+
+        game.changeTurn("");
+        if (auth.user.username === game.host) {
+          socket.emit("timer", auth.user.username, time, game.lobby);
+        }
+      }
+    };
+    socket.once("end-time", changeTurn);
+
     return () => {
       socket.off("counter", countDown);
+      socket.off("end-time", changeTurn);
     };
   }, [timer]);
 
