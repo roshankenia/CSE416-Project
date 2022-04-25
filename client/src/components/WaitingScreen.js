@@ -30,7 +30,16 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 // konva stuff
-import { Stage, Layer, Rect, Text, Circle, Line, Star, Ellipse } from "react-konva";
+import {
+  Stage,
+  Layer,
+  Rect,
+  Text,
+  Circle,
+  Line,
+  Star,
+  Ellipse,
+} from "react-konva";
 import { BsEraserFill } from "react-icons/bs";
 
 import Timer from "./Timer";
@@ -44,6 +53,9 @@ export default function WaitingScreen(props) {
   const socket = useContext(SocketContext);
 
   let { stageRef, actions, setActions, URLImage } = props;
+  const handleLeave = (event) => {
+    game.leaveLobby();
+  };
   const flexContainer = {
     display: "flex",
     flexDirection: "row",
@@ -205,6 +217,7 @@ export default function WaitingScreen(props) {
           border: 3,
           color: "black",
         }}
+        onClick={(event) => handleLeave()}
       >
         <Typography fontSize={"32px"}>Leave</Typography>
       </Button>
