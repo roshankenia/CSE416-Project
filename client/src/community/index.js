@@ -500,25 +500,22 @@ function GlobalCommunityContextProvider(props) {
   };
 
   community.makePost = async function (voteVal, title, dateTime, game) {
-    let response = await api.createComic({
-      authors: game.players, 
-      panels: game.panels,
-    })
+    let response = await api.createComic(game.players, game.panels)
     if (response.status === 200){
       console.log("Made comic: ", response.data.comic)
       let comicID = response.data.comic._id;
       if (voteVal == "comm"){
-        let postResponse = await api.createPost({
-          postTitle: title, 
-          postComic: comicID, 
-          postStory: null,
-          likes: 0, 
-          dislikes: 0,
-          communityPublished: true,
-          discoveryPublished: false,
-          dateAndTime: dateTime,
-          communityName: game.communityName,
-        })
+        let postResponse = await api.createPost(
+          title, 
+          comicID, 
+          null,
+          0, 
+          0,
+          true,
+          false,
+          dateTime,
+          game.communityName
+        )
         if (postResponse.status === 200) {
           console.log("Made post: ", postResponse.data.post)
           let postID = postResponse.data.post._id;
