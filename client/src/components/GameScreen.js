@@ -680,7 +680,7 @@ export default function GameScreen() {
   if (gameMode) {
     gameUtils = (
       <Grid item xs="3" align="center">
-        <Button
+        <Box
           sx={{
             width: 450,
             height: 75,
@@ -696,7 +696,7 @@ export default function GameScreen() {
             actions={actions}
             setActions={setActions}
           />
-        </Button>
+        </Box>
         <Button
           sx={{
             width: 450,
@@ -854,30 +854,12 @@ export default function GameScreen() {
             </ImageList>
           </Box>
         )}
-        <Button
-          sx={{
-            width: 450,
-            height: 75,
-            margin: 1,
-            backgroundColor: "green",
-            "&:hover": {
-              backgroundColor: "green",
-              opacity: [0.9, 0.8, 0.7],
-            },
-            borderRadius: 5,
-            border: 3,
-            color: "black",
-          }}
-          onClick={handleSubmit}
-        >
-          <Typography fontSize={"32px"}>Submit</Typography>
-        </Button>
       </Grid>
     );
   } else {
     gameUtils = (
       <Grid item xs="3" align="center">
-        <Button
+        <Box
           sx={{
             width: 450,
             height: 75,
@@ -897,7 +879,7 @@ export default function GameScreen() {
             actions={actions}
             setActions={setActions}
           />
-        </Button>
+        </Box>
         <Button
           sx={{
             width: 450,

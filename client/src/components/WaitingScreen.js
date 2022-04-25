@@ -177,7 +177,7 @@ export default function WaitingScreen(props) {
   );
   const waitUtils = (
     <Grid item xs="3" align="center">
-      <Button
+      <Box
         sx={{
           width: 450,
           height: 75,
@@ -189,7 +189,7 @@ export default function WaitingScreen(props) {
         }}
       >
         <Timer stageRef={stageRef} actions={actions} setActions={setActions} />
-      </Button>
+      </Box>
 
       <Button
         sx={{
