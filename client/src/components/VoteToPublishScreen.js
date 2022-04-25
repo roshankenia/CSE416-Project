@@ -108,8 +108,10 @@ export default function VoteToPublishScreen(){
             handleExitVoting()
         } else if (voteVal == "comm" || voteVal == "commdis"){
             community.makePost(voteVal, title, dateTime, game)
+            handleExitVoting()
         } else {
             console.log("Improper voting value")
+            handleExitVoting()
         }
     }
 
