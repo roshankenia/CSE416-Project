@@ -509,13 +509,8 @@ function GlobalCommunityContextProvider(props) {
           title,
           comicID,
           null,
-<<<<<<< HEAD
           [], 
           [],
-=======
-          0,
-          0,
->>>>>>> a717acc4d06241a9f3b9fca5f31776b70fea97f9
           true,
           false,
           dateTime,
