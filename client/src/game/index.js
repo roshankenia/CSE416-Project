@@ -508,13 +508,17 @@ function GameContextProvider(props) {
   game.enterVoting = async function (lastPanel) {
     try {
       const id = "madeupgameid";
-      let panels = game.panels;
-      panels.push(lastPanel);
-      gameReducer({
-        type: GameActionType.ENTER_VOTING,
-        payload: panels,
-      });
-      history.push("/game/" + id);
+      if (game.host != auth.user.username) {
+        game.exitVoting();
+      } else {
+        let panels = game.panels;
+        panels.push(lastPanel);
+        gameReducer({
+          type: GameActionType.ENTER_VOTING,
+          payload: panels,
+        });
+        history.push("/game/" + id);
+      }
       //}
     } catch {
       console.log("error buddy");
