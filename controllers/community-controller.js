@@ -301,9 +301,8 @@ createComic = async (req, res) => {
   const comic = new Comic(body);
   console.log("creating comic: " + JSON.stringify(comic));
   if (!comic) {
+    console.log("comic not made");
     return res.status(400).json({
-      console.log("comic not made");
-
       errorMessage: "Improperly formatted request",
     });
   }
