@@ -500,54 +500,63 @@ function GlobalCommunityContextProvider(props) {
   };
 
   community.makePost = async function (voteVal, title, dateTime, game) {
-    let response = await api.createComic(game.players, game.panels)
-    if (response.status === 200){
-      console.log("Made comic: ", response.data.comic)
+    let response = await api.createComic(game.players, game.panels);
+    if (response.status === 200) {
+      console.log("Made comic: ", response.data.comic);
       let comicID = response.data.comic._id;
-      if (voteVal == "comm"){
+      if (voteVal == "comm") {
         let postResponse = await api.createPost(
-          title, 
-          comicID, 
+          title,
+          comicID,
           null,
+<<<<<<< HEAD
           [], 
           [],
+=======
+          0,
+          0,
+>>>>>>> a717acc4d06241a9f3b9fca5f31776b70fea97f9
           true,
           false,
           dateTime,
           game.communityName
-        )
+        );
         if (postResponse.status === 200) {
-          console.log("Made post: ", postResponse.data.post)
+          console.log("Made post: ", postResponse.data.post);
           let postID = postResponse.data.post._id;
-          let response = await api.searchCommunityByName(game.communityName)
-          console.log("Search Comm By Name returns: ", response)
-          if (response.status === 200) {
-            console.log("Found designated community")
-            let newComm = response.communityList
-            newComm.communityPosts.push(postID)
-            let response = await api.updateCommunityById(postID, newComm)
-            if (response.status === 200){
-              console.log("Post sucessfully pushed to community")
+          let comResponse = await api.searchCommunityByName(game.communityName);
+          console.log("Search Comm By Name returns: ", comResponse);
+          if (comResponse.status === 200) {
+            console.log("Found designated community");
+            console.log(postID);
+            let newComm = comResponse.data.communityList[0];
+            console.log(newComm);
+            newComm.communityPosts.push(postID);
+            let updateResponse = await api.updateCommunityById(
+              newComm._id,
+              newComm
+            );
+            if (updateResponse.status === 200) {
+              console.log("Post sucessfully pushed to community");
             }
           }
         }
-      } else if (voteVal == "commDis"){
+      } else if (voteVal == "commDis") {
         // let postResponse = await api.createPost({
-        //   postTitle: title, 
-        //   postComic: comicID, 
+        //   postTitle: title,
+        //   postComic: comicID,
         //   postStory: null,
-        //   likes: 0, 
+        //   likes: 0,
         //   dislikes: 0,
         //   communityPublished: true,
         //   discoveryPublished: true,
         //   dateAndTime: dateTime,
         //   communityName: game.communityName,
         // })
-        console.log("Community and Discovery Post Pushing TO BE DONE")
+        console.log("Community and Discovery Post Pushing TO BE DONE");
       }
-      
     }
-  }
+  };
 
   return (
     <GlobalCommunityContext.Provider
