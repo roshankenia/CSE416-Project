@@ -25,6 +25,7 @@ import Grid from "@mui/material/Grid";
 import AuthContext from "../auth";
 import { Stage, Layer, Image, Line } from "react-konva";
 import useImage from "use-image";
+import URLImage from "./URLImage"
 /*
     This module is used for testing stuff
     modules can be copy+pasted to other components
@@ -32,22 +33,6 @@ import useImage from "use-image";
     @Terran
 */
 const HomeScreen = () => {
-
-
-const URLImage = ({ image }) => {
-  const [img] = useImage(image.src);
-  return (
-    <Image
-      image={img}
-      x={image.x}
-      y={image.y}
-      crossOrigin="Anonymous"
-      // I will use offset to set origin to the center of the image
-      offsetX={img ? img.width / 2 : 0}
-      offsetY={img ? img.height / 2 : 0}
-    />
-  );
-};
 
   const dragUrl = React.useRef();
   const stageRef = React.useRef();
@@ -82,6 +67,26 @@ const URLImage = ({ image }) => {
     isDrawing.current = false;
   };
 
+  const handleOnDrop = (e) => {
+    e.preventDefault();
+    stageRef.current.setPointersPositions(e);
+    setImages([...images, {
+      ...stageRef.current.getPointerPosition(),
+      src: dragUrl.current
+    }]);
+    // setImages(
+    //     images.concat([
+    //       {
+    //         ...stageRef.current.getPointerPosition(),
+    //         src: dragUrl.current
+    //       }
+    //     ])
+    //   );
+  }
+
+  const wwidth = window.innerWidth
+  const wheight = window.innerHeight
+
   return (
     <div>
       Try to trag and image into the stage:
@@ -96,26 +101,14 @@ const URLImage = ({ image }) => {
         }}
       />
       <div
-        onDrop={(e) => {
-          e.preventDefault();
-          // register event position
-          stageRef.current.setPointersPositions(e);
-          // add image
-          setImages(
-            images.concat([
-              {
-                ...stageRef.current.getPointerPosition(),
-                src: dragUrl.current
-              }
-            ])
-          );
-
-        }}
+        onDrop={handleOnDrop}
         onDragOver={(e) => e.preventDefault()}
+        width={'600px'}
+        height={'600px'}
       >
         <Stage
-          width={window.innerWidth}
-          height={window.innerHeight}
+          width={wwidth}
+          height={wheight}
           onMouseDown={handleMouseDown}
           onMousemove={handleMouseMove}
           onMouseup={handleMouseUp}

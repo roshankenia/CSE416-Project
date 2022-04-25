@@ -50,6 +50,7 @@ import {
 } from "react-konva";
 import useImage from "use-image";
 import { BsEraserFill } from "react-icons/bs";
+import URLImage from "./URLImage"
 
 //socket
 import { SocketContext } from "../socket";
@@ -76,15 +77,24 @@ export default function GameScreen() {
 
   const [characterToggle, setCharacterToggle] = useState(false);
   const toggleCharacters = () => {
+    if(!characterToggle){
+      setTool('image')
+    }
     setCharacterToggle(!characterToggle);
   };
   const [bubbleToggle, setBubbleToggle] = useState(false);
   const toggleBubbles = () => {
+    if(!bubbleToggle){
+      setTool('image')
+    }
     setBubbleToggle(!bubbleToggle);
   };
 
   const [themeToggle, setThemeToggle] = useState(false);
   const toggleThemes = () => {
+    if(!themeToggle){
+      setTool('image')
+    }
     setThemeToggle(!themeToggle);
   };
 
@@ -145,7 +155,7 @@ export default function GameScreen() {
   //#region KONVA functions
   const [tool, setTool] = React.useState("pen");
   const [color, setColor] = React.useState("#000000");
-  const [strokeWidth, setStrokeWidth] = React.useState(1);
+  const [strokeWidth, setStrokeWidth] = React.useState(15);
   const [fill, setFill] = React.useState("#ffffff");
   const [actions, setActions] = React.useState([]);
   const [redos, setRedos] = React.useState([]);
@@ -160,19 +170,19 @@ export default function GameScreen() {
     setDisplayText(text);
   };
 
-  const URLImage = ({ image }) => {
-    const [img] = useImage(image.src);
-    return (
-      <Image
-        image={img}
-        x={image.x}
-        y={image.y}
-        // I will use offset to set origin to the center of the image
-        offsetX={img ? img.width / 2 : 0}
-        offsetY={img ? img.height / 2 : 0}
-      />
-    );
-  };
+  // const URLImage = ({ image }) => {
+  //   const [img] = useImage(image.src);
+  //   return (
+  //     <Image
+  //       image={img}
+  //       x={image.x}
+  //       y={image.y}
+  //       // I will use offset to set origin to the center of the image
+  //       offsetX={img ? img.width / 2 : 0}
+  //       offsetY={img ? img.height / 2 : 0}
+  //     />
+  //   );
+  // };
 
   const handleUndo = () => {
     if (actions.length) {
@@ -359,7 +369,6 @@ export default function GameScreen() {
       actions.splice(actions.length - 1, 1, lastCircle);
       setActions(actions.concat());
     }
-    console.log(game.currentPlayer);
     socket.emit("draw-actions", auth.user._id, actions, game.lobby);
   };
 
@@ -475,6 +484,9 @@ export default function GameScreen() {
       handleRedo={handleRedo}
       handleChangeText={handleChangeText}
       handleClear={handleClear}
+      setCharacterToggle={setCharacterToggle}
+      setThemeToggle={setThemeToggle}
+      setBubbleToggle={setBubbleToggle}
     />
   );
 
@@ -499,8 +511,18 @@ export default function GameScreen() {
               ...stageRef.current.getPointerPosition(),
               src: dragUrl.current,
               key: actions.length + 1,
+              size: strokeWidth
             });
-            setActions(actions);
+            setActions(
+                  actions.concat([
+                    {
+                      ...stageRef.current.getPointerPosition(),
+                      src: dragUrl.current,
+                      key: actions.length + 1,
+                      size: strokeWidth,
+                    }
+                  ])
+                );
             socket.emit("draw-actions", auth.user._id, actions, game.lobby);
           }}
           onDragOver={(e) => e.preventDefault()}

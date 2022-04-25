@@ -49,6 +49,9 @@ export default function GameTools(props) {
     handleRedo,
     handleChangeText,
     handleClear,
+    setBubbleToggle,
+    setCharacterToggle,
+    setThemeToggle
   } = props;
 
   let strokeSlider = (
@@ -68,7 +71,7 @@ export default function GameTools(props) {
       <Typography fontSize={"32px"}>
         {tool.toUpperCase() + " Properties"}
       </Typography>
-      <Box
+      {tool != 'image' && <Box
         sx={{
           margin: 1,
           backgroundColor: "white",
@@ -371,7 +374,7 @@ export default function GameTools(props) {
             </IconButton>
           </Grid>
         </Grid>
-      </Box>
+      </Box>}
       {tool == "text" && (
         <Box
           sx={{
@@ -762,6 +765,9 @@ export default function GameTools(props) {
             <Button
               sx={buttonCSS}
               onClick={(e) => {
+                setBubbleToggle(false)
+                setCharacterToggle(false)
+                setThemeToggle(false)
                 setTool("pen");
               }}
             >
@@ -770,6 +776,9 @@ export default function GameTools(props) {
             <Button
               sx={buttonCSS}
               onClick={(e) => {
+                setBubbleToggle(false)
+                setCharacterToggle(false)
+                setThemeToggle(false)
                 setTool("eraser");
               }}
             >
@@ -778,6 +787,9 @@ export default function GameTools(props) {
             <Button
               sx={buttonCSS}
               onClick={(e) => {
+                setBubbleToggle(false)
+                setCharacterToggle(false)
+                setThemeToggle(false)
                 setTool("rectangle");
               }}
             >
@@ -786,6 +798,9 @@ export default function GameTools(props) {
             <Button
               sx={buttonCSS}
               onClick={(e) => {
+                setBubbleToggle(false)
+                setCharacterToggle(false)
+                setThemeToggle(false)
                 setTool("circle");
               }}
             >
@@ -794,6 +809,9 @@ export default function GameTools(props) {
             <Button
               sx={buttonCSS}
               onClick={(e) => {
+                setBubbleToggle(false)
+                setCharacterToggle(false)
+                setThemeToggle(false)
                 setTool("ellipse");
               }}
             >
@@ -802,6 +820,9 @@ export default function GameTools(props) {
             <Button
               sx={buttonCSS}
               onClick={(e) => {
+                setBubbleToggle(false)
+                setCharacterToggle(false)
+                setThemeToggle(false)
                 setTool("text");
               }}
             >
