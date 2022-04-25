@@ -52,10 +52,10 @@ var server = app.listen(PORT, function () {
 });
 
 //comment the line below to start a local websocket server (express functionality unaffected)
-//var io = require("socket.io")(server);
+var io = require("socket.io")(server);
 
 //uncomment the line below to start a local websocket server
-var io = require("socket.io")(5000, {cors:{origin: ["http://localhost:3000"]}});
+//var io = require("socket.io")(5000, {cors:{origin: ["http://localhost:3000"]}});
 
 //by pass cors stuff
 app.use((req, res, next) => {
