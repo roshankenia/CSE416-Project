@@ -285,6 +285,7 @@ deleteStoryById = async (req, res) => {
 //#region comic
 createComic = async (req, res) => {
   const body = req.body;
+  console.log(body);
   if (!body) {
     console.log("no body");
     return res.status(400).json({
