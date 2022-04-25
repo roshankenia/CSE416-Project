@@ -29,9 +29,9 @@ function AuthContextProvider(props) {
     loggedIn: false,
     errorMessage: null,
     isGuest: false, //Add this to the setAuth in the reducer
-    searchUsers: null,
-    friends: null,
-    friendRequests: null,
+    searchUsers: [],
+    friends: [],
+    friendRequests: [],
   });
   const history = useHistory();
   const { community } = useContext(GlobalCommunityContext);
@@ -425,8 +425,8 @@ function AuthContextProvider(props) {
   auth.updateBio = async function (username, bio) {
     try {
       const response = await api.updateBio(username, bio);
-      console.log("from index.js response:", response)
-      console.log("from index.js response status:", response.status)
+      console.log("from index.js response:", response);
+      console.log("from index.js response status:", response.status);
       if (response.status === 200) {
         // authReducer({
         //   type: AuthActionType.UPDATE_BIO,
@@ -528,7 +528,7 @@ function AuthContextProvider(props) {
             user: response.data.user,
           },
         });
-        history.push("/login");
+        history.push("/");
       }
     } catch (error) {
       console.log(error.response.data.errorMessage);

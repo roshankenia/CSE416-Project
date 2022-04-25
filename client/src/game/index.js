@@ -118,7 +118,7 @@ function GameContextProvider(props) {
           currentPlayer: null,
           panelNumber: null,
           communityName: game.communityName,
-          panels: game.panels,
+          panels: payload,
         });
       }
       case GameActionType.EXIT_VOTING: {
@@ -505,12 +505,14 @@ function GameContextProvider(props) {
     });
   };
 
-  game.enterVoting = async function () {
+  game.enterVoting = async function (lastPanel) {
     try {
       const id = "madeupgameid";
+      let panels = game.panels;
+      panels.push(lastPanel);
       gameReducer({
         type: GameActionType.ENTER_VOTING,
-        payload: null,
+        payload: panels,
       });
       history.push("/game/" + id);
       //}
