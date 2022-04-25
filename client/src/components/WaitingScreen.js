@@ -30,7 +30,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 // konva stuff
-import { Stage, Layer, Rect, Text, Circle, Line, Star } from "react-konva";
+import { Stage, Layer, Rect, Text, Circle, Line, Star, Ellipse } from "react-konva";
 import { BsEraserFill } from "react-icons/bs";
 
 import Timer from "./Timer";
@@ -89,7 +89,19 @@ export default function WaitingScreen(props) {
                     y={action.y}
                     width={action.width}
                     height={action.height}
-                    fill="transparent"
+                    fill={action.fill}
+                    stroke={action.stroke}
+                    strokeWidth={action.strokeWidth}
+                  />
+                );
+              } else if (action.tool === "ellipse") {
+                return (
+                  <Ellipse
+                    x={action.x}
+                    y={action.y}
+                    width={action.width}
+                    height={action.height}
+                    fill={action.fill}
                     stroke={action.stroke}
                     strokeWidth={action.strokeWidth}
                   />
@@ -101,7 +113,7 @@ export default function WaitingScreen(props) {
                     y={action.y}
                     width={action.width}
                     height={action.height}
-                    fill="transparent"
+                    fill={action.fill}
                     stroke={action.stroke}
                     strokeWidth={action.strokeWidth}
                   />

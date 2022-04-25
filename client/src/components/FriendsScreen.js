@@ -76,7 +76,6 @@ const FriendsScreen = () => {
   const [userSearch, setUserSearch] = useState("");
 
   function handleUpdateSearch(event) {
-    setUserSearch(event.target.value);
   }
   function handleKeyPress(event) {
     if (event.code === "Enter") {

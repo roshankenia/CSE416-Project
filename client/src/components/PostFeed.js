@@ -40,9 +40,17 @@ export default function PostFeed() {
     handleMenuClose();
   }
 
+  function handleKeyPress(event) {
+    if (event.code === "Enter") {
+      let text = event.target.value;
+      console.log(text);
+      community.searchPostsUp(text);
+    }
+  }
+
   const postFeed = (
     <List>
-      {community.communityPosts.map((post, index) => (
+      {community.searchPosts.map((post, index) => (
         <ListItem key={post}>
           <PostCard post={post} index={index} />
         </ListItem>
@@ -72,6 +80,7 @@ export default function PostFeed() {
               id="search"
               label="Search:"
               name="search"
+              onKeyPress={handleKeyPress}
               InputProps={{
                 disableUnderline: true,
                 style: {

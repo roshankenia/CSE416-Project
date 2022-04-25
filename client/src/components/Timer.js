@@ -85,6 +85,7 @@ export default function Timer(props) {
         console.log("stageref:", stageRef);
         let imageData = stageRef.current.toDataURL();
         setActions([]);
+        console.log("after reset:",actions);
         console.log(imageData);
 
         game.changeTurn(imageData);
