@@ -74,9 +74,7 @@ export default function LobbyScreen() {
   ];
 
   const handleSetTimer = (event, newValue) => {
-    if (newValue >= 10 && newValue <= 100) {
       setValue(newValue);
-    }
   };
   //#endregion slider
 
@@ -112,7 +110,7 @@ export default function LobbyScreen() {
   //Note, time is the slider value times 3
   const handleStartGame = (event) => {
     console.log(game);
-    game.setTimer(value * 3);
+    game.setTimer(value);
     console.log("game timer(in seconds): " + game.timer);
     game.createNewGame();
   };
@@ -244,10 +242,15 @@ export default function LobbyScreen() {
         </Grid>
         <Grid item xs>
           <Slider
-            value={typeof value === "number" ? value : 10}
+            value={typeof value === "number" ? value : 1}
             onChange={handleSetTimer}
             aria-labelledby="input-slider"
-            marks={marks}
+            // marks={marks}
+            defaultValue={60}
+            step ={10}
+            min={30}
+            max={300}
+            valueLabelDisplay="auto"
           />
         </Grid>
       </Grid>
@@ -488,7 +491,7 @@ export default function LobbyScreen() {
               }}
             >
               <ListItem align="center">
-                <Typography sx={{ fontSize: 50 }}>Game Settings:</Typography>
+                <Typography sx={{ fontSize: 50 }}>Time: {value} sec</Typography>
               </ListItem>
               <ListItem align="center">{timeSlider}</ListItem>
             </Box>
