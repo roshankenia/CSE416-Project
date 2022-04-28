@@ -72,8 +72,6 @@ export default function GameScreen() {
   //#region not-timer
   const roomCode = "imadethiscodeup";
   // ******* change gameMode as "story" or "comic" to get different game screens *******
-  // const gameMode = "comic"
-  const [gameMode, setGameMode] = useState(true);
 
   const [characterToggle, setCharacterToggle] = useState(false);
   const toggleCharacters = () => {
@@ -96,15 +94,6 @@ export default function GameScreen() {
       setTool("image");
     }
     setThemeToggle(!themeToggle);
-  };
-
-  const handleGameMode = (event) => {
-    event.stopPropagation();
-    if (gameMode) {
-      setGameMode(false);
-    } else {
-      setGameMode(true);
-    }
   };
 
   const charactersLeft = 147;
@@ -397,35 +386,10 @@ export default function GameScreen() {
     event.preventDefault();
   };
 
-  //#region game elements to render
-  const gameModeButton = (
-    <Button
-      onClick={handleGameMode}
-      sx={{
-        width: 300,
-        height: 50,
-        margin: 1,
-        backgroundColor: "white",
-        "&:hover": {
-          backgroundColor: "white",
-          opacity: [0.9, 0.8, 0.7],
-        },
-        borderRadius: 5,
-        border: 3,
-        color: "black",
-      }}
-    >
-      <Typography>
-        {gameMode
-          ? "Click me to switch to Story"
-          : "Click me to switch to Comic"}
-      </Typography>
-    </Button>
-  );
-
   const gameCurrentPlayer = (
     <Typography fontSize={"64px"}>
-      {game.currentPlayer} is currently {gameMode ? "Drawing" : "Writing"}...
+      {game.currentPlayer} is currently{" "}
+      {game.gameMode == "comic" ? "Drawing" : "Writing"}...
     </Typography>
   );
 
@@ -470,7 +434,7 @@ export default function GameScreen() {
     <GameTools
       buttonCSS={buttonCSS}
       setTool={setTool}
-      gameMode={gameMode}
+      gameMode={game.gameMode}
       flexContainer={flexContainer}
       tool={tool}
       changeColor={changeColor}
@@ -492,7 +456,7 @@ export default function GameScreen() {
 
   /* Drawing/Writing Canvas */
   let gameWorkSpace = "";
-  if (gameMode) {
+  if (game.gameMode == "comic") {
     gameWorkSpace = (
       <Grid item xs="6" align="center">
         <Box
@@ -677,7 +641,7 @@ export default function GameScreen() {
 
   //right handside buttons
   let gameUtils = "";
-  if (gameMode) {
+  if (game.gameMode == "comic") {
     gameUtils = (
       <Grid item xs="3" align="center">
         <Box
@@ -957,7 +921,6 @@ export default function GameScreen() {
       }}
     >
       <Grid item xs="12" align="center">
-        {gameModeButton}
         {gameCurrentPlayer}
         {/* List of current panels drawn goes here */}
         {gamePanels}
