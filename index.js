@@ -108,6 +108,11 @@ io.on("connection", (socket) => {
     }, 1000);
   });
 
+  socket.on("change-gamemode", (gamemode, lobbyID)=>{
+    console.log("host switching game mode to:", gamemode,"for:",lobbyID);
+    io.to(lobbyID).emit("switch-gamemode", gamemode);
+  })
+
   socket.on("start-game", (players, lobbyID) => {
     io.to(lobbyID).emit("game-started", players);
   });
