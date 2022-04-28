@@ -108,10 +108,10 @@ io.on("connection", (socket) => {
     }, 1000);
   });
 
-  socket.on("change-gamemode", (gamemode, lobbyID)=>{
-    console.log("host switching game mode to:", gamemode,"for:",lobbyID);
+  socket.on("change-gamemode", (gamemode, lobbyID) => {
+    console.log("host switching game mode to:", gamemode, "for:", lobbyID);
     io.to(lobbyID).emit("switch-gamemode", gamemode);
-  })
+  });
 
   socket.on("start-game", (players, lobbyID) => {
     io.to(lobbyID).emit("game-started", players);
@@ -120,6 +120,11 @@ io.on("connection", (socket) => {
   socket.on("draw-actions", (userId, actions, lobbyID) => {
     console.log("sending actions to:", lobbyID);
     io.to(lobbyID).emit("sync-actions", userId, actions);
+  });
+
+  socket.on("edit-text", (userId, text, lobbyID) => {
+    console.log("sending text to:", lobbyID);
+    io.to(lobbyID).emit("sync-text", userId, text);
   });
 
   socket.on("update-host", (host, lobbyID) => {
