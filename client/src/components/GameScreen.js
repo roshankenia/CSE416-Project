@@ -58,6 +58,9 @@ import { SocketContext } from "../socket";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
 export default function GameScreen() {
   const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
@@ -376,8 +379,17 @@ export default function GameScreen() {
       }
     };
     socket.on("sync-actions", syncA);
+
+    const syncT = async (userId, text) => {
+      if (userId != auth.user._id) {
+        setStoryText(text);
+      }
+    };
+
+    socket.on("sync-text", syncT);
     return () => {
       socket.off("sync-actions", syncA);
+      socket.off("sync-text", syncT);
     };
   }, []);
 
@@ -405,6 +417,90 @@ export default function GameScreen() {
       </ImageList>
     </Box>
   );
+  const [storyText, setStoryText] = React.useState("");
+  const handleEdit = (text) => {
+    setStoryText(text);
+    socket.emit("edit-text", auth.user._id, storyText, game.lobby);
+  };
+  let editor = (
+    <Paper
+      elevation={0}
+      sx={{
+        display: "flex",
+        border: (theme) => `1px solid ${theme.palette.divider}`,
+        flexWrap: "wrap",
+      }}
+    >
+      <StyledToggleButtonGroup
+        // orientation="vertical"
+        size="small"
+        value={alignment}
+        exclusive
+        onChange={handleAlignment}
+        aria-label="text alignment"
+      >
+        <ToggleButton value="left" aria-label="left aligned">
+          <FormatAlignLeftIcon />
+        </ToggleButton>
+        <ToggleButton value="center" aria-label="centered">
+          <FormatAlignCenterIcon />
+        </ToggleButton>
+        <ToggleButton value="right" aria-label="right aligned">
+          <FormatAlignRightIcon />
+        </ToggleButton>
+        <ToggleButton value="justify" aria-label="justified" disabled>
+          <FormatAlignJustifyIcon />
+        </ToggleButton>
+      </StyledToggleButtonGroup>
+      <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
+      <StyledToggleButtonGroup
+        // orientation="vertical"
+        size="small"
+        value={formats}
+        onChange={handleFormat}
+        aria-label="text formatting"
+      >
+        <ToggleButton value="bold" aria-label="bold">
+          <FormatBoldIcon />
+        </ToggleButton>
+        <ToggleButton value="italic" aria-label="italic">
+          <FormatItalicIcon />
+        </ToggleButton>
+        <ToggleButton value="underlined" aria-label="underlined">
+          <FormatUnderlinedIcon />
+        </ToggleButton>
+        <ToggleButton value="color" aria-label="color" disabled>
+          <FormatColorFillIcon />
+          <ArrowDropDownIcon />
+        </ToggleButton>
+      </StyledToggleButtonGroup>
+    </Paper>
+  );
+  if (game.gamemode == "story") {
+    editor = (
+      <Typography
+        sx={{
+          width: 600,
+          height: 600,
+          backgroundColor: "white",
+          border: 3,
+        }}
+      >
+        {" "}
+        <ReactQuill
+          theme="snow"
+          value={storyText}
+          onChange={(value) => handleEdit(value)}
+          sx={{
+            width: 600,
+            height: 600,
+            backgroundColor: "white",
+            border: 3,
+          }}
+        ></ReactQuill>
+      </Typography>
+    );
+  }
 
   const isColorSelected = (buttonColor) => {
     if (color == buttonColor) {
@@ -575,66 +671,7 @@ export default function GameScreen() {
   } else {
     gameWorkSpace = (
       <Grid item xs="6" align="center">
-        <Paper
-          elevation={0}
-          sx={{
-            display: "flex",
-            border: (theme) => `1px solid ${theme.palette.divider}`,
-            flexWrap: "wrap",
-          }}
-        >
-          <StyledToggleButtonGroup
-            // orientation="vertical"
-            size="small"
-            value={alignment}
-            exclusive
-            onChange={handleAlignment}
-            aria-label="text alignment"
-          >
-            <ToggleButton value="left" aria-label="left aligned">
-              <FormatAlignLeftIcon />
-            </ToggleButton>
-            <ToggleButton value="center" aria-label="centered">
-              <FormatAlignCenterIcon />
-            </ToggleButton>
-            <ToggleButton value="right" aria-label="right aligned">
-              <FormatAlignRightIcon />
-            </ToggleButton>
-            <ToggleButton value="justify" aria-label="justified" disabled>
-              <FormatAlignJustifyIcon />
-            </ToggleButton>
-          </StyledToggleButtonGroup>
-          <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
-          <StyledToggleButtonGroup
-            // orientation="vertical"
-            size="small"
-            value={formats}
-            onChange={handleFormat}
-            aria-label="text formatting"
-          >
-            <ToggleButton value="bold" aria-label="bold">
-              <FormatBoldIcon />
-            </ToggleButton>
-            <ToggleButton value="italic" aria-label="italic">
-              <FormatItalicIcon />
-            </ToggleButton>
-            <ToggleButton value="underlined" aria-label="underlined">
-              <FormatUnderlinedIcon />
-            </ToggleButton>
-            <ToggleButton value="color" aria-label="color" disabled>
-              <FormatColorFillIcon />
-              <ArrowDropDownIcon />
-            </ToggleButton>
-          </StyledToggleButtonGroup>
-        </Paper>
-        <Box
-          sx={{
-            width: 600,
-            height: 600,
-            backgroundColor: "white",
-            border: 3,
-          }}
-        ></Box>
+        {editor}
       </Grid>
     );
   }
@@ -659,6 +696,8 @@ export default function GameScreen() {
             stageRef={stageRef}
             actions={actions}
             setActions={setActions}
+            storyText={storyText}
+            setStoryText={setStoryText}
           />
         </Box>
         <Button
@@ -842,9 +881,12 @@ export default function GameScreen() {
             stageRef={stageRef}
             actions={actions}
             setActions={setActions}
+            storyText={storyText}
+            setStoryText={setStoryText}
           />
         </Box>
-        <Button
+        <Typography
+          fontSize={"32px"}
           sx={{
             width: 450,
             height: 75,
@@ -859,10 +901,8 @@ export default function GameScreen() {
             color: "black",
           }}
         >
-          <Typography fontSize={"32px"}>
-            Characters Left: {charactersLeft}
-          </Typography>
-        </Button>
+          {"Characters Left: 237"}
+        </Typography>
         <Button
           sx={{
             width: 450,
@@ -904,6 +944,8 @@ export default function GameScreen() {
         actions={actions}
         URLImage={URLImage}
         setActions={setActions}
+        storyText={storyText}
+        setStoryText={setStoryText}
       />
     );
   }
