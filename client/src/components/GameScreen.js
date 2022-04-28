@@ -50,7 +50,7 @@ import {
 } from "react-konva";
 import useImage from "use-image";
 import { BsEraserFill } from "react-icons/bs";
-import URLImage from "./URLImage"
+import URLImage from "./URLImage";
 
 //socket
 import { SocketContext } from "../socket";
@@ -77,23 +77,23 @@ export default function GameScreen() {
 
   const [characterToggle, setCharacterToggle] = useState(false);
   const toggleCharacters = () => {
-    if(!characterToggle){
-      setTool('image')
+    if (!characterToggle) {
+      setTool("image");
     }
     setCharacterToggle(!characterToggle);
   };
   const [bubbleToggle, setBubbleToggle] = useState(false);
   const toggleBubbles = () => {
-    if(!bubbleToggle){
-      setTool('image')
+    if (!bubbleToggle) {
+      setTool("image");
     }
     setBubbleToggle(!bubbleToggle);
   };
 
   const [themeToggle, setThemeToggle] = useState(false);
   const toggleThemes = () => {
-    if(!themeToggle){
-      setTool('image')
+    if (!themeToggle) {
+      setTool("image");
     }
     setThemeToggle(!themeToggle);
   };
@@ -511,18 +511,18 @@ export default function GameScreen() {
               ...stageRef.current.getPointerPosition(),
               src: dragUrl.current,
               key: actions.length + 1,
-              size: strokeWidth
+              size: strokeWidth,
             });
             setActions(
-                  actions.concat([
-                    {
-                      ...stageRef.current.getPointerPosition(),
-                      src: dragUrl.current,
-                      key: actions.length + 1,
-                      size: strokeWidth,
-                    }
-                  ])
-                );
+              actions.concat([
+                {
+                  ...stageRef.current.getPointerPosition(),
+                  src: dragUrl.current,
+                  key: actions.length + 1,
+                  size: strokeWidth,
+                },
+              ])
+            );
             socket.emit("draw-actions", auth.user._id, actions, game.lobby);
           }}
           onDragOver={(e) => e.preventDefault()}

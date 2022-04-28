@@ -114,7 +114,61 @@ export default function LobbyScreen() {
     console.log("game timer(in seconds): " + game.timer);
     game.createNewGame();
   };
+  const changeGamemode = (event, gamemode) => {
+    event.stopPropagation();
+    if (gamemode != game.gamemode) {
+      game.changeGamemode(gamemode);
+    }
+  };
 
+  let gamemodeButton = (
+    <Box>
+      <Typography style={{ fontSize: "32px" }}>
+        {"Gamemode: " + game.gamemode.toUpperCase()}
+      </Typography>
+      <Button disabled={true} style={{ fontSize: "32px", opacity: 0.5 }}>
+        Comic
+      </Button>
+      <Typography display="inline" style={{ fontSize: "32px" }}>
+        /
+      </Typography>
+      <Button
+        style={{ fontSize: "32px" }}
+        onClick={(event) => changeGamemode(event, "story")}
+      >
+        Story
+      </Button>
+    </Box>
+  );
+  if (auth.user.username != game.host) {
+    gamemodeButton = (
+      <Box>
+        <Typography style={{ fontSize: "32px" }}>
+          {"Gamemode: " + game.gamemode.toUpperCase()}
+        </Typography>
+      </Box>
+    );
+  } else if (game.gamemode == "story") {
+    gamemodeButton = (
+      <Box>
+        <Typography style={{ fontSize: "32px" }}>
+          {"Gamemode: " + game.gamemode.toUpperCase()}
+        </Typography>
+        <Button
+          style={{ fontSize: "32px" }}
+          onClick={(event) => changeGamemode(event, "comic")}
+        >
+          Comic
+        </Button>
+        <Typography display="inline" style={{ fontSize: "32px" }}>
+          /
+        </Typography>
+        <Button disabled={true} style={{ fontSize: "32px", opacity: 0.5 }}>
+          Story
+        </Button>
+      </Box>
+    );
+  }
   //#region uncategorized render components
   let startButton = (
     <div
@@ -311,12 +365,7 @@ export default function LobbyScreen() {
           </ListItem>
           {/* This is game mode and buttons */}
           <ListItem key="game_mode" align="center">
-            <Typography align="center" style={{ fontSize: "32px" }}>
-              Game Mode:
-            </Typography>
-            <Button style={{ fontSize: "32px" }}>Comic</Button>
-            <Typography style={{ fontSize: "32px" }}>/</Typography>
-            <Button style={{ fontSize: "32px" }}>Story</Button>
+            {gamemodeButton}
           </ListItem>
           <Box
             justifyContent="center"

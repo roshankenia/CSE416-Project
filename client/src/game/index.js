@@ -20,6 +20,7 @@ export const GameActionType = {
   ADD_HOST: "ADD_HOST",
   UPDATE_TIMER: "UPDATE_TIMER",
   NEXT_TURN: "NEXT_TURN",
+  CHANGE_GAMEMODE: "CHANGE_GAMEMODE",
 };
 
 function GameContextProvider(props) {
@@ -44,6 +45,7 @@ function GameContextProvider(props) {
     panelNumber: null,
     communityName: null,
     panels: [],
+    gamemode: "comic",
   });
   const history = useHistory();
 
@@ -67,6 +69,7 @@ function GameContextProvider(props) {
           panelNumber: null,
           communityName: payload.communityName,
           panels: game.panels,
+          gamemode: game.gamemode,
         });
       }
       case GameActionType.UPDATE_TIMER: {
@@ -84,6 +87,7 @@ function GameContextProvider(props) {
           panelNumber: game.panelNumber,
           communityName: game.communityName,
           panels: game.panels,
+          gamemode: game.gamemode,
         });
       }
       case GameActionType.CREATE_NEW_GAME: {
@@ -102,6 +106,7 @@ function GameContextProvider(props) {
           panelNumber: payload.players.length * 3,
           communityName: game.communityName,
           panels: game.panels,
+          gamemode: game.gamemode,
         });
       }
       case GameActionType.ENTER_VOTING: {
@@ -119,6 +124,7 @@ function GameContextProvider(props) {
           panelNumber: null,
           communityName: game.communityName,
           panels: payload,
+          gamemode: game.gamemode,
         });
       }
       case GameActionType.EXIT_VOTING: {
@@ -136,6 +142,7 @@ function GameContextProvider(props) {
           panelNumber: game.panelNumber,
           communityName: game.communityName,
           panels: game.panels,
+          gamemode: game.gamemode,
         });
       }
       case GameActionType.JOIN_LOBBY: {
@@ -153,6 +160,7 @@ function GameContextProvider(props) {
           panelNumber: null,
           communityName: game.communityName,
           panels: game.panels,
+          gamemode: game.gamemode,
         });
       }
       case GameActionType.UPDATE_PLAYERS: {
@@ -170,6 +178,7 @@ function GameContextProvider(props) {
           panelNumber: null,
           communityName: game.communityName,
           panels: game.panels,
+          gamemode: game.gamemode,
         });
       }
       case GameActionType.LEAVE_LOBBY: {
@@ -187,6 +196,7 @@ function GameContextProvider(props) {
           panelNumber: null,
           communityName: game.communityName,
           panels: game.panels,
+          gamemode: game.gamemode,
         });
       }
       case GameActionType.ADD_READY: {
@@ -204,6 +214,7 @@ function GameContextProvider(props) {
           panelNumber: null,
           communityName: game.communityName,
           panels: game.panels,
+          gamemode: game.gamemode,
         });
       }
       case GameActionType.NEXT_TURN: {
@@ -220,6 +231,7 @@ function GameContextProvider(props) {
           panelNumber: game.panelNumber,
           communityName: game.communityName,
           panels: payload.panels,
+          gamemode: game.gamemode,
         });
       }
       case GameActionType.ADD_HOST: {
@@ -236,6 +248,24 @@ function GameContextProvider(props) {
           panelNumber: null,
           communityName: game.communityName,
           panels: game.panels,
+          gamemode: game.gamemode,
+        });
+      }
+      case GameActionType.CHANGE_GAMEMODE: {
+        return setGame({
+          game: game.game,
+          lobby: game.lobby,
+          voting: game.voting,
+          players: game.players,
+          readyPlayers: game.readyPlayers,
+          screen: game.screen,
+          host: game.host,
+          turn: game.turn,
+          currentPlayer: game.currentPlayer,
+          panelNumber: game.panelNumber,
+          communityName: game.communityName,
+          panels: game.panels,
+          gamemode: payload,
         });
       }
       default:
@@ -375,6 +405,16 @@ function GameContextProvider(props) {
     // };
     // socket.on("sync-lines", syncL);
 
+    const switchGamemode = async (gamemode) => {
+      console.log("host switching gamemode to:",gamemode);
+      gameReducer({
+        type: GameActionType.CHANGE_GAMEMODE,
+        payload: gamemode,
+      });
+    }
+
+    socket.once("switch-gamemode", switchGamemode);
+
     return () => {
       socket.off("new-player", newP);
       socket.off("add-players", addP);
@@ -383,11 +423,20 @@ function GameContextProvider(props) {
       // socket.off("counter", countDown)
       socket.off("add-host", addH);
       socket.off("game-started", gameStart);
+      socket.off("switch-gamemode", switchGamemode);
 
       // socket.off('count1');
     };
   }, [game]);
 
+  game.changeGamemode = async function (gamemode) {
+    console.log("host switching gamemode to:",gamemode);
+    gameReducer({
+      type: GameActionType.CHANGE_GAMEMODE,
+      payload: gamemode,
+    });
+    socket.emit("change-gamemode", gamemode, game.lobby);
+  }
   game.readyUp = async function () {
     let readyPlayers = game.readyPlayers;
     if (!readyPlayers.includes(auth.user.username)) {
