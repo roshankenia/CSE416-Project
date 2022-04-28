@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalCommunityContext } from "../community";
 import CommentCard from "./CommentCard.js";
+import StoryPopout from "./StoryPopout.js";
 
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -50,16 +51,21 @@ export default function PostCard(props) {
     event.stopPropagation();
     community.setDeletePost(true, post);
   }
+  let postData = "";
 
-  let postData = (
-    <ImageList sx={{ width: "95%" }} cols={3}>
-      {post.data.panels.map((picture) => (
-        <ImageListItem key={picture}>
-          <img src={picture} loading="lazy" />
-        </ImageListItem>
-      ))}
-    </ImageList>
-  );
+  if (post.postComic) {
+    postData = (
+      <ImageList sx={{ width: "95%" }} cols={3}>
+        {post.data.panels.map((picture) => (
+          <ImageListItem key={picture}>
+            <img src={picture} loading="lazy" />
+          </ImageListItem>
+        ))}
+      </ImageList>
+    );
+  } else if (post.postStory) {
+    postData = <StoryPopout post={post} />;
+  }
 
   // if (index % 2 == 1) {
   //   postData = (

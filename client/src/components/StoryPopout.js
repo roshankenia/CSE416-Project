@@ -5,8 +5,10 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import Typography from "@mui/material/Typography";
 
-export default function StoryPopout() {
+export default function StoryPopout(props) {
+  const { post } = props;
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => () => {
@@ -29,7 +31,8 @@ export default function StoryPopout() {
 
   return (
     <div>
-      <Button style={{ fontSize: 32 }} onClick={handleClickOpen()}>
+      <Typography>{post.data.panels[0] + " .....Story Continues"}</Typography>
+      <Button style={{ fontSize: 28 }} onClick={handleClickOpen()}>
         Read Full Story
       </Button>
       <Dialog
@@ -39,25 +42,20 @@ export default function StoryPopout() {
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
       >
-        <DialogTitle id="scroll-dialog-title">Story Title</DialogTitle>
+        <DialogTitle id="scroll-dialog-title">{post.postTitle}</DialogTitle>
         <DialogContent dividers={true}>
           <DialogContentText
             id="scroll-dialog-description"
             ref={descriptionElementRef}
             tabIndex={-1}
           >
-            {[...new Array(50)]
-              .map(
-                () => `Cras mattis consectetur purus sit amet fermentum.
-Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
-              )
-              .join("\n")}
+            {post.data.panels.map((paragraph) => (
+              <Typography>{paragraph} </Typography>
+            ))}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
     </div>

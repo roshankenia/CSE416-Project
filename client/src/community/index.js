@@ -337,7 +337,9 @@ function GlobalCommunityContextProvider(props) {
     search = search.toLowerCase();
     let newCommunityPosts = [];
     for (let i = 0; i < community.communityPosts.length; i++) {
-      if (community.communityPosts[i].postTitle.toLowerCase().startsWith(search)) {
+      if (
+        community.communityPosts[i].postTitle.toLowerCase().startsWith(search)
+      ) {
         newCommunityPosts.push(community.communityPosts[i]);
       }
     }
@@ -369,6 +371,10 @@ function GlobalCommunityContextProvider(props) {
               const comicResponse = await api.getComicById(post.postComic);
               console.log("comic:", comicResponse.data.comic);
               post.data = comicResponse.data.comic;
+            } else if (post.postStory) {
+              const storyResponse = await api.getStoryById(post.postStory);
+              console.log("story:", storyResponse.data.story);
+              post.data = storyResponse.data.story;
             }
             if (post.discoveryPublished) {
               communityPosts.push(post);
@@ -392,6 +398,10 @@ function GlobalCommunityContextProvider(props) {
               const comicResponse = await api.getComicById(post.postComic);
               console.log("comic:", comicResponse.data.comic);
               post.data = comicResponse.data.comic;
+            } else if (post.postStory) {
+              const storyResponse = await api.getStoryById(post.postStory);
+              console.log("story:", storyResponse.data.story);
+              post.data = storyResponse.data.story;
             }
             if (post.data.authors.includes(auth.user.username)) {
               communityPosts.push(post);
@@ -431,6 +441,10 @@ function GlobalCommunityContextProvider(props) {
             const comicResponse = await api.getComicById(post.postComic);
             console.log("comic:", comicResponse.data.comic);
             post.data = comicResponse.data.comic;
+          } else if (post.postStory) {
+            const storyResponse = await api.getStoryById(post.postStory);
+            console.log("story:", storyResponse.data.story);
+            post.data = storyResponse.data.story;
           }
           communityPosts.push(post);
         }
@@ -514,6 +528,12 @@ function GlobalCommunityContextProvider(props) {
                           );
                           console.log("comic:", comicResponse.data.comic);
                           post.data = comicResponse.data.comic;
+                        } else if (post.postStory) {
+                          const storyResponse = await api.getStoryById(
+                            post.postStory
+                          );
+                          console.log("story:", storyResponse.data.story);
+                          post.data = storyResponse.data.story;
                         }
                         if (post.data.authors.includes(auth.user.username)) {
                           communityPosts.push(post);
@@ -731,6 +751,12 @@ function GlobalCommunityContextProvider(props) {
                       );
                       console.log("comic:", comicResponse.data.comic);
                       post.data = comicResponse.data.comic;
+                    } else if (post.postStory) {
+                      const storyResponse = await api.getStoryById(
+                        post.postStory
+                      );
+                      console.log("story:", storyResponse.data.story);
+                      post.data = storyResponse.data.story;
                     }
                     communityPosts.push(post);
                   }
@@ -808,6 +834,12 @@ function GlobalCommunityContextProvider(props) {
                       );
                       console.log("comic:", comicResponse.data.comic);
                       post.data = comicResponse.data.comic;
+                    } else if (post.postStory) {
+                      const storyResponse = await api.getStoryById(
+                        post.postStory
+                      );
+                      console.log("story:", storyResponse.data.story);
+                      post.data = storyResponse.data.story;
                     }
                     communityPosts.push(post);
                   }

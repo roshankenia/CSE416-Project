@@ -47,6 +47,10 @@ export const getComicById = (id) => {
   return api.get(`/comic/${id}`);
 };
 
+export const getStoryById = (id) => {
+  return api.get(`/story/${id}`);
+};
+
 export const createComic = (authors, panels) => {
   return api.post(`/comic`, {
     authors: authors,
@@ -103,6 +107,7 @@ const apis = {
   deleteCommunity,
   getPostById,
   getComicById,
+  getStoryById,
   deleteComicById,
   deleteStoryById,
   deletePostById,

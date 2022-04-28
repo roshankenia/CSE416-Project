@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { GlobalCommunityContext } from "../community";
 import CommunityCard from "./CommunityCard.js";
 import Sidebar from "./Sidebar.js";
-import StoryPopout from "./StoryPopout.js";
 //import MUIDeleteModal from "./MUIDeleteModal";
 //import Statusbar from "./Statusbar";
 
@@ -200,7 +199,6 @@ const HomeScreen = () => {
           {communitiesButton}
           {discoveryButton}
           {friendsButton}
-          <StoryPopout />
         </Grid>
         <Grid item xs={6}></Grid>
         <Grid item xs={3}>
