@@ -226,7 +226,12 @@ export default function WaitingScreen(props) {
           color: "black",
         }}
       >
-        <Timer stageRef={stageRef} actions={actions} setActions={setActions} />
+        <Timer 
+        stageRef={stageRef} 
+        actions={actions} 
+        setActions={setActions}  
+        storyText={storyText}
+        setStoryText={setStoryText}/>
       </Box>
 
       <Button

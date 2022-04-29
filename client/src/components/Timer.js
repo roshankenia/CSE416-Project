@@ -96,11 +96,13 @@ export default function Timer(props) {
           }
         }
       } else if (game.gamemode == "story") {
+        console.log("inside timer gamemode story")
         console.log(storyText);
         // check if game.turn == amount of panels
         if (game.panelNumber - 1 == game.turn) {
           game.enterVoting(storyText);
-        } else {
+        } 
+        else {
           console.log("storyText:", storyText);
           setStoryText("");
           console.log("after reset:", storyText);

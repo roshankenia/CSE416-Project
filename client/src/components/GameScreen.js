@@ -348,6 +348,7 @@ export default function GameScreen() {
       console.log(text);
       console.log("storyText before update:", storyText);
       setStoryText(text);
+      console.log("story text after update", storyText)
     };
 
     socket.on("sync-text", syncT);
