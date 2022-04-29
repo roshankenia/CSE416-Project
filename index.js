@@ -51,10 +51,10 @@ var server = app.listen(PORT, function () {
   console.log("running at http://" + host + ":" + port);
 });
 
-//comment the line below to start a local websocket server (express functionality unaffected)
+//comment out the line below
 var io = require("socket.io")(server);
 
-//uncomment the line below to start a local websocket server
+//and uncomment the line below to start a local websocket server
 //var io = require("socket.io")(5000, {cors:{origin: ["http://localhost:3000"]}});
 
 //by pass cors stuff
@@ -64,9 +64,7 @@ app.use((req, res, next) => {
 });
 
 io.on("connection", (socket) => {
-  // socket object may be used to send specific messages to the new connected client
   console.log("new client connected");
-  socket.emit("connection", null);
 
   socket.on("send-message", (message) => {
     io.emit("message", message);

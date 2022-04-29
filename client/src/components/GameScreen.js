@@ -153,11 +153,11 @@ export default function GameScreen() {
   //#endregion game control
 
   //#region KONVA functions
+  const [actions, setActions] = React.useState([]);
   const [tool, setTool] = React.useState("pen");
   const [color, setColor] = React.useState("#000000");
   const [strokeWidth, setStrokeWidth] = React.useState(15);
   const [fill, setFill] = React.useState("#ffffff");
-  const [actions, setActions] = React.useState([]);
   const [redos, setRedos] = React.useState([]);
   const [displayText, setDisplayText] = React.useState("Enter Text Here");
 
@@ -169,20 +169,6 @@ export default function GameScreen() {
     const text = e.target.value;
     setDisplayText(text);
   };
-
-  // const URLImage = ({ image }) => {
-  //   const [img] = useImage(image.src);
-  //   return (
-  //     <Image
-  //       image={img}
-  //       x={image.x}
-  //       y={image.y}
-  //       // I will use offset to set origin to the center of the image
-  //       offsetX={img ? img.width / 2 : 0}
-  //       offsetY={img ? img.height / 2 : 0}
-  //     />
-  //   );
-  // };
 
   const handleUndo = () => {
     if (actions.length) {
@@ -298,10 +284,7 @@ export default function GameScreen() {
   };
 
   const handleMouseMove = (e) => {
-    // no drawing - skipping
-    if (!isDrawing.current) {
-      return;
-    }
+    if (!isDrawing.current) {return;}
     if (tool == "pen" || tool == "eraser") {
       const stage = e.target.getStage();
       const point = stage.getPointerPosition();
@@ -379,7 +362,7 @@ export default function GameScreen() {
 
   //#endregion
 
-  //the websocket codes
+  //the websocket codes 
   useEffect(() => {
     const syncA = async (userId, actions) => {
       if (userId != auth.user._id) {
@@ -392,7 +375,6 @@ export default function GameScreen() {
     };
   }, []);
 
-  //probably most important function
   const handleSubmit = (event) => {
     event.preventDefault();
   };
