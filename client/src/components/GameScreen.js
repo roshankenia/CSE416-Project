@@ -35,7 +35,7 @@ import URLImage from "./URLImage";
 //#endregion konva import
 
 //#region quilljs import
-import StoryEditor from "./StoryEditor"
+import StoryEditor from "./StoryEditor";
 //#endregion quilljs
 
 //socket
@@ -255,7 +255,9 @@ export default function GameScreen() {
   };
 
   const handleMouseMove = (e) => {
-    if (!isDrawing.current) {return;}
+    if (!isDrawing.current) {
+      return;
+    }
     if (tool == "pen" || tool == "eraser") {
       const stage = e.target.getStage();
       const point = stage.getPointerPosition();
@@ -333,7 +335,7 @@ export default function GameScreen() {
 
   //#endregion
 
-  //the websocket codes 
+  //the websocket codes
   useEffect(() => {
     const syncA = async (userId, actions) => {
       if (userId != auth.user._id) {
@@ -343,7 +345,8 @@ export default function GameScreen() {
     socket.on("sync-actions", syncA);
 
     const syncT = async (text) => {
-      console.log(text)
+      console.log(text);
+      console.log("storyText before update:", storyText);
       setStoryText(text);
     };
 
@@ -373,8 +376,6 @@ export default function GameScreen() {
       </ImageList>
     </Box>
   );
-
-  
 
   const isColorSelected = (buttonColor) => {
     if (color == buttonColor) {
@@ -545,10 +546,11 @@ export default function GameScreen() {
   } else {
     gameWorkSpace = (
       <Grid item xs="6" align="center">
-          <StoryEditor 
-            storyText={storyText}
-            setStoryText={setStoryText}
-            game={game}/>
+        <StoryEditor
+          storyText={storyText}
+          setStoryText={setStoryText}
+          game={game}
+        />
       </Grid>
     );
   }

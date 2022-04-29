@@ -97,6 +97,19 @@ export default function Timer(props) {
         }
       } else if (game.gamemode == "story") {
         console.log(storyText);
+        // check if game.turn == amount of panels
+        if (game.panelNumber - 1 == game.turn) {
+          game.enterVoting(storyText);
+        } else {
+          console.log("storyText:", storyText);
+          setStoryText("");
+          console.log("after reset:", storyText);
+
+          game.changeTurn(storyText);
+          if (auth.user.username === game.host) {
+            socket.emit("timer", auth.user.username, time, game.lobby);
+          }
+        }
       }
     };
     socket.once("end-time", changeTurn);

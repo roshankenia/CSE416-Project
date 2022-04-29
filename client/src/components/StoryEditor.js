@@ -11,6 +11,7 @@ export const StoryEditor = (props) => {
   
     let { storyText, setStoryText,  game } = props;
     const handleChange = (text) => {
+        console.log("updating:",text);
         setStoryText(storyText)
         socket.emit("edit-text", text, game.lobby);
     };

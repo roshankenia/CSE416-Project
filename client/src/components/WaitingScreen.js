@@ -54,8 +54,15 @@ export default function WaitingScreen(props) {
   const { auth } = useContext(AuthContext);
   const socket = useContext(SocketContext);
 
-  let { stageRef, actions, setActions, URLImage, storyText, setStoryText, quillRef } =
-    props;
+  let {
+    stageRef,
+    actions,
+    setActions,
+    URLImage,
+    storyText,
+    setStoryText,
+    quillRef,
+  } = props;
   const handleLeave = (event) => {
     game.leaveLobby();
   };
@@ -68,18 +75,19 @@ export default function WaitingScreen(props) {
     justifyContent: "center",
   };
   //#region wait elements
-  let waitCenterPanel =  (
-      <Grid item xs="6" align="center">
-        <Box
-          sx={{
-            pointerEvents:'none',
-            width: 600,
-            height: 600,
-            backgroundColor: "white",
-            border: 3,
-          }}
-        >
-          {game.gamemode === 'comic' ? <Stage width={600} height={600} ref={stageRef}>
+  let waitCenterPanel = (
+    <Grid item xs="6" align="center">
+      <Box
+        sx={{
+          pointerEvents: "none",
+          width: 600,
+          height: 600,
+          backgroundColor: "white",
+          border: 3,
+        }}
+      >
+        {game.gamemode === "comic" ? (
+          <Stage width={600} height={600} ref={stageRef}>
             <Layer>
               <Rect x={0} y={0} width={600} height={600} fill="white" />
               {actions.map((action) => {
@@ -150,23 +158,22 @@ export default function WaitingScreen(props) {
               })}
             </Layer>
           </Stage>
-          
-          :
-
+        ) : (
           <ReactQuill
             theme="bubble"
             value={storyText}
             placeholder={"Write something awesome..."}
             sx={{
-            width: 600,
-            height: 600,
-            backgroundColor: "white",
-            border: 3,
+              width: 600,
+              height: 600,
+              backgroundColor: "white",
+              border: 3,
             }}
-          ></ReactQuill>}
-        </Box>
-      </Grid>
-    );
+          ></ReactQuill>
+        )}
+      </Box>
+    </Grid>
+  );
 
   const waitChat = (
     <Grid>
