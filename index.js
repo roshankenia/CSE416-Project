@@ -52,10 +52,10 @@ var server = app.listen(PORT, function () {
 });
 
 //comment out the line below
-var io = require("socket.io")(server);
+//var io = require("socket.io")(server);
 
 //and uncomment the line below to start a local websocket server
-//var io = require("socket.io")(5000, {cors:{origin: ["http://localhost:3000"]}});
+var io = require("socket.io")(5000, {cors:{origin: ["http://localhost:3000"]}});
 
 //by pass cors stuff
 app.use((req, res, next) => {
@@ -120,9 +120,9 @@ io.on("connection", (socket) => {
     io.to(lobbyID).emit("sync-actions", userId, actions);
   });
 
-  socket.on("edit-text", (userId, text, lobbyID) => {
+  socket.on("edit-text", (text, lobbyID) => {
     console.log("sending text to:", lobbyID);
-    io.to(lobbyID).emit("sync-text", userId, text);
+    io.to(lobbyID).emit("sync-text", text);
   });
 
   socket.on("update-host", (host, lobbyID) => {

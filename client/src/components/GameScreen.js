@@ -1,41 +1,22 @@
+//#region imports
 import { Grid, Typography } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
-import { GlobalCommunityContext } from "../community";
 import { GameContext } from "../game";
 import AuthContext from "../auth";
 import { Box, Button, List, ListItem, TextField } from "@mui/material";
 
-import EditIcon from "@mui/icons-material/Edit";
-import BrushIcon from "@mui/icons-material/Brush";
-import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
-import ImageSearchIcon from "@mui/icons-material/ImageSearch";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
-import TextFormatIcon from "@mui/icons-material/TextFormat";
-import ColorizeIcon from "@mui/icons-material/Colorize";
-import ClearIcon from "@mui/icons-material/Clear";
-import SquareIcon from "@mui/icons-material/Square";
-
 import { styled } from "@mui/material/styles";
-import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
-import FormatAlignCenterIcon from "@mui/icons-material/FormatAlignCenter";
-import FormatAlignRightIcon from "@mui/icons-material/FormatAlignRight";
-import FormatAlignJustifyIcon from "@mui/icons-material/FormatAlignJustify";
-import FormatBoldIcon from "@mui/icons-material/FormatBold";
-import FormatItalicIcon from "@mui/icons-material/FormatItalic";
-import FormatUnderlinedIcon from "@mui/icons-material/FormatUnderlined";
 // import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import Divider from "@mui/material/Divider";
-import Paper from "@mui/material/Paper";
-import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 import WaitingScreen from "./WaitingScreen";
 import GameTools from "./GameTools";
 import Timer from "./Timer";
-import IconButton from "@mui/material/IconButton";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
+//#endregion imports
 
-// konva stuff
+//#region konva import
 import {
   Stage,
   Layer,
@@ -51,20 +32,21 @@ import {
 import useImage from "use-image";
 import { BsEraserFill } from "react-icons/bs";
 import URLImage from "./URLImage";
+//#endregion konva import
+
+//#region quilljs import
+import StoryEditor from "./StoryEditor"
+//#endregion quilljs
 
 //socket
 import { SocketContext } from "../socket";
-
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 
 export default function GameScreen() {
   const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
   const socket = useContext(SocketContext);
+
+  const [storyText, setStoryText] = React.useState("");
 
   //#region css
   const buttonCSS = { color: "black", fontSize: "40pt" };
@@ -73,9 +55,6 @@ export default function GameScreen() {
   //#region game control
 
   //#region not-timer
-  const roomCode = "imadethiscodeup";
-  // ******* change gameMode as "story" or "comic" to get different game screens *******
-
   const [characterToggle, setCharacterToggle] = useState(false);
   const toggleCharacters = () => {
     if (!characterToggle) {
@@ -363,10 +342,9 @@ export default function GameScreen() {
     };
     socket.on("sync-actions", syncA);
 
-    const syncT = async (userId, text) => {
-      if (userId != auth.user._id) {
-        setStoryText(text);
-      }
+    const syncT = async (text) => {
+      console.log(text)
+      setStoryText(text);
     };
 
     socket.on("sync-text", syncT);
@@ -374,16 +352,12 @@ export default function GameScreen() {
       socket.off("sync-actions", syncA);
       socket.off("sync-text", syncT);
     };
-  }, []);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-  };
+  }, [actions, storyText]);
 
   const gameCurrentPlayer = (
     <Typography fontSize={"64px"}>
       {game.currentPlayer} is currently{" "}
-      {game.gameMode == "comic" ? "Drawing" : "Writing"}...
+      {game.gamemode == "comic" ? "Drawing" : "Writing"}...
     </Typography>
   );
 
@@ -399,90 +373,8 @@ export default function GameScreen() {
       </ImageList>
     </Box>
   );
-  const [storyText, setStoryText] = React.useState("");
-  const handleEdit = (text) => {
-    setStoryText(text);
-    socket.emit("edit-text", auth.user._id, storyText, game.lobby);
-  };
-  let editor = (
-    <Paper
-      elevation={0}
-      sx={{
-        display: "flex",
-        border: (theme) => `1px solid ${theme.palette.divider}`,
-        flexWrap: "wrap",
-      }}
-    >
-      <StyledToggleButtonGroup
-        // orientation="vertical"
-        size="small"
-        value={alignment}
-        exclusive
-        onChange={handleAlignment}
-        aria-label="text alignment"
-      >
-        <ToggleButton value="left" aria-label="left aligned">
-          <FormatAlignLeftIcon />
-        </ToggleButton>
-        <ToggleButton value="center" aria-label="centered">
-          <FormatAlignCenterIcon />
-        </ToggleButton>
-        <ToggleButton value="right" aria-label="right aligned">
-          <FormatAlignRightIcon />
-        </ToggleButton>
-        <ToggleButton value="justify" aria-label="justified" disabled>
-          <FormatAlignJustifyIcon />
-        </ToggleButton>
-      </StyledToggleButtonGroup>
-      <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
-      <StyledToggleButtonGroup
-        // orientation="vertical"
-        size="small"
-        value={formats}
-        onChange={handleFormat}
-        aria-label="text formatting"
-      >
-        <ToggleButton value="bold" aria-label="bold">
-          <FormatBoldIcon />
-        </ToggleButton>
-        <ToggleButton value="italic" aria-label="italic">
-          <FormatItalicIcon />
-        </ToggleButton>
-        <ToggleButton value="underlined" aria-label="underlined">
-          <FormatUnderlinedIcon />
-        </ToggleButton>
-        <ToggleButton value="color" aria-label="color" disabled>
-          <FormatColorFillIcon />
-          <ArrowDropDownIcon />
-        </ToggleButton>
-      </StyledToggleButtonGroup>
-    </Paper>
-  );
-  if (game.gamemode == "story") {
-    editor = (
-      <Typography
-        sx={{
-          width: 600,
-          height: 600,
-          backgroundColor: "white",
-          border: 3,
-        }}
-      >
-        {" "}
-        <ReactQuill
-          theme="snow"
-          value={storyText}
-          onChange={(value) => handleEdit(value)}
-          sx={{
-            width: 600,
-            height: 600,
-            backgroundColor: "white",
-            border: 3,
-          }}
-        ></ReactQuill>
-      </Typography>
-    );
-  }
+
+  
 
   const isColorSelected = (buttonColor) => {
     if (color == buttonColor) {
@@ -512,7 +404,7 @@ export default function GameScreen() {
     <GameTools
       buttonCSS={buttonCSS}
       setTool={setTool}
-      gameMode={game.gameMode}
+      gameMode={game.gamemode}
       flexContainer={flexContainer}
       tool={tool}
       changeColor={changeColor}
@@ -534,7 +426,7 @@ export default function GameScreen() {
 
   /* Drawing/Writing Canvas */
   let gameWorkSpace = "";
-  if (game.gameMode == "comic") {
+  if (game.gamemode === "comic") {
     gameWorkSpace = (
       <Grid item xs="6" align="center">
         <Box
@@ -653,14 +545,17 @@ export default function GameScreen() {
   } else {
     gameWorkSpace = (
       <Grid item xs="6" align="center">
-        {editor}
+          <StoryEditor 
+            storyText={storyText}
+            setStoryText={setStoryText}
+            game={game}/>
       </Grid>
     );
   }
 
   //right handside buttons
   let gameUtils = "";
-  if (game.gameMode == "comic") {
+  if (game.gamemode === "comic") {
     gameUtils = (
       <Grid item xs="3" align="center">
         <Box
@@ -919,7 +814,7 @@ export default function GameScreen() {
   );
 
   //waiting switch
-  if (auth.user.username != game.currentPlayer) {
+  if (auth.user.username !== game.currentPlayer) {
     currentDisplay = (
       <WaitingScreen
         stageRef={stageRef}

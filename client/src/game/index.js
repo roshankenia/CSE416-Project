@@ -455,6 +455,7 @@ function GameContextProvider(props) {
   game.createNewGame = async function () {
     let sortPlayers = game.players.sort();
     try {
+      console.log(game.gamemode)
       let id = "madeupgameid";
       let newgame = { game: "gameOBJ", players: sortPlayers };
       // backend stuff
