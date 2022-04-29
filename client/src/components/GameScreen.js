@@ -50,13 +50,16 @@ import {
 } from "react-konva";
 import useImage from "use-image";
 import { BsEraserFill } from "react-icons/bs";
-import URLImage from "./URLImage"
+import URLImage from "./URLImage";
 
 //socket
 import { SocketContext } from "../socket";
 
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 export default function GameScreen() {
   const { game } = useContext(GameContext);
@@ -72,39 +75,28 @@ export default function GameScreen() {
   //#region not-timer
   const roomCode = "imadethiscodeup";
   // ******* change gameMode as "story" or "comic" to get different game screens *******
-  // const gameMode = "comic"
-  const [gameMode, setGameMode] = useState(true);
 
   const [characterToggle, setCharacterToggle] = useState(false);
   const toggleCharacters = () => {
-    if(!characterToggle){
-      setTool('image')
+    if (!characterToggle) {
+      setTool("image");
     }
     setCharacterToggle(!characterToggle);
   };
   const [bubbleToggle, setBubbleToggle] = useState(false);
   const toggleBubbles = () => {
-    if(!bubbleToggle){
-      setTool('image')
+    if (!bubbleToggle) {
+      setTool("image");
     }
     setBubbleToggle(!bubbleToggle);
   };
 
   const [themeToggle, setThemeToggle] = useState(false);
   const toggleThemes = () => {
-    if(!themeToggle){
-      setTool('image')
+    if (!themeToggle) {
+      setTool("image");
     }
     setThemeToggle(!themeToggle);
-  };
-
-  const handleGameMode = (event) => {
-    event.stopPropagation();
-    if (gameMode) {
-      setGameMode(false);
-    } else {
-      setGameMode(true);
-    }
   };
 
   const charactersLeft = 147;
@@ -370,8 +362,17 @@ export default function GameScreen() {
       }
     };
     socket.on("sync-actions", syncA);
+
+    const syncT = async (userId, text) => {
+      if (userId != auth.user._id) {
+        setStoryText(text);
+      }
+    };
+
+    socket.on("sync-text", syncT);
     return () => {
       socket.off("sync-actions", syncA);
+      socket.off("sync-text", syncT);
     };
   }, []);
 
@@ -379,35 +380,10 @@ export default function GameScreen() {
     event.preventDefault();
   };
 
-  //#region game elements to render
-  const gameModeButton = (
-    <Button
-      onClick={handleGameMode}
-      sx={{
-        width: 300,
-        height: 50,
-        margin: 1,
-        backgroundColor: "white",
-        "&:hover": {
-          backgroundColor: "white",
-          opacity: [0.9, 0.8, 0.7],
-        },
-        borderRadius: 5,
-        border: 3,
-        color: "black",
-      }}
-    >
-      <Typography>
-        {gameMode
-          ? "Click me to switch to Story"
-          : "Click me to switch to Comic"}
-      </Typography>
-    </Button>
-  );
-
   const gameCurrentPlayer = (
     <Typography fontSize={"64px"}>
-      {game.currentPlayer} is currently {gameMode ? "Drawing" : "Writing"}...
+      {game.currentPlayer} is currently{" "}
+      {game.gameMode == "comic" ? "Drawing" : "Writing"}...
     </Typography>
   );
 
@@ -423,6 +399,90 @@ export default function GameScreen() {
       </ImageList>
     </Box>
   );
+  const [storyText, setStoryText] = React.useState("");
+  const handleEdit = (text) => {
+    setStoryText(text);
+    socket.emit("edit-text", auth.user._id, storyText, game.lobby);
+  };
+  let editor = (
+    <Paper
+      elevation={0}
+      sx={{
+        display: "flex",
+        border: (theme) => `1px solid ${theme.palette.divider}`,
+        flexWrap: "wrap",
+      }}
+    >
+      <StyledToggleButtonGroup
+        // orientation="vertical"
+        size="small"
+        value={alignment}
+        exclusive
+        onChange={handleAlignment}
+        aria-label="text alignment"
+      >
+        <ToggleButton value="left" aria-label="left aligned">
+          <FormatAlignLeftIcon />
+        </ToggleButton>
+        <ToggleButton value="center" aria-label="centered">
+          <FormatAlignCenterIcon />
+        </ToggleButton>
+        <ToggleButton value="right" aria-label="right aligned">
+          <FormatAlignRightIcon />
+        </ToggleButton>
+        <ToggleButton value="justify" aria-label="justified" disabled>
+          <FormatAlignJustifyIcon />
+        </ToggleButton>
+      </StyledToggleButtonGroup>
+      <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
+      <StyledToggleButtonGroup
+        // orientation="vertical"
+        size="small"
+        value={formats}
+        onChange={handleFormat}
+        aria-label="text formatting"
+      >
+        <ToggleButton value="bold" aria-label="bold">
+          <FormatBoldIcon />
+        </ToggleButton>
+        <ToggleButton value="italic" aria-label="italic">
+          <FormatItalicIcon />
+        </ToggleButton>
+        <ToggleButton value="underlined" aria-label="underlined">
+          <FormatUnderlinedIcon />
+        </ToggleButton>
+        <ToggleButton value="color" aria-label="color" disabled>
+          <FormatColorFillIcon />
+          <ArrowDropDownIcon />
+        </ToggleButton>
+      </StyledToggleButtonGroup>
+    </Paper>
+  );
+  if (game.gamemode == "story") {
+    editor = (
+      <Typography
+        sx={{
+          width: 600,
+          height: 600,
+          backgroundColor: "white",
+          border: 3,
+        }}
+      >
+        {" "}
+        <ReactQuill
+          theme="snow"
+          value={storyText}
+          onChange={(value) => handleEdit(value)}
+          sx={{
+            width: 600,
+            height: 600,
+            backgroundColor: "white",
+            border: 3,
+          }}
+        ></ReactQuill>
+      </Typography>
+    );
+  }
 
   const isColorSelected = (buttonColor) => {
     if (color == buttonColor) {
@@ -452,7 +512,7 @@ export default function GameScreen() {
     <GameTools
       buttonCSS={buttonCSS}
       setTool={setTool}
-      gameMode={gameMode}
+      gameMode={game.gameMode}
       flexContainer={flexContainer}
       tool={tool}
       changeColor={changeColor}
@@ -474,7 +534,7 @@ export default function GameScreen() {
 
   /* Drawing/Writing Canvas */
   let gameWorkSpace = "";
-  if (gameMode) {
+  if (game.gameMode == "comic") {
     gameWorkSpace = (
       <Grid item xs="6" align="center">
         <Box
@@ -493,18 +553,18 @@ export default function GameScreen() {
               ...stageRef.current.getPointerPosition(),
               src: dragUrl.current,
               key: actions.length + 1,
-              size: strokeWidth
+              size: strokeWidth,
             });
             setActions(
-                  actions.concat([
-                    {
-                      ...stageRef.current.getPointerPosition(),
-                      src: dragUrl.current,
-                      key: actions.length + 1,
-                      size: strokeWidth,
-                    }
-                  ])
-                );
+              actions.concat([
+                {
+                  ...stageRef.current.getPointerPosition(),
+                  src: dragUrl.current,
+                  key: actions.length + 1,
+                  size: strokeWidth,
+                },
+              ])
+            );
             socket.emit("draw-actions", auth.user._id, actions, game.lobby);
           }}
           onDragOver={(e) => e.preventDefault()}
@@ -593,76 +653,17 @@ export default function GameScreen() {
   } else {
     gameWorkSpace = (
       <Grid item xs="6" align="center">
-        <Paper
-          elevation={0}
-          sx={{
-            display: "flex",
-            border: (theme) => `1px solid ${theme.palette.divider}`,
-            flexWrap: "wrap",
-          }}
-        >
-          <StyledToggleButtonGroup
-            // orientation="vertical"
-            size="small"
-            value={alignment}
-            exclusive
-            onChange={handleAlignment}
-            aria-label="text alignment"
-          >
-            <ToggleButton value="left" aria-label="left aligned">
-              <FormatAlignLeftIcon />
-            </ToggleButton>
-            <ToggleButton value="center" aria-label="centered">
-              <FormatAlignCenterIcon />
-            </ToggleButton>
-            <ToggleButton value="right" aria-label="right aligned">
-              <FormatAlignRightIcon />
-            </ToggleButton>
-            <ToggleButton value="justify" aria-label="justified" disabled>
-              <FormatAlignJustifyIcon />
-            </ToggleButton>
-          </StyledToggleButtonGroup>
-          <Divider flexItem orientation="vertical" sx={{ mx: 0.5, my: 1 }} />
-          <StyledToggleButtonGroup
-            // orientation="vertical"
-            size="small"
-            value={formats}
-            onChange={handleFormat}
-            aria-label="text formatting"
-          >
-            <ToggleButton value="bold" aria-label="bold">
-              <FormatBoldIcon />
-            </ToggleButton>
-            <ToggleButton value="italic" aria-label="italic">
-              <FormatItalicIcon />
-            </ToggleButton>
-            <ToggleButton value="underlined" aria-label="underlined">
-              <FormatUnderlinedIcon />
-            </ToggleButton>
-            <ToggleButton value="color" aria-label="color" disabled>
-              <FormatColorFillIcon />
-              <ArrowDropDownIcon />
-            </ToggleButton>
-          </StyledToggleButtonGroup>
-        </Paper>
-        <Box
-          sx={{
-            width: 600,
-            height: 600,
-            backgroundColor: "white",
-            border: 3,
-          }}
-        ></Box>
+        {editor}
       </Grid>
     );
   }
 
   //right handside buttons
   let gameUtils = "";
-  if (gameMode) {
+  if (game.gameMode == "comic") {
     gameUtils = (
       <Grid item xs="3" align="center">
-        <Button
+        <Box
           sx={{
             width: 450,
             height: 75,
@@ -677,8 +678,10 @@ export default function GameScreen() {
             stageRef={stageRef}
             actions={actions}
             setActions={setActions}
+            storyText={storyText}
+            setStoryText={setStoryText}
           />
-        </Button>
+        </Box>
         <Button
           sx={{
             width: 450,
@@ -836,30 +839,12 @@ export default function GameScreen() {
             </ImageList>
           </Box>
         )}
-        <Button
-          sx={{
-            width: 450,
-            height: 75,
-            margin: 1,
-            backgroundColor: "green",
-            "&:hover": {
-              backgroundColor: "green",
-              opacity: [0.9, 0.8, 0.7],
-            },
-            borderRadius: 5,
-            border: 3,
-            color: "black",
-          }}
-          onClick={handleSubmit}
-        >
-          <Typography fontSize={"32px"}>Submit</Typography>
-        </Button>
       </Grid>
     );
   } else {
     gameUtils = (
       <Grid item xs="3" align="center">
-        <Button
+        <Box
           sx={{
             width: 450,
             height: 75,
@@ -878,9 +863,12 @@ export default function GameScreen() {
             stageRef={stageRef}
             actions={actions}
             setActions={setActions}
+            storyText={storyText}
+            setStoryText={setStoryText}
           />
-        </Button>
-        <Button
+        </Box>
+        <Typography
+          fontSize={"32px"}
           sx={{
             width: 450,
             height: 75,
@@ -895,10 +883,8 @@ export default function GameScreen() {
             color: "black",
           }}
         >
-          <Typography fontSize={"32px"}>
-            Characters Left: {charactersLeft}
-          </Typography>
-        </Button>
+          {"Characters Left: 237"}
+        </Typography>
         <Button
           sx={{
             width: 450,
@@ -940,6 +926,8 @@ export default function GameScreen() {
         actions={actions}
         URLImage={URLImage}
         setActions={setActions}
+        storyText={storyText}
+        setStoryText={setStoryText}
       />
     );
   }
@@ -957,7 +945,6 @@ export default function GameScreen() {
       }}
     >
       <Grid item xs="12" align="center">
-        {gameModeButton}
         {gameCurrentPlayer}
         {/* List of current panels drawn goes here */}
         {gamePanels}

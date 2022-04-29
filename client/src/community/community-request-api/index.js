@@ -47,40 +47,54 @@ export const getComicById = (id) => {
   return api.get(`/comic/${id}`);
 };
 
+export const getStoryById = (id) => {
+  return api.get(`/story/${id}`);
+};
+
 export const createComic = (authors, panels) => {
   return api.post(`/comic`, {
     authors: authors,
     panels: panels,
   });
-}
+};
+
+export const deleteComicById = (id) => {
+  return api.delete(`/comic/${id}`);
+};
+export const deleteStoryById = (id) => {
+  return api.delete(`/story/${id}`);
+};
+export const deletePostById = (id) => {
+  return api.delete(`/post/${id}`);
+};
 
 export const createPost = (
-  postTitle, 
-  postComic, 
-  postStory, 
-  likes, 
-  dislikes, 
-  communityPublished, 
-  discoveryPublished, 
-  dateAndTime, 
+  postTitle,
+  postComic,
+  postStory,
+  likes,
+  dislikes,
+  communityPublished,
+  discoveryPublished,
+  dateAndTime,
   communityName
 ) => {
   return api.post(`/post`, {
-    postTitle: postTitle, 
+    postTitle: postTitle,
     postComic: postComic,
-    postStory: postStory, 
-    likes: likes, 
+    postStory: postStory,
+    likes: likes,
     dislikes: dislikes,
     communityPublished: communityPublished,
     discoveryPublished: discoveryPublished,
     dateAndTime: dateAndTime,
     communityName: communityName,
   });
-}
+};
 
-export const searchCommunityByName = (name) =>{
-  return api.get(`/searchcommunitybyname/${name}`)
-}
+export const searchCommunityByName = (name) => {
+  return api.get(`/searchcommunitybyname/${name}`);
+};
 
 const apis = {
   createCommunity,
@@ -92,7 +106,11 @@ const apis = {
   // for testing purpose
   deleteCommunity,
   getPostById,
-  getComicById
+  getComicById,
+  getStoryById,
+  deleteComicById,
+  deleteStoryById,
+  deletePostById,
 };
 
 export default apis;

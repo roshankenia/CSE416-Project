@@ -22,29 +22,36 @@ export default function DeletePostModal() {
   const { community } = useContext(GlobalCommunityContext);
 
   function handleDeletePost(event) {
-    // auth.deleteAccount();
+    community.removePost();
   }
   function handleClose(event) {
-    community.setDeletePost(false);
+    community.setDeletePost(false, null);
   }
-  return (
-    <Modal
-      open={community.deletePostModal}
-      onClose={handleClose}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
-    >
-      <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h5" component="h2">
-          Are you sure you want to delete your username off this post?
-        </Typography>
-        <Button variant="contained" onClick={handleDeletePost} sx={{ m: 1 }}>
-          Confirm
-        </Button>
-        <Button variant="outlined" onClick={handleClose} sx={{ m: 1 }}>
-          Cancel
-        </Button>
-      </Box>
-    </Modal>
-  );
+  if (community.deletePost) {
+    console.log(community.deletePost);
+    return (
+      <Modal
+        open={community.deletePostModal}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h5" component="h2">
+            {"Are you sure you want to delete " +
+              community.deletePost.postTitle +
+              "?"}
+          </Typography>
+          <Button variant="contained" onClick={handleDeletePost} sx={{ m: 1 }}>
+            Confirm
+          </Button>
+          <Button variant="outlined" onClick={handleClose} sx={{ m: 1 }}>
+            Cancel
+          </Button>
+        </Box>
+      </Modal>
+    );
+  } else {
+    return "";
+  }
 }

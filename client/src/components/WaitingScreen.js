@@ -30,7 +30,16 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 // konva stuff
-import { Stage, Layer, Rect, Text, Circle, Line, Star } from "react-konva";
+import {
+  Stage,
+  Layer,
+  Rect,
+  Text,
+  Circle,
+  Line,
+  Star,
+  Ellipse,
+} from "react-konva";
 import { BsEraserFill } from "react-icons/bs";
 
 import Timer from "./Timer";
@@ -43,7 +52,11 @@ export default function WaitingScreen(props) {
   const { auth } = useContext(AuthContext);
   const socket = useContext(SocketContext);
 
-  let { stageRef, actions, setActions, URLImage } = props;
+  let { stageRef, actions, setActions, URLImage, storyText, setStoryText } =
+    props;
+  const handleLeave = (event) => {
+    game.leaveLobby();
+  };
   const flexContainer = {
     display: "flex",
     flexDirection: "row",
@@ -53,78 +66,107 @@ export default function WaitingScreen(props) {
     justifyContent: "center",
   };
   //#region wait elements
-  const waitCenterPanel = (
-    <Grid item xs="6" align="center">
-      <Box
+  let waitCenterPanel = "";
+
+  if (game.gamemode == "comic") {
+    waitCenterPanel = (
+      <Grid item xs="6" align="center">
+        <Box
+          sx={{
+            width: 600,
+            height: 600,
+            backgroundColor: "white",
+            border: 3,
+          }}
+        >
+          <Stage width={600} height={600} ref={stageRef}>
+            <Layer>
+              <Rect x={0} y={0} width={600} height={600} fill="white" />
+              {actions.map((action) => {
+                if (action.tool === "pen" || action.tool === "eraser") {
+                  return (
+                    <Line
+                      points={action.points}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                      tension={0.5}
+                      lineCap="round"
+                      globalCompositeOperation={
+                        action.tool === "eraser"
+                          ? "destination-out"
+                          : "source-over"
+                      }
+                    />
+                  );
+                } else if (action.tool === "rectangle") {
+                  return (
+                    <Rect
+                      x={action.x}
+                      y={action.y}
+                      width={action.width}
+                      height={action.height}
+                      fill={action.fill}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                    />
+                  );
+                } else if (action.tool === "ellipse") {
+                  return (
+                    <Ellipse
+                      x={action.x}
+                      y={action.y}
+                      width={action.width}
+                      height={action.height}
+                      fill={action.fill}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                    />
+                  );
+                } else if (action.tool === "circle") {
+                  return (
+                    <Circle
+                      x={action.x}
+                      y={action.y}
+                      width={action.width}
+                      height={action.height}
+                      fill={action.fill}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                    />
+                  );
+                } else if (action.tool === "text") {
+                  return (
+                    <Text
+                      x={action.x}
+                      y={action.y}
+                      text={action.text}
+                      fontSize={action.fontSize}
+                      fill={action.fill}
+                    />
+                  );
+                } else {
+                  return <URLImage image={action} />;
+                }
+              })}
+            </Layer>
+          </Stage>
+        </Box>
+      </Grid>
+    );
+  } else if (game.gamemode == "story") {
+    waitCenterPanel = (
+      <Typography
         sx={{
           width: 600,
           height: 600,
           backgroundColor: "white",
           border: 3,
         }}
-      >
-        <Stage width={600} height={600} ref={stageRef}>
-          <Layer>
-            <Rect x={0} y={0} width={600} height={600} fill="white" />
-            {actions.map((action) => {
-              if (action.tool === "pen" || action.tool === "eraser") {
-                return (
-                  <Line
-                    points={action.points}
-                    stroke={action.stroke}
-                    strokeWidth={action.strokeWidth}
-                    tension={0.5}
-                    lineCap="round"
-                    globalCompositeOperation={
-                      action.tool === "eraser"
-                        ? "destination-out"
-                        : "source-over"
-                    }
-                  />
-                );
-              } else if (action.tool === "rectangle") {
-                return (
-                  <Rect
-                    x={action.x}
-                    y={action.y}
-                    width={action.width}
-                    height={action.height}
-                    fill="transparent"
-                    stroke={action.stroke}
-                    strokeWidth={action.strokeWidth}
-                  />
-                );
-              } else if (action.tool === "circle") {
-                return (
-                  <Circle
-                    x={action.x}
-                    y={action.y}
-                    width={action.width}
-                    height={action.height}
-                    fill="transparent"
-                    stroke={action.stroke}
-                    strokeWidth={action.strokeWidth}
-                  />
-                );
-              } else if (action.tool === "text") {
-                return (
-                  <Text
-                    x={action.x}
-                    y={action.y}
-                    text={action.text}
-                    fontSize={action.fontSize}
-                    fill={action.fill}
-                  />
-                );
-              } else {
-                return <URLImage image={action} />;
-              }
-            })}
-          </Layer>
-        </Stage>
-      </Box>
-    </Grid>
-  );
+        dangerouslySetInnerHTML={{ __html: storyText }}
+      ></Typography>
+    );
+  }
+
   const waitChat = (
     <Grid>
       <Box
@@ -165,7 +207,7 @@ export default function WaitingScreen(props) {
   );
   const waitUtils = (
     <Grid item xs="3" align="center">
-      <Button
+      <Box
         sx={{
           width: 450,
           height: 75,
@@ -177,7 +219,7 @@ export default function WaitingScreen(props) {
         }}
       >
         <Timer stageRef={stageRef} actions={actions} setActions={setActions} />
-      </Button>
+      </Box>
 
       <Button
         sx={{
@@ -193,6 +235,7 @@ export default function WaitingScreen(props) {
           border: 3,
           color: "black",
         }}
+        onClick={(event) => handleLeave()}
       >
         <Typography fontSize={"32px"}>Leave</Typography>
       </Button>

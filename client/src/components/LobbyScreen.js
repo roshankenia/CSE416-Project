@@ -74,7 +74,7 @@ export default function LobbyScreen() {
   ];
 
   const handleSetTimer = (event, newValue) => {
-      setValue(newValue);
+    setValue(newValue);
   };
   //#endregion slider
 
@@ -114,7 +114,61 @@ export default function LobbyScreen() {
     console.log("game timer(in seconds): " + game.timer);
     game.createNewGame();
   };
+  const changeGamemode = (event, gamemode) => {
+    event.stopPropagation();
+    if (gamemode != game.gamemode) {
+      game.changeGamemode(gamemode);
+    }
+  };
 
+  let gamemodeButton = (
+    <Box>
+      <Typography style={{ fontSize: "32px" }}>
+        {"Gamemode: " + game.gamemode.toUpperCase()}
+      </Typography>
+      <Button disabled={true} style={{ fontSize: "32px", opacity: 0.5 }}>
+        Comic
+      </Button>
+      <Typography display="inline" style={{ fontSize: "32px" }}>
+        /
+      </Typography>
+      <Button
+        style={{ fontSize: "32px" }}
+        onClick={(event) => changeGamemode(event, "story")}
+      >
+        Story
+      </Button>
+    </Box>
+  );
+  if (auth.user.username != game.host) {
+    gamemodeButton = (
+      <Box>
+        <Typography style={{ fontSize: "32px" }}>
+          {"Gamemode: " + game.gamemode.toUpperCase()}
+        </Typography>
+      </Box>
+    );
+  } else if (game.gamemode == "story") {
+    gamemodeButton = (
+      <Box>
+        <Typography style={{ fontSize: "32px" }}>
+          {"Gamemode: " + game.gamemode.toUpperCase()}
+        </Typography>
+        <Button
+          style={{ fontSize: "32px" }}
+          onClick={(event) => changeGamemode(event, "comic")}
+        >
+          Comic
+        </Button>
+        <Typography display="inline" style={{ fontSize: "32px" }}>
+          /
+        </Typography>
+        <Button disabled={true} style={{ fontSize: "32px", opacity: 0.5 }}>
+          Story
+        </Button>
+      </Box>
+    );
+  }
   //#region uncategorized render components
   let startButton = (
     <div
@@ -247,7 +301,7 @@ export default function LobbyScreen() {
             aria-labelledby="input-slider"
             // marks={marks}
             defaultValue={60}
-            step ={10}
+            step={10}
             min={30}
             max={300}
             valueLabelDisplay="auto"
@@ -311,88 +365,7 @@ export default function LobbyScreen() {
           </ListItem>
           {/* This is game mode and buttons */}
           <ListItem key="game_mode" align="center">
-            <Typography align="center" style={{ fontSize: "32px" }}>
-              Game Mode:
-            </Typography>
-            <Button style={{ fontSize: "32px" }}>Comic</Button>
-            <Typography style={{ fontSize: "32px" }}>/</Typography>
-            <Button style={{ fontSize: "32px" }}>Story</Button>
-            <Button
-              variant="contained"
-              color="success"
-              size="small"
-              align="center"
-              onClick={(event) => handleInvite()}
-              style={{
-                fontWeight: 600,
-                border: "3px solid",
-                borderColor: "black",
-                backgroundColor: "red",
-                color: "black",
-                fontSize: "30px",
-                borderRadius: 20,
-              }}
-              sx={{ ml: 1, width: "10%", height: "40px" }}
-            >
-              solo
-            </Button>
-            <Button
-              variant="contained"
-              color="success"
-              size="small"
-              align="center"
-              onClick={(event) => handleInvite()}
-              style={{
-                fontWeight: 600,
-                border: "3px solid",
-                borderColor: "black",
-                backgroundColor: "red",
-                color: "black",
-                fontSize: "30px",
-                borderRadius: 20,
-              }}
-              sx={{ ml: 1, width: "10%", height: "40px" }}
-            >
-              2
-            </Button>
-            <Button
-              variant="contained"
-              color="success"
-              size="small"
-              align="center"
-              onClick={(event) => handleInvite()}
-              style={{
-                fontWeight: 600,
-                border: "3px solid",
-                borderColor: "black",
-                backgroundColor: "red",
-                color: "black",
-                fontSize: "30px",
-                borderRadius: 20,
-              }}
-              sx={{ ml: 1, width: "10%", height: "40px" }}
-            >
-              3
-            </Button>
-            <Button
-              variant="contained"
-              color="success"
-              size="small"
-              align="center"
-              onClick={(event) => handleInvite()}
-              style={{
-                fontWeight: 600,
-                border: "3px solid",
-                borderColor: "black",
-                backgroundColor: "red",
-                color: "black",
-                fontSize: "30px",
-                borderRadius: 20,
-              }}
-              sx={{ ml: 1, width: "10%", height: "40px" }}
-            >
-              4
-            </Button>
+            {gamemodeButton}
           </ListItem>
           <Box
             justifyContent="center"

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalCommunityContext } from "../community";
 import CommentCard from "./CommentCard.js";
+import StoryPopout from "./StoryPopout.js";
 
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -48,18 +49,23 @@ export default function PostCard(props) {
 
   function handleDelete(event) {
     event.stopPropagation();
-    community.setDeletePost(true);
+    community.setDeletePost(true, post);
   }
+  let postData = "";
 
-  let postData = (
-    <ImageList sx={{ width: "95%" }} cols={3}>
-      {post.data.panels.map((picture) => (
-        <ImageListItem key={picture}>
-          <img src={picture} loading="lazy" />
-        </ImageListItem>
-      ))}
-    </ImageList>
-  );
+  if (post.postComic) {
+    postData = (
+      <ImageList sx={{ width: "95%" }} cols={3}>
+        {post.data.panels.map((picture) => (
+          <ImageListItem key={picture}>
+            <img src={picture} loading="lazy" />
+          </ImageListItem>
+        ))}
+      </ImageList>
+    );
+  } else if (post.postStory) {
+    postData = <StoryPopout post={post} />;
+  }
 
   // if (index % 2 == 1) {
   //   postData = (
@@ -100,24 +106,14 @@ export default function PostCard(props) {
 
   if (community.screen == "profile") {
     profileOptions = (
-      <Box>
-        <IconButton color="primary" onClick={handleDelete}>
-          <DeleteIcon
-            sx={{
-              width: 40,
-              height: 40,
-            }}
-          />
-        </IconButton>
-        <IconButton color="primary">
-          <EditIcon
-            sx={{
-              width: 40,
-              height: 40,
-            }}
-          />
-        </IconButton>
-      </Box>
+      <IconButton color="primary" onClick={handleDelete}>
+        <DeleteIcon
+          sx={{
+            width: 40,
+            height: 40,
+          }}
+        />
+      </IconButton>
     );
   }
 
@@ -158,7 +154,7 @@ export default function PostCard(props) {
                 fontSize: "22px",
               }}
             >
-              {post.dateAndTime.substring(0,10)}
+              {post.dateAndTime.substring(0, 10)}
             </Typography>
           </Grid>
           <Grid item xs={3}>
@@ -231,7 +227,7 @@ export default function PostCard(props) {
             {postData}
           </Grid>
           <Grid item xs={2}></Grid>
-          <Grid item xs={8}>
+          <Grid item xs={9}>
             <Typography
               display="inline"
               style={{
@@ -254,7 +250,7 @@ export default function PostCard(props) {
               );
             })}
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={1}>
             {profileOptions}
           </Grid>
           <Grid item xs={12} style={{ textAlign: "center" }}>
@@ -339,7 +335,7 @@ export default function PostCard(props) {
                 fontSize: "22px",
               }}
             >
-              {post.dateAndTime.substring(0,10)}
+              {post.dateAndTime.substring(0, 10)}
             </Typography>
           </Grid>
           <Grid item xs={3}>

@@ -28,6 +28,8 @@ export const GlobalCommunityActionType = {
   SET_DELETE_POST: "SET_DELETE_POST",
   SET_USER_PROFILE: "SET_USER_PROFILE",
   SET_CHANGE_BIO: "SET_CHANGE_BIO",
+  DELETE_POST: "DELETE_POST",
+  SEARCH_POSTS: "SEARCH_POSTS",
 };
 
 function GlobalCommunityContextProvider(props) {
@@ -46,6 +48,8 @@ function GlobalCommunityContextProvider(props) {
     deletePostModal: false,
     userProfile: auth.user,
     changeBioModal: false,
+    deletePost: null,
+    searchPosts: null,
   });
   const history = useHistory();
 
@@ -72,6 +76,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          deletePost: community.deletePost,
+          searchPosts: payload.communityPosts,
         });
       }
       case GlobalCommunityActionType.GET_COMMUNITYLIST: {
@@ -89,6 +95,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          deletePost: community.deletePost,
+          searchPosts: community.searchPosts,
         });
       }
       case GlobalCommunityActionType.UPDATE_COMMUNITYLIST: {
@@ -106,6 +114,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          deletePost: community.deletePost,
+          searchPosts: community.searchPosts,
         });
       }
       //For testing purpose only
@@ -124,11 +134,13 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          deletePost: community.deletePost,
+          searchPosts: community.searchPosts,
         });
       }
       case GlobalCommunityActionType.SET_COMMUNITY: {
         return setCommunity({
-          communityList: community.communityList,
+          communityList: payload.communityList,
           currentCommunity: payload.currentCommunity,
           communityPosts: payload.communityPosts,
           search: community.search,
@@ -141,6 +153,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          deletePost: community.deletePost,
+          searchPosts: payload.communityPosts,
         });
       }
       case GlobalCommunityActionType.SET_SCREEN: {
@@ -158,6 +172,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: auth.user,
           changeBioModal: community.changeBioModal,
+          deletePost: community.deletePost,
+          searchPosts: payload.communityPosts,
         });
       }
       case GlobalCommunityActionType.SET_DELETE_ACCOUNT: {
@@ -175,6 +191,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          deletePost: community.deletePost,
+          searchPosts: community.searchPosts,
         });
       }
       case GlobalCommunityActionType.SET_FEEDBACK: {
@@ -192,6 +210,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          deletePost: community.deletePost,
+          searchPosts: community.searchPosts,
         });
       }
       case GlobalCommunityActionType.SET_CHANGE_PASSWORD: {
@@ -209,6 +229,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          deletePost: community.deletePost,
+          searchPosts: community.searchPosts,
         });
       }
       case GlobalCommunityActionType.SET_DELETE_POST: {
@@ -223,9 +245,11 @@ function GlobalCommunityContextProvider(props) {
           deleteAccountModal: community.deleteAccountModal,
           changePasswordModal: community.changePasswordModal,
           feedbackModal: community.feedbackModal,
-          deletePostModal: payload,
+          deletePostModal: payload.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          deletePost: payload.deletePost,
+          searchPosts: community.searchPosts,
         });
       }
       case GlobalCommunityActionType.SET_USER_PROFILE: {
@@ -243,12 +267,15 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: payload,
           changeBioModal: community.changeBioModal,
+          deletePost: community.deletePost,
+          searchPosts: community.searchPosts,
         });
       }
       case GlobalCommunityActionType.SET_CHANGE_BIO: {
         return setCommunity({
           communityList: community.communityList,
           currentCommunity: community.currentCommunity,
+          communityPosts: community.communityPosts,
           search: community.search,
           errorMessage: community.errorMessage,
           sort: community.sort,
@@ -259,11 +286,68 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: payload,
+          deletePost: community.deletePost,
+          searchPosts: community.searchPosts,
+        });
+      }
+      case GlobalCommunityActionType.DELETE_POST: {
+        return setCommunity({
+          communityList: payload.communityList,
+          currentCommunity: community.currentCommunity,
+          communityPosts: payload.communityPosts,
+          search: community.search,
+          errorMessage: community.errorMessage,
+          sort: community.sort,
+          screen: community.screen,
+          deleteAccountModal: community.deleteAccountModal,
+          changePasswordModal: community.changePasswordModal,
+          feedbackModal: community.feedbackModal,
+          deletePostModal: false,
+          userProfile: community.userProfile,
+          changeBioModal: community.changeBioModal,
+          deletePost: null,
+          searchPosts: payload.communityPosts,
+        });
+      }
+      case GlobalCommunityActionType.SEARCH_POSTS: {
+        return setCommunity({
+          communityList: community.communityList,
+          currentCommunity: community.currentCommunity,
+          communityPosts: community.communityPosts,
+          search: community.search,
+          errorMessage: community.errorMessage,
+          sort: community.sort,
+          screen: community.screen,
+          deleteAccountModal: community.deleteAccountModal,
+          changePasswordModal: community.changePasswordModal,
+          feedbackModal: community.feedbackModal,
+          deletePostModal: community.deletePostModal,
+          userProfile: community.userProfile,
+          changeBioModal: community.changeBioModal,
+          deletePost: community.deletePost,
+          searchPosts: payload,
         });
       }
       default:
         return community;
     }
+  };
+
+  community.searchPostsUp = async function (search) {
+    search = search.toLowerCase();
+    let newCommunityPosts = [];
+    for (let i = 0; i < community.communityPosts.length; i++) {
+      if (
+        community.communityPosts[i].postTitle.toLowerCase().startsWith(search)
+      ) {
+        newCommunityPosts.push(community.communityPosts[i]);
+      }
+    }
+    console.log("search posts:", newCommunityPosts);
+    communityReducer({
+      type: GlobalCommunityActionType.SEARCH_POSTS,
+      payload: newCommunityPosts,
+    });
   };
 
   community.setUserProfile = async function (user) {
@@ -287,8 +371,14 @@ function GlobalCommunityContextProvider(props) {
               const comicResponse = await api.getComicById(post.postComic);
               console.log("comic:", comicResponse.data.comic);
               post.data = comicResponse.data.comic;
+            } else if (post.postStory) {
+              const storyResponse = await api.getStoryById(post.postStory);
+              console.log("story:", storyResponse.data.story);
+              post.data = storyResponse.data.story;
             }
-            communityPosts.push(post);
+            if (post.discoveryPublished) {
+              communityPosts.push(post);
+            }
           }
           console.log("posts found:", communityPosts);
         } catch (err) {
@@ -308,6 +398,10 @@ function GlobalCommunityContextProvider(props) {
               const comicResponse = await api.getComicById(post.postComic);
               console.log("comic:", comicResponse.data.comic);
               post.data = comicResponse.data.comic;
+            } else if (post.postStory) {
+              const storyResponse = await api.getStoryById(post.postStory);
+              console.log("story:", storyResponse.data.story);
+              post.data = storyResponse.data.story;
             }
             if (post.data.authors.includes(auth.user.username)) {
               communityPosts.push(post);
@@ -324,28 +418,33 @@ function GlobalCommunityContextProvider(props) {
       payload: { screen: screen, communityPosts: communityPosts },
     });
   };
-  community.setCommunity = async function (community) {
+  community.setCommunity = async function (setCommunity) {
     //first obtain all posts for this community
     let communityPosts = [];
-    console.log(community);
-    if (community == null) {
+    console.log(setCommunity);
+    if (setCommunity == null) {
       communityReducer({
         type: GlobalCommunityActionType.SET_COMMUNITY,
         payload: {
+          communityList: community.communityList,
           currentCommunity: null,
           communityPosts: null,
         },
       });
     } else {
       try {
-        for (let i = 0; i < community.communityPosts.length; i++) {
-          let postID = community.communityPosts[i];
+        for (let i = 0; i < setCommunity.communityPosts.length; i++) {
+          let postID = setCommunity.communityPosts[i];
           const response = await api.getPostById(postID);
           let post = response.data.post;
           if (post.postComic) {
             const comicResponse = await api.getComicById(post.postComic);
             console.log("comic:", comicResponse.data.comic);
             post.data = comicResponse.data.comic;
+          } else if (post.postStory) {
+            const storyResponse = await api.getStoryById(post.postStory);
+            console.log("story:", storyResponse.data.story);
+            post.data = storyResponse.data.story;
           }
           communityPosts.push(post);
         }
@@ -353,7 +452,8 @@ function GlobalCommunityContextProvider(props) {
         communityReducer({
           type: GlobalCommunityActionType.SET_COMMUNITY,
           payload: {
-            currentCommunity: community.communityName,
+            communityList: community.communityList,
+            currentCommunity: setCommunity.communityName,
             communityPosts: communityPosts,
           },
         });
@@ -368,11 +468,100 @@ function GlobalCommunityContextProvider(props) {
       payload: deleteAccount,
     });
   };
-  community.setDeletePost = async function (deletePost) {
+  community.setDeletePost = async function (deletePostModal, deletePost) {
     communityReducer({
       type: GlobalCommunityActionType.SET_DELETE_POST,
-      payload: deletePost,
+      payload: { deletePostModal: deletePostModal, deletePost: deletePost },
     });
+  };
+
+  community.removePost = async function () {
+    try {
+      //first delete comic
+      let post = community.deletePost;
+      if (post.postComic) {
+        let comicResponse = await api.deleteComicById(post.postComic);
+        if (comicResponse.status == 201) {
+          //next delete post
+          let postResponse = await api.deletePostById(post._id);
+          if (postResponse.status == 201) {
+            //delete postID from community
+            let comResponse = await api.searchCommunityByName(
+              post.communityName
+            );
+            console.log("Search Comm By Name returns: ", comResponse);
+            if (comResponse.status === 200) {
+              console.log("Found designated community");
+              console.log(post._id);
+              let newComm = comResponse.data.communityList[0];
+              console.log(newComm);
+
+              const index = newComm.communityPosts.indexOf(post._id);
+              if (index > -1) {
+                newComm.communityPosts.splice(index, 1); // 2nd parameter means remove one item only
+              }
+              let updateResponse = await api.updateCommunityById(
+                newComm._id,
+                newComm
+              );
+              if (updateResponse.status === 201) {
+                //update posts
+                const listResponse = await api.getCommunityList();
+                console.log(
+                  "getCommunities response: " + listResponse.data.communityList
+                );
+                if (listResponse.status === 201) {
+                  let communityList = listResponse.data.communityList;
+
+                  let communityPosts = [];
+                  for (let j = 0; j < communityList.length; j++) {
+                    let curCumm = communityList[j];
+
+                    try {
+                      for (let i = 0; i < curCumm.communityPosts.length; i++) {
+                        let postID = curCumm.communityPosts[i];
+                        const response = await api.getPostById(postID);
+                        let post = response.data.post;
+                        if (post.postComic) {
+                          const comicResponse = await api.getComicById(
+                            post.postComic
+                          );
+                          console.log("comic:", comicResponse.data.comic);
+                          post.data = comicResponse.data.comic;
+                        } else if (post.postStory) {
+                          const storyResponse = await api.getStoryById(
+                            post.postStory
+                          );
+                          console.log("story:", storyResponse.data.story);
+                          post.data = storyResponse.data.story;
+                        }
+                        if (post.data.authors.includes(auth.user.username)) {
+                          communityPosts.push(post);
+                        }
+                      }
+                      console.log("posts found:", communityPosts);
+
+                      communityReducer({
+                        type: GlobalCommunityActionType.DELETE_POST,
+                        payload: {
+                          communityPosts: communityPosts,
+                          communityList: communityList,
+                        },
+                      });
+                    } catch (err) {
+                      console.log("could not obtain posts:", err);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      } else if (post.postStory) {
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   community.setChangePassword = async function (changePassword) {
     communityReducer({
@@ -509,7 +698,7 @@ function GlobalCommunityContextProvider(props) {
           title,
           comicID,
           null,
-          [], 
+          [],
           [],
           true,
           false,
@@ -531,24 +720,145 @@ function GlobalCommunityContextProvider(props) {
               newComm._id,
               newComm
             );
-            if (updateResponse.status === 200) {
-              console.log("Post sucessfully pushed to community");
+            if (updateResponse.status === 201) {
+              //update posts
+              const listResponse = await api.getCommunityList();
+              console.log(
+                "getCommunities response: " + listResponse.data.communityList
+              );
+              if (listResponse.status === 201) {
+                let communityList = listResponse.data.communityList;
+
+                let curCommunity = null;
+                let communityPosts = [];
+
+                for (let k = 0; k < communityList.length; k++) {
+                  if (
+                    communityList[k].communityName == community.currentCommunity
+                  ) {
+                    curCommunity = communityList[k];
+                  }
+                }
+
+                try {
+                  for (let i = 0; i < curCommunity.communityPosts.length; i++) {
+                    let postID = curCommunity.communityPosts[i];
+                    const response = await api.getPostById(postID);
+                    let post = response.data.post;
+                    if (post.postComic) {
+                      const comicResponse = await api.getComicById(
+                        post.postComic
+                      );
+                      console.log("comic:", comicResponse.data.comic);
+                      post.data = comicResponse.data.comic;
+                    } else if (post.postStory) {
+                      const storyResponse = await api.getStoryById(
+                        post.postStory
+                      );
+                      console.log("story:", storyResponse.data.story);
+                      post.data = storyResponse.data.story;
+                    }
+                    communityPosts.push(post);
+                  }
+                  console.log("posts found:", communityPosts);
+                  communityReducer({
+                    type: GlobalCommunityActionType.SET_COMMUNITY,
+                    payload: {
+                      currentCommunity: curCommunity.communityName,
+                      communityPosts: communityPosts,
+                      communityList: communityList,
+                    },
+                  });
+                } catch (err) {
+                  console.log("could not obtain posts:", err);
+                }
+              }
             }
           }
         }
-      } else if (voteVal == "commDis") {
-        // let postResponse = await api.createPost({
-        //   postTitle: title,
-        //   postComic: comicID,
-        //   postStory: null,
-        //   likes: 0,
-        //   dislikes: 0,
-        //   communityPublished: true,
-        //   discoveryPublished: true,
-        //   dateAndTime: dateTime,
-        //   communityName: game.communityName,
-        // })
-        console.log("Community and Discovery Post Pushing TO BE DONE");
+      } else if (voteVal == "commdis") {
+        let postResponse = await api.createPost(
+          title,
+          comicID,
+          null,
+          [],
+          [],
+          true,
+          true,
+          dateTime,
+          game.communityName
+        );
+        if (postResponse.status === 200) {
+          console.log("Made post: ", postResponse.data.post);
+          let postID = postResponse.data.post._id;
+          let comResponse = await api.searchCommunityByName(game.communityName);
+          console.log("Search Comm By Name returns: ", comResponse);
+          if (comResponse.status === 200) {
+            console.log("Found designated community");
+            console.log(postID);
+            let newComm = comResponse.data.communityList[0];
+            console.log(newComm);
+            newComm.communityPosts.push(postID);
+            let updateResponse = await api.updateCommunityById(
+              newComm._id,
+              newComm
+            );
+            if (updateResponse.status === 201) {
+              //update posts
+              const listResponse = await api.getCommunityList();
+              console.log(
+                "getCommunities response: " + listResponse.data.communityList
+              );
+              if (listResponse.status === 201) {
+                let communityList = listResponse.data.communityList;
+
+                let curCommunity = null;
+                let communityPosts = [];
+
+                for (let k = 0; k < communityList.length; k++) {
+                  if (
+                    communityList[k].communityName == community.currentCommunity
+                  ) {
+                    curCommunity = communityList[k];
+                  }
+                }
+
+                try {
+                  for (let i = 0; i < curCommunity.communityPosts.length; i++) {
+                    let postID = curCommunity.communityPosts[i];
+                    const response = await api.getPostById(postID);
+                    let post = response.data.post;
+                    if (post.postComic) {
+                      const comicResponse = await api.getComicById(
+                        post.postComic
+                      );
+                      console.log("comic:", comicResponse.data.comic);
+                      post.data = comicResponse.data.comic;
+                    } else if (post.postStory) {
+                      const storyResponse = await api.getStoryById(
+                        post.postStory
+                      );
+                      console.log("story:", storyResponse.data.story);
+                      post.data = storyResponse.data.story;
+                    }
+                    communityPosts.push(post);
+                  }
+                  console.log("posts found:", communityPosts);
+                  communityReducer({
+                    type: GlobalCommunityActionType.SET_COMMUNITY,
+                    payload: {
+                      currentCommunity: curCommunity.communityName,
+                      communityPosts: communityPosts,
+                      communityList: communityList,
+                    },
+                  });
+                } catch (err) {
+                  console.log("could not obtain posts:", err);
+                }
+              }
+            }
+          }
+        }
       }
     }
   };

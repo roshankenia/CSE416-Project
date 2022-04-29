@@ -59,7 +59,7 @@ export default function Timer(props) {
 
   const [timer, setTimer] = useState(null);
 
-  let { stageRef, actions, setActions } = props;
+  let { stageRef, actions, setActions, storyText, setStoryText } = props;
   useEffect(() => {
     const countDown = async (count) => {
       console.log("Inside the countDown", count);
@@ -78,19 +78,25 @@ export default function Timer(props) {
         "Check to make sure all players are organized the same",
         game.players
       );
-      // check if game.turn == amount of panels
-      if (game.panelNumber - 1 == game.turn) {
-        game.enterVoting(stageRef.current.toDataURL());
-      } else {
-        console.log("stageref:", stageRef);
-        let imageData = stageRef.current.toDataURL();
-        setActions([]);
-        console.log(imageData);
+      //check game
+      if (game.gamemode == "comic") {
+        // check if game.turn == amount of panels
+        if (game.panelNumber - 1 == game.turn) {
+          game.enterVoting(stageRef.current.toDataURL());
+        } else {
+          console.log("stageref:", stageRef);
+          let imageData = stageRef.current.toDataURL();
+          setActions([]);
+          console.log("after reset:", actions);
+          console.log(imageData);
 
-        game.changeTurn(imageData);
-        if (auth.user.username === game.host) {
-          socket.emit("timer", auth.user.username, time, game.lobby);
+          game.changeTurn(imageData);
+          if (auth.user.username === game.host) {
+            socket.emit("timer", auth.user.username, time, game.lobby);
+          }
         }
+      } else if (game.gamemode == "story") {
+        console.log(storyText);
       }
     };
     socket.once("end-time", changeTurn);
@@ -99,7 +105,7 @@ export default function Timer(props) {
       socket.off("counter", countDown);
       socket.off("end-time", changeTurn);
     };
-  }, [timer, stageRef, actions]);
+  }, [timer, stageRef, actions, storyText]);
 
   return <Typography fontSize={"32px"}>Time Left: {timer}</Typography>;
 }
