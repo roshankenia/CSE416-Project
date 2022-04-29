@@ -122,7 +122,7 @@ io.on("connection", (socket) => {
 
   socket.on("edit-text", (text, lobbyID) => {
     console.log("sending text to:", lobbyID);
-    io.to(lobbyID).emit("sync-text", text);
+    socket.to(lobbyID).emit("sync-text", text);
   });
 
   socket.on("update-host", (host, lobbyID) => {
