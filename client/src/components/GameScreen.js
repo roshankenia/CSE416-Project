@@ -14,6 +14,9 @@ import GameTools from "./GameTools";
 import Timer from "./Timer";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+
+import ReactQuill from "react-quill";
+
 //#endregion imports
 
 //#region konva import
@@ -348,7 +351,7 @@ export default function GameScreen() {
       console.log(text);
       console.log("storyText before update:", storyText);
       setStoryText(text);
-      console.log("story text after update", storyText)
+      console.log("story text after update", storyText);
     };
 
     socket.on("sync-text", syncT);
@@ -366,17 +369,44 @@ export default function GameScreen() {
   );
 
   /* List of current panels drawn goes here */
-  const gamePanels = (
-    <Box sx={{ width: "70%", height: "70%" }}>
-      <ImageList sx={{ width: "95%" }} cols={6}>
-        {game.panels.map((picture) => (
-          <ImageListItem key={picture}>
-            <img src={picture} loading="lazy" />
-          </ImageListItem>
+  let gamePanels = "";
+  if (game.gamemode == "comic") {
+    gamePanels = (
+      <Box sx={{ width: "70%", height: "70%" }}>
+        <ImageList sx={{ width: "95%" }} cols={6}>
+          {game.panels.map((picture) => (
+            <ImageListItem key={picture}>
+              <img src={picture} loading="lazy" />
+            </ImageListItem>
+          ))}
+        </ImageList>
+      </Box>
+    );
+  } else if (game.gamemode == "story") {
+    gamePanels = (
+      <Grid container spacing={2}>
+        {game.panels.map((text) => (
+          <Grid
+            item
+            key={text}
+            xs={2}
+            sx={{
+              backgroundColor: "white",
+              border: 3,
+            }}
+            style={{ height: 200 }}
+          >
+            <ReactQuill
+              style={{ maxHeight: "100%", overflow: "auto" }}
+              readOnly={true}
+              theme="bubble"
+              value={text}
+            ></ReactQuill>
+          </Grid>
         ))}
-      </ImageList>
-    </Box>
-  );
+      </Grid>
+    );
+  }
 
   const isColorSelected = (buttonColor) => {
     if (color == buttonColor) {

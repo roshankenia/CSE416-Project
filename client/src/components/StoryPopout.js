@@ -7,6 +7,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Typography from "@mui/material/Typography";
 
+import ReactQuill from "react-quill";
+
 export default function StoryPopout(props) {
   const { post } = props;
   const [open, setOpen] = React.useState(false);
@@ -31,7 +33,11 @@ export default function StoryPopout(props) {
 
   return (
     <div>
-      <Typography>{post.data.panels[0] + " .....Story Continues"}</Typography>
+      <ReactQuill
+        readOnly={true}
+        theme="bubble"
+        value={post.data.panels[0]}
+      ></ReactQuill>
       <Button style={{ fontSize: 28 }} onClick={handleClickOpen()}>
         Read Full Story
       </Button>
@@ -50,7 +56,11 @@ export default function StoryPopout(props) {
             tabIndex={-1}
           >
             {post.data.panels.map((paragraph) => (
-              <Typography>{paragraph} </Typography>
+              <ReactQuill
+                readOnly={true}
+                theme="bubble"
+                value={paragraph}
+              ></ReactQuill>
             ))}
           </DialogContentText>
         </DialogContent>

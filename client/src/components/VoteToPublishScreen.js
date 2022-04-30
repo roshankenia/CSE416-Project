@@ -12,6 +12,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import Input from "@mui/material/Input";
+import ReactQuill from "react-quill";
 
 export default function VoteToPublishScreen() {
   const { game } = useContext(GameContext);
@@ -86,17 +87,44 @@ export default function VoteToPublishScreen() {
   };
 
   //hardcoded for now but should take the array of panels after game ends
-  const gamePanels = (
-    <Box sx={{ width: "90%", height: "90%" }}>
-      <ImageList sx={{ width: "95%" }} cols={6}>
-        {game.panels.map((picture) => (
-          <ImageListItem key={picture}>
-            <img src={picture} loading="lazy" />
-          </ImageListItem>
+  let gamePanels = "";
+  if (game.gamemode == "comic") {
+    gamePanels = (
+      <Box sx={{ width: "90%", height: "90%" }}>
+        <ImageList sx={{ width: "95%" }} cols={6}>
+          {game.panels.map((picture) => (
+            <ImageListItem key={picture}>
+              <img src={picture} loading="lazy" />
+            </ImageListItem>
+          ))}
+        </ImageList>
+      </Box>
+    );
+  } else if (game.gamemode == "story") {
+    gamePanels = (
+      <Grid container spacing={2}>
+        {game.panels.map((text) => (
+          <Grid
+            item
+            key={text}
+            xs={2}
+            sx={{
+              backgroundColor: "white",
+              border: 3,
+            }}
+            style={{ height: 200 }}
+          >
+            <ReactQuill
+              style={{ maxHeight: "100%", overflow: "auto" }}
+              readOnly={true}
+              theme="bubble"
+              value={text}
+            ></ReactQuill>
+          </Grid>
         ))}
-      </ImageList>
-    </Box>
-  );
+      </Grid>
+    );
+  }
 
   function submitAction(event, voteVal) {
     event.stopPropagation();
