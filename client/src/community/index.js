@@ -160,7 +160,7 @@ function GlobalCommunityContextProvider(props) {
       case GlobalCommunityActionType.SET_SCREEN: {
         return setCommunity({
           communityList: community.communityList,
-          currentCommunity: community.currentCommunity,
+          currentCommunity: null,
           communityPosts: payload.communityPosts,
           search: community.search,
           errorMessage: community.errorMessage,
@@ -413,6 +413,8 @@ function GlobalCommunityContextProvider(props) {
         }
       }
     }
+
+    console.log("community posts are:", communityPosts);
     communityReducer({
       type: GlobalCommunityActionType.SET_SCREEN,
       payload: { screen: screen, communityPosts: communityPosts },
@@ -558,6 +560,83 @@ function GlobalCommunityContextProvider(props) {
           }
         }
       } else if (post.postStory) {
+        let storyResponse = await api.deleteStoryById(post.postStory);
+        if (storyResponse.status == 201) {
+          //next delete post
+          let postResponse = await api.deletePostById(post._id);
+          if (postResponse.status == 201) {
+            //delete postID from community
+            let comResponse = await api.searchCommunityByName(
+              post.communityName
+            );
+            console.log("Search Comm By Name returns: ", comResponse);
+            if (comResponse.status === 200) {
+              console.log("Found designated community");
+              console.log(post._id);
+              let newComm = comResponse.data.communityList[0];
+              console.log(newComm);
+
+              const index = newComm.communityPosts.indexOf(post._id);
+              if (index > -1) {
+                newComm.communityPosts.splice(index, 1); // 2nd parameter means remove one item only
+              }
+              let updateResponse = await api.updateCommunityById(
+                newComm._id,
+                newComm
+              );
+              if (updateResponse.status === 201) {
+                //update posts
+                const listResponse = await api.getCommunityList();
+                console.log(
+                  "getCommunities response: " + listResponse.data.communityList
+                );
+                if (listResponse.status === 201) {
+                  let communityList = listResponse.data.communityList;
+
+                  let communityPosts = [];
+                  for (let j = 0; j < communityList.length; j++) {
+                    let curCumm = communityList[j];
+
+                    try {
+                      for (let i = 0; i < curCumm.communityPosts.length; i++) {
+                        let postID = curCumm.communityPosts[i];
+                        const response = await api.getPostById(postID);
+                        let post = response.data.post;
+                        if (post.postComic) {
+                          const comicResponse = await api.getComicById(
+                            post.postComic
+                          );
+                          console.log("comic:", comicResponse.data.comic);
+                          post.data = comicResponse.data.comic;
+                        } else if (post.postStory) {
+                          const storyResponse = await api.getStoryById(
+                            post.postStory
+                          );
+                          console.log("story:", storyResponse.data.story);
+                          post.data = storyResponse.data.story;
+                        }
+                        if (post.data.authors.includes(auth.user.username)) {
+                          communityPosts.push(post);
+                        }
+                      }
+                      console.log("posts found:", communityPosts);
+
+                      communityReducer({
+                        type: GlobalCommunityActionType.DELETE_POST,
+                        payload: {
+                          communityPosts: communityPosts,
+                          communityList: communityList,
+                        },
+                      });
+                    } catch (err) {
+                      console.log("could not obtain posts:", err);
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     } catch (error) {
       console.log(error);
