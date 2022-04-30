@@ -10,9 +10,11 @@ export const StoryEditor = (props) => {
     const socket = useContext(SocketContext);
   
     let { storyText, setStoryText,  game } = props;
+
     const handleChange = (text) => {
         console.log("updating:",text);
-        setStoryText(storyText)
+        setStoryText(text)
+        console.log("Setting store Text" ,storyText)
         socket.emit("edit-text", text, game.lobby);
     };
 

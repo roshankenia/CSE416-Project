@@ -231,7 +231,9 @@ export default function WaitingScreen(props) {
         actions={actions} 
         setActions={setActions}  
         storyText={storyText}
-        setStoryText={setStoryText}/>
+        setStoryText={setStoryText}>
+        {storyText}
+        </Timer>
       </Box>
 
       <Button
