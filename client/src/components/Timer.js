@@ -104,7 +104,7 @@ export default function Timer(props) {
         } 
         else {
           console.log("storyText:", storyText);
-          setStoryText(" ");
+          setStoryText("");
           console.log("after reset:", storyText);
 
           game.changeTurn(storyText);
