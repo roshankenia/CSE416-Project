@@ -76,9 +76,9 @@ io.on("connection", (socket) => {
     socket.to(lobbyID).emit("new-player", username, lobbyID);
   });
 
-  socket.on("consolidate-players", (players, readyPlayers, lobbyID) => {
+  socket.on("consolidate-players", (players, readyPlayers, lobbyID, gameMode) => {
     console.log("sending players to users in lobby ", lobbyID);
-    socket.to(lobbyID).emit("add-players", players, readyPlayers, lobbyID);
+    socket.to(lobbyID).emit("add-players", players, readyPlayers, lobbyID, gameMode);
   });
 
   socket.on("leave-lobby", (username, lobbyID) => {
