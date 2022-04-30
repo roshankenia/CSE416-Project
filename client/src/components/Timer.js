@@ -103,10 +103,8 @@ export default function Timer(props) {
           game.enterVoting(storyText);
         } 
         else {
-          console.log("storyText:", storyText);
+          //Might be uneccessary to do this here... Maybe reset the text whenever the turn starts?
           setStoryText("");
-          console.log("after reset:", storyText);
-
           game.changeTurn(storyText);
           if (auth.user.username === game.host) {
             socket.emit("timer", auth.user.username, time, game.lobby);

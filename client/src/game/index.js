@@ -178,7 +178,7 @@ function GameContextProvider(props) {
           panelNumber: null,
           communityName: game.communityName,
           panels: game.panels,
-          gamemode: game.gamemode,
+          gamemode: payload.gamemode,
         });
       }
       case GameActionType.LEAVE_LOBBY: {
@@ -286,15 +286,16 @@ function GameContextProvider(props) {
       }
       gameReducer({
         type: GameActionType.UPDATE_PLAYERS,
-        payload: { players: players, readyPlayers: game.readyPlayers },
+        payload: { players: players, readyPlayers: game.readyPlayers, gamemode: game.gamemode},
       });
 
       let readyPlayers = game.readyPlayers;
 
-      socket.emit("consolidate-players", players, readyPlayers, lobbyID);
 
       if (auth.user.username == game.host) {
         socket.emit("update-host", auth.user.username, lobbyID);
+        socket.emit("consolidate-players", players, readyPlayers, lobbyID, game.gamemode);
+
       }
     };
     socket.once("new-player", newP);
@@ -311,7 +312,7 @@ function GameContextProvider(props) {
 
     socket.once("add-host", addH);
 
-    const addP = async (addPlayer, addReady, lobbyID) => {
+    const addP = async (addPlayer, addReady, lobbyID, gameMode) => {
       console.log("adding all unknown players");
       let players = game.players;
       for (var i = 0; i < addPlayer.length; i++) {
@@ -331,7 +332,7 @@ function GameContextProvider(props) {
 
       gameReducer({
         type: GameActionType.UPDATE_PLAYERS,
-        payload: { players: players, readyPlayers: readyPlayers },
+        payload: { players: players, readyPlayers: readyPlayers, gamemode: gameMode },
       });
     };
     socket.once("add-players", addP);
@@ -353,7 +354,7 @@ function GameContextProvider(props) {
 
       gameReducer({
         type: GameActionType.UPDATE_PLAYERS,
-        payload: { players: players, readyPlayers: readyPlayers },
+        payload: { players: players, readyPlayers: readyPlayers, gamemode: game.gamemode },
       });
     };
 
