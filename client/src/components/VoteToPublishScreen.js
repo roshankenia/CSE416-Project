@@ -138,16 +138,10 @@ export default function VoteToPublishScreen() {
     console.log("sending vote to state")
     game.updateVotes(voteVal, auth.user.username);
     if (game.votes[0] + game.votes[1] + game.votes[2] == game.players.length){
-      console.log("all votes have been made");
-      const screen = "communities" 
-      
+      console.log("all votes have been made");      
       makePostingDecision()
-
-      //Possible problem here, I believe handleExitVoting 
-      //will only exit the last person to submit their vote.
-      //Everyone else will remain in the voting screen.
-      handleExitVoting()
     }
+    handleExitVoting()
   }
   if (auth.user.username = game.host){
     return (
