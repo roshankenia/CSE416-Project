@@ -133,7 +133,7 @@ export default function VoteToPublishScreen() {
   function submitAction(event, voteVal) {
     event.stopPropagation();
     console.log("sending vote to state")
-    game.updateVotes(voteVal);
+    game.updateVotes(voteVal, auth.user.username);
     if (game.votes[0] + game.votes[1] + game.votes[2] == game.players.length){
       console.log("all votes have been made");
       const screen = "communities" 

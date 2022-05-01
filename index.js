@@ -92,6 +92,11 @@ io.on("connection", (socket) => {
     socket.to(lobbyID).emit("player-ready", username);
   });
 
+  socket.on("update-votes", (voteVal, username, lobbyID) => {
+    console.log(username, "has voted");
+    socket.to(lobbyID).emit("update-votes-cb", voteVal, username);
+  });
+
   socket.on("timer", (username, time, lobbyID) => {
     let counter = time;
     let WinnerCountdown = setInterval(function () {

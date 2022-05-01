@@ -768,171 +768,346 @@ function GlobalCommunityContextProvider(props) {
   };
 
   community.makePost = async function (voteVal, title, dateTime, game) {
-    let response = await api.createComic(game.players, game.panels);
-    if (response.status === 200) {
-      console.log("Made comic: ", response.data.comic);
-      let comicID = response.data.comic._id;
-      if (voteVal == "comm") {
-        let postResponse = await api.createPost(
-          title,
-          comicID,
-          null,
-          [],
-          [],
-          true,
-          false,
-          dateTime,
-          game.communityName
-        );
-        if (postResponse.status === 200) {
-          console.log("Made post: ", postResponse.data.post);
-          let postID = postResponse.data.post._id;
-          let comResponse = await api.searchCommunityByName(game.communityName);
-          console.log("Search Comm By Name returns: ", comResponse);
-          if (comResponse.status === 200) {
-            console.log("Found designated community");
-            console.log(postID);
-            let newComm = comResponse.data.communityList[0];
-            console.log(newComm);
-            newComm.communityPosts.push(postID);
-            let updateResponse = await api.updateCommunityById(
-              newComm._id,
-              newComm
-            );
-            if (updateResponse.status === 201) {
-              //update posts
-              const listResponse = await api.getCommunityList();
-              console.log(
-                "getCommunities response: " + listResponse.data.communityList
+    if (game.gamemode == "comic"){
+      let response = await api.createComic(game.players, game.panels);
+      if (response.status === 200) {
+        console.log("Made comic: ", response.data.comic);
+        let comicID = response.data.comic._id;
+        if (voteVal == "comm") {
+          let postResponse = await api.createPost(
+            title,
+            comicID,
+            null,
+            [],
+            [],
+            true,
+            false,
+            dateTime,
+            game.communityName
+          );
+          if (postResponse.status === 200) {
+            console.log("Made post: ", postResponse.data.post);
+            let postID = postResponse.data.post._id;
+            let comResponse = await api.searchCommunityByName(game.communityName);
+            console.log("Search Comm By Name returns: ", comResponse);
+            if (comResponse.status === 200) {
+              console.log("Found designated community");
+              console.log(postID);
+              let newComm = comResponse.data.communityList[0];
+              console.log(newComm);
+              newComm.communityPosts.push(postID);
+              let updateResponse = await api.updateCommunityById(
+                newComm._id,
+                newComm
               );
-              if (listResponse.status === 201) {
-                let communityList = listResponse.data.communityList;
+              if (updateResponse.status === 201) {
+                //update posts
+                const listResponse = await api.getCommunityList();
+                console.log(
+                  "getCommunities response: " + listResponse.data.communityList
+                );
+                if (listResponse.status === 201) {
+                  let communityList = listResponse.data.communityList;
 
-                let curCommunity = null;
-                let communityPosts = [];
+                  let curCommunity = null;
+                  let communityPosts = [];
 
-                for (let k = 0; k < communityList.length; k++) {
-                  if (
-                    communityList[k].communityName == community.currentCommunity
-                  ) {
-                    curCommunity = communityList[k];
+                  for (let k = 0; k < communityList.length; k++) {
+                    if (
+                      communityList[k].communityName == community.currentCommunity
+                    ) {
+                      curCommunity = communityList[k];
+                    }
+                  }
+
+                  try {
+                    for (let i = 0; i < curCommunity.communityPosts.length; i++) {
+                      let postID = curCommunity.communityPosts[i];
+                      const response = await api.getPostById(postID);
+                      let post = response.data.post;
+                      if (post.postComic) {
+                        const comicResponse = await api.getComicById(
+                          post.postComic
+                        );
+                        console.log("comic:", comicResponse.data.comic);
+                        post.data = comicResponse.data.comic;
+                      } else if (post.postStory) {
+                        const storyResponse = await api.getStoryById(
+                          post.postStory
+                        );
+                        console.log("story:", storyResponse.data.story);
+                        post.data = storyResponse.data.story;
+                      }
+                      communityPosts.push(post);
+                    }
+                    console.log("posts found:", communityPosts);
+                    communityReducer({
+                      type: GlobalCommunityActionType.SET_COMMUNITY,
+                      payload: {
+                        currentCommunity: curCommunity.communityName,
+                        communityPosts: communityPosts,
+                        communityList: communityList,
+                      },
+                    });
+                  } catch (err) {
+                    console.log("could not obtain posts:", err);
                   }
                 }
+              }
+            }
+          }
+        } else if (voteVal == "commdis") {
+          let postResponse = await api.createPost(
+            title,
+            comicID,
+            null,
+            [],
+            [],
+            true,
+            true,
+            dateTime,
+            game.communityName
+          );
+          if (postResponse.status === 200) {
+            console.log("Made post: ", postResponse.data.post);
+            let postID = postResponse.data.post._id;
+            let comResponse = await api.searchCommunityByName(game.communityName);
+            console.log("Search Comm By Name returns: ", comResponse);
+            if (comResponse.status === 200) {
+              console.log("Found designated community");
+              console.log(postID);
+              let newComm = comResponse.data.communityList[0];
+              console.log(newComm);
+              newComm.communityPosts.push(postID);
+              let updateResponse = await api.updateCommunityById(
+                newComm._id,
+                newComm
+              );
+              if (updateResponse.status === 201) {
+                //update posts
+                const listResponse = await api.getCommunityList();
+                console.log(
+                  "getCommunities response: " + listResponse.data.communityList
+                );
+                if (listResponse.status === 201) {
+                  let communityList = listResponse.data.communityList;
 
-                try {
-                  for (let i = 0; i < curCommunity.communityPosts.length; i++) {
-                    let postID = curCommunity.communityPosts[i];
-                    const response = await api.getPostById(postID);
-                    let post = response.data.post;
-                    if (post.postComic) {
-                      const comicResponse = await api.getComicById(
-                        post.postComic
-                      );
-                      console.log("comic:", comicResponse.data.comic);
-                      post.data = comicResponse.data.comic;
-                    } else if (post.postStory) {
-                      const storyResponse = await api.getStoryById(
-                        post.postStory
-                      );
-                      console.log("story:", storyResponse.data.story);
-                      post.data = storyResponse.data.story;
+                  let curCommunity = null;
+                  let communityPosts = [];
+
+                  for (let k = 0; k < communityList.length; k++) {
+                    if (
+                      communityList[k].communityName == community.currentCommunity
+                    ) {
+                      curCommunity = communityList[k];
                     }
-                    communityPosts.push(post);
                   }
-                  console.log("posts found:", communityPosts);
-                  communityReducer({
-                    type: GlobalCommunityActionType.SET_COMMUNITY,
-                    payload: {
-                      currentCommunity: curCommunity.communityName,
-                      communityPosts: communityPosts,
-                      communityList: communityList,
-                    },
-                  });
-                } catch (err) {
-                  console.log("could not obtain posts:", err);
+
+                  try {
+                    for (let i = 0; i < curCommunity.communityPosts.length; i++) {
+                      let postID = curCommunity.communityPosts[i];
+                      const response = await api.getPostById(postID);
+                      let post = response.data.post;
+                      if (post.postComic) {
+                        const comicResponse = await api.getComicById(
+                          post.postComic
+                        );
+                        console.log("comic:", comicResponse.data.comic);
+                        post.data = comicResponse.data.comic;
+                      } else if (post.postStory) {
+                        const storyResponse = await api.getStoryById(
+                          post.postStory
+                        );
+                        console.log("story:", storyResponse.data.story);
+                        post.data = storyResponse.data.story;
+                      }
+                      communityPosts.push(post);
+                    }
+                    console.log("posts found:", communityPosts);
+                    communityReducer({
+                      type: GlobalCommunityActionType.SET_COMMUNITY,
+                      payload: {
+                        currentCommunity: curCommunity.communityName,
+                        communityPosts: communityPosts,
+                        communityList: communityList,
+                      },
+                    });
+                  } catch (err) {
+                    console.log("could not obtain posts:", err);
+                  }
                 }
               }
             }
           }
         }
-      } else if (voteVal == "commdis") {
-        let postResponse = await api.createPost(
-          title,
-          comicID,
-          null,
-          [],
-          [],
-          true,
-          true,
-          dateTime,
-          game.communityName
-        );
-        if (postResponse.status === 200) {
-          console.log("Made post: ", postResponse.data.post);
-          let postID = postResponse.data.post._id;
-          let comResponse = await api.searchCommunityByName(game.communityName);
-          console.log("Search Comm By Name returns: ", comResponse);
-          if (comResponse.status === 200) {
-            console.log("Found designated community");
-            console.log(postID);
-            let newComm = comResponse.data.communityList[0];
-            console.log(newComm);
-            newComm.communityPosts.push(postID);
-            let updateResponse = await api.updateCommunityById(
-              newComm._id,
-              newComm
-            );
-            if (updateResponse.status === 201) {
-              //update posts
-              const listResponse = await api.getCommunityList();
-              console.log(
-                "getCommunities response: " + listResponse.data.communityList
+      }
+    } else if (game.gamemode == "story"){
+      let response = await api.createComic(game.players, game.panels);
+      if (response.status === 200) {
+        console.log("Made comic: ", response.data.comic);
+        let comicID = response.data.comic._id;
+        if (voteVal == "comm") {
+          let postResponse = await api.createPost(
+            title,
+            comicID,
+            null,
+            [],
+            [],
+            true,
+            false,
+            dateTime,
+            game.communityName
+          );
+          if (postResponse.status === 200) {
+            console.log("Made post: ", postResponse.data.post);
+            let postID = postResponse.data.post._id;
+            let comResponse = await api.searchCommunityByName(game.communityName);
+            console.log("Search Comm By Name returns: ", comResponse);
+            if (comResponse.status === 200) {
+              console.log("Found designated community");
+              console.log(postID);
+              let newComm = comResponse.data.communityList[0];
+              console.log(newComm);
+              newComm.communityPosts.push(postID);
+              let updateResponse = await api.updateCommunityById(
+                newComm._id,
+                newComm
               );
-              if (listResponse.status === 201) {
-                let communityList = listResponse.data.communityList;
+              if (updateResponse.status === 201) {
+                //update posts
+                const listResponse = await api.getCommunityList();
+                console.log(
+                  "getCommunities response: " + listResponse.data.communityList
+                );
+                if (listResponse.status === 201) {
+                  let communityList = listResponse.data.communityList;
 
-                let curCommunity = null;
-                let communityPosts = [];
+                  let curCommunity = null;
+                  let communityPosts = [];
 
-                for (let k = 0; k < communityList.length; k++) {
-                  if (
-                    communityList[k].communityName == community.currentCommunity
-                  ) {
-                    curCommunity = communityList[k];
+                  for (let k = 0; k < communityList.length; k++) {
+                    if (
+                      communityList[k].communityName == community.currentCommunity
+                    ) {
+                      curCommunity = communityList[k];
+                    }
+                  }
+
+                  try {
+                    for (let i = 0; i < curCommunity.communityPosts.length; i++) {
+                      let postID = curCommunity.communityPosts[i];
+                      const response = await api.getPostById(postID);
+                      let post = response.data.post;
+                      if (post.postComic) {
+                        const comicResponse = await api.getComicById(
+                          post.postComic
+                        );
+                        console.log("comic:", comicResponse.data.comic);
+                        post.data = comicResponse.data.comic;
+                      } else if (post.postStory) {
+                        const storyResponse = await api.getStoryById(
+                          post.postStory
+                        );
+                        console.log("story:", storyResponse.data.story);
+                        post.data = storyResponse.data.story;
+                      }
+                      communityPosts.push(post);
+                    }
+                    console.log("posts found:", communityPosts);
+                    communityReducer({
+                      type: GlobalCommunityActionType.SET_COMMUNITY,
+                      payload: {
+                        currentCommunity: curCommunity.communityName,
+                        communityPosts: communityPosts,
+                        communityList: communityList,
+                      },
+                    });
+                  } catch (err) {
+                    console.log("could not obtain posts:", err);
                   }
                 }
+              }
+            }
+          }
+        } else if (voteVal == "commdis") {
+          let postResponse = await api.createPost(
+            title,
+            comicID,
+            null,
+            [],
+            [],
+            true,
+            true,
+            dateTime,
+            game.communityName
+          );
+          if (postResponse.status === 200) {
+            console.log("Made post: ", postResponse.data.post);
+            let postID = postResponse.data.post._id;
+            let comResponse = await api.searchCommunityByName(game.communityName);
+            console.log("Search Comm By Name returns: ", comResponse);
+            if (comResponse.status === 200) {
+              console.log("Found designated community");
+              console.log(postID);
+              let newComm = comResponse.data.communityList[0];
+              console.log(newComm);
+              newComm.communityPosts.push(postID);
+              let updateResponse = await api.updateCommunityById(
+                newComm._id,
+                newComm
+              );
+              if (updateResponse.status === 201) {
+                //update posts
+                const listResponse = await api.getCommunityList();
+                console.log(
+                  "getCommunities response: " + listResponse.data.communityList
+                );
+                if (listResponse.status === 201) {
+                  let communityList = listResponse.data.communityList;
 
-                try {
-                  for (let i = 0; i < curCommunity.communityPosts.length; i++) {
-                    let postID = curCommunity.communityPosts[i];
-                    const response = await api.getPostById(postID);
-                    let post = response.data.post;
-                    if (post.postComic) {
-                      const comicResponse = await api.getComicById(
-                        post.postComic
-                      );
-                      console.log("comic:", comicResponse.data.comic);
-                      post.data = comicResponse.data.comic;
-                    } else if (post.postStory) {
-                      const storyResponse = await api.getStoryById(
-                        post.postStory
-                      );
-                      console.log("story:", storyResponse.data.story);
-                      post.data = storyResponse.data.story;
+                  let curCommunity = null;
+                  let communityPosts = [];
+
+                  for (let k = 0; k < communityList.length; k++) {
+                    if (
+                      communityList[k].communityName == community.currentCommunity
+                    ) {
+                      curCommunity = communityList[k];
                     }
-                    communityPosts.push(post);
                   }
-                  console.log("posts found:", communityPosts);
-                  communityReducer({
-                    type: GlobalCommunityActionType.SET_COMMUNITY,
-                    payload: {
-                      currentCommunity: curCommunity.communityName,
-                      communityPosts: communityPosts,
-                      communityList: communityList,
-                    },
-                  });
-                } catch (err) {
-                  console.log("could not obtain posts:", err);
+
+                  try {
+                    for (let i = 0; i < curCommunity.communityPosts.length; i++) {
+                      let postID = curCommunity.communityPosts[i];
+                      const response = await api.getPostById(postID);
+                      let post = response.data.post;
+                      if (post.postComic) {
+                        const comicResponse = await api.getComicById(
+                          post.postComic
+                        );
+                        console.log("comic:", comicResponse.data.comic);
+                        post.data = comicResponse.data.comic;
+                      } else if (post.postStory) {
+                        const storyResponse = await api.getStoryById(
+                          post.postStory
+                        );
+                        console.log("story:", storyResponse.data.story);
+                        post.data = storyResponse.data.story;
+                      }
+                      communityPosts.push(post);
+                    }
+                    console.log("posts found:", communityPosts);
+                    communityReducer({
+                      type: GlobalCommunityActionType.SET_COMMUNITY,
+                      payload: {
+                        currentCommunity: curCommunity.communityName,
+                        communityPosts: communityPosts,
+                        communityList: communityList,
+                      },
+                    });
+                  } catch (err) {
+                    console.log("could not obtain posts:", err);
+                  }
                 }
               }
             }
