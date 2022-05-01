@@ -47,23 +47,6 @@ export default function VoteToPublishScreen() {
     setValue(event.target.value);
   };
 
-  // function changeSubmit(voteVal) {
-  //     let submitButton = document.getElementById("vote-submit-button");
-  //     if (voteVal == "comm"){
-  //         submitButton.onClick = "handleWrapPostComm";
-  //         console.log(submitButton)
-  //         console.log(submitButton.onClick)
-  //     } else if (voteVal == "commdis"){
-  //         submitButton.onClick = "handleWrapPostCommDis";
-  //         console.log(submitButton)
-  //         console.log(submitButton.onClick)
-  //     } else {
-  //         submitButton.onClick = "handleExitVoting";
-  //         console.log(submitButton)
-  //         console.log(submitButton.onClick)
-  //     }
-  // }
-
   const [title, setTitle] = useState("Untitled");
 
   function handleChangeTitle(event) {
@@ -126,16 +109,40 @@ export default function VoteToPublishScreen() {
     );
   }
 
+  function makePostingDecision() {
+    const arr = game.votes;
+    console.log("votes:", arr)
+    const max = Math.max(...arr)
+    console.log("max value: ", max)
+    const decisionVal = arr.indexOf(max);
+    console.log("index of max:", decisionVal)
+    if (decisionVal == 0) {
+      console.log("Voting Decision: Scrap")
+    } else if (decisionVal == 1) {
+      console.log("Voting Decision: Community")
+      community.makePost("comm", title, dateTime, game);
+    } else if (decisionVal == 2) {
+      console.log("Voting Decision: Community and Discovery")
+      community.makePost("commdis", title, dateTime, game);
+    } else {
+      console.log("error: improper decision value")
+      console.log("post was not posted")
+    }
+  }
+
   function submitAction(event, voteVal) {
     event.stopPropagation();
-    if (voteVal == "scrap") {
-      handleExitVoting();
-    } else if (voteVal == "comm" || voteVal == "commdis") {
-      community.makePost(voteVal, title, dateTime, game);
-      handleExitVoting();
-    } else {
-      console.log("Improper voting value");
-      handleExitVoting();
+    console.log("sending vote to state")
+    game.updateVotes(voteVal);
+    if (game.votes[0] + game.votes[1] + game.votes[2] == game.players.length){
+      const screen = "communities" 
+      
+      makePostingDecision()
+
+      //Possible problem here, I believe handleExitVoting 
+      //will only exit the last person to submit their vote.
+      //Everyone else will remain in the voting screen.
+      handleExitVoting()
     }
   }
 

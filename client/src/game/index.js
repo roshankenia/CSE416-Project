@@ -21,6 +21,7 @@ export const GameActionType = {
   UPDATE_TIMER: "UPDATE_TIMER",
   NEXT_TURN: "NEXT_TURN",
   CHANGE_GAMEMODE: "CHANGE_GAMEMODE",
+  UPDATE_VOTES: "UPDATE_VOTES",
 };
 
 function GameContextProvider(props) {
@@ -35,6 +36,7 @@ function GameContextProvider(props) {
     game: null,
     lobby: null,
     voting: false,
+    votes: [0, 0, 0],
     players: [],
     readyPlayers: [],
     screen: "lobby",
@@ -59,6 +61,7 @@ function GameContextProvider(props) {
           game: null,
           lobby: payload.lobbyID,
           voting: game.voting,
+          votes: game.votes,
           players: payload.players,
           readyPlayers: game.readyPlayers,
           screen: "lobby",
@@ -77,6 +80,7 @@ function GameContextProvider(props) {
           game: game.game,
           lobby: game.lobby,
           voting: game.voting,
+          votes: game.votes,
           players: game.players,
           readyPlayers: game.readyPlayers,
           screen: game.screen,
@@ -96,6 +100,7 @@ function GameContextProvider(props) {
           //need lobbyID to keep socket connection
           lobby: game.lobby,
           voting: game.voting,
+          votes: game.votes,
           players: payload.players,
           readyPlayers: game.readyPlayers,
           screen: "game",
@@ -114,6 +119,7 @@ function GameContextProvider(props) {
           game: game.game,
           lobby: game.lobby,
           voting: true,
+          votes: game.votes,
           players: game.players,
           readyPlayers: game.readyPlayers,
           screen: "voting",
@@ -132,6 +138,7 @@ function GameContextProvider(props) {
           game: game.game,
           lobby: game.lobby,
           voting: false,
+          votes: game.votes,
           players: game.players,
           readyPlayers: game.readyPlayers,
           screen: "lobby",
@@ -150,6 +157,7 @@ function GameContextProvider(props) {
           game: game.game,
           lobby: payload.lobby,
           voting: game.voting,
+          votes: game.votes,
           players: payload.players,
           readyPlayers: game.readyPlayers,
           screen: "lobby",
@@ -168,6 +176,7 @@ function GameContextProvider(props) {
           game: game.game,
           lobby: game.lobby,
           voting: game.voting,
+          votes: game.votes,
           players: payload.players,
           readyPlayers: payload.readyPlayers,
           screen: game.screen,
@@ -186,6 +195,7 @@ function GameContextProvider(props) {
           game: game.game,
           lobby: null,
           voting: game.voting,
+          votes: game.votes,
           players: [],
           readyPlayers: [],
           screen: game.screen,
@@ -204,6 +214,7 @@ function GameContextProvider(props) {
           game: game.game,
           lobby: game.lobby,
           voting: game.voting,
+          votes: game.votes,
           players: game.players,
           readyPlayers: payload,
           screen: game.screen,
@@ -222,6 +233,7 @@ function GameContextProvider(props) {
           game: game.game,
           lobby: game.lobby,
           voting: game.voting,
+          votes: game.votes,
           players: game.players,
           readyPlayers: game.readyPlayers,
           screen: game.screen,
@@ -239,6 +251,7 @@ function GameContextProvider(props) {
           game: game.game,
           lobby: game.lobby,
           voting: game.voting,
+          votes: game.votes,
           players: game.players,
           readyPlayers: game.readyPlayers,
           screen: game.screen,
@@ -256,6 +269,7 @@ function GameContextProvider(props) {
           game: game.game,
           lobby: game.lobby,
           voting: game.voting,
+          votes: game.votes,
           players: game.players,
           readyPlayers: game.readyPlayers,
           screen: game.screen,
@@ -266,6 +280,24 @@ function GameContextProvider(props) {
           communityName: game.communityName,
           panels: game.panels,
           gamemode: payload,
+        });
+      }
+      case GameActionType.UPDATE_VOTES: {
+        return setGame({
+          game: game.game,
+          lobby: game.lobby,
+          voting: game.voting,
+          votes: payload,
+          players: game.players,
+          readyPlayers: game.readyPlayers,
+          screen: game.screen,
+          host: game.host,
+          turn: game.turn,
+          currentPlayer: game.currentPlayer,
+          panelNumber: game.panelNumber,
+          communityName: game.communityName,
+          panels: game.panels,
+          gamemode: game.gamemode,
         });
       }
       default:
@@ -589,6 +621,38 @@ function GameContextProvider(props) {
       console.log("error buddy");
     }
   };
+
+  game.updateVotes = async function (voteVal) {
+    try{
+      let votesArr = game.votes
+      if (voteVal == "scrap"){
+        console.log("vote to scrap was made")
+        votesArr[0] = votesArr[0] + 1
+        gameReducer({
+          type: GameActionType.UPDATE_VOTES,
+          payload: votesArr,
+        });
+      } else if (voteVal == "comm"){
+        console.log("vote to comm was made")
+        votesArr[1] = votesArr[1] + 1
+        gameReducer({
+          type: GameActionType.UPDATE_VOTES,
+          payload: votesArr,
+        });
+      } else if (voteVal == "commdis"){
+        console.log("vote to commdis was made")
+        votesArr[2] = votesArr[2] + 1
+        gameReducer({
+          type: GameActionType.UPDATE_VOTES,
+          payload: votesArr,
+        });
+      } else {
+        console.log("error in updating votes: vote value not found")
+      }
+    } catch {
+      console.log("error in updating votes")
+    }
+  }
 
   //TIMER CODE- make sure time only starts when start game happens
   game.setTimer = async function (time) {
