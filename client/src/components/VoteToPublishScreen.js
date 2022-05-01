@@ -2,6 +2,7 @@ import { Grid, Typography, List, Box, Button } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalCommunityContext } from "../community";
 import { GameContext } from "../game";
+import AuthContext from "../auth";
 
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
@@ -17,6 +18,8 @@ import ReactQuill from "react-quill";
 export default function VoteToPublishScreen() {
   const { game } = useContext(GameContext);
   const { community } = useContext(GlobalCommunityContext);
+  const { auth } = useContext(AuthContext);
+
 
   const style = {
     // position: "absolute",
@@ -112,7 +115,7 @@ export default function VoteToPublishScreen() {
   function makePostingDecision() {
     const arr = game.votes;
     console.log("votes:", arr)
-    const max = Math.max(...arr)
+    const max = Math.max(arr[0], arr[1], arr[2])
     console.log("max value: ", max)
     const decisionVal = arr.indexOf(max);
     console.log("index of max:", decisionVal)

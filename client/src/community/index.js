@@ -942,14 +942,14 @@ function GlobalCommunityContextProvider(props) {
         }
       }
     } else if (game.gamemode == "story"){
-      let response = await api.createComic(game.players, game.panels);
+      let response = await api.createStory(game.players, game.panels);
       if (response.status === 200) {
-        console.log("Made comic: ", response.data.comic);
-        let comicID = response.data.comic._id;
+        console.log("Made story: ", response.data.story);
+        let storyID = response.data.story._id;
         if (voteVal == "comm") {
           let postResponse = await api.createPost(
             title,
-            comicID,
+            storyID,
             null,
             [],
             [],
@@ -1032,7 +1032,7 @@ function GlobalCommunityContextProvider(props) {
         } else if (voteVal == "commdis") {
           let postResponse = await api.createPost(
             title,
-            comicID,
+            storyID,
             null,
             [],
             [],
