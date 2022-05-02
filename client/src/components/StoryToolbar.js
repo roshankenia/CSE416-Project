@@ -58,14 +58,14 @@ export const formats = [
 export const StoryToolbar = () => (
   <div id="toolbar">
     <span className="ql-formats">
-      <select className="ql-font" >
+      {/* <select className="ql-font" >
         <option value="arial" select>Arial</option>
         <option value="comic-sans">Comic Sans</option>
         <option value="courier-new">Courier New</option>
         <option value="georgia">Georgia</option>
         <option value="helvetica">Helvetica</option>
         <option value="lucida">Lucida</option>
-      </select>
+      </select> */}
       <select className="ql-size" defaultValue="medium">
         <option value="extra-small">Size 1</option>
         <option value="small">Size 2</option>
