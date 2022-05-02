@@ -142,7 +142,7 @@ export default function VoteToPublishScreen() {
     }
     handleExitVoting();
   }
-  if ((auth.user.username = game.host)) {
+  if ((auth.user.username == game.host)) {
     return (
       <Grid
         container
