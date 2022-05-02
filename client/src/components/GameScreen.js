@@ -48,8 +48,9 @@ export default function GameScreen() {
   const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
   const socket = useContext(SocketContext);
-
+ 
   const [storyText, setStoryText] = React.useState("");
+  const charLimit = 230;
 
   //#region css
   const buttonCSS = { color: "black", fontSize: "40pt" };
@@ -57,7 +58,6 @@ export default function GameScreen() {
 
   //#region game control
 
-  //#region not-timer
   const [characterToggle, setCharacterToggle] = useState(false);
   const toggleCharacters = () => {
     if (!characterToggle) {
@@ -122,7 +122,6 @@ export default function GameScreen() {
       },
     },
   }));
-  //#endregion not-timer
 
   //#endregion game control
 
@@ -580,6 +579,7 @@ export default function GameScreen() {
         <StoryEditor
           storyText={storyText}
           setStoryText={setStoryText}
+          charLimit={charLimit}
           game={game}
         />
       </Grid>
@@ -811,7 +811,7 @@ export default function GameScreen() {
             color: "black",
           }}
         >
-          {"Characters Left: 237"}
+          {"Characters Left: "} {charLimit - storyText.replace(/<\/?[^>]+(>|$)/g, "").length}
         </Typography>
         <Button
           sx={{
