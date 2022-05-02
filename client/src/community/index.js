@@ -768,7 +768,7 @@ function GlobalCommunityContextProvider(props) {
   };
 
   community.makePost = async function (voteVal, title, dateTime, game) {
-    if (game.gamemode == "comic"){
+    if (game.gamemode == "comic") {
       let response = await api.createComic(game.players, game.panels);
       if (response.status === 200) {
         console.log("Made comic: ", response.data.comic);
@@ -788,7 +788,9 @@ function GlobalCommunityContextProvider(props) {
           if (postResponse.status === 200) {
             console.log("Made post: ", postResponse.data.post);
             let postID = postResponse.data.post._id;
-            let comResponse = await api.searchCommunityByName(game.communityName);
+            let comResponse = await api.searchCommunityByName(
+              game.communityName
+            );
             console.log("Search Comm By Name returns: ", comResponse);
             if (comResponse.status === 200) {
               console.log("Found designated community");
@@ -814,14 +816,19 @@ function GlobalCommunityContextProvider(props) {
 
                   for (let k = 0; k < communityList.length; k++) {
                     if (
-                      communityList[k].communityName == community.currentCommunity
+                      communityList[k].communityName ==
+                      community.currentCommunity
                     ) {
                       curCommunity = communityList[k];
                     }
                   }
 
                   try {
-                    for (let i = 0; i < curCommunity.communityPosts.length; i++) {
+                    for (
+                      let i = 0;
+                      i < curCommunity.communityPosts.length;
+                      i++
+                    ) {
                       let postID = curCommunity.communityPosts[i];
                       const response = await api.getPostById(postID);
                       let post = response.data.post;
@@ -871,7 +878,9 @@ function GlobalCommunityContextProvider(props) {
           if (postResponse.status === 200) {
             console.log("Made post: ", postResponse.data.post);
             let postID = postResponse.data.post._id;
-            let comResponse = await api.searchCommunityByName(game.communityName);
+            let comResponse = await api.searchCommunityByName(
+              game.communityName
+            );
             console.log("Search Comm By Name returns: ", comResponse);
             if (comResponse.status === 200) {
               console.log("Found designated community");
@@ -897,14 +906,19 @@ function GlobalCommunityContextProvider(props) {
 
                   for (let k = 0; k < communityList.length; k++) {
                     if (
-                      communityList[k].communityName == community.currentCommunity
+                      communityList[k].communityName ==
+                      community.currentCommunity
                     ) {
                       curCommunity = communityList[k];
                     }
                   }
 
                   try {
-                    for (let i = 0; i < curCommunity.communityPosts.length; i++) {
+                    for (
+                      let i = 0;
+                      i < curCommunity.communityPosts.length;
+                      i++
+                    ) {
                       let postID = curCommunity.communityPosts[i];
                       const response = await api.getPostById(postID);
                       let post = response.data.post;
@@ -941,7 +955,7 @@ function GlobalCommunityContextProvider(props) {
           }
         }
       }
-    } else if (game.gamemode == "story"){
+    } else if (game.gamemode == "story") {
       let response = await api.createStory(game.players, game.panels);
       if (response.status === 200) {
         console.log("Made story: ", response.data.story);
@@ -961,7 +975,9 @@ function GlobalCommunityContextProvider(props) {
           if (postResponse.status === 200) {
             console.log("Made post: ", postResponse.data.post);
             let postID = postResponse.data.post._id;
-            let comResponse = await api.searchCommunityByName(game.communityName);
+            let comResponse = await api.searchCommunityByName(
+              game.communityName
+            );
             console.log("Search Comm By Name returns: ", comResponse);
             if (comResponse.status === 200) {
               console.log("Found designated community");
@@ -987,14 +1003,19 @@ function GlobalCommunityContextProvider(props) {
 
                   for (let k = 0; k < communityList.length; k++) {
                     if (
-                      communityList[k].communityName == community.currentCommunity
+                      communityList[k].communityName ==
+                      community.currentCommunity
                     ) {
                       curCommunity = communityList[k];
                     }
                   }
 
                   try {
-                    for (let i = 0; i < curCommunity.communityPosts.length; i++) {
+                    for (
+                      let i = 0;
+                      i < curCommunity.communityPosts.length;
+                      i++
+                    ) {
                       let postID = curCommunity.communityPosts[i];
                       const response = await api.getPostById(postID);
                       let post = response.data.post;
@@ -1044,7 +1065,9 @@ function GlobalCommunityContextProvider(props) {
           if (postResponse.status === 200) {
             console.log("Made post: ", postResponse.data.post);
             let postID = postResponse.data.post._id;
-            let comResponse = await api.searchCommunityByName(game.communityName);
+            let comResponse = await api.searchCommunityByName(
+              game.communityName
+            );
             console.log("Search Comm By Name returns: ", comResponse);
             if (comResponse.status === 200) {
               console.log("Found designated community");
@@ -1070,14 +1093,19 @@ function GlobalCommunityContextProvider(props) {
 
                   for (let k = 0; k < communityList.length; k++) {
                     if (
-                      communityList[k].communityName == community.currentCommunity
+                      communityList[k].communityName ==
+                      community.currentCommunity
                     ) {
                       curCommunity = communityList[k];
                     }
                   }
 
                   try {
-                    for (let i = 0; i < curCommunity.communityPosts.length; i++) {
+                    for (
+                      let i = 0;
+                      i < curCommunity.communityPosts.length;
+                      i++
+                    ) {
                       let postID = curCommunity.communityPosts[i];
                       const response = await api.getPostById(postID);
                       let post = response.data.post;

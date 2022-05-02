@@ -20,7 +20,6 @@ export default function VoteToPublishScreen() {
   const { community } = useContext(GlobalCommunityContext);
   const { auth } = useContext(AuthContext);
 
-
   const style = {
     // position: "absolute",
     // top: "50%",
@@ -114,36 +113,36 @@ export default function VoteToPublishScreen() {
 
   function makePostingDecision() {
     const arr = game.votes;
-    console.log("votes:", arr)
-    const max = Math.max(arr[0], arr[1], arr[2])
-    console.log("max value: ", max)
+    console.log("votes:", arr);
+    const max = Math.max(arr[0], arr[1], arr[2]);
+    console.log("max value: ", max);
     const decisionVal = arr.indexOf(max);
-    console.log("index of max:", decisionVal)
+    console.log("index of max:", decisionVal);
     if (decisionVal == 0) {
-      console.log("Voting Decision: Scrap")
+      console.log("Voting Decision: Scrap");
     } else if (decisionVal == 1) {
-      console.log("Voting Decision: Community")
+      console.log("Voting Decision: Community");
       community.makePost("comm", title, dateTime, game);
     } else if (decisionVal == 2) {
-      console.log("Voting Decision: Community and Discovery")
+      console.log("Voting Decision: Community and Discovery");
       community.makePost("commdis", title, dateTime, game);
     } else {
-      console.log("error: improper decision value")
-      console.log("post was not posted")
+      console.log("error: improper decision value");
+      console.log("post was not posted");
     }
   }
 
   function submitAction(event, voteVal) {
     event.stopPropagation();
-    console.log("sending vote to state")
+    console.log("sending vote to state");
     game.updateVotes(voteVal, auth.user.username);
-    if (game.votes[0] + game.votes[1] + game.votes[2] == game.players.length){
-      console.log("all votes have been made");      
-      makePostingDecision()
+    if (game.votes[0] + game.votes[1] + game.votes[2] == game.players.length) {
+      console.log("all votes have been made");
+      makePostingDecision();
     }
-    handleExitVoting()
+    handleExitVoting();
   }
-  if (auth.user.username = game.host){
+  if ((auth.user.username = game.host)) {
     return (
       <Grid
         container
@@ -170,7 +169,7 @@ export default function VoteToPublishScreen() {
               />
             </FormControl>
           </Box>
-  
+
           <FormControl>
             <FormLabel id="demo-controlled-radio-buttons-group">
               Voting Options
@@ -247,7 +246,7 @@ export default function VoteToPublishScreen() {
               />
             </FormControl>
           </Box> */}
-  
+
           <FormControl>
             <FormLabel id="demo-controlled-radio-buttons-group">
               Voting Options
@@ -298,5 +297,4 @@ export default function VoteToPublishScreen() {
       </Grid>
     );
   }
-  
 }

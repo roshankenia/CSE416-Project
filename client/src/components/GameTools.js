@@ -51,7 +51,7 @@ export default function GameTools(props) {
     handleClear,
     setBubbleToggle,
     setCharacterToggle,
-    setThemeToggle
+    setThemeToggle,
   } = props;
 
   let strokeSlider = (
@@ -71,310 +71,312 @@ export default function GameTools(props) {
       <Typography fontSize={"32px"}>
         {tool.toUpperCase() + " Properties"}
       </Typography>
-      {tool != 'image' && <Box
-        sx={{
-          margin: 1,
-          backgroundColor: "white",
-          borderRadius: 5,
-          border: 3,
-          color: "black",
-        }}
-      >
-        <Typography fontSize={"24px"}>Color</Typography>
-        <Grid container sx={{ width: "95%", mr: 2 }}>
-          <Grid item xs={3}>
-            <IconButton
-              size="small"
-              style={{ color: "#ff0000" }}
-              onClick={(event) => changeColor(event, "#ff0000")}
-              sx={{
-                border: 1,
-                borderColor: isColorSelected("#ff0000"),
-              }}
-            >
-              <SquareIcon
+      {tool != "image" && (
+        <Box
+          sx={{
+            margin: 1,
+            backgroundColor: "white",
+            borderRadius: 5,
+            border: 3,
+            color: "black",
+          }}
+        >
+          <Typography fontSize={"24px"}>Color</Typography>
+          <Grid container sx={{ width: "95%", mr: 2 }}>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#ff0000" }}
+                onClick={(event) => changeColor(event, "#ff0000")}
                 sx={{
-                  width: 20,
-                  height: 20,
+                  border: 1,
+                  borderColor: isColorSelected("#ff0000"),
                 }}
-              />
-            </IconButton>
-          </Grid>
-          <Grid item xs={3}>
-            <IconButton
-              size="small"
-              style={{ color: "#ff5900" }}
-              onClick={(event) => changeColor(event, "#ff5900")}
-              sx={{
-                border: 1,
-                borderColor: isColorSelected("#ff5900"),
-              }}
-            >
-              <SquareIcon
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#ff5900" }}
+                onClick={(event) => changeColor(event, "#ff5900")}
                 sx={{
-                  width: 20,
-                  height: 20,
+                  border: 1,
+                  borderColor: isColorSelected("#ff5900"),
                 }}
-              />
-            </IconButton>
-          </Grid>
-          <Grid item xs={3}>
-            <IconButton
-              size="small"
-              style={{ color: "#ff9900" }}
-              onClick={(event) => changeColor(event, "#ff9900")}
-              sx={{
-                border: 1,
-                borderColor: isColorSelected("#ff9900"),
-              }}
-            >
-              <SquareIcon
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#ff9900" }}
+                onClick={(event) => changeColor(event, "#ff9900")}
                 sx={{
-                  width: 20,
-                  height: 20,
+                  border: 1,
+                  borderColor: isColorSelected("#ff9900"),
                 }}
-              />
-            </IconButton>
-          </Grid>
-          <Grid item xs={3}>
-            <IconButton
-              size="small"
-              style={{ color: "#f6ff00" }}
-              onClick={(event) => changeColor(event, "#f6ff00")}
-              sx={{
-                border: 1,
-                borderColor: isColorSelected("#f6ff00"),
-              }}
-            >
-              <SquareIcon
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#f6ff00" }}
+                onClick={(event) => changeColor(event, "#f6ff00")}
                 sx={{
-                  width: 20,
-                  height: 20,
+                  border: 1,
+                  borderColor: isColorSelected("#f6ff00"),
                 }}
-              />
-            </IconButton>
-          </Grid>
-          <Grid item xs={3}>
-            <IconButton
-              size="small"
-              style={{ color: "#a6ff00" }}
-              onClick={(event) => changeColor(event, "#a6ff00")}
-              sx={{
-                border: 1,
-                borderColor: isColorSelected("#a6ff00"),
-              }}
-            >
-              <SquareIcon
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#a6ff00" }}
+                onClick={(event) => changeColor(event, "#a6ff00")}
                 sx={{
-                  width: 20,
-                  height: 20,
+                  border: 1,
+                  borderColor: isColorSelected("#a6ff00"),
                 }}
-              />
-            </IconButton>
-          </Grid>
-          <Grid item xs={3}>
-            <IconButton
-              size="small"
-              style={{ color: "#62ff00" }}
-              onClick={(event) => changeColor(event, "#62ff00")}
-              sx={{
-                border: 1,
-                borderColor: isColorSelected("#62ff00"),
-              }}
-            >
-              <SquareIcon
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#62ff00" }}
+                onClick={(event) => changeColor(event, "#62ff00")}
                 sx={{
-                  width: 20,
-                  height: 20,
+                  border: 1,
+                  borderColor: isColorSelected("#62ff00"),
                 }}
-              />
-            </IconButton>
-          </Grid>
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
 
-          <Grid item xs={3}>
-            <IconButton
-              size="small"
-              style={{ color: "#00ff84" }}
-              onClick={(event) => changeColor(event, "#00ff84")}
-              sx={{
-                border: 1,
-                borderColor: isColorSelected("#00ff84"),
-              }}
-            >
-              <SquareIcon
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#00ff84" }}
+                onClick={(event) => changeColor(event, "#00ff84")}
                 sx={{
-                  width: 20,
-                  height: 20,
+                  border: 1,
+                  borderColor: isColorSelected("#00ff84"),
                 }}
-              />
-            </IconButton>
-          </Grid>
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
 
-          <Grid item xs={3}>
-            <IconButton
-              size="small"
-              style={{ color: "#00ffd9" }}
-              onClick={(event) => changeColor(event, "#00ffd9")}
-              sx={{
-                border: 1,
-                borderColor: isColorSelected("#00ffd9"),
-              }}
-            >
-              <SquareIcon
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#00ffd9" }}
+                onClick={(event) => changeColor(event, "#00ffd9")}
                 sx={{
-                  width: 20,
-                  height: 20,
+                  border: 1,
+                  borderColor: isColorSelected("#00ffd9"),
                 }}
-              />
-            </IconButton>
-          </Grid>
-          <Grid item xs={3}>
-            <IconButton
-              size="small"
-              style={{ color: "#0048ff" }}
-              onClick={(event) => changeColor(event, "#0048ff")}
-              sx={{
-                border: 1,
-                borderColor: isColorSelected("#0048ff"),
-              }}
-            >
-              <SquareIcon
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#0048ff" }}
+                onClick={(event) => changeColor(event, "#0048ff")}
                 sx={{
-                  width: 20,
-                  height: 20,
+                  border: 1,
+                  borderColor: isColorSelected("#0048ff"),
                 }}
-              />
-            </IconButton>
-          </Grid>
-          <Grid item xs={3}>
-            <IconButton
-              size="small"
-              style={{ color: "#6a00ff" }}
-              onClick={(event) => changeColor(event, "#6a00ff")}
-              sx={{
-                border: 1,
-                borderColor: isColorSelected("#6a00ff"),
-              }}
-            >
-              <SquareIcon
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#6a00ff" }}
+                onClick={(event) => changeColor(event, "#6a00ff")}
                 sx={{
-                  width: 20,
-                  height: 20,
+                  border: 1,
+                  borderColor: isColorSelected("#6a00ff"),
                 }}
-              />
-            </IconButton>
-          </Grid>
-          <Grid item xs={3}>
-            <IconButton
-              size="small"
-              style={{ color: "#a600ff" }}
-              onClick={(event) => changeColor(event, "#a600ff")}
-              sx={{
-                border: 1,
-                borderColor: isColorSelected("#a600ff"),
-              }}
-            >
-              <SquareIcon
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#a600ff" }}
+                onClick={(event) => changeColor(event, "#a600ff")}
                 sx={{
-                  width: 20,
-                  height: 20,
+                  border: 1,
+                  borderColor: isColorSelected("#a600ff"),
                 }}
-              />
-            </IconButton>
-          </Grid>
-          <Grid item xs={3}>
-            <IconButton
-              size="small"
-              style={{ color: "#ff00e6" }}
-              onClick={(event) => changeColor(event, "#ff00e6")}
-              sx={{
-                border: 1,
-                borderColor: isColorSelected("#ff00e6"),
-              }}
-            >
-              <SquareIcon
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#ff00e6" }}
+                onClick={(event) => changeColor(event, "#ff00e6")}
                 sx={{
-                  width: 20,
-                  height: 20,
+                  border: 1,
+                  borderColor: isColorSelected("#ff00e6"),
                 }}
-              />
-            </IconButton>
-          </Grid>
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
 
-          <Grid item xs={3}>
-            <IconButton
-              size="small"
-              style={{ color: "#ffffff" }}
-              onClick={(event) => changeColor(event, "#ffffff")}
-              sx={{
-                border: 1,
-                borderColor: isColorSelected("#ffffff"),
-              }}
-            >
-              <SquareIcon
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#ffffff" }}
+                onClick={(event) => changeColor(event, "#ffffff")}
                 sx={{
-                  width: 20,
-                  height: 20,
+                  border: 1,
+                  borderColor: isColorSelected("#ffffff"),
                 }}
-              />
-            </IconButton>
-          </Grid>
-          <Grid item xs={3}>
-            <IconButton
-              size="small"
-              style={{ color: "#a1a1a1" }}
-              onClick={(event) => changeColor(event, "#a1a1a1")}
-              sx={{
-                border: 1,
-                borderColor: isColorSelected("#a1a1a1"),
-              }}
-            >
-              <SquareIcon
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#a1a1a1" }}
+                onClick={(event) => changeColor(event, "#a1a1a1")}
                 sx={{
-                  width: 20,
-                  height: 20,
+                  border: 1,
+                  borderColor: isColorSelected("#a1a1a1"),
                 }}
-              />
-            </IconButton>
-          </Grid>
-          <Grid item xs={3}>
-            <IconButton
-              size="small"
-              style={{ color: "#5c5c5c" }}
-              onClick={(event) => changeColor(event, "#5c5c5c")}
-              sx={{
-                border: 1,
-                borderColor: isColorSelected("#5c5c5c"),
-              }}
-            >
-              <SquareIcon
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#5c5c5c" }}
+                onClick={(event) => changeColor(event, "#5c5c5c")}
                 sx={{
-                  width: 20,
-                  height: 20,
+                  border: 1,
+                  borderColor: isColorSelected("#5c5c5c"),
                 }}
-              />
-            </IconButton>
-          </Grid>
-          <Grid item xs={3}>
-            <IconButton
-              size="small"
-              style={{ color: "#000000" }}
-              onClick={(event) => changeColor(event, "#000000")}
-              sx={{
-                border: 1,
-                borderColor: isColorSelected("#000000"),
-              }}
-            >
-              <SquareIcon
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item xs={3}>
+              <IconButton
+                size="small"
+                style={{ color: "#000000" }}
+                onClick={(event) => changeColor(event, "#000000")}
                 sx={{
-                  width: 20,
-                  height: 20,
+                  border: 1,
+                  borderColor: isColorSelected("#000000"),
                 }}
-              />
-            </IconButton>
+              >
+                <SquareIcon
+                  sx={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </IconButton>
+            </Grid>
           </Grid>
-        </Grid>
-      </Box>}
+        </Box>
+      )}
       {tool == "text" && (
         <Box
           sx={{
@@ -738,7 +740,7 @@ export default function GameTools(props) {
 
   return (
     <Grid item xs="3" align="center">
-      {gameMode ? (
+      {gameMode == "comic" ? (
         <List style={flexContainer}>
           <Box
             sx={{
@@ -765,9 +767,9 @@ export default function GameTools(props) {
             <Button
               sx={buttonCSS}
               onClick={(e) => {
-                setBubbleToggle(false)
-                setCharacterToggle(false)
-                setThemeToggle(false)
+                setBubbleToggle(false);
+                setCharacterToggle(false);
+                setThemeToggle(false);
                 setTool("pen");
               }}
             >
@@ -776,9 +778,9 @@ export default function GameTools(props) {
             <Button
               sx={buttonCSS}
               onClick={(e) => {
-                setBubbleToggle(false)
-                setCharacterToggle(false)
-                setThemeToggle(false)
+                setBubbleToggle(false);
+                setCharacterToggle(false);
+                setThemeToggle(false);
                 setTool("eraser");
               }}
             >
@@ -787,9 +789,9 @@ export default function GameTools(props) {
             <Button
               sx={buttonCSS}
               onClick={(e) => {
-                setBubbleToggle(false)
-                setCharacterToggle(false)
-                setThemeToggle(false)
+                setBubbleToggle(false);
+                setCharacterToggle(false);
+                setThemeToggle(false);
                 setTool("rectangle");
               }}
             >
@@ -798,9 +800,9 @@ export default function GameTools(props) {
             <Button
               sx={buttonCSS}
               onClick={(e) => {
-                setBubbleToggle(false)
-                setCharacterToggle(false)
-                setThemeToggle(false)
+                setBubbleToggle(false);
+                setCharacterToggle(false);
+                setThemeToggle(false);
                 setTool("circle");
               }}
             >
@@ -809,9 +811,9 @@ export default function GameTools(props) {
             <Button
               sx={buttonCSS}
               onClick={(e) => {
-                setBubbleToggle(false)
-                setCharacterToggle(false)
-                setThemeToggle(false)
+                setBubbleToggle(false);
+                setCharacterToggle(false);
+                setThemeToggle(false);
                 setTool("ellipse");
               }}
             >
@@ -820,9 +822,9 @@ export default function GameTools(props) {
             <Button
               sx={buttonCSS}
               onClick={(e) => {
-                setBubbleToggle(false)
-                setCharacterToggle(false)
-                setThemeToggle(false)
+                setBubbleToggle(false);
+                setCharacterToggle(false);
+                setThemeToggle(false);
                 setTool("text");
               }}
             >
