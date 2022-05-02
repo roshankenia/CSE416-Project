@@ -50,7 +50,7 @@ export default function GameScreen() {
   const socket = useContext(SocketContext);
  
   const [storyText, setStoryText] = React.useState("");
-  const charLimit = 230;
+  const charLimit = 9999999;
 
   //#region css
   const buttonCSS = { color: "black", fontSize: "40pt" };
@@ -795,7 +795,7 @@ export default function GameScreen() {
             setStoryText={setStoryText}
           />
         </Box>
-        <Typography
+        {/* <Typography
           fontSize={"32px"}
           sx={{
             width: 450,
@@ -812,7 +812,7 @@ export default function GameScreen() {
           }}
         >
           {"Characters Left: "} {charLimit - storyText.replace(/<\/?[^>]+(>|$)/g, "").length}
-        </Typography>
+        </Typography> */}
         <Button
           sx={{
             width: 450,

@@ -2,6 +2,7 @@ import React from "react";
 import { Quill } from "react-quill";
 import UndoIcon from '@mui/icons-material/Undo';
 import RedoIcon from '@mui/icons-material/Redo';
+import './fonts.css'
 
 // Undo and redo functions for Custom Toolbar
 function undoChange() {
@@ -15,18 +16,6 @@ function redoChange() {
 const Size = Quill.import("formats/size");
 Size.whitelist = ["extra-small", "small", "medium", "large"];
 Quill.register(Size, true);
-
-// Add fonts to whitelist and register them
-const Font = Quill.import("formats/font");
-Font.whitelist = [
-  "arial",
-  "comic-sans",
-  "courier-new",
-  "georgia",
-  "helvetica",
-  "lucida"
-];
-Quill.register(Font, true);
 
 // Modules object for setting up the Quill editor
 export const modules = {
@@ -69,8 +58,8 @@ export const formats = [
 export const StoryToolbar = () => (
   <div id="toolbar">
     <span className="ql-formats">
-      <select className="ql-font" defaultValue="arial">
-        <option value="arial">Arial</option>
+      <select className="ql-font" >
+        <option value="arial" select>Arial</option>
         <option value="comic-sans">Comic Sans</option>
         <option value="courier-new">Courier New</option>
         <option value="georgia">Georgia</option>
@@ -128,5 +117,17 @@ export const StoryToolbar = () => (
     </span>
   </div>
 );
+
+// Add fonts to whitelist and register them
+const Font = Quill.import("formats/font");
+Font.whitelist = [
+  "arial",
+  "comic-sans",
+  "courier-new",
+  "georgia",
+  "helvetica",
+  "lucida"
+];
+Quill.register(Font, true);
 
 export default StoryToolbar;

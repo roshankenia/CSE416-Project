@@ -20,8 +20,9 @@ export const StoryEditor = (props) => {
         if(charLimit - storyText.replace(/<\/?[^>]+(>|$)/g, "").length <= 1){
             setOldText(storyText)
         }
-        //console.log("updating:",text);
-        //console.log("Setting store Text" ,storyText)
+        console.log("updating:",text);
+        console.log("Setting store Text" ,storyText)
+        console.log('whata')
         setStoryText(text)
         socket.emit("edit-text", text, game.lobby);
         if(charLimit - storyText.replace(/<\/?[^>]+(>|$)/g, "").length === 0 && charLimit - text.replace(/<\/?[^>]+(>|$)/g, "").length <= 0){
@@ -36,6 +37,7 @@ export const StoryEditor = (props) => {
             height: 600,
             backgroundColor: "white",
             border: 3,
+            overflowY: 'scroll',
         }}
         >
         {<StoryToolbar />}
