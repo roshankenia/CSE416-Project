@@ -318,16 +318,24 @@ function GameContextProvider(props) {
       }
       gameReducer({
         type: GameActionType.UPDATE_PLAYERS,
-        payload: { players: players, readyPlayers: game.readyPlayers, gamemode: game.gamemode},
+        payload: {
+          players: players,
+          readyPlayers: game.readyPlayers,
+          gamemode: game.gamemode,
+        },
       });
 
       let readyPlayers = game.readyPlayers;
 
-
       if (auth.user.username == game.host) {
         socket.emit("update-host", auth.user.username, lobbyID);
-        socket.emit("consolidate-players", players, readyPlayers, lobbyID, game.gamemode);
-
+        socket.emit(
+          "consolidate-players",
+          players,
+          readyPlayers,
+          lobbyID,
+          game.gamemode
+        );
       }
     };
     socket.once("new-player", newP);
@@ -364,7 +372,11 @@ function GameContextProvider(props) {
 
       gameReducer({
         type: GameActionType.UPDATE_PLAYERS,
-        payload: { players: players, readyPlayers: readyPlayers, gamemode: gameMode },
+        payload: {
+          players: players,
+          readyPlayers: readyPlayers,
+          gamemode: gameMode,
+        },
       });
     };
     socket.once("add-players", addP);
@@ -386,7 +398,11 @@ function GameContextProvider(props) {
 
       gameReducer({
         type: GameActionType.UPDATE_PLAYERS,
-        payload: { players: players, readyPlayers: readyPlayers, gamemode: game.gamemode },
+        payload: {
+          players: players,
+          readyPlayers: readyPlayers,
+          gamemode: game.gamemode,
+        },
       });
     };
 
@@ -411,45 +427,45 @@ function GameContextProvider(props) {
     socket.once("player-ready", readyP);
 
     const newVotes = async (voteVal, username) => {
-      try{
-        let votesArr = game.votes
-        if (votesArr.indexOf(username) == -1){
-          if (voteVal == "scrap"){
-            console.log("vote to scrap was made")
+      try {
+        let votesArr = game.votes;
+        if (votesArr.indexOf(username) == -1) {
+          if (voteVal == "scrap") {
+            console.log("vote to scrap was made");
             votesArr[0] = votesArr[0] + 1;
-            votesArr.push(username)
+            votesArr.push(username);
             gameReducer({
               type: GameActionType.UPDATE_VOTES,
               payload: votesArr,
             });
-          } else if (voteVal == "comm"){
-            console.log("vote to comm was made")
+          } else if (voteVal == "comm") {
+            console.log("vote to comm was made");
             votesArr[1] = votesArr[1] + 1;
-            votesArr.push(username)
+            votesArr.push(username);
             gameReducer({
               type: GameActionType.UPDATE_VOTES,
               payload: votesArr,
             });
-          } else if (voteVal == "commdis"){
-            console.log("vote to commdis was made")
-            votesArr[2] = votesArr[2] + 1
+          } else if (voteVal == "commdis") {
+            console.log("vote to commdis was made");
+            votesArr[2] = votesArr[2] + 1;
             votesArr.push(username);
             gameReducer({
               type: GameActionType.UPDATE_VOTES,
               payload: votesArr,
             });
           } else {
-            console.log("error in updating votes: vote value not found")
+            console.log("error in updating votes: vote value not found");
           }
         } else {
-          console.log("this user has already made a vote")
+          console.log("this user has already made a vote");
         }
       } catch {
-        console.log("error in updating votes")
+        console.log("error in updating votes");
       }
     };
 
-    socket.once("update-votes-cb", newVotes)
+    socket.once("update-votes-cb", newVotes);
 
     // const countDown = async (count)=>{
     //   gameReducer({
@@ -480,12 +496,12 @@ function GameContextProvider(props) {
     // socket.on("sync-lines", syncL);
 
     const switchGamemode = async (gamemode) => {
-      console.log("host switching gamemode to:",gamemode);
+      console.log("host switching gamemode to:", gamemode);
       gameReducer({
         type: GameActionType.CHANGE_GAMEMODE,
         payload: gamemode,
       });
-    }
+    };
 
     socket.once("switch-gamemode", switchGamemode);
 
@@ -498,20 +514,20 @@ function GameContextProvider(props) {
       socket.off("add-host", addH);
       socket.off("game-started", gameStart);
       socket.off("switch-gamemode", switchGamemode);
-      socket.off("update-vote-cb", newVotes)
+      socket.off("update-vote-cb", newVotes);
 
       // socket.off('count1');
     };
   }, [game]);
 
   game.changeGamemode = async function (gamemode) {
-    console.log("host switching gamemode to:",gamemode);
+    console.log("host switching gamemode to:", gamemode);
     gameReducer({
       type: GameActionType.CHANGE_GAMEMODE,
       payload: gamemode,
     });
     socket.emit("change-gamemode", gamemode, game.lobby);
-  }
+  };
   game.readyUp = async function () {
     let readyPlayers = game.readyPlayers;
     if (!readyPlayers.includes(auth.user.username)) {
@@ -528,49 +544,49 @@ function GameContextProvider(props) {
   };
 
   game.updateVotes = async function (voteVal, username) {
-    try{
-      let votesArr = game.votes
-      if (votesArr.indexOf(username) == -1){
-        if (voteVal == "scrap"){
-          console.log("vote to scrap was made")
+    try {
+      let votesArr = game.votes;
+      if (votesArr.indexOf(username) == -1) {
+        if (voteVal == "scrap") {
+          console.log("vote to scrap was made");
           votesArr[0] = votesArr[0] + 1;
-          votesArr.push(username)
+          votesArr.push(username);
           gameReducer({
             type: GameActionType.UPDATE_VOTES,
             payload: votesArr,
           });
-        } else if (voteVal == "comm"){
-          console.log("vote to comm was made")
+        } else if (voteVal == "comm") {
+          console.log("vote to comm was made");
           votesArr[1] = votesArr[1] + 1;
-          votesArr.push(username)
+          votesArr.push(username);
           gameReducer({
             type: GameActionType.UPDATE_VOTES,
             payload: votesArr,
           });
-        } else if (voteVal == "commdis"){
-          console.log("vote to commdis was made")
-          votesArr[2] = votesArr[2] + 1
+        } else if (voteVal == "commdis") {
+          console.log("vote to commdis was made");
+          votesArr[2] = votesArr[2] + 1;
           votesArr.push(username);
           gameReducer({
             type: GameActionType.UPDATE_VOTES,
             payload: votesArr,
           });
         } else {
-          console.log("error in updating votes: vote value not found")
+          console.log("error in updating votes: vote value not found");
         }
       } else {
-        console.log("this user has already made a vote")
+        console.log("this user has already made a vote");
       }
     } catch {
-      console.log("error in updating votes")
+      console.log("error in updating votes");
     }
-    socket.emit("update-votes", voteVal, username, game.lobby)
-  }
+    socket.emit("update-votes", voteVal, username, game.lobby);
+  };
 
   game.createNewGame = async function () {
     let sortPlayers = game.players.sort();
     try {
-      console.log(game.gamemode)
+      console.log(game.gamemode);
       let id = "madeupgameid";
       let newgame = { game: "gameOBJ", players: sortPlayers };
       // backend stuff
@@ -703,7 +719,6 @@ function GameContextProvider(props) {
       console.log("error buddy");
     }
   };
-
 
   //TIMER CODE- make sure time only starts when start game happens
   game.setTimer = async function (time) {

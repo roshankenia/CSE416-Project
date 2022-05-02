@@ -58,6 +58,13 @@ export const createComic = (authors, panels) => {
   });
 };
 
+export const createStory = (authors, panels) => {
+  return api.post(`/story`, {
+    authors: authors,
+    panels: panels,
+  });
+};
+
 export const deleteComicById = (id) => {
   return api.delete(`/comic/${id}`);
 };
@@ -111,6 +118,7 @@ const apis = {
   deleteComicById,
   deleteStoryById,
   deletePostById,
+  createStory,
 };
 
 export default apis;

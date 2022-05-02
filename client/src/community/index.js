@@ -963,8 +963,8 @@ function GlobalCommunityContextProvider(props) {
         if (voteVal == "comm") {
           let postResponse = await api.createPost(
             title,
-            storyID,
             null,
+            storyID,
             [],
             [],
             true,
@@ -1053,8 +1053,8 @@ function GlobalCommunityContextProvider(props) {
         } else if (voteVal == "commdis") {
           let postResponse = await api.createPost(
             title,
-            storyID,
             null,
+            storyID,
             [],
             [],
             true,

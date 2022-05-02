@@ -110,6 +110,11 @@ export default function VoteToPublishScreen() {
       </Grid>
     );
   }
+  //remove after fix
+  const tempMakePost = () => {
+    game.exitVoting();
+    community.makePost(value, title, dateTime, game);
+  };
 
   function makePostingDecision() {
     const arr = game.votes;
@@ -200,7 +205,9 @@ export default function VoteToPublishScreen() {
         </Grid>
         <Button
           id="vote-submit-button"
-          onClick={(event) => submitAction(event, value)}
+          //uncomment once fixed
+          //onClick={(event) => submitAction(event, value)}
+          onClick={tempMakePost}
           sx={{
             width: 300,
             height: 50,
