@@ -438,7 +438,7 @@ function GameContextProvider(props) {
               type: GameActionType.UPDATE_VOTES,
               payload: votesArr,
             });
-            console.log("votes array updated")
+            console.log("votes array updated");
           } else if (voteVal == "comm") {
             console.log("vote to comm was made");
             votesArr[1] = votesArr[1] + 1;
@@ -447,7 +447,7 @@ function GameContextProvider(props) {
               type: GameActionType.UPDATE_VOTES,
               payload: votesArr,
             });
-            console.log("votes array updated")
+            console.log("votes array updated");
           } else if (voteVal == "commdis") {
             console.log("vote to commdis was made");
             votesArr[2] = votesArr[2] + 1;
@@ -456,7 +456,7 @@ function GameContextProvider(props) {
               type: GameActionType.UPDATE_VOTES,
               payload: votesArr,
             });
-            console.log("votes array updated")
+            console.log("votes array updated");
           } else {
             console.log("error in updating votes: vote value not found");
           }
@@ -584,7 +584,7 @@ function GameContextProvider(props) {
       console.log("error in updating votes");
     }
     socket.emit("update-votes", voteVal, username, game.lobby);
-    console.log("announcing to server to update votes for other clients")
+    console.log("announcing to server to update votes for other clients");
   };
 
   game.createNewGame = async function () {
@@ -693,18 +693,13 @@ function GameContextProvider(props) {
   game.enterVoting = async function (lastPanel) {
     try {
       const id = "madeupgameid";
-      if (game.host != auth.user.username) {
-        game.exitVoting();
-      } else {
-        let panels = game.panels;
-        panels.push(lastPanel);
-        gameReducer({
-          type: GameActionType.ENTER_VOTING,
-          payload: panels,
-        });
-        history.push("/game/" + id);
-      }
-      //}
+      let panels = game.panels;
+      panels.push(lastPanel);
+      gameReducer({
+        type: GameActionType.ENTER_VOTING,
+        payload: panels,
+      });
+      history.push("/game/" + id);
     } catch {
       console.log("error buddy");
     }
