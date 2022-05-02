@@ -300,7 +300,7 @@ createComic = async (req, res) => {
   }
 
   const comic = new Comic(body);
-  console.log("creating comic: " + JSON.stringify(comic));
+  // console.log("creating comic: " + JSON.stringify(comic));
   if (!comic) {
     console.log("comic not made");
     return res.status(400).json({
@@ -333,7 +333,7 @@ updateComicById = async (req, res) => {
   try {
     const id = req.params.id;
     await Comic.findOne({ _id: id }, (err, comic) => {
-      console.log("Comic found: " + JSON.stringify(comic));
+      // console.log("Comic found: " + JSON.stringify(comic));
       if (err) {
         return res.status(404).json({
           success: false,
@@ -360,13 +360,13 @@ updateComicById = async (req, res) => {
 getComicById = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log("Find Comic with id: " + JSON.stringify(id));
+    //console.log("Find Comic with id: " + JSON.stringify(id));
 
     await Comic.findOne({ _id: id }, (err, comic) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
-      console.log("Found comic: " + JSON.stringify(comic));
+      //console.log("Found comic: " + JSON.stringify(comic));
       return res.status(200).json({ success: true, comic: comic });
     }).catch((err) => console.log(err));
   } catch (err) {
@@ -436,13 +436,13 @@ createPost = async (req, res) => {
 getPostById = async (req, res) => {
   try {
     const id = req.params.id;
-    console.log("Find Post with id: " + JSON.stringify(id));
+    // console.log("Find Post with id: " + JSON.stringify(id));
 
     await Post.findOne({ _id: id }, (err, post) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
-      console.log("Found post: " + JSON.stringify(post));
+      // console.log("Found post: " + JSON.stringify(post));
       return res.status(200).json({ success: true, post: post });
     }).catch((err) => console.log(err));
   } catch (err) {
@@ -467,7 +467,7 @@ updatePost = async (req, res) => {
     const id = req.params.id;
 
     Post.findOne({ _id: id }, (err, post) => {
-      console.log("Post found: " + JSON.stringify(post));
+      // console.log("Post found: " + JSON.stringify(post));
       if (err) {
         return res.status(404).json({
           err,
