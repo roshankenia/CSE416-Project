@@ -48,7 +48,7 @@ export default function StoryPopout(props) {
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
       >
-        <DialogTitle id="scroll-dialog-title">{post.podstTitle}</DialogTitle>
+        <DialogTitle id="scroll-dialog-title">{post.postTitle}</DialogTitle>
         <DialogContent dividers={true}>
           <DialogContentText
             id="scroll-dialog-description"
