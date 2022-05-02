@@ -148,7 +148,7 @@ export default function VoteToPublishScreen() {
     }
     handleExitVoting();
   }
-  if ((auth.user.username == game.host)) {
+  if (auth.user.username == game.host) {
     return (
       <Grid
         container
@@ -207,7 +207,7 @@ export default function VoteToPublishScreen() {
         <Button
           id="vote-submit-button"
           //uncomment once fixed
-          //onClick={(event) => submitAction(event, value)}
+          // onClick={(event) => submitAction(event, value)}
           onClick={tempMakePost}
           sx={{
             width: 300,
