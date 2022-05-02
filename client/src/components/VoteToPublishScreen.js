@@ -140,8 +140,9 @@ export default function VoteToPublishScreen() {
   function submitAction(event, voteVal) {
     event.stopPropagation();
     console.log("sending vote to state");
+    let numOfVotes = game.votes[0] + game.votes[1] + game.votes[2];
     game.updateVotes(voteVal, auth.user.username);
-    if (game.votes[0] + game.votes[1] + game.votes[2] == game.players.length) {
+    if (numOfVotes == game.players.length - 1) {
       console.log("all votes have been made");
       makePostingDecision();
     }

@@ -438,6 +438,7 @@ function GameContextProvider(props) {
               type: GameActionType.UPDATE_VOTES,
               payload: votesArr,
             });
+            console.log("votes array updated")
           } else if (voteVal == "comm") {
             console.log("vote to comm was made");
             votesArr[1] = votesArr[1] + 1;
@@ -446,6 +447,7 @@ function GameContextProvider(props) {
               type: GameActionType.UPDATE_VOTES,
               payload: votesArr,
             });
+            "votes array updated"
           } else if (voteVal == "commdis") {
             console.log("vote to commdis was made");
             votesArr[2] = votesArr[2] + 1;
@@ -454,6 +456,7 @@ function GameContextProvider(props) {
               type: GameActionType.UPDATE_VOTES,
               payload: votesArr,
             });
+            "votes array updated"
           } else {
             console.log("error in updating votes: vote value not found");
           }
@@ -581,6 +584,7 @@ function GameContextProvider(props) {
       console.log("error in updating votes");
     }
     socket.emit("update-votes", voteVal, username, game.lobby);
+    console.log("announcing to server to update votes for other clients")
   };
 
   game.createNewGame = async function () {
