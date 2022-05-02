@@ -447,7 +447,7 @@ function GameContextProvider(props) {
               type: GameActionType.UPDATE_VOTES,
               payload: votesArr,
             });
-            "votes array updated"
+            console.log("votes array updated")
           } else if (voteVal == "commdis") {
             console.log("vote to commdis was made");
             votesArr[2] = votesArr[2] + 1;
@@ -456,7 +456,7 @@ function GameContextProvider(props) {
               type: GameActionType.UPDATE_VOTES,
               payload: votesArr,
             });
-            "votes array updated"
+            console.log("votes array updated")
           } else {
             console.log("error in updating votes: vote value not found");
           }
