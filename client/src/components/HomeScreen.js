@@ -24,9 +24,14 @@ import Fab from "@mui/material/Fab";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 
+import Snackbar from "@mui/material/Snackbar";
+import CloseIcon from "@mui/icons-material/Close";
+
 import Grid from "@mui/material/Grid";
 
 import AuthContext from "../auth";
+import { SocketContext } from "../socket";
+import { GameContext } from "../game";
 
 /*
     User gets redirected here after login,
@@ -44,7 +49,47 @@ const HomeScreen = () => {
   //   //Keeps track of current search
   //   const [search, setSearch] = useState("");
 
+  const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
+  const socket  = useContext(SocketContext);
+
+  const [openInvite, setOpen] = React.useState(false);
+  const handleClick = () => {
+    setOpen(true);
+  };
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+  const [gameLobbyID, setLobbyID] = React.useState(false);
+
+  const handleJoin = (event) => {
+    event.preventDefault();
+    console.log("new lobby");
+    console.log("lobby join from invite:", gameLobbyID);
+
+    game.joinLobby(gameLobbyID);
+  };
+
+  const action = (
+    <React.Fragment>
+      {/* On click here will join the game lobby (button) */}
+      <Button color="secondary" size="large" onClick={handleJoin}>
+        JOIN
+      </Button>
+      <IconButton
+        size="large"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -188,6 +233,19 @@ const HomeScreen = () => {
       ))}
     </List>
   );
+
+  useEffect(() => {
+    const invite = async (lobbyID) => {
+      setLobbyID(lobbyID)
+      console.log("inside the invite with lobbyID",lobbyID)
+      handleClick()
+      // game.joinLobby(lobbyID)
+    };
+    socket.on("receive-invite", invite);
+    return () => {
+      socket.off("receive-invite", invite);
+    };
+  }, []);
   return (
     <Box
       style={{
@@ -253,6 +311,13 @@ const HomeScreen = () => {
           {/* </Sticky> */}
         </div>
       </Grid>
+      <Snackbar
+          open={openInvite}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          message="u/Roshan has invited you to the game"
+          action={action}
+        />
     </Box>
   );
 };

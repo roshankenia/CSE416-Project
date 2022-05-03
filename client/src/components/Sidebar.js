@@ -30,10 +30,6 @@ export default function Sidebar() {
     setOpen(false);
   };
 
-  const handleJoin = (event, reason) => {
-    // Join game room logic here
-  };
-
   const handleAddFriend = (event) => {
     event.preventDefault();
     console.log("handleAddFriend");

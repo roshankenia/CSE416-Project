@@ -29,15 +29,18 @@ import { styled } from "@mui/material/styles";
 import Slider from "@mui/material/Slider";
 import MuiInput from "@mui/material/Input";
 import VolumeUp from "@mui/icons-material/VolumeUp";
+import { SocketContext } from "../socket";
 
 //put all the lobby settings stuff on the right side!!!
 export default function LobbyScreen() {
   const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
+  const socket  = useContext(SocketContext);
 
   const history = useHistory();
 
   const users = [auth.user.username, "Terran", "someone", "$_$", "another"];
+  // const friends = auth.user.fr
 
   //#region slider
   const Input = styled(MuiInput)`
@@ -80,8 +83,9 @@ export default function LobbyScreen() {
 
   //#region invite/action
   //not implemented, should return a model
-  const handleInvite = (event) => {
-    console.log("nothing");
+  const handleInvite = (username) => {
+    console.log("the name of the user is", username);
+    socket.emit("send-invite", username, game.lobby)
   };
   const handleLeave = (event) => {
     game.leaveLobby();
@@ -229,7 +233,7 @@ export default function LobbyScreen() {
 
   let userCard = (
     <List sx={{ width: "100%" }}>
-      {users.map((name) => (
+      {auth.friends.map((name) => (
         <ListItem key={name}>
           <Box
             variant="contained"
@@ -249,7 +253,7 @@ export default function LobbyScreen() {
             <Grid container spacing={2}>
               <Grid item xs={8}>
                 <Typography align="center" style={{ fontSize: "48px" }}>
-                  {name}
+                  {name.username}
                 </Typography>
               </Grid>
               <Grid item xs={2}>
@@ -258,7 +262,7 @@ export default function LobbyScreen() {
                   color="success"
                   size="small"
                   align="center"
-                  onClick={(event) => handleInvite()}
+                  onClick={(event) => handleInvite(name.username)}
                   style={{
                     fontWeight: 600,
                     border: "3px solid",
@@ -311,6 +315,18 @@ export default function LobbyScreen() {
     </Box>
   );
   //#endregion right side
+
+  // TODO Maybe implement later... Otherwise just dont receive any invites when in lobby
+  // useEffect(() => {
+  //   const invite = async (lobbyID) => {
+  //     console.log("inside the invite with lobbyID",lobbyID)
+  //     // game.joinLobby(lobbyID)
+  //   };
+  //   socket.on("receive-invite", invite);
+  //   return () => {
+  //     socket.off("receive-invite", invite);
+  //   };
+  // }, []);
 
   return (
     <Grid

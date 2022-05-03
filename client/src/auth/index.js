@@ -3,8 +3,10 @@ import { useHistory } from "react-router-dom";
 import api from "./auth-request-api";
 import { GlobalCommunityContext } from "../community";
 import { GameContext } from "../game";
+import { SocketContext } from "../socket";
 
 const AuthContext = createContext();
+
 console.log("create AuthContext: " + AuthContext);
 
 // THESE ARE ALL THE TYPES OF UPDATES TO OUR AUTH STATE THAT CAN BE PROCESSED
@@ -36,6 +38,7 @@ function AuthContextProvider(props) {
   const history = useHistory();
   const { community } = useContext(GlobalCommunityContext);
   const { game } = useContext(GameContext);
+  const socket = useContext(SocketContext);
 
   useEffect(() => {
     auth.getLoggedIn();
@@ -545,6 +548,10 @@ function AuthContextProvider(props) {
       if (response.status === 200) {
         let user = response.data.user;
         console.log("login updating friends and requests");
+        console.log("Before socket call")
+        console.log("the socket id is", socket.id)
+        socket.emit("socket-username", username,socket.id);
+        console.log("Here")
         let friendRequestIds = user.requests;
         let friendIds = user.friends;
 
@@ -559,7 +566,8 @@ function AuthContextProvider(props) {
           let response = await api.findById(friendIds[i]);
           friends.push(response.data.user);
         }
-
+       
+        
         authReducer({
           type: AuthActionType.LOGIN_USER,
           payload: {
@@ -570,6 +578,7 @@ function AuthContextProvider(props) {
         });
         history.push("/");
       }
+
     } catch (error) {
       console.log(error);
       auth.setErrorMessage(error.response.data.errorMessage);
