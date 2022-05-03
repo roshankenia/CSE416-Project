@@ -148,6 +148,9 @@ io.on("connection", (socket) => {
     console.log("sending invite to user ", username);
     socketid = userID[username]
     console.log("the socketid is", socketid);
-    socket.broadcast.to(socketid).emit(lobbyID); 
+    socket.join(socketid);
+    socket.to(socketid).emit("receive-invite",lobbyID); 
   });
 });
+
+// socket.to(lobbyID).emit("new-player", username, lobbyID);
