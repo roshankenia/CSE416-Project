@@ -66,7 +66,7 @@ app.use((req, res, next) => {
 var userID = {}
 
 io.on("connection", (socket) => {
-  console.log("new client connected");
+  console.log("new client connected", socket.id);
 
   socket.on("send-message", (message) => {
     io.emit("message", message);
