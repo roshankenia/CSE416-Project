@@ -137,10 +137,11 @@ io.on("connection", (socket) => {
     socket.to(lobbyID).emit("add-host", host);
   });
 
-  socket.on("socket-username", (username) => {
+  socket.on("socket-username", (username,socketID) => {
     console.log("setting the username for the socket", username);
     socket.username = username
-    userID[username] = socket.id
+    console.log("the socket id is", socketID)
+    userID[username] = socketID
   });
 //testing
   socket.on("send-invite", (username, lobbyID) => {
