@@ -134,4 +134,9 @@ io.on("connection", (socket) => {
     console.log("sending host:", host);
     socket.to(lobbyID).emit("add-host", host);
   });
+
+  socket.on("socket-username", (username) => {
+    console.log("setting the username for the socket", username);
+    socket.username = username
+  });
 });
