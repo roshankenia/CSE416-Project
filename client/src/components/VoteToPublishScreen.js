@@ -207,8 +207,8 @@ export default function VoteToPublishScreen() {
         <Button
           id="vote-submit-button"
           //uncomment once fixed
-          // onClick={(event) => submitAction(event, value)}
-          onClick={tempMakePost}
+          onClick={(event) => submitAction(event, value)}
+          // onClick={tempMakePost}
           sx={{
             width: 300,
             height: 50,
