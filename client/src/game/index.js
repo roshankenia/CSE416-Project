@@ -427,11 +427,12 @@ function GameContextProvider(props) {
     socket.once("player-ready", readyP);
 
     const newVotes = async (voteVal, username) => {
+      console.log("inside votes callback");
       try {
         let votesArr = game.votes;
         if (votesArr.indexOf(username) == -1) {
           if (voteVal == "scrap") {
-            console.log("vote to scrap was made");
+            console.log("vote to scrap was made by somebody else");
             votesArr[0] = votesArr[0] + 1;
             votesArr.push(username);
             gameReducer({
@@ -440,7 +441,7 @@ function GameContextProvider(props) {
             });
             console.log("votes array updated");
           } else if (voteVal == "comm") {
-            console.log("vote to comm was made");
+            console.log("vote to comm was made by somebody else");
             votesArr[1] = votesArr[1] + 1;
             votesArr.push(username);
             gameReducer({
@@ -449,7 +450,7 @@ function GameContextProvider(props) {
             });
             console.log("votes array updated");
           } else if (voteVal == "commdis") {
-            console.log("vote to commdis was made");
+            console.log("vote to commdis was made by somebody else");
             votesArr[2] = votesArr[2] + 1;
             votesArr.push(username);
             gameReducer({
@@ -517,7 +518,7 @@ function GameContextProvider(props) {
       socket.off("add-host", addH);
       socket.off("game-started", gameStart);
       socket.off("switch-gamemode", switchGamemode);
-      socket.off("update-vote-cb", newVotes);
+      socket.off("update-votes-cb", newVotes);
 
       // socket.off('count1');
     };
@@ -580,11 +581,11 @@ function GameContextProvider(props) {
       } else {
         console.log("this user has already made a vote");
       }
+      socket.emit("update-votes", voteVal, username, game.lobby);
+      console.log("announcing to server to update votes for other clients");
     } catch {
       console.log("error in updating votes");
     }
-    socket.emit("update-votes", voteVal, username, game.lobby);
-    console.log("announcing to server to update votes for other clients");
   };
 
   game.createNewGame = async function () {
@@ -693,9 +694,9 @@ function GameContextProvider(props) {
   game.enterVoting = async function (lastPanel) {
     try {
       const id = "madeupgameid";
-      if (game.host != auth.user.username) {
-        game.exitVoting();
-      } else {
+      // if (game.host != auth.user.username) {
+        // game.exitVoting();
+      // } else {
         let panels = game.panels;
         panels.push(lastPanel);
         gameReducer({
@@ -703,7 +704,7 @@ function GameContextProvider(props) {
           payload: panels,
         });
         history.push("/game/" + id);
-      }
+      // }
       //}
     } catch {
       console.log("error buddy");
