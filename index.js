@@ -63,6 +63,8 @@ app.use((req, res, next) => {
   next();
 });
 
+var userID = {}
+
 io.on("connection", (socket) => {
   console.log("new client connected");
 
@@ -138,5 +140,13 @@ io.on("connection", (socket) => {
   socket.on("socket-username", (username) => {
     console.log("setting the username for the socket", username);
     socket.username = username
+    userID[username] = socket.id
+  });
+
+  socket.on("send-invite", (username, lobbyID) => {
+    console.log("sending invite to user ", username);
+    userid = userID[username]
+    console.log("the userid is", userid);
+    socket.broadcast.to(userid),emit(lobbyID); 
   });
 });
