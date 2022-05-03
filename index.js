@@ -142,7 +142,7 @@ io.on("connection", (socket) => {
     socket.username = username
     userID[username] = socket.id
   });
-
+//testing
   socket.on("send-invite", (username, lobbyID) => {
     console.log("sending invite to user ", username);
     userid = userID[username]
