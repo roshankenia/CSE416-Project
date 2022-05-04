@@ -485,10 +485,10 @@ updatePost = async (req, res) => {
         post.postStory = postStory;
       }
       if (likes) {
-        post.likes = likeCount;
+        post.likes = likes;
       }
       if (dislikes) {
-        post.dislikes = dislikeCount;
+        post.dislikes = dislikes;
       }
       if (comments) {
         post.comment = comments;

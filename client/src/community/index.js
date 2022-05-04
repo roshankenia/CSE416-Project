@@ -522,6 +522,79 @@ function GlobalCommunityContextProvider(props) {
     });
   };
 
+  community.updatePost = async function(updateType, post, userID) {
+    try{
+      if (updateType == "like"){
+        let likeArray = post.likes;
+        let dislikeArray = post.dislikes;
+        let likeIndex = likeArray.indexOf(userID);
+        let dislikeIndex = dislikeArray.indexOf(userID);
+        //If user has already disliked, then remove the dislike and change to like
+        if (dislikeIndex != -1){
+          dislikeArray.splice(dislikeIndex);
+        }
+        //If user has not liked, then add their username
+        if (likeIndex == -1){
+          likeArray.push(userID);
+          console.log("pushed user to like Array")
+        } 
+        //If user has liked, then remove their like and username
+        else {
+          likeArray.splice(likeIndex);
+        }
+        let response = await api.updatePost(
+          post._id,
+          post.postTitle,
+          post.postComic,
+          post.postStory,
+          likeArray,
+          dislikeArray,
+          post.communityPublished,
+          post.discoveryPublished,
+          post.dateAndTime,
+          post.communityName,
+        );
+        console.log("Like reponse: ", response);
+      } else if (updateType == "dislike"){
+        let likeArray = post.likes;
+        let dislikeArray = post.dislikes;
+        let likeIndex = likeArray.indexOf(userID);
+        let dislikeIndex = dislikeArray.indexOf(userID);
+        //If user has already liked, then remove the like and change to dislike
+        if (likeIndex != -1){
+          likeArray.splice(likeIndex);
+        }
+        //If user has not disliked, then add their username
+        if (dislikeIndex == -1){
+          dislikeArray.push(userID);
+        } 
+        //If user has disliked, then remove their dislike and username
+        else {
+          dislikeArray.splice(dislikeIndex);
+        }
+        let response = await api.updatePost(
+          post._id,
+          post.postTitle,
+          post.postComic,
+          post.postStory,
+          likeArray,
+          dislikeArray,
+          post.communityPublished,
+          post.discoveryPublished,
+          post.dateAndTime,
+          post.communityName,
+        );
+        console.log("Dislike reponse: ", response);
+      } else {
+        console.log("Update Type not given or invalid!");
+      }
+      
+    } catch {
+      console.log("FAILED TO UPDATE POST")
+    }
+  }
+
+
   community.removePost = async function () {
     try {
       //first delete comic

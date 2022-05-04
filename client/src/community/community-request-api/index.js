@@ -99,6 +99,31 @@ export const createPost = (
   });
 };
 
+export const updatePost = (
+  id,
+  postTitle,
+  postComic,
+  postStory,
+  likes,
+  dislikes,
+  communityPublished,
+  discoveryPublished,
+  dateAndTime,
+  communityName
+) => {
+  return api.put(`/post/${id}`, {
+    postTitle: postTitle,
+    postComic: postComic,
+    postStory: postStory,
+    likes: likes,
+    dislikes: dislikes,
+    communityPublished: communityPublished,
+    discoveryPublished: discoveryPublished,
+    dateAndTime: dateAndTime,
+    communityName: communityName,
+  });
+};
+
 export const searchCommunityByName = (name) => {
   return api.get(`/searchcommunitybyname/${name}`);
 };
@@ -119,6 +144,7 @@ const apis = {
   // for testing purpose
   deleteCommunity,
   getPostById,
+  updatePost,
   getComicById,
   getStoryById,
   deleteComicById,
