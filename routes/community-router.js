@@ -13,7 +13,11 @@ router.get("/community/:id", auth.verify, CommunityController.getCommunityById);
 router.get("/communitylist", CommunityController.getCommunityList);
 
 //handles an update community request
-router.put("/community/:id", auth.verify, CommunityController.updateCommunityById);
+router.put(
+  "/community/:id",
+  auth.verify,
+  CommunityController.updateCommunityById
+);
 
 //handles creating a new story in database request
 router.post("/story", auth.verify, CommunityController.createStory);
@@ -60,20 +64,43 @@ router.get("/comment/:id", auth.verify, CommunityController.getCommentById);
 //handles an update comment request
 router.put("/comment/:id", auth.verify, CommunityController.updateCommentById);
 
+router.post("/searchUserExact", auth.verify, CommunityController.searchUserExact);
+
+
 //handles a delete post request
-router.delete("/comment/:id", auth.verify, CommunityController.deleteCommentById);
+router.delete(
+  "/comment/:id",
+  auth.verify,
+  CommunityController.deleteCommentById
+);
 
 //handles a search community request
-router.get("/searchcommunitybyname/:name", auth.verify, CommunityController.searchCommunityByName);
+router.get(
+  "/searchcommunitybyname/:name",
+  auth.verify,
+  CommunityController.searchCommunityByName
+);
 
 //handles a search post request
-router.get("/searchpostbytitle/:title", auth.verify, CommunityController.searchPostByTitle);
+router.get(
+  "/searchpostbytitle/:title",
+  auth.verify,
+  CommunityController.searchPostByTitle
+);
 
 //handles a search comic request
-router.get("/searchcomicbyauthor/:author", auth.verify, CommunityController.searchComicByAuthor);
+router.get(
+  "/searchcomicbyauthor/:author",
+  auth.verify,
+  CommunityController.searchComicByAuthor
+);
 
 //handles a search story request
-router.get("/searchstorybyauthor/:author", auth.verify, CommunityController.searchStoryByAuthor);
+router.get(
+  "/searchstorybyauthor/:author",
+  auth.verify,
+  CommunityController.searchStoryByAuthor
+);
 
 //for testing purpose only
 router.post(

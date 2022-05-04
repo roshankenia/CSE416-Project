@@ -680,6 +680,31 @@ deleteCommentById = async (req, res) => {
 };
 
 //#endregion comment
+searchUserExact = async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
+
+  const { username } = req.body;
+  console.log(username);
+
+  await User.findOne({ username: username }, (err, user) => {
+    console.log("found user: " + JSON.stringify(user));
+    if (err) {
+      return res.status(400).json({ success: false, error: err });
+    }
+    if (!user) {
+      console.log("!user");
+      return res.status(404).json({ success: false, error: "User not found" });
+    } else {
+      console.log("Send the User");
+      return res.status(200).json({ success: true, user: user });
+    }
+  }).catch((err) => console.log(err));
+};
 
 //#region query
 searchCommunityByName = async (req, res) => {
@@ -799,4 +824,5 @@ module.exports = {
   searchPostByTitle,
   searchComicByAuthor,
   searchStoryByAuthor,
+  searchUserExact
 };
