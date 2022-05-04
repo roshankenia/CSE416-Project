@@ -83,9 +83,10 @@ export default function PostCard(props) {
   //     </Typography>
   //   );
   // }
-  function handleViewProfile(event, user) {
+  function handleViewProfile(event, username) {
+    console.log("in view profile");
     event.stopPropagation();
-    community.setUserProfile(user);
+    community.setUserProfile(username);
   }
 
   let comms = ["J/Rage Comics", "J/Memes", "J/Random"];

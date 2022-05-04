@@ -103,6 +103,12 @@ export const searchCommunityByName = (name) => {
   return api.get(`/searchcommunitybyname/${name}`);
 };
 
+export const searchUserExact = (username) => {
+  return api.post("/searchUserExact/", {
+    username: username,
+  });
+};
+
 const apis = {
   createCommunity,
   getCommunityList,
@@ -119,6 +125,7 @@ const apis = {
   deleteStoryById,
   deletePostById,
   createStory,
+  searchUserExact,
 };
 
 export default apis;

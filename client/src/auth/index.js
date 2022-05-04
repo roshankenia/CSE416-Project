@@ -218,12 +218,20 @@ function AuthContextProvider(props) {
         let friends = [];
 
         for (let i = 0; i < friendRequestIds.length; i++) {
-          let response = await api.findById(friendRequestIds[i]);
-          friendRequests.push(response.data.user);
+          if (friendRequestIds[i].username) {
+            friendRequests.push(friendRequestIds[i]);
+          } else {
+            let response = await api.findById(friendRequestIds[i]);
+            friendRequests.push(response.data.user);
+          }
         }
         for (let i = 0; i < friendIds.length; i++) {
-          let response = await api.findById(friendIds[i]);
-          friends.push(response.data.user);
+          if (friendIds[i].username) {
+            friends.push(friendIds[i]);
+          } else {
+            let response = await api.findById(friendIds[i]);
+            friends.push(response.data.user);
+          }
         }
 
         authReducer({
@@ -258,12 +266,20 @@ function AuthContextProvider(props) {
         let friends = [];
 
         for (let i = 0; i < friendRequestIds.length; i++) {
-          let response = await api.findById(friendRequestIds[i]);
-          friendRequests.push(response.data.user);
+          if (friendRequestIds[i].username) {
+            friendRequests.push(friendRequestIds[i]);
+          } else {
+            let response = await api.findById(friendRequestIds[i]);
+            friendRequests.push(response.data.user);
+          }
         }
         for (let i = 0; i < friendIds.length; i++) {
-          let response = await api.findById(friendIds[i]);
-          friends.push(response.data.user);
+          if (friendIds[i].username) {
+            friends.push(friendIds[i]);
+          } else {
+            let response = await api.findById(friendIds[i]);
+            friends.push(response.data.user);
+          }
         }
         console.log("current friends:", friends);
 
@@ -276,7 +292,7 @@ function AuthContextProvider(props) {
         });
       }
     } catch (error) {
-      console.log(error.response.data.errorMessage);
+      console.log(error);
       //auth.setErrorMessage(error.response.data.errorMessage);
     }
     history.push("/");
@@ -302,12 +318,20 @@ function AuthContextProvider(props) {
         let friends = [];
 
         for (let i = 0; i < friendRequestIds.length; i++) {
-          let response = await api.findById(friendRequestIds[i]);
-          friendRequests.push(response.data.user);
+          if (friendRequestIds[i].username) {
+            friendRequests.push(friendRequestIds[i]);
+          } else {
+            let response = await api.findById(friendRequestIds[i]);
+            friendRequests.push(response.data.user);
+          }
         }
         for (let i = 0; i < friendIds.length; i++) {
-          let response = await api.findById(friendIds[i]);
-          friends.push(response.data.user);
+          if (friendIds[i].username) {
+            friends.push(friendIds[i]);
+          } else {
+            let response = await api.findById(friendIds[i]);
+            friends.push(response.data.user);
+          }
         }
 
         authReducer({
@@ -342,12 +366,20 @@ function AuthContextProvider(props) {
         let friends = [];
 
         for (let i = 0; i < friendRequestIds.length; i++) {
-          let response = await api.findById(friendRequestIds[i]);
-          friendRequests.push(response.data.user);
+          if (friendRequestIds[i].username) {
+            friendRequests.push(friendRequestIds[i]);
+          } else {
+            let response = await api.findById(friendRequestIds[i]);
+            friendRequests.push(response.data.user);
+          }
         }
         for (let i = 0; i < friendIds.length; i++) {
-          let response = await api.findById(friendIds[i]);
-          friends.push(response.data.user);
+          if (friendIds[i].username) {
+            friends.push(friendIds[i]);
+          } else {
+            let response = await api.findById(friendIds[i]);
+            friends.push(response.data.user);
+          }
         }
 
         authReducer({
@@ -548,10 +580,10 @@ function AuthContextProvider(props) {
       if (response.status === 200) {
         let user = response.data.user;
         console.log("login updating friends and requests");
-        console.log("Before socket call")
-        console.log("the socket id is", socket.id)
-        socket.emit("socket-username", username,socket.id);
-        console.log("Here")
+        console.log("Before socket call");
+        console.log("the socket id is", socket.id);
+        socket.emit("socket-username", username, socket.id);
+        console.log("Here");
         let friendRequestIds = user.requests;
         let friendIds = user.friends;
 
@@ -559,15 +591,22 @@ function AuthContextProvider(props) {
         let friends = [];
 
         for (let i = 0; i < friendRequestIds.length; i++) {
-          let response = await api.findById(friendRequestIds[i]);
-          friendRequests.push(response.data.user);
+          if (friendRequestIds[i].username) {
+            friendRequests.push(friendRequestIds[i]);
+          } else {
+            let response = await api.findById(friendRequestIds[i]);
+            friendRequests.push(response.data.user);
+          }
         }
         for (let i = 0; i < friendIds.length; i++) {
-          let response = await api.findById(friendIds[i]);
-          friends.push(response.data.user);
+          if (friendIds[i].username) {
+            friends.push(friendIds[i]);
+          } else {
+            let response = await api.findById(friendIds[i]);
+            friends.push(response.data.user);
+          }
         }
-       
-        
+
         authReducer({
           type: AuthActionType.LOGIN_USER,
           payload: {
@@ -578,7 +617,6 @@ function AuthContextProvider(props) {
         });
         history.push("/");
       }
-
     } catch (error) {
       console.log(error);
       auth.setErrorMessage(error.response.data.errorMessage);

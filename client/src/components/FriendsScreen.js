@@ -75,8 +75,7 @@ const FriendsScreen = () => {
   //Keeps track of current search
   const [userSearch, setUserSearch] = useState("");
 
-  function handleUpdateSearch(event) {
-  }
+  function handleUpdateSearch(event) {}
   function handleKeyPress(event) {
     if (event.code === "Enter") {
       let text = event.target.value;
@@ -195,7 +194,7 @@ const FriendsScreen = () => {
                     variant="contained"
                     color="success"
                     size="small"
-                    onClick={(event) => handleViewProfile(event, user)}
+                    onClick={(event) => handleViewProfile(event, user.username)}
                     style={{
                       fontWeight: 600,
                       border: "3px solid",
@@ -345,7 +344,7 @@ const FriendsScreen = () => {
                   variant="contained"
                   color="success"
                   size="small"
-                  onClick={(event) => handleViewProfile(event, friend)}
+                  onClick={(event) => handleViewProfile(event, friend.username)}
                   style={{
                     fontWeight: 600,
                     border: "3px solid",

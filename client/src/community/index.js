@@ -255,20 +255,20 @@ function GlobalCommunityContextProvider(props) {
       case GlobalCommunityActionType.SET_USER_PROFILE: {
         return setCommunity({
           communityList: community.communityList,
-          currentCommunity: community.currentCommunity,
-          communityPosts: community.communityPosts,
+          currentCommunity: null,
+          communityPosts: payload.communityPosts,
           search: community.search,
           errorMessage: community.errorMessage,
           sort: community.sort,
-          screen: "profile",
+          screen: payload.screen,
           deleteAccountModal: community.deleteAccountModal,
           changePasswordModal: community.changePasswordModal,
           feedbackModal: community.feedbackModal,
           deletePostModal: community.deletePostModal,
-          userProfile: payload,
+          userProfile: payload.userProfile,
           changeBioModal: community.changeBioModal,
           deletePost: community.deletePost,
-          searchPosts: community.searchPosts,
+          searchPosts: payload.communityPosts,
         });
       }
       case GlobalCommunityActionType.SET_CHANGE_BIO: {
@@ -350,11 +350,56 @@ function GlobalCommunityContextProvider(props) {
     });
   };
 
-  community.setUserProfile = async function (user) {
-    communityReducer({
-      type: GlobalCommunityActionType.SET_USER_PROFILE,
-      payload: user,
-    });
+  community.setUserProfile = async function (username) {
+    try {
+      let userResponse = await api.searchUserExact(username);
+      if (userResponse.status == 200) {
+        let newUser = userResponse.data.user;
+        console.log("user found:", newUser);
+        //now find all posts with this user
+        let communityPosts = [];
+        for (let j = 0; j < community.communityList.length; j++) {
+          let curCumm = community.communityList[j];
+
+          try {
+            for (let i = 0; i < curCumm.communityPosts.length; i++) {
+              let postID = curCumm.communityPosts[i];
+              console.log("searching for post with id", postID);
+              const response = await api.getPostById(postID);
+              let post = response.data.post;
+              if (post.postComic) {
+                const comicResponse = await api.getComicById(post.postComic);
+                console.log("comic:", comicResponse.data.comic);
+                post.data = comicResponse.data.comic;
+              } else if (post.postStory) {
+                const storyResponse = await api.getStoryById(post.postStory);
+                console.log("story:", storyResponse.data.story);
+                post.data = storyResponse.data.story;
+              }
+              if (post.data.authors.includes(newUser.username)) {
+                communityPosts.push(post);
+              }
+            }
+            console.log("posts found:", communityPosts);
+
+            communityReducer({
+              type: GlobalCommunityActionType.SET_USER_PROFILE,
+              payload: {
+                userProfile: newUser,
+                screen: "profile",
+                communityPosts: communityPosts,
+              },
+            });
+          } catch (err) {
+            console.log("could not obtain posts:", err);
+          }
+        }
+      } else {
+        console.log(userResponse);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
   community.setScreen = async function (screen) {
     let communityPosts = [];

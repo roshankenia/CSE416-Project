@@ -14,6 +14,9 @@ import ChangeBioModal from "./ChangeBioModal";
 import Box from "@mui/material/Box";
 
 export default function ProfileScreen() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const { community } = useContext(GlobalCommunityContext);
   const { auth } = useContext(AuthContext);
   const [notifyOpen, setNotifyOpen] = React.useState(false);
@@ -204,9 +207,9 @@ export default function ProfileScreen() {
         </Grid>
 
         <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
-          <Typography style={{ fontSize: "32px" }}>
+          {/* <Typography style={{ fontSize: "32px" }}>
             {community.communityList}
-          </Typography>
+          </Typography> */}
           <PostFeed />
         </Grid>
 
@@ -277,9 +280,9 @@ export default function ProfileScreen() {
         />
 
         <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
-          <Typography style={{ fontSize: "32px" }}>
+          {/* <Typography style={{ fontSize: "32px" }}>
             {community.communityList}
-          </Typography>
+          </Typography> */}
           <PostFeed />
         </Grid>
 
