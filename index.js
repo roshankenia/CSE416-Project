@@ -149,7 +149,7 @@ io.on("connection", (socket) => {
     socketid = userID[username]
     console.log("the socketid is", socketid);
     socket.join(socketid);
-    socket.to(socketid).emit("receive-invite",lobbyID); 
+    socket.to(socketid).emit("receive-invite",lobbyID, socketid); 
   });
 });
 
