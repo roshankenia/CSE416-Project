@@ -13,12 +13,12 @@ router.post("/changePassword", AuthController.changePassword);
 router.post("/resetPassword", AuthController.resetPassword);
 router.post("/deleteAccount", AuthController.deleteAccount);
 router.post("/search", AuthController.searchUsers);
+router.post("/searchExact", AuthController.searchUserExact);
 router.post("/findByEmail/:email", AuthController.findByEmail);
 router.put("/friendRequest", AuthController.addFriendRequest);
 router.put("/friend", AuthController.addFriend);
 router.put("/removeFriendRequest", AuthController.removeFriendRequest);
 router.put("/removeFriend", AuthController.removeFriend);
 router.get("/findById/:id", AuthController.findById);
-
 
 module.exports = router;
