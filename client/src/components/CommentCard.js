@@ -36,8 +36,8 @@ export default function CommentCard(props) {
   const replies = comment.reply;
   const replyFeed = (
     <List>
-      {replies.map((reply) => (
-        <ListItem key={reply}>
+      {replies.map((reply, index) => (
+        <ListItem key={index}>
           <Box
             variant="contained"
             color="success"

@@ -195,7 +195,7 @@ export default function WaitingScreen(props) {
           justifyContent: "space-between",
         }}
       >
-        <div class="chat-messages">
+        <div className="chat-messages">
 
         </div>
         <Typography fontSize={"32px"} sx={{ width: "100%" }}>

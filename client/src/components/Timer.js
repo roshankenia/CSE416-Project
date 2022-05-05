@@ -88,7 +88,7 @@ export default function Timer(props) {
           let imageData = stageRef.current.toDataURL();
           setActions([]);
           console.log("after reset:", actions);
-          console.log(imageData);
+          //console.log(imageData);
 
           game.changeTurn(imageData);
           if (auth.user.username === game.host) {
@@ -96,13 +96,12 @@ export default function Timer(props) {
           }
         }
       } else if (game.gamemode == "story") {
-        console.log("inside timer gamemode story")
+        console.log("inside timer gamemode story");
         console.log(storyText);
         // check if game.turn == amount of panels
         if (game.panelNumber - 1 == game.turn) {
           game.enterVoting(storyText);
-        } 
-        else {
+        } else {
           //Might be uneccessary to do this here... Maybe reset the text whenever the turn starts?
           setStoryText("");
           game.changeTurn(storyText);

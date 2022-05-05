@@ -55,8 +55,9 @@ export default function StoryPopout(props) {
             ref={descriptionElementRef}
             tabIndex={-1}
           >
-            {post.data.panels.map((paragraph) => (
+            {post.data.panels.map((paragraph, index) => (
               <ReactQuill
+                key={index}
                 readOnly={true}
                 theme="bubble"
                 value={paragraph}

@@ -77,8 +77,8 @@ export default function VoteToPublishScreen() {
     gamePanels = (
       <Box sx={{ width: "90%", height: "90%" }}>
         <ImageList sx={{ width: "95%" }} cols={6}>
-          {game.panels.map((picture) => (
-            <ImageListItem key={picture}>
+          {game.panels.map((picture, index) => (
+            <ImageListItem key={index}>
               <img src={picture} loading="lazy" />
             </ImageListItem>
           ))}
@@ -149,7 +149,10 @@ export default function VoteToPublishScreen() {
     handleExitVoting();
   }
   if (auth.user.username == game.host) {
-    if (game.votes[0] + game.votes[1] + game.votes[2] == game.players.length - 1){
+    if (
+      game.votes[0] + game.votes[1] + game.votes[2] ==
+      game.players.length - 1
+    ) {
       return (
         <Grid
           container
@@ -176,7 +179,7 @@ export default function VoteToPublishScreen() {
                 />
               </FormControl>
             </Box>
-  
+
             <FormControl>
               <FormLabel id="demo-controlled-radio-buttons-group">
                 Voting Options
@@ -244,7 +247,9 @@ export default function VoteToPublishScreen() {
           <Grid item xs="12" align="center">
             <Typography fontSize={"64px"}>Vote to Publish?</Typography>
             {gamePanels}
-            <Typography fontSize={"48px"}>Waiting for other players to vote...</Typography>
+            <Typography fontSize={"48px"}>
+              Waiting for other players to vote...
+            </Typography>
           </Grid>
         </Grid>
       );

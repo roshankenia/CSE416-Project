@@ -139,8 +139,8 @@ export default function PostCard(props) {
   const comments = post.comments;
   const commentFeed = (
     <List>
-      {comments.map((comment) => (
-        <ListItem key={comment}>
+      {comments.map((comment, index) => (
+        <ListItem key={index}>
           <CommentCard comment={comment} />
         </ListItem>
       ))}
@@ -223,11 +223,13 @@ export default function PostCard(props) {
             >
               {post.dislikes.length}
             </Typography>
-            <IconButton color="primary">
+            <IconButton
+              color="primary"
+              onClick={(event) => {
+                handleExpand(event);
+              }}
+            >
               <CommentIcon
-                onClick={(event) => {
-                  handleExpand(event);
-                }}
                 sx={{
                   width: 40,
                   height: 40,
@@ -273,11 +275,13 @@ export default function PostCard(props) {
             {profileOptions}
           </Grid>
           <Grid item xs={12} style={{ textAlign: "center" }}>
-            <IconButton color="primary">
+            <IconButton
+              color="primary"
+              onClick={(event) => {
+                handleExpand(event);
+              }}
+            >
               <ExpandLessIcon
-                onClick={(event) => {
-                  handleExpand(event);
-                }}
                 sx={{
                   width: 40,
                   height: 40,
@@ -404,14 +408,16 @@ export default function PostCard(props) {
             >
               {post.dislikes.length}
             </Typography>
-            <IconButton color="primary">
+            <IconButton
+              color="primary"
+              onClick={(event) => {
+                handleExpand(event);
+              }}
+            >
               <CommentIcon
                 sx={{
                   width: 40,
                   height: 40,
-                }}
-                onClick={(event) => {
-                  handleExpand(event);
                 }}
               />
             </IconButton>

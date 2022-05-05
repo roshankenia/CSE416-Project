@@ -48,7 +48,7 @@ export default function GameScreen() {
   const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
   const socket = useContext(SocketContext);
- 
+
   const [storyText, setStoryText] = React.useState("");
   const charLimit = 9999999;
 
@@ -373,8 +373,8 @@ export default function GameScreen() {
     gamePanels = (
       <Box sx={{ width: "70%", height: "70%" }}>
         <ImageList sx={{ width: "95%" }} cols={6}>
-          {game.panels.map((picture) => (
-            <ImageListItem key={picture}>
+          {game.panels.map((picture,index) => (
+            <ImageListItem key={index}>
               <img src={picture} loading="lazy" />
             </ImageListItem>
           ))}
@@ -459,7 +459,7 @@ export default function GameScreen() {
   let gameWorkSpace = "";
   if (game.gamemode === "comic") {
     gameWorkSpace = (
-      <Grid item xs="6" align="center">
+      <Grid item xs={6} align="center">
         <Box
           sx={{
             width: 600,
@@ -575,7 +575,7 @@ export default function GameScreen() {
     );
   } else {
     gameWorkSpace = (
-      <Grid item xs="6" align="center">
+      <Grid item xs={6} align="center">
         <StoryEditor
           storyText={storyText}
           setStoryText={setStoryText}
@@ -590,7 +590,7 @@ export default function GameScreen() {
   let gameUtils = "";
   if (game.gamemode === "comic") {
     gameUtils = (
-      <Grid item xs="3" align="center">
+      <Grid item xs={3} align="center">
         <Box
           sx={{
             width: 450,
@@ -771,7 +771,7 @@ export default function GameScreen() {
     );
   } else {
     gameUtils = (
-      <Grid item xs="3" align="center">
+      <Grid item xs={3} align="center">
         <Box
           sx={{
             width: 450,
@@ -872,7 +872,7 @@ export default function GameScreen() {
         backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
       }}
     >
-      <Grid item xs="12" align="center">
+      <Grid item xs={12} align="center">
         {gameCurrentPlayer}
         {/* List of current panels drawn goes here */}
         {gamePanels}

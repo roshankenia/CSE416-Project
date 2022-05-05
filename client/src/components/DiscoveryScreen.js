@@ -60,7 +60,7 @@ export default function DiscoveryScreen() {
   const discoveryButton = (
     <Button
       onClick={(event) => setScreen(event, "discovery")}
-      disabled="true"
+      disabled={true}
       variant="contained"
       color="success"
       size="small"
@@ -121,7 +121,7 @@ export default function DiscoveryScreen() {
           <PostFeed />
         </Grid>
 
-        <div class="sticky">
+        <div className="sticky">
           <Sidebar />
         </div>
       </Grid>

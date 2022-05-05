@@ -51,7 +51,7 @@ const HomeScreen = () => {
 
   const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
-  const socket  = useContext(SocketContext);
+  const socket = useContext(SocketContext);
 
   const [openInvite, setOpen] = React.useState(false);
   const handleClick = () => {
@@ -181,9 +181,9 @@ const HomeScreen = () => {
   let communityCard = <List></List>;
   communityCard = (
     <List>
-      {community.communityList.map((com) => (
-        <ListItem key={com}>
-          <Button
+      {community.communityList.map((com, index) => (
+        <ListItem key={index}>
+          <Box
             variant="contained"
             color="success"
             size="large"
@@ -228,21 +228,20 @@ const HomeScreen = () => {
                 </Button>
               </Grid>
             </Grid>
-          </Button>
+          </Box>
         </ListItem>
       ))}
     </List>
   );
 
   useEffect(() => {
-    const invite = async (lobbyID,socketid) => {
-      setLobbyID(lobbyID)
-      console.log("inside the invite with lobbyID",lobbyID)
-      console.log("socketID is", socketid)
-      handleClick()
+    const invite = async (lobbyID, socketid) => {
+      setLobbyID(lobbyID);
+      console.log("inside the invite with lobbyID", lobbyID);
+      console.log("socketID is", socketid);
+      handleClick();
       // socket.leave()
-      
-      
+
       // game.joinLobby(lobbyID)
     };
     socket.on("receive-invite", invite);
@@ -309,19 +308,19 @@ const HomeScreen = () => {
         <Grid item xs={8} align="center">
           {communityCard}
         </Grid>
-        <div class="sticky">
+        <div className="sticky">
           {/* <Sticky> */}
           <Sidebar />
           {/* </Sticky> */}
         </div>
       </Grid>
       <Snackbar
-          open={openInvite}
-          autoHideDuration={6000}
-          onClose={handleClose}
-          message="u/Roshan has invited you to the game"
-          action={action}
-        />
+        open={openInvite}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="u/Roshan has invited you to the game"
+        action={action}
+      />
     </Box>
   );
 };

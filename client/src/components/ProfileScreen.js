@@ -165,7 +165,7 @@ export default function ProfileScreen() {
           <PostFeed />
         </Grid>
 
-        <div class="sticky">
+        <div className="sticky">
           <Sidebar />
         </div>
         <ChangeBioModal />
@@ -213,7 +213,7 @@ export default function ProfileScreen() {
           <PostFeed />
         </Grid>
 
-        <div class="sticky">
+        <div className="sticky">
           <Sidebar />
         </div>
       </Grid>
@@ -286,7 +286,7 @@ export default function ProfileScreen() {
           <PostFeed />
         </Grid>
 
-        <div class="sticky">
+        <div className="sticky">
           <Sidebar />
         </div>
       </Grid>

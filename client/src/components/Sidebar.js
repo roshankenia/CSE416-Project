@@ -66,7 +66,7 @@ export default function Sidebar() {
 
   return (
     <List>
-      <ListItem key="join">
+      <ListItem key="addFriend">
         <Box
           justifyContent="center"
           alignItems="center"
@@ -293,7 +293,7 @@ export default function Sidebar() {
           </Box>
         </Box>
       </ListItem>
-      <ListItem key="create">
+      <ListItem key="invites">
         <Box
           justifyContent="center"
           alignItems="center"

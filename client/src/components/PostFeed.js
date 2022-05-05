@@ -52,7 +52,7 @@ export default function PostFeed() {
   const postFeed = (
     <List>
       {community.searchPosts.map((post, index) => (
-        <ListItem key={post}>
+        <ListItem key={index}>
           <PostCard post={post} index={index} />
         </ListItem>
       ))}

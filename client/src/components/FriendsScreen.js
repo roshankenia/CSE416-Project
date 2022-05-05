@@ -164,7 +164,7 @@ const FriendsScreen = () => {
       }
     }
     searchUserList = (
-      <List textAlign="center">
+      <List>
         {newSearchUsers.map((user) => (
           <ListItem key={user}>
             <Box
@@ -243,7 +243,7 @@ const FriendsScreen = () => {
   }
 
   let requestList = (
-    <List textAlign="center">
+    <List>
       {auth.friendRequests.map((request) => (
         <ListItem key={request}>
           <Box
@@ -314,7 +314,7 @@ const FriendsScreen = () => {
   );
 
   let friendsList = (
-    <List textAlign="center">
+    <List>
       {auth.friends.map((friend) => (
         <ListItem key={friend}>
           <Box
@@ -572,7 +572,7 @@ const FriendsScreen = () => {
             {searchUserList}
           </Box>
         </Grid>
-        <div class="sticky">
+        <div className="sticky">
           {/* <Sticky> */}
           <Sidebar />
           {/* </Sticky> */}

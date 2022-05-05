@@ -135,7 +135,7 @@ export default function CommunityScreen() {
           <PostFeed />
         </Grid>
 
-        <div class="sticky">
+        <div className="sticky">
           {/* <Sticky> */}
           <Sidebar />
           {/* </Sticky> */}
