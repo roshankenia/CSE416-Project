@@ -151,6 +151,13 @@ io.on("connection", (socket) => {
     socket.join(socketid);
     socket.to(socketid).emit("receive-invite",lobbyID, socketid); 
   });
+//Chat testing
+  socket.on("send-chat-message", (message, lobbyID, username) => {
+    console.log("sending invite to user ", username);
+    console.log("the message is", message);
+    socket.to(lobbyID).emit("receive-message", message, username); 
+  });
+
 });
 
 // socket.to(lobbyID).emit("new-player", username, lobbyID);
