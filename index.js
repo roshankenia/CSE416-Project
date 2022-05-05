@@ -155,7 +155,7 @@ io.on("connection", (socket) => {
   socket.on("send-chat-message", (message, lobbyID, username) => {
     console.log("sending invite to user ", username);
     console.log("the message is", message);
-    socket.to(lobbyID).emit("receive-message", message, username); 
+    io.to(lobbyID).emit("receive-message", message, username); 
   });
 
 });
