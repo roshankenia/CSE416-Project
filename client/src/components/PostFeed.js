@@ -37,6 +37,7 @@ export default function PostFeed() {
 
   function handleSort(event, sort) {
     event.stopPropagation();
+    community.selectSort(sort);
     handleMenuClose();
   }
 

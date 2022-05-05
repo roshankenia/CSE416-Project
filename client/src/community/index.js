@@ -30,6 +30,7 @@ export const GlobalCommunityActionType = {
   SET_CHANGE_BIO: "SET_CHANGE_BIO",
   DELETE_POST: "DELETE_POST",
   SEARCH_POSTS: "SEARCH_POSTS",
+  SORT_POSTS: "SORT_POSTS",
 };
 
 function GlobalCommunityContextProvider(props) {
@@ -328,11 +329,103 @@ function GlobalCommunityContextProvider(props) {
           searchPosts: payload,
         });
       }
+      case GlobalCommunityActionType.SORT_POSTS: {
+        return setCommunity({
+          communityList: community.communityList,
+          currentCommunity: community.currentCommunity,
+          communityPosts: community.communityPosts,
+          search: community.search,
+          errorMessage: community.errorMessage,
+          sort: payload.sort,
+          screen: community.screen,
+          deleteAccountModal: community.deleteAccountModal,
+          changePasswordModal: community.changePasswordModal,
+          feedbackModal: community.feedbackModal,
+          deletePostModal: community.deletePostModal,
+          userProfile: community.userProfile,
+          changeBioModal: community.changeBioModal,
+          deletePost: community.deletePost,
+          searchPosts: payload.searchPosts,
+        });
+      }
       default:
         return community;
     }
   };
 
+  community.selectSort = async function (sort) {
+    let currentPosts = community.searchPosts;
+
+    let sortedPosts = await community.sortPosts(currentPosts, sort);
+    
+    console.log(sortedPosts);
+
+    communityReducer({
+      type: GlobalCommunityActionType.SORT_POSTS,
+      payload: { sort: sort, searchPosts: sortedPosts },
+    });
+  };
+  community.sortPosts = async function (currentPosts, sort) {
+    let sortedPosts = currentPosts;
+
+    if (sort === "comments") {
+      sortedPosts = sortedPosts.sort(function (a, b) {
+        if (a.comments.length > b.comments.length) {
+          return -1;
+        } else if (a.views < b.views) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    } else if (sort === "likes") {
+      sortedPosts = sortedPosts.sort(function (a, b) {
+        if (a.likes.length > b.likes.length) {
+          return -1;
+        } else if (a.likes.length < b.likes.length) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    } else if (sort === "dislikes") {
+      sortedPosts = sortedPosts.sort(function (a, b) {
+        if (a.dislikes.length > b.dislikes.length) {
+          return -1;
+        } else if (a.dislikes.length < b.dislikes.length) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    } else if (sort === "newest date") {
+      sortedPosts = sortedPosts.sort(function (a, b) {
+        let d1 = Date.parse(a.dateAndTime);
+        let d2 = Date.parse(b.dateAndTime);
+        if (d1 > d2) {
+          return -1;
+        } else if (d1 < d2) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    } else if (sort === "oldest date") {
+      sortedPosts = sortedPosts.sort(function (a, b) {
+        let d1 = Date.parse(a.dateAndTime);
+        let d2 = Date.parse(b.dateAndTime);
+        if (d1 > d2) {
+          return 1;
+        } else if (d1 < d2) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+    }
+
+    return sortedPosts;
+  };
   community.searchPostsUp = async function (search) {
     search = search.toLowerCase();
     let newCommunityPosts = [];
@@ -536,22 +629,22 @@ function GlobalCommunityContextProvider(props) {
     });
   };
 
-  community.updatePost = async function(updateType, post, userID) {
-    try{
-      if (updateType == "like"){
+  community.updatePost = async function (updateType, post, userID) {
+    try {
+      if (updateType == "like") {
         let likeArray = post.likes;
         let dislikeArray = post.dislikes;
         let likeIndex = likeArray.indexOf(userID);
         let dislikeIndex = dislikeArray.indexOf(userID);
         //If user has already disliked, then remove the dislike and change to like
-        if (dislikeIndex != -1){
+        if (dislikeIndex != -1) {
           dislikeArray.splice(dislikeIndex);
         }
         //If user has not liked, then add their username
-        if (likeIndex == -1){
+        if (likeIndex == -1) {
           likeArray.push(userID);
-          console.log("pushed user to like Array")
-        } 
+          console.log("pushed user to like Array");
+        }
         //If user has liked, then remove their like and username
         else {
           likeArray.splice(likeIndex);
@@ -566,22 +659,22 @@ function GlobalCommunityContextProvider(props) {
           post.communityPublished,
           post.discoveryPublished,
           post.dateAndTime,
-          post.communityName,
+          post.communityName
         );
         console.log("Like reponse: ", response);
-      } else if (updateType == "dislike"){
+      } else if (updateType == "dislike") {
         let likeArray = post.likes;
         let dislikeArray = post.dislikes;
         let likeIndex = likeArray.indexOf(userID);
         let dislikeIndex = dislikeArray.indexOf(userID);
         //If user has already liked, then remove the like and change to dislike
-        if (likeIndex != -1){
+        if (likeIndex != -1) {
           likeArray.splice(likeIndex);
         }
         //If user has not disliked, then add their username
-        if (dislikeIndex == -1){
+        if (dislikeIndex == -1) {
           dislikeArray.push(userID);
-        } 
+        }
         //If user has disliked, then remove their dislike and username
         else {
           dislikeArray.splice(dislikeIndex);
@@ -596,18 +689,16 @@ function GlobalCommunityContextProvider(props) {
           post.communityPublished,
           post.discoveryPublished,
           post.dateAndTime,
-          post.communityName,
+          post.communityName
         );
         console.log("Dislike reponse: ", response);
       } else {
         console.log("Update Type not given or invalid!");
       }
-      
     } catch {
-      console.log("FAILED TO UPDATE POST")
+      console.log("FAILED TO UPDATE POST");
     }
-  }
-
+  };
 
   community.removePost = async function () {
     try {
