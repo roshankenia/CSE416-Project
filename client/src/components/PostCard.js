@@ -54,14 +54,14 @@ export default function PostCard(props) {
     community.setDeletePost(true, post);
   }
 
-  function handleLike(event){
+  function handleLike(event) {
     event.stopPropagation();
-    community.updatePost("like", post, auth.user._id)
+    community.updatePost("like", post, auth.user._id);
   }
 
   function handleDislike(event) {
     event.stopPropagation();
-    community.updatePost("dislike", post, auth.user._id)
+    community.updatePost("dislike", post, auth.user._id);
   }
   let postData = "";
 
@@ -101,6 +101,11 @@ export default function PostCard(props) {
     community.setUserProfile(username);
   }
 
+  function openCommunity(event, communityName) {
+    event.stopPropagation();
+    community.getCommunityFromPost(communityName);
+  }
+
   let comms = ["J/Rage Comics", "J/Memes", "J/Random"];
 
   let communityName = (
@@ -110,6 +115,7 @@ export default function PostCard(props) {
         paddingLeft: 10,
         paddingBottom: 10,
       }}
+      onClick={(event) => openCommunity(event, post.communityName)}
     >
       {post.communityName}
     </Button>
@@ -187,9 +193,7 @@ export default function PostCard(props) {
             </IconButton>
           </Grid>
           <Grid item xs={2} align="center">
-            <IconButton 
-            color="primary"
-            onClick={handleLike}>
+            <IconButton color="primary" onClick={handleLike}>
               <ThumbUpIcon
                 sx={{
                   width: 40,
@@ -204,9 +208,7 @@ export default function PostCard(props) {
             >
               {post.likes.length}
             </Typography>
-            <IconButton 
-            color="primary"
-            onClick={handleDislike}>
+            <IconButton color="primary" onClick={handleDislike}>
               <ThumbDownIcon
                 sx={{
                   width: 40,
@@ -372,9 +374,7 @@ export default function PostCard(props) {
             </IconButton>
           </Grid>
           <Grid item xs={2} align="center">
-            <IconButton 
-            color="primary"
-            onClick={handleLike}>
+            <IconButton color="primary" onClick={handleLike}>
               <ThumbUpIcon
                 sx={{
                   width: 40,
@@ -389,9 +389,7 @@ export default function PostCard(props) {
             >
               {post.likes.length}
             </Typography>
-            <IconButton 
-            color="primary"
-            onClick={handleDislike}>
+            <IconButton color="primary" onClick={handleDislike}>
               <ThumbDownIcon
                 sx={{
                   width: 40,

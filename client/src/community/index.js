@@ -146,7 +146,7 @@ function GlobalCommunityContextProvider(props) {
           search: community.search,
           errorMessage: community.errorMessage,
           sort: community.sort,
-          screen: community.screen,
+          screen: "communities",
           deleteAccountModal: community.deleteAccountModal,
           changePasswordModal: community.changePasswordModal,
           feedbackModal: community.feedbackModal,
@@ -465,11 +465,25 @@ function GlobalCommunityContextProvider(props) {
       payload: { screen: screen, communityPosts: communityPosts },
     });
   };
+  community.getCommunityFromPost = async function (communityName) {
+    try {
+      let communitySearchResponse = await api.searchCommunity(communityName);
+      if (communitySearchResponse.status == 200) {
+        let currentCommunity = communitySearchResponse.data.communityList[0];
+        community.setCommunity(currentCommunity);
+      } else {
+        console.log(communitySearchResponse);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   community.setCommunity = async function (setCommunity) {
     //first obtain all posts for this community
     let communityPosts = [];
     console.log(setCommunity);
     if (setCommunity == null) {
+      console.log("returning back to communities");
       communityReducer({
         type: GlobalCommunityActionType.SET_COMMUNITY,
         payload: {

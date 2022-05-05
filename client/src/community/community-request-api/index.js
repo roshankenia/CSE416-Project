@@ -75,6 +75,10 @@ export const deletePostById = (id) => {
   return api.delete(`/post/${id}`);
 };
 
+export const searchCommunity = (name) => {
+  return api.get(`/searchcommunitybyname/${name}`);
+};
+
 export const createPost = (
   postTitle,
   postComic,
@@ -152,6 +156,7 @@ const apis = {
   deletePostById,
   createStory,
   searchUserExact,
+  searchCommunity,
 };
 
 export default apis;
