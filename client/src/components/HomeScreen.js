@@ -235,10 +235,14 @@ const HomeScreen = () => {
   );
 
   useEffect(() => {
-    const invite = async (lobbyID) => {
+    const invite = async (lobbyID,socketid) => {
       setLobbyID(lobbyID)
       console.log("inside the invite with lobbyID",lobbyID)
+      console.log("socketID is", socketid)
       handleClick()
+      // socket.leave()
+      
+      
       // game.joinLobby(lobbyID)
     };
     socket.on("receive-invite", invite);

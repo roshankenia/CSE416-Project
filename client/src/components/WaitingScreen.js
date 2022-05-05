@@ -74,6 +74,15 @@ export default function WaitingScreen(props) {
     alignItems: "center",
     justifyContent: "center",
   };
+  //TODO Alan
+  const handleChat = (event) => {
+    event.preventDefault();
+    console.log("handleAddFriend");
+    const data = new FormData(event.currentTarget);
+    const message = data.get("chat")
+    console.log(game.lobby)
+    socket.emit("send-chat-message", message, game.lobby, auth.user.username);
+  };
   //#region wait elements
   let waitCenterPanel = (
     <Grid item xs="6" align="center">
@@ -186,30 +195,42 @@ export default function WaitingScreen(props) {
           justifyContent: "space-between",
         }}
       >
+        <div class="chat-messages">
+
+        </div>
         <Typography fontSize={"32px"} sx={{ width: "100%" }}>
           Terran: Hi!
         </Typography>
         <Typography fontSize={"32px"} sx={{ width: "100%" }}>
           xx: Hi!
         </Typography>
-        <TextField sx={{ top: "65%", width: "60%" }}></TextField>
-        <Button
-          sx={{
-            marginLeft: 2,
-            width: "20%",
-            top: "65%",
-            backgroundColor: "yellow",
-            "&:hover": {
-              backgroundColor: "primary.main",
-              opacity: [0.9, 0.8, 0.7],
-            },
-            borderRadius: 5,
-            border: 3,
-            color: "black",
-          }}
-        >
-          <Typography fontSize={"32px"}>chat</Typography>
-        </Button>
+        <Box component="form" onSubmit={handleChat} noValidate>
+          <TextField
+          id="chat"
+          name="chat"
+           sx={{ top: "65%", width: "60%" }}>
+             Type Message
+           </TextField>
+            <Button
+              type="submit"
+              sx={{
+                marginLeft: 2,
+                width: "20%",
+                top: "65%",
+                backgroundColor: "yellow",
+                "&:hover": {
+                  backgroundColor: "primary.main",
+                  opacity: [0.9, 0.8, 0.7],
+                },
+                borderRadius: 5,
+                border: 3,
+                color: "black",
+              }}
+            >
+
+              <Typography fontSize={"32px"}>chat</Typography>
+            </Button>
+        </Box>
       </Box>
     </Grid>
   );
@@ -256,6 +277,26 @@ export default function WaitingScreen(props) {
       </Button>
     </Grid>
   );
+
+function outputMessage(user, message){
+  const div = document.createElement('div'); 
+  div.classList.add('message');
+  div.innerHTML =`<p> ${user}: ${message}</p>`;
+  document.querySelector('.chat-messages').appendChild(div)
+}
+  useEffect(() => {
+    const displayMessage = async (message, username) => {
+      console.log("the message is", message)
+      outputMessage(username,message);
+      //TODO
+      
+    };
+    socket.on("receive-message", displayMessage);
+    return () => {
+      socket.off("receive-message", displayMessage);
+    };
+  }, []);
+
 
   return (
     <List style={flexContainer} sx={{ justifyContent: "center" }}>
