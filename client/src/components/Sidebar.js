@@ -15,6 +15,7 @@ import CloseIcon from "@mui/icons-material/Close";
 export default function Sidebar() {
   const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
+  const { community } = useContext(GlobalCommunityContext);
 
   const [open, setOpen] = React.useState(false);
   const [gameInviteOpen, setGameInviteOpen] = React.useState(false);
@@ -46,6 +47,14 @@ export default function Sidebar() {
 
     game.joinLobby(lobbyID);
   };
+
+  const handleCreateCommunity = (event) => {
+    event.preventDefault();
+    console.log("create new community");
+    const data = new FormData(event.currentTarget);
+    let communityName = data.get("communityName");
+    community.createNewCommunity(communityName)
+  }
 
   const action = (
     <React.Fragment>
@@ -239,6 +248,7 @@ export default function Sidebar() {
             {" "}
             Create New Community
           </Typography>
+          <Box component="form" onSubmit={handleCreateCommunity} noValidate>
           <Box
             m="auto"
             textAlign="center"
@@ -256,6 +266,7 @@ export default function Sidebar() {
             <TextField
               align="center"
               id="communityName"
+              name="communityName"
               label="Enter A Community Name:"
               variant="standard"
               InputProps={{
@@ -272,8 +283,9 @@ export default function Sidebar() {
               }}
             />
           </Box>
-          <Box textAlign="center">
+          <Box textAlign="center" >
             <Button
+              type="submit"
               variant="contained"
               color="success"
               size="small"
@@ -290,6 +302,7 @@ export default function Sidebar() {
             >
               Create!
             </Button>
+          </Box>
           </Box>
         </Box>
       </ListItem>

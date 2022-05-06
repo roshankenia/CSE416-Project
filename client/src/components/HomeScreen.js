@@ -32,6 +32,7 @@ import Grid from "@mui/material/Grid";
 import AuthContext from "../auth";
 import { SocketContext } from "../socket";
 import { GameContext } from "../game";
+import { set } from "mongoose";
 
 /*
     User gets redirected here after login,
@@ -179,13 +180,12 @@ const HomeScreen = () => {
     </Button>
   );
 
-  let yourCommunities = [];
-
-  for (let i = 0; i < community.communityList.length; i++) {
-    if (
-      community.communityList[i].communityMembers.includes(auth.user.username)
-    ) {
-      yourCommunities.push(community.communityList[i]);
+  const [yourCommunities, setUCom] = useState(community.communityList.filter(x=>x.communityMembers.includes(auth.user.username)))
+  function handleKeyPress(event) {
+    if (event.code === "Enter") {
+      let text = event.target.value;
+      console.log(text);
+      setUCom(community.communityList.filter(x=>(x.communityMembers.includes(auth.user.username) && x.communityName.toLowerCase().startsWith(text.toLowerCase()))))
     }
   }
   let communityCard = <List></List>;
@@ -291,6 +291,7 @@ const HomeScreen = () => {
                 id="search"
                 label="Search:"
                 name="search"
+                onKeyDown={handleKeyPress}
                 InputProps={{
                   disableUnderline: true,
                   style: {

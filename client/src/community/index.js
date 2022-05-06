@@ -509,13 +509,14 @@ function GlobalCommunityContextProvider(props) {
     }
 
     return sortedPosts;
-  };
+  }; 
   community.searchPostsUp = async function (search) {
     search = search.toLowerCase();
     let newCommunityPosts = [];
     for (let i = 0; i < community.communityPosts.length; i++) {
       if (
-        community.communityPosts[i].postTitle.toLowerCase().startsWith(search)
+        community.communityPosts[i].postTitle.toLowerCase().startsWith(search) ||
+        community.communityPosts[i].communityName.toLowerCase().startsWith(search)
       ) {
         newCommunityPosts.push(community.communityPosts[i]);
       }
