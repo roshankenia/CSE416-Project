@@ -2,6 +2,10 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import api from "./community-request-api";
 import AuthContext from "../auth";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+
 /*
     This is our global data Community. Note that it uses the Flux design pattern,
     which makes use of things like actions and reducers. 
@@ -53,6 +57,7 @@ function GlobalCommunityContextProvider(props) {
     deletePost: null,
     searchPosts: null,
   });
+  const [load, setLoad] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
@@ -523,6 +528,7 @@ function GlobalCommunityContextProvider(props) {
   };
 
   community.setUserProfile = async function (username) {
+    setLoad(true);
     try {
       let userResponse = await api.searchUserExact(username);
       if (userResponse.status == 200) {
@@ -572,8 +578,10 @@ function GlobalCommunityContextProvider(props) {
     } catch (err) {
       console.log(err);
     }
+    setLoad(false);
   };
   community.setScreen = async function (screen) {
+    setLoad(true);
     let communityPosts = [];
     if (screen == "discovery") {
       for (let j = 0; j < community.communityList.length; j++) {
@@ -636,6 +644,8 @@ function GlobalCommunityContextProvider(props) {
       type: GlobalCommunityActionType.SET_SCREEN,
       payload: { screen: screen, communityPosts: communityPosts },
     });
+
+    setLoad(false);
   };
   community.getCommunityFromPost = async function (communityName) {
     try {
@@ -651,6 +661,7 @@ function GlobalCommunityContextProvider(props) {
     }
   };
   community.setCommunity = async function (setCommunity) {
+    setLoad(true);
     //first obtain all posts for this community
     let communityPosts = [];
     console.log(setCommunity);
@@ -708,6 +719,7 @@ function GlobalCommunityContextProvider(props) {
         console.log("could not obtain posts:", err);
       }
     }
+    setLoad(false);
   };
   community.setDeleteAccount = async function (deleteAccount) {
     communityReducer({
@@ -1468,6 +1480,20 @@ function GlobalCommunityContextProvider(props) {
       }}
     >
       {props.children}
+      <Modal open={load}>
+        <Box
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            textAlign: "center",
+            p: 4,
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      </Modal>
     </GlobalCommunityContext.Provider>
   );
 }

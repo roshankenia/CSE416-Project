@@ -54,8 +54,8 @@ function AuthContextProvider(props) {
           errorMessage: auth.errorMessage,
           isGuest: auth.isGuest,
           searchUsers: auth.searchUsers,
-          friends: auth.friends,
-          friendRequests: auth.friendRequests,
+          friends: payload.friends,
+          friendRequests: payload.friendRequests,
         });
       }
       case AuthActionType.LOGIN_USER: {
@@ -522,14 +522,45 @@ function AuthContextProvider(props) {
   };
 
   auth.getLoggedIn = async function () {
+    console.log("trying to get log in info");
     try {
       const response = await api.getLoggedIn();
       if (response.status === 200) {
+        let user = response.data.user;
+        console.log("updating friends and friend requests");
+        let friendRequestIds = user.requests;
+        let friendIds = user.friends;
+
+        let friendRequests = [];
+        let friends = [];
+
+        console.log("friendRequestIds:", friendRequestIds);
+        console.log("friendIds:", friendIds);
+
+        for (let i = 0; i < friendRequestIds.length; i++) {
+          if (friendRequestIds[i].username) {
+            friendRequests.push(friendRequestIds[i]);
+          } else {
+            let response = await api.findById(friendRequestIds[i]);
+            friendRequests.push(response.data.user);
+          }
+        }
+        for (let i = 0; i < friendIds.length; i++) {
+          if (friendIds[i].username) {
+            friends.push(friendIds[i]);
+          } else {
+            let response = await api.findById(friendIds[i]);
+            friends.push(response.data.user);
+          }
+        }
+
         authReducer({
           type: AuthActionType.GET_LOGGED_IN,
           payload: {
             loggedIn: response.data.loggedIn,
-            user: response.data.user,
+            user: user,
+            friends: friends,
+            friendRequests: friendRequests,
           },
         });
       }
@@ -589,6 +620,9 @@ function AuthContextProvider(props) {
 
         let friendRequests = [];
         let friends = [];
+
+        console.log("friendRequestIds:", friendRequestIds);
+        console.log("friendIds:", friendIds);
 
         for (let i = 0; i < friendRequestIds.length; i++) {
           if (friendRequestIds[i].username) {
