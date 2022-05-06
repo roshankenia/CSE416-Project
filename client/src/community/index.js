@@ -31,6 +31,7 @@ export const GlobalCommunityActionType = {
   DELETE_POST: "DELETE_POST",
   SEARCH_POSTS: "SEARCH_POSTS",
   SORT_POSTS: "SORT_POSTS",
+  UPDATE_CURRENT_COMMUNITY: "UPDATE_CURRENT_COMMUNITY",
 };
 
 function GlobalCommunityContextProvider(props) {
@@ -348,8 +349,86 @@ function GlobalCommunityContextProvider(props) {
           searchPosts: payload.searchPosts,
         });
       }
+      case GlobalCommunityActionType.UPDATE_CURRENT_COMMUNITY: {
+        return setCommunity({
+          communityList: community.communityList,
+          currentCommunity: payload,
+          communityPosts: community.communityPosts,
+          search: community.search,
+          errorMessage: community.errorMessage,
+          sort: community.sort,
+          screen: community.screen,
+          deleteAccountModal: community.deleteAccountModal,
+          changePasswordModal: community.changePasswordModal,
+          feedbackModal: community.feedbackModal,
+          deletePostModal: community.deletePostModal,
+          userProfile: community.userProfile,
+          changeBioModal: community.changeBioModal,
+          deletePost: community.deletePost,
+          searchPosts: community.searchPosts,
+        });
+      }
       default:
         return community;
+    }
+  };
+  community.joinCommunity = async function (communityName) {
+    try {
+      let getCommunityResponse = await api.searchCommunity(communityName);
+      if (getCommunityResponse.status == 200) {
+        let communityToJoin = getCommunityResponse.data.communityList[0];
+        console.log(communityToJoin);
+
+        communityToJoin.communityMembers.push(auth.user.username);
+
+        let updateCommunity = await api.updateCommunityById(
+          communityToJoin._id,
+          communityToJoin
+        );
+
+        if (updateCommunity.status == 201) {
+          let newCurCom = updateCommunity.data.community;
+          console.log(newCurCom);
+          communityReducer({
+            type: GlobalCommunityActionType.UPDATE_CURRENT_COMMUNITY,
+            payload: newCurCom,
+          });
+        }
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  community.leaveCommunity = async function (communityName) {
+    try {
+      let getCommunityResponse = await api.searchCommunity(communityName);
+      if (getCommunityResponse.status == 200) {
+        let communityToJoin = getCommunityResponse.data.communityList[0];
+        console.log(communityToJoin);
+        const index = communityToJoin.communityMembers.indexOf(
+          auth.user.username
+        );
+        if (index > -1) {
+          communityToJoin.communityMembers.splice(index, 1);
+        }
+
+        let updateCommunity = await api.updateCommunityById(
+          communityToJoin._id,
+          communityToJoin
+        );
+
+        if (updateCommunity.status == 201) {
+          let newCurCom = updateCommunity.data.community;
+          console.log(newCurCom);
+          communityReducer({
+            type: GlobalCommunityActionType.UPDATE_CURRENT_COMMUNITY,
+            payload: newCurCom,
+          });
+        }
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -357,7 +436,7 @@ function GlobalCommunityContextProvider(props) {
     let currentPosts = community.searchPosts;
 
     let sortedPosts = await community.sortPosts(currentPosts, sort);
-    
+
     console.log(sortedPosts);
 
     communityReducer({
@@ -577,14 +656,28 @@ function GlobalCommunityContextProvider(props) {
     console.log(setCommunity);
     if (setCommunity == null) {
       console.log("returning back to communities");
-      communityReducer({
-        type: GlobalCommunityActionType.SET_COMMUNITY,
-        payload: {
-          communityList: community.communityList,
-          currentCommunity: null,
-          communityPosts: null,
-        },
-      });
+      console.log("update communities");
+      try {
+        const listResponse = await api.getCommunityList();
+        console.log(
+          "getCommunities response: " + listResponse.data.communityList
+        );
+        if (listResponse.status === 201) {
+          let communityList = listResponse.data.communityList;
+          communityReducer({
+            type: GlobalCommunityActionType.SET_COMMUNITY,
+            payload: {
+              communityList: communityList,
+              currentCommunity: null,
+              communityPosts: null,
+            },
+          });
+        } else {
+          console.log("could not update community list");
+        }
+      } catch (err) {
+        console.log(err);
+      }
     } else {
       try {
         for (let i = 0; i < setCommunity.communityPosts.length; i++) {
@@ -607,7 +700,7 @@ function GlobalCommunityContextProvider(props) {
           type: GlobalCommunityActionType.SET_COMMUNITY,
           payload: {
             communityList: community.communityList,
-            currentCommunity: setCommunity.communityName,
+            currentCommunity: setCommunity,
             communityPosts: communityPosts,
           },
         });
@@ -892,7 +985,7 @@ function GlobalCommunityContextProvider(props) {
         communityReducer({
           type: GlobalCommunityActionType.CREATE_NEW_COMMUNITY,
           payload: {
-            currentCommunity: community.communityName,
+            currentCommunity: community,
             communityPosts: [],
           },
         });
@@ -1074,7 +1167,7 @@ function GlobalCommunityContextProvider(props) {
                     communityReducer({
                       type: GlobalCommunityActionType.SET_COMMUNITY,
                       payload: {
-                        currentCommunity: curCommunity.communityName,
+                        currentCommunity: curCommunity,
                         communityPosts: communityPosts,
                         communityList: communityList,
                       },
@@ -1164,7 +1257,7 @@ function GlobalCommunityContextProvider(props) {
                     communityReducer({
                       type: GlobalCommunityActionType.SET_COMMUNITY,
                       payload: {
-                        currentCommunity: curCommunity.communityName,
+                        currentCommunity: curCommunity,
                         communityPosts: communityPosts,
                         communityList: communityList,
                       },
@@ -1261,7 +1354,7 @@ function GlobalCommunityContextProvider(props) {
                     communityReducer({
                       type: GlobalCommunityActionType.SET_COMMUNITY,
                       payload: {
-                        currentCommunity: curCommunity.communityName,
+                        currentCommunity: curCommunity,
                         communityPosts: communityPosts,
                         communityList: communityList,
                       },
@@ -1351,7 +1444,7 @@ function GlobalCommunityContextProvider(props) {
                     communityReducer({
                       type: GlobalCommunityActionType.SET_COMMUNITY,
                       payload: {
-                        currentCommunity: curCommunity.communityName,
+                        currentCommunity: curCommunity,
                         communityPosts: communityPosts,
                         communityList: communityList,
                       },

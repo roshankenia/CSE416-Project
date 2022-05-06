@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalCommunityContext } from "../community";
 import { GameContext } from "../game";
+import AuthContext from "../auth";
 
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -27,8 +28,13 @@ import Sidebar from "./Sidebar.js";
 import PostFeed from "./PostFeed.js";
 
 export default function CommunityScreen() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
   const { community } = useContext(GlobalCommunityContext);
   const { game } = useContext(GameContext);
+  const { auth } = useContext(AuthContext);
 
   const handleBackToCommunities = (event) => {
     event.stopPropagation();
@@ -37,8 +43,66 @@ export default function CommunityScreen() {
 
   const handleHostNewGame = (event) => {
     event.preventDefault();
-    game.hostNewLobby(community.currentCommunity);
+    game.hostNewLobby(community.currentCommunity.communityName);
   };
+
+  const joinCommunity = (event) => {
+    event.preventDefault();
+    community.joinCommunity(community.currentCommunity.communityName);
+  };
+
+  const leaveCommunity = (event) => {
+    event.preventDefault();
+    community.leaveCommunity(community.currentCommunity.communityName);
+  };
+
+  let joinLeaveButton = (
+    <Button
+      variant="contained"
+      color="success"
+      size="small"
+      align="center"
+      onClick={joinCommunity}
+      style={{
+        fontWeight: 600,
+        border: "3px solid",
+        borderColor: "black",
+        backgroundColor: "green",
+        color: "black",
+        fontSize: "10px",
+        borderRadius: 20,
+      }}
+      sx={{ ml: 2, mb: 2 }}
+    >
+      Join
+    </Button>
+  );
+
+  if (
+    community.currentCommunity.communityMembers.includes(auth.user.username)
+  ) {
+    joinLeaveButton = (
+      <Button
+        variant="contained"
+        color="success"
+        size="small"
+        align="center"
+        onClick={leaveCommunity}
+        style={{
+          fontWeight: 600,
+          border: "3px solid",
+          borderColor: "black",
+          backgroundColor: "red",
+          color: "black",
+          fontSize: "10px",
+          borderRadius: 20,
+        }}
+        sx={{ ml: 2, mb: 2 }}
+      >
+        Leave
+      </Button>
+    );
+  }
 
   return (
     <Box style={{ backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')" }}>
@@ -70,26 +134,9 @@ export default function CommunityScreen() {
             style={{ fontSize: "48px" }}
             sx={{ ml: 20 }}
           >
-            {community.currentCommunity}
+            {community.currentCommunity.communityName}
           </Typography>
-          <Button
-            variant="contained"
-            color="success"
-            size="small"
-            align="center"
-            style={{
-              fontWeight: 600,
-              border: "3px solid",
-              borderColor: "black",
-              backgroundColor: "red",
-              color: "black",
-              fontSize: "10px",
-              borderRadius: 20,
-            }}
-            sx={{ ml: 2, mb: 2 }}
-          >
-            Leave
-          </Button>
+          {joinLeaveButton}
         </Grid>
         <Grid item xs={4}>
           <Box

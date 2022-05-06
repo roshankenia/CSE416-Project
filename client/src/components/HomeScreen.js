@@ -178,12 +178,22 @@ const HomeScreen = () => {
       Friends
     </Button>
   );
+
+  let yourCommunities = [];
+
+  for (let i = 0; i < community.communityList.length; i++) {
+    if (
+      community.communityList[i].communityMembers.includes(auth.user.username)
+    ) {
+      yourCommunities.push(community.communityList[i]);
+    }
+  }
   let communityCard = <List></List>;
   communityCard = (
     <List>
-      {community.communityList.map((com, index) => (
+      {yourCommunities.map((com, index) => (
         <ListItem key={index}>
-          <Box
+          <Button
             variant="contained"
             color="success"
             size="large"
@@ -201,34 +211,26 @@ const HomeScreen = () => {
           >
             <Grid container>
               <Grid item xs={8}>
-                <Typography align="center" style={{ fontSize: "48px" }}>
+                <Typography align="center" style={{ fontSize: "54px" }}>
                   {"J/" + com.communityName}
                 </Typography>
               </Grid>
-              <Grid item xs={2}></Grid>
-              <Grid item xs={2}>
-                <Button
-                  variant="contained"
-                  color="success"
-                  size="small"
+              <Grid item xs={4}>
+                <Typography
                   align="center"
-                  onClick={handleLeaveCommunity}
-                  style={{
-                    fontWeight: 600,
-                    border: "3px solid",
-                    borderColor: "black",
-                    backgroundColor: "red",
-                    color: "black",
-                    fontSize: "10px",
-                    borderRadius: 20,
-                  }}
-                  sx={{ mt: 2, width: "25%" }}
+                  style={{ fontSize: "36px", color: "#000e6b" }}
                 >
-                  Leave
-                </Button>
+                  {com.communityMembers.length + " member(s)"}
+                </Typography>
+                <Typography
+                  align="center"
+                  style={{ fontSize: "36px", color: "#005449" }}
+                >
+                  {com.communityPosts.length + " Post(s)"}
+                </Typography>
               </Grid>
             </Grid>
-          </Box>
+          </Button>
         </ListItem>
       ))}
     </List>

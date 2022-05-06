@@ -121,6 +121,23 @@ export default function PostCard(props) {
     </Button>
   );
 
+  if (community.currentCommunity) {
+    communityName = (
+      <Button
+        disabled={true}
+        style={{
+          fontSize: "22px",
+          paddingLeft: 10,
+          paddingBottom: 10,
+          color: "grey",
+        }}
+        onClick={(event) => openCommunity(event, post.communityName)}
+      >
+        {post.communityName}
+      </Button>
+    );
+  }
+
   let profileOptions = "";
 
   if (community.screen == "profile") {

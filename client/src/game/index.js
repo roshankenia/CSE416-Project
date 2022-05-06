@@ -393,7 +393,7 @@ function GameContextProvider(props) {
       let readyPlayers = game.readyPlayers;
       const readyIndex = readyPlayers.indexOf(username);
       if (readyIndex > -1) {
-        readyPlayers.splice(index, 1);
+        readyPlayers.splice(readyIndex, 1);
       }
 
       gameReducer({
@@ -695,15 +695,15 @@ function GameContextProvider(props) {
     try {
       const id = "madeupgameid";
       // if (game.host != auth.user.username) {
-        // game.exitVoting();
+      // game.exitVoting();
       // } else {
-        let panels = game.panels;
-        panels.push(lastPanel);
-        gameReducer({
-          type: GameActionType.ENTER_VOTING,
-          payload: panels,
-        });
-        history.push("/game/" + id);
+      let panels = game.panels;
+      panels.push(lastPanel);
+      gameReducer({
+        type: GameActionType.ENTER_VOTING,
+        payload: panels,
+      });
+      history.push("/game/" + id);
       // }
       //}
     } catch {

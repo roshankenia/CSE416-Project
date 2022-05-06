@@ -165,8 +165,8 @@ const FriendsScreen = () => {
     }
     searchUserList = (
       <List>
-        {newSearchUsers.map((user) => (
-          <ListItem key={user}>
+        {newSearchUsers.map((user, index) => (
+          <ListItem key={index}>
             <Box
               style={{
                 border: "3px solid",
