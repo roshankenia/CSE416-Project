@@ -140,7 +140,10 @@ export default function PostCard(props) {
 
   let profileOptions = "";
 
-  if (community.screen == "profile") {
+  if (
+    community.screen == "profile" &&
+    auth.user.username == community.userProfile.username
+  ) {
     profileOptions = (
       <IconButton color="primary" onClick={handleDelete}>
         <DeleteIcon
