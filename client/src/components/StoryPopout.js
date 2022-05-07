@@ -6,11 +6,16 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 import ReactQuill from "react-quill";
+import IconButton from "@mui/material/IconButton";
+
+import DownloadIcon from "@mui/icons-material/Download";
+import jsPDF from "jspdf";
 
 export default function StoryPopout(props) {
-  const { post } = props;
+  const { post, index } = props;
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => () => {
@@ -30,6 +35,14 @@ export default function StoryPopout(props) {
       }
     }
   }, [open]);
+
+  function downloadPost(event) {
+    event.stopPropagation();
+    let input = document.getElementById("data" + index);
+    console.log(input);
+    const pdf = new jsPDF("p", "pt", "a4");
+    pdf.html(input).then(() => pdf.save("jart.pdf"));
+  }
 
   return (
     <div>
@@ -55,17 +68,27 @@ export default function StoryPopout(props) {
             ref={descriptionElementRef}
             tabIndex={-1}
           >
-            {post.data.panels.map((paragraph, index) => (
-              <ReactQuill
-                key={index}
-                readOnly={true}
-                theme="bubble"
-                value={paragraph}
-              ></ReactQuill>
-            ))}
+            <Box id={"data" + index}>
+              {post.data.panels.map((paragraph, index) => (
+                <ReactQuill
+                  key={index}
+                  readOnly={true}
+                  theme="bubble"
+                  value={paragraph}
+                ></ReactQuill>
+              ))}
+            </Box>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
+          <IconButton color="primary" onClick={downloadPost}>
+            <DownloadIcon
+              sx={{
+                width: 40,
+                height: 40,
+              }}
+            />
+          </IconButton>
           <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>

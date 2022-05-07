@@ -19,6 +19,7 @@ import CommentIcon from "@mui/icons-material/Comment";
 import FlagIcon from "@mui/icons-material/Flag";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import DownloadIcon from "@mui/icons-material/Download";
 
 import SortIcon from "@mui/icons-material/Sort";
 
@@ -31,6 +32,8 @@ import Grid from "@mui/material/Grid";
 
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+
+import jsPDF from "jspdf";
 
 export default function PostCard(props) {
   const { community } = useContext(GlobalCommunityContext);
@@ -67,7 +70,7 @@ export default function PostCard(props) {
 
   if (post.postComic) {
     postData = (
-      <ImageList sx={{ width: "95%" }} cols={3}>
+      <ImageList id={"data" + index} sx={{ width: "95%" }} cols={3}>
         {post.data.panels.map((picture) => (
           <ImageListItem key={picture}>
             <img src={picture} loading="lazy" />
@@ -76,7 +79,27 @@ export default function PostCard(props) {
       </ImageList>
     );
   } else if (post.postStory) {
-    postData = <StoryPopout post={post} />;
+    postData = <StoryPopout index={index} post={post} />;
+  }
+  function downloadPost(event) {
+    event.stopPropagation();
+    let input = document.getElementById("data" + index);
+    console.log(input);
+
+    const pdf = new jsPDF("p", "pt", "a4");
+    const pageWidth = pdf.internal.pageSize.getWidth();
+
+    const marginX = (pageWidth - 250) / 2;
+    let y = 0;
+    for (let i = 0; i < post.data.panels.length; i += 3) {
+      pdf.addImage(post.data.panels[i], "JPEG", marginX, 0, 250, 250);
+      pdf.addImage(post.data.panels[i + 1], "JPEG", marginX, 250, 250, 250);
+      pdf.addImage(post.data.panels[i + 2], "JPEG", marginX, 500, 250, 250);
+      if (i + 3 != post.data.panels.length) {
+        pdf.addPage();
+      }
+    }
+    pdf.save("jart.pdf");
   }
 
   // if (index % 2 == 1) {
@@ -268,7 +291,7 @@ export default function PostCard(props) {
             {postData}
           </Grid>
           <Grid item xs={2}></Grid>
-          <Grid item xs={9}>
+          <Grid item xs={8}>
             <Typography
               display="inline"
               style={{
@@ -290,6 +313,18 @@ export default function PostCard(props) {
                 </Button>
               );
             })}
+          </Grid>
+          <Grid item xs={1}>
+            {post.postComic && (
+              <IconButton color="primary" onClick={downloadPost}>
+                <DownloadIcon
+                  sx={{
+                    width: 40,
+                    height: 40,
+                  }}
+                />
+              </IconButton>
+            )}
           </Grid>
           <Grid item xs={1}>
             {profileOptions}
@@ -476,7 +511,19 @@ export default function PostCard(props) {
               );
             })}
           </Grid>
-          <Grid item xs={2}>
+          <Grid item xs={1}>
+            {post.postComic && (
+              <IconButton color="primary" onClick={downloadPost}>
+                <DownloadIcon
+                  sx={{
+                    width: 40,
+                    height: 40,
+                  }}
+                />
+              </IconButton>
+            )}
+          </Grid>
+          <Grid item xs={1}>
             {profileOptions}
           </Grid>
         </Grid>
