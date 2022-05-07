@@ -1146,7 +1146,7 @@ function GlobalCommunityContextProvider(props) {
                   for (let k = 0; k < communityList.length; k++) {
                     if (
                       communityList[k].communityName ==
-                      community.currentCommunity
+                      community.currentCommunity.communityName
                     ) {
                       curCommunity = communityList[k];
                     }
@@ -1236,7 +1236,7 @@ function GlobalCommunityContextProvider(props) {
                   for (let k = 0; k < communityList.length; k++) {
                     if (
                       communityList[k].communityName ==
-                      community.currentCommunity
+                      community.currentCommunity.communityName
                     ) {
                       curCommunity = communityList[k];
                     }
@@ -1333,7 +1333,7 @@ function GlobalCommunityContextProvider(props) {
                   for (let k = 0; k < communityList.length; k++) {
                     if (
                       communityList[k].communityName ==
-                      community.currentCommunity
+                      community.currentCommunity.communityName
                     ) {
                       curCommunity = communityList[k];
                     }
@@ -1423,7 +1423,7 @@ function GlobalCommunityContextProvider(props) {
                   for (let k = 0; k < communityList.length; k++) {
                     if (
                       communityList[k].communityName ==
-                      community.currentCommunity
+                      community.currentCommunity.communityName
                     ) {
                       curCommunity = communityList[k];
                     }
