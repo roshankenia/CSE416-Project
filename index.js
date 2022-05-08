@@ -90,7 +90,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("ready-unready", (username, lobbyID) => {
-    console.log(username, "is readying or unreadying");
+    console.log(username, "is readying or unreadying ", lobbyID);
     socket.to(lobbyID).emit("player-ready", username);
   });
 
