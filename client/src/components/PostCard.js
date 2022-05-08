@@ -44,25 +44,6 @@ export default function PostCard(props) {
   const [expanded, setExpanded] = useState(false);
   const [comment, setComment] = useState('');
 
-  // useEffect(() => {
-  //   const listener = event => {
-  //     if (event.code === "Enter" || event.code === "NumpadEnter") {
-  //       console.log("Enter key was pressed.");
-  //       event.preventDefault();
-  //       event.stopPropagation();
-  //       if (expanded){
-  //         if (comment !== ''){
-  //           handleSubmitComment()
-  //         }
-  //       }
-  //     }
-  //   };
-  //   document.addEventListener("keydown", listener);
-  //   return () => {
-  //     document.removeEventListener("keydown", listener);
-  //   };
-  // }, []);
-
   const enterKeyDown = (event) => {
     if (event.key === "Enter"){
       console.log("Enter was pressed.");
@@ -76,6 +57,7 @@ export default function PostCard(props) {
     // call update post, creating new update type "comment" and just push the comment into array
     if (comment !== ''){
       console.log("comment submitted:", comment)
+      community.updatePost("comment", post, comment, auth.user);
     } else {
       console.log("no comment to submit");
     }
@@ -86,6 +68,7 @@ export default function PostCard(props) {
     event.stopPropagation();
     let ex = !expanded;
     setExpanded(ex);
+    setComment('');
     // if (ex) {
     //   store.updateViews(top5List);
     // }
@@ -103,12 +86,12 @@ export default function PostCard(props) {
 
   function handleLike(event) {
     event.stopPropagation();
-    community.updatePost("like", post, auth.user._id);
+    community.updatePost("like", post, null, auth.user._id);
   }
 
   function handleDislike(event) {
     event.stopPropagation();
-    community.updatePost("dislike", post, auth.user._id);
+    community.updatePost("dislike", post, null, auth.user._id);
   }
   let postData = "";
 

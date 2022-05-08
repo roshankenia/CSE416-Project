@@ -735,20 +735,54 @@ function GlobalCommunityContextProvider(props) {
     });
   };
 
-  community.updatePost = async function (updateType, post, userID) {
+  community.updatePost = async function (updateType, post, payload, user) {
     try {
-      if (updateType == "like") {
+      if (updateType == "comment") {
+        let commresponse = await api.createComment(
+          user.username,
+          payload,
+          [],
+          [],
+          []
+        )
+        console.log(response)
+        if (response.status === 200){
+          console.log("Comment Object successfully made")
+          let response = await api.updatePost(
+            post._id,
+            post.postTitle,
+            post.postComic,
+            post.postStory,
+            post.likes,
+            post.dislikes,
+            commresponse,
+            post.communityPublished,
+            post.discoveryPublished,
+            post.dateAndTime,
+            post.communityName
+          )
+          console.log(response)
+          if (response.status === 200){
+            console.log("Comment added to post")
+          } else {
+            console.log("Comment was not added to post")
+          }
+        } else {
+          console.log("Comment Object was not made.")
+        }
+      }
+      else if (updateType == "like") {
         let likeArray = post.likes;
         let dislikeArray = post.dislikes;
-        let likeIndex = likeArray.indexOf(userID);
-        let dislikeIndex = dislikeArray.indexOf(userID);
+        let likeIndex = likeArray.indexOf(user._id);
+        let dislikeIndex = dislikeArray.indexOf(user._id);
         //If user has already disliked, then remove the dislike and change to like
         if (dislikeIndex != -1) {
           dislikeArray.splice(dislikeIndex);
         }
         //If user has not liked, then add their username
         if (likeIndex == -1) {
-          likeArray.push(userID);
+          likeArray.push(user._id);
           console.log("pushed user to like Array");
         }
         //If user has liked, then remove their like and username
@@ -762,6 +796,7 @@ function GlobalCommunityContextProvider(props) {
           post.postStory,
           likeArray,
           dislikeArray,
+          post.comments,
           post.communityPublished,
           post.discoveryPublished,
           post.dateAndTime,
@@ -771,15 +806,15 @@ function GlobalCommunityContextProvider(props) {
       } else if (updateType == "dislike") {
         let likeArray = post.likes;
         let dislikeArray = post.dislikes;
-        let likeIndex = likeArray.indexOf(userID);
-        let dislikeIndex = dislikeArray.indexOf(userID);
+        let likeIndex = likeArray.indexOf(user._id);
+        let dislikeIndex = dislikeArray.indexOf(user._id);
         //If user has already liked, then remove the like and change to dislike
         if (likeIndex != -1) {
           likeArray.splice(likeIndex);
         }
         //If user has not disliked, then add their username
         if (dislikeIndex == -1) {
-          dislikeArray.push(userID);
+          dislikeArray.push(user._id);
         }
         //If user has disliked, then remove their dislike and username
         else {
@@ -792,6 +827,7 @@ function GlobalCommunityContextProvider(props) {
           post.postStory,
           likeArray,
           dislikeArray,
+          post.comments,
           post.communityPublished,
           post.discoveryPublished,
           post.dateAndTime,

@@ -85,6 +85,7 @@ export const createPost = (
   postStory,
   likes,
   dislikes,
+  comments,
   communityPublished,
   discoveryPublished,
   dateAndTime,
@@ -96,6 +97,7 @@ export const createPost = (
     postStory: postStory,
     likes: likes,
     dislikes: dislikes,
+    comments: comments,
     communityPublished: communityPublished,
     discoveryPublished: discoveryPublished,
     dateAndTime: dateAndTime,
@@ -110,6 +112,7 @@ export const updatePost = (
   postStory,
   likes,
   dislikes,
+  comments,
   communityPublished,
   discoveryPublished,
   dateAndTime,
@@ -121,10 +124,27 @@ export const updatePost = (
     postStory: postStory,
     likes: likes,
     dislikes: dislikes,
+    comments: comments,
     communityPublished: communityPublished,
     discoveryPublished: discoveryPublished,
     dateAndTime: dateAndTime,
     communityName: communityName,
+  });
+};
+
+export const createComment = (
+  username,
+  comment,
+  likes,
+  dislikes,
+  reply,
+) => {
+  return api.post(`/comment`, {
+    username: username,
+    comment: comment,
+    likes: likes,
+    dislikes: dislikes,
+    reply: reply,
   });
 };
 
@@ -157,6 +177,7 @@ const apis = {
   createStory,
   searchUserExact,
   searchCommunity,
+  createComment,
 };
 
 export default apis;
