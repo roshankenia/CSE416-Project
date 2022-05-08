@@ -86,7 +86,7 @@ io.on("connection", (socket) => {
   socket.on("leave-lobby", (username, lobbyID) => {
     console.log(username, "is leaving", lobbyID);
     socket.leave(lobbyID);
-    socket.to(lobbyID).emit("remove-player", username, lobbyID);
+    io.to(lobbyID).emit("remove-player", username, lobbyID);
   });
 
   socket.on("ready-unready", (username, lobbyID) => {
