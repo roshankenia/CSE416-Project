@@ -31,15 +31,12 @@ export default function ChangeBioModal() {
 
   function handleClose(event) {
     setNewBio('')
-    // setSuccess(false)
     auth.setErrorMessage('')
     community.setChangeBio(false);
   }
 
   async function handleChangeBio(event) {
     const response = await auth.updateBio(auth.user.username, newBio)
-    console.log("MAKE IT HERE PELASEEEEEEEEEEE")
-    console.log(response)
     handleClose()
   }
 

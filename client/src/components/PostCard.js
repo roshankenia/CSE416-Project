@@ -42,6 +42,45 @@ export default function PostCard(props) {
 
   //Keeps track if post is expanded or not
   const [expanded, setExpanded] = useState(false);
+  const [comment, setComment] = useState('');
+
+  // useEffect(() => {
+  //   const listener = event => {
+  //     if (event.code === "Enter" || event.code === "NumpadEnter") {
+  //       console.log("Enter key was pressed.");
+  //       event.preventDefault();
+  //       event.stopPropagation();
+  //       if (expanded){
+  //         if (comment !== ''){
+  //           handleSubmitComment()
+  //         }
+  //       }
+  //     }
+  //   };
+  //   document.addEventListener("keydown", listener);
+  //   return () => {
+  //     document.removeEventListener("keydown", listener);
+  //   };
+  // }, []);
+
+  const enterKeyDown = (event) => {
+    if (event.key === "Enter"){
+      console.log("Enter was pressed.");
+      handleSubmitComment();
+      setComment('');
+      setExpanded(false);
+    }
+  }
+
+  function handleSubmitComment(){
+    // call update post, creating new update type "comment" and just push the comment into array
+    if (comment !== ''){
+      console.log("comment submitted:", comment)
+    } else {
+      console.log("no comment to submit");
+    }
+  }
+
 
   function handleExpand(event) {
     event.stopPropagation();
@@ -50,6 +89,11 @@ export default function PostCard(props) {
     // if (ex) {
     //   store.updateViews(top5List);
     // }
+  }
+
+  function handleUpdateComment(event) {
+    console.log(event.target.value)
+    setComment(event.target.value)
   }
 
   function handleDelete(event) {
@@ -376,6 +420,8 @@ export default function PostCard(props) {
                     style: { fontSize: 24, paddingLeft: 20 },
                     shrink: true,
                   }}
+                  onChange={handleUpdateComment}
+                  onKeyDown={(e) => enterKeyDown(e)}
                 />
               </Box>
             </Box>
