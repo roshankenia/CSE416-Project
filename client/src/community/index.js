@@ -745,7 +745,7 @@ function GlobalCommunityContextProvider(props) {
           [],
           []
         )
-        console.log(response)
+        console.log(commresponse)
         if (response.status === 200){
           console.log("Comment Object successfully made")
           let response = await api.updatePost(
