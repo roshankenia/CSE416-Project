@@ -91,7 +91,7 @@ io.on("connection", (socket) => {
 
   socket.on("ready-unready", (username, lobbyID) => {
     console.log(username, "is readying or unreadying");
-    socket.to(lobbyID).emit("player-ready", username);
+    io.to(lobbyID).emit("player-ready", username);
   });
 
   socket.on("update-votes", (voteVal, username, lobbyID) => {

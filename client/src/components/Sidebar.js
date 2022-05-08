@@ -306,7 +306,7 @@ export default function Sidebar() {
           </Box>
         </Box>
       </ListItem>
-      <ListItem key="invites">
+      {/* <ListItem key="invites">
         <Box
           justifyContent="center"
           alignItems="center"
@@ -369,8 +369,8 @@ export default function Sidebar() {
             </Button>
           </Box>
         </Box>
-      </ListItem>
-      <div>
+      </ListItem> */}
+      {/* <div>
         <Button onClick={handleClick}>Sample Invite</Button>
         <Snackbar
           open={open}
@@ -379,7 +379,7 @@ export default function Sidebar() {
           message="u/Roshan has invited you to the game"
           action={action}
         />
-      </div>
+      </div> */}
     </List>
   );
 }
