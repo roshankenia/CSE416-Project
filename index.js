@@ -75,7 +75,7 @@ io.on("connection", (socket) => {
   socket.on("join-lobby", (username, lobbyID) => {
     console.log(username, " has joined lobby ", lobbyID);
     socket.join(lobbyID);
-    io.to(lobbyID).emit("new-player", username, lobbyID);
+    socket.to(lobbyID).emit("new-player", username, lobbyID);
   });
 
   socket.on("consolidate-players", (players, readyPlayers, lobbyID, gameMode) => {
@@ -86,11 +86,11 @@ io.on("connection", (socket) => {
   socket.on("leave-lobby", (username, lobbyID) => {
     console.log(username, "is leaving", lobbyID);
     socket.leave(lobbyID);
-    io.to(lobbyID).emit("remove-player", username, lobbyID);
+    socket.to(lobbyID).emit("remove-player", username, lobbyID);
   });
 
   socket.on("ready-unready", (username, lobbyID) => {
-    console.log(username, "is readying or unreadying ", lobbyID);
+    console.log(username, "is readying or unreadying");
     socket.to(lobbyID).emit("player-ready", username);
   });
 
