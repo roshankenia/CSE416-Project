@@ -465,6 +465,7 @@ updatePost = async (req, res) => {
       dateAndTime,
     } = req.body;
     const id = req.params.id;
+    console.log("Backend Update Post Body:", req.body)
 
     Post.findOne({ _id: id }, (err, post) => {
       // console.log("Post found: " + JSON.stringify(post));
@@ -491,7 +492,7 @@ updatePost = async (req, res) => {
         post.dislikes = dislikes;
       }
       if (comments) {
-        post.comment = comments;
+        post.comments = comments;
       }
       if (communityPublished) {
         post.communityPublished = communityPublished;
