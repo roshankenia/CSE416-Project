@@ -86,12 +86,12 @@ export default function PostCard(props) {
 
   function handleLike(event) {
     event.stopPropagation();
-    community.updatePost("like", post, null, auth.user._id);
+    community.updatePost("like", post, null, auth.user);
   }
 
   function handleDislike(event) {
     event.stopPropagation();
-    community.updatePost("dislike", post, null, auth.user._id);
+    community.updatePost("dislike", post, null, auth.user);
   }
   let postData = "";
 

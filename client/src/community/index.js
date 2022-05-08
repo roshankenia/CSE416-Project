@@ -745,9 +745,12 @@ function GlobalCommunityContextProvider(props) {
           [],
           []
         )
-        console.log(commresponse)
+        console.log("Create Comment Response", commresponse.data.comment)
         if (commresponse.status === 200){
           console.log("Comment Object successfully made")
+          let commentArr = post.comments;
+          commentArr.push(commresponse.data.comment)
+          console.log("Updated comment array:", commentArr)
           let response = await api.updatePost(
             post._id,
             post.postTitle,
@@ -755,13 +758,13 @@ function GlobalCommunityContextProvider(props) {
             post.postStory,
             post.likes,
             post.dislikes,
-            commresponse,
+            commentArr,
             post.communityPublished,
             post.discoveryPublished,
             post.dateAndTime,
             post.communityName
           )
-          console.log(response)
+          console.log("Update Post Response:", response)
           if (response.status === 200){
             console.log("Comment added to post")
           } else {
@@ -776,6 +779,8 @@ function GlobalCommunityContextProvider(props) {
         let dislikeArray = post.dislikes;
         let likeIndex = likeArray.indexOf(user._id);
         let dislikeIndex = dislikeArray.indexOf(user._id);
+        console.log(likeIndex)
+        console.log(dislikeIndex)
         //If user has already disliked, then remove the dislike and change to like
         if (dislikeIndex != -1) {
           dislikeArray.splice(dislikeIndex);
@@ -1145,6 +1150,7 @@ function GlobalCommunityContextProvider(props) {
             null,
             [],
             [],
+            [],
             true,
             false,
             dateTime,
@@ -1233,6 +1239,7 @@ function GlobalCommunityContextProvider(props) {
             title,
             comicID,
             null,
+            [],
             [],
             [],
             true,
