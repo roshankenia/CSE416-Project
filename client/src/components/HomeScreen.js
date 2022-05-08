@@ -71,8 +71,8 @@ const HomeScreen = () => {
     event.preventDefault();
     console.log("new lobby");
     console.log("lobby join from invite:", gameLobbyID);
-
     game.joinLobby(gameLobbyID);
+    
   };
 
   const action = (
@@ -242,7 +242,6 @@ const HomeScreen = () => {
       console.log("inside the invite with lobbyID", lobbyID);
       console.log("socketID is", socketid);
       handleClick();
-      // socket.leave()
 
       // game.joinLobby(lobbyID)
     };
