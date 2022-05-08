@@ -75,7 +75,7 @@ io.on("connection", (socket) => {
   socket.on("join-lobby", (username, lobbyID) => {
     console.log(username, " has joined lobby ", lobbyID);
     socket.join(lobbyID);
-    socket.to(lobbyID).emit("new-player", username, lobbyID);
+    io.to(lobbyID).emit("new-player", username, lobbyID);
   });
 
   socket.on("consolidate-players", (players, readyPlayers, lobbyID, gameMode) => {
