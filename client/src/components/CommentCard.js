@@ -23,8 +23,10 @@ export default function CommentCard(props) {
   const { comment } = props;
   const { auth } = useContext(AuthContext);
 
+  console.log(comment)
   function handleLike(event) {
     event.stopPropagation();
+    // console.log(comment)
     community.updateComment("like", comment, auth.user);
   }
 
@@ -60,7 +62,7 @@ export default function CommentCard(props) {
           >
             {comment.likes.length}
           </Typography>
-          <IconButton color="primary">
+          <IconButton color="primary" onClick={handleLike}>
             <ThumbUpIcon
               sx={{
                 width: 20,
@@ -76,7 +78,7 @@ export default function CommentCard(props) {
           >
             {comment.dislikes.length}
           </Typography>
-          <IconButton color="primary">
+          <IconButton color="primary" onClick={handleDislike}>
             <ThumbDownIcon
               sx={{
                 width: 20,

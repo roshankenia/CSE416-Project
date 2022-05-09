@@ -187,6 +187,7 @@ export const updateCommentById = (
   likes,
   dislikes,
 ) => {
+  console.log("In request API")
   return api.put(`/comment/${id}`, {
     username: username,
     comment: comment,

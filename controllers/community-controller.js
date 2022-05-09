@@ -613,6 +613,8 @@ getCommentById = async (req, res) => {
 updateCommentById = async (req, res) => {
   try {
     const body = req.body;
+    console.log("In controller")
+    console.log(body)
     const id = req.params.id;
     if (!body) {
       return res.status(400).json({
