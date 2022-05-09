@@ -80,7 +80,7 @@ export default function WelcomeScreen() {
             Login
           </Button>
         </div>
-        <div>
+        {/* <div>
           <Button
             variant="contained"
             color="success"
@@ -98,7 +98,7 @@ export default function WelcomeScreen() {
           >
             Continue as Guest
           </Button>
-        </div>
+        </div> */}
       </div>
     </Box>
   );

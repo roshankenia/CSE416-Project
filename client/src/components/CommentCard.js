@@ -51,7 +51,7 @@ export default function CommentCard(props) {
       sx={{ width: "100%" }}
     >
       <Grid container alignItems="center">
-        <Grid item xs={2.5}>
+        {/* <Grid item xs={2.5}>
           <Typography
             display="inline"
             style={{
@@ -85,11 +85,12 @@ export default function CommentCard(props) {
               }}
             />
           </IconButton>
-        </Grid>
-        <Grid item xs={9.5}>
+        </Grid> */}
+        <Grid item xs={12}>
           <Typography
             style={{
               fontSize: "26px",
+              paddingLeft: 10,
             }}
           >
             {comment.username + ": " + comment.comment}

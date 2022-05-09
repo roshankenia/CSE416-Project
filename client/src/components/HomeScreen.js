@@ -72,7 +72,6 @@ const HomeScreen = () => {
     console.log("new lobby");
     console.log("lobby join from invite:", gameLobbyID);
     game.joinLobby(gameLobbyID);
-    
   };
 
   const action = (
@@ -180,12 +179,22 @@ const HomeScreen = () => {
     </Button>
   );
 
-  const [yourCommunities, setUCom] = useState(community.communityList.filter(x=>x.communityMembers.includes(auth.user.username)))
+  const [yourCommunities, setUCom] = useState(
+    community.communityList.filter((x) =>
+      x.communityMembers.includes(auth.user.username)
+    )
+  );
   function handleKeyPress(event) {
     if (event.code === "Enter") {
       let text = event.target.value;
       console.log(text);
-      setUCom(community.communityList.filter(x=>(x.communityMembers.includes(auth.user.username) && x.communityName.toLowerCase().startsWith(text.toLowerCase()))))
+      setUCom(
+        community.communityList.filter(
+          (x) =>
+            x.communityMembers.includes(auth.user.username) &&
+            x.communityName.toLowerCase().startsWith(text.toLowerCase())
+        )
+      );
     }
   }
   let communityCard = <List></List>;
@@ -270,41 +279,6 @@ const HomeScreen = () => {
         </Grid>
         <Grid item xs={5}>
           {" "}
-          <Box
-            style={{
-              border: "3px solid",
-              borderColor: "black",
-              color: "black",
-              backgroundColor: "white",
-              fontSize: "32px",
-              borderRadius: 20,
-              outline: "none",
-              width: "96%",
-              marginTop: 2,
-            }}
-          >
-            <Box style={{ width: "96%" }}>
-              <TextField
-                fullWidth
-                variant="standard"
-                id="search"
-                label="Search:"
-                name="search"
-                onKeyDown={handleKeyPress}
-                InputProps={{
-                  disableUnderline: true,
-                  style: {
-                    fontSize: 20,
-                    paddingLeft: 20,
-                  },
-                }}
-                InputLabelProps={{
-                  style: { fontSize: 24, paddingLeft: 20 },
-                  shrink: true,
-                }}
-              />
-            </Box>
-          </Box>
         </Grid>
         <Grid item xs={4}></Grid>
         <Grid item xs={8} align="center">
