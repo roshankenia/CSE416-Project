@@ -51,6 +51,10 @@ export const getStoryById = (id) => {
   return api.get(`/story/${id}`);
 };
 
+export const getCommentByID = (id) => {
+  return api.get(`/comment/${id}`);
+};
+
 export const createComic = (authors, panels) => {
   return api.post(`/comic`, {
     authors: authors,
@@ -178,6 +182,7 @@ const apis = {
   searchUserExact,
   searchCommunity,
   createComment,
+  getCommentByID,
 };
 
 export default apis;
