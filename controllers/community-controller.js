@@ -613,6 +613,7 @@ getCommentById = async (req, res) => {
 updateCommentById = async (req, res) => {
   console.log("In controller")
   console.log("req.body:", req.body)
+  console.log("req.body.username:", req.body.username)
   try {
     const body = req.body;
     const id = req.params.id;
@@ -630,10 +631,10 @@ updateCommentById = async (req, res) => {
         });
       }
 
-      comment.username = body.comment.username
-      comment.comment = body.comment.comment;
-      comment.likes = body.comment.likes;
-      comment.dislikes = body.comment.dislikes;
+      comment.username = req.body.username
+      comment.comment = req.body.comment;
+      comment.likes = req.body.likes;
+      comment.dislikes = req.body.dislikes;
 
       comment
         .save()
@@ -869,5 +870,5 @@ module.exports = {
   searchComicByAuthor,
   searchStoryByAuthor,
   searchUserExact,
-  createReport
+  createReport,
 };
