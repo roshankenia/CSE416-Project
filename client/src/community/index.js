@@ -1231,11 +1231,6 @@ function GlobalCommunityContextProvider(props) {
       else {
         likeArray.splice(likeIndex);
       }
-      console.log("this is passed to the api request:", comment._id,
-      comment.username,
-      comment.comment,
-      likeArray,
-      dislikeArray,)
       let response = await api.updateCommentById(
         comment._id,
         comment.username,
@@ -1247,7 +1242,34 @@ function GlobalCommunityContextProvider(props) {
         console.log("Update Comment Successful")
       }
     } else if (updateType == "dislike") {
-      
+      let likeArray = comment.likes;
+      let dislikeArray = comment.dislikes;
+      let likeIndex = likeArray.indexOf(user._id);
+      let dislikeIndex = dislikeArray.indexOf(user._id);
+      //If user has already liked, then remove the like and change to dislike
+      if (likeIndex != -1) {
+        likeArray.splice(likeIndex);
+        console.log("removed user from like Array")
+      }
+      //If user has not disliked, then add their username
+      if (dislikeIndex == -1) {
+        dislikeArray.push(user._id);
+        console.log("pushed user to dislike Array");
+      }
+      //If user has disliked, then remove their dislike and username
+      else {
+        dislikeArray.splice(dislikeIndex);
+      }
+      let response = await api.updateCommentById(
+        comment._id,
+        comment.username,
+        comment.comment,
+        likeArray,
+        dislikeArray,
+      );
+      if (response.status === 200){
+        console.log("Update Comment Successful")
+      }
     } else {
       console.log("Comment UpdateType Not Valid");
     }
