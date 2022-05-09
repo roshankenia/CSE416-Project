@@ -35,6 +35,9 @@ import ImageListItem from "@mui/material/ImageListItem";
 
 import jsPDF from "jspdf";
 
+import ReportModal from "./ReportModal";
+
+
 export default function PostCard(props) {
   const { community } = useContext(GlobalCommunityContext);
   const { auth } = useContext(AuthContext);
@@ -96,7 +99,8 @@ export default function PostCard(props) {
 
   function handleOpenReportModal(event) {
     event.stopPropagation();
-    community.setReportModal(true, post._id)
+    console.log("Open report modal")
+    community.setReportModal(true, post)
   }
 
   let postData = "";
@@ -239,6 +243,7 @@ export default function PostCard(props) {
         }}
         sx={{ mt: 2, width: "100%" }}
       >
+        <ReportModal/>
         <Grid container justifyContent="center" alignItems="center">
           <Grid item xs={3}>
             {communityName}
@@ -438,6 +443,7 @@ export default function PostCard(props) {
         }}
         sx={{ mt: 2, width: "100%" }}
       >
+        <ReportModal/>
         <Grid container justifyContent="center" alignItems="center">
           <Grid item xs={3}>
             {communityName}

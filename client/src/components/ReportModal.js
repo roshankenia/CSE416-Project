@@ -31,10 +31,18 @@ export default function ReportModal() {
   function handleClose(event) {
     setNewReport('')
     auth.setErrorMessage('')
+    community.setReportModal(false, null)
   }
 
   async function handleCreateReport(event) {
-    const response = await community.createReport(auth.user._id, community.reportPostID, newReport)
+    const response = await community.createReport(
+        auth.user._id, 
+        community.reportPost._id, 
+        auth.user.username, 
+        community.reportPost.postTitle, 
+        community.reportPost.communityName, 
+        newReport,
+        );
     console.log(response)
     handleClose()
   }

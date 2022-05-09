@@ -165,11 +165,17 @@ export const searchUserExact = (username) => {
 export const createReport = (
   userID,
   postID,
+  username,
+  postTitle,
+  postCommunity,
   report,
 ) => {
   return api.post(`/report`, {
     userID: userID,
     postID: postID,
+    username:username,
+    postTitle: postTitle,
+    postCommunity: postCommunity,
     report: report
   });
 };

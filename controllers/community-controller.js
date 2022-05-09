@@ -806,7 +806,7 @@ createReport = async (req, res) => {
         errorMessage: "Improperly formatted request",
       });
     }
-    if (Object.keys(body).length < 3) {
+    if (Object.keys(body).length < 6) {
       return res.status(400).json({
         errorMessage: "Improperly formatted request",
       });
