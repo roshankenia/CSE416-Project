@@ -4,7 +4,7 @@ import { GlobalCommunityContext } from "../community";
 import { GameContext } from "../game";
 import AuthContext from "../auth";
 import { Box, Button, List, ListItem, TextField } from "@mui/material";
-
+import Chat from "./Chat"
 import EditIcon from "@mui/icons-material/Edit";
 import BrushIcon from "@mui/icons-material/Brush";
 import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
@@ -86,6 +86,40 @@ export default function WaitingScreen(props) {
     document.getElementById('chat').value= "";
 
   };
+  //Handles the messages
+  // const messages = [["alan","hi"]];
+  // let chatbox =(
+  //   <List>
+  //       {messages.map((message) => (
+  //         <ListItem key={message}>
+  //           <Box
+  //             style={{
+  //               border: "3px solid",
+  //               borderColor: "black",
+  //               color: "black",
+  //               backgroundColor: "white",
+  //               fontSize: "20px",
+  //               outline: "none",
+  //               borderRadius: 20,
+  //               width: "100%",
+  //             }}
+  //           >
+  //             <Grid container spacing={2}>
+  //               <Grid item xs={5}>
+  //                 <Typography
+  //                   display="inline"
+  //                   style={{ fontSize: "32px" }}
+  //                   sx={{ ml: 2 }}
+  //                 >
+  //                   {message[0]}: {message[1]} test
+  //                 </Typography>
+  //               </Grid>
+  //             </Grid>
+  //           </Box>
+  //         </ListItem>
+  //       ))}
+  //     </List>
+  // );
   //#region wait elements
   let waitCenterPanel = (
     <Grid item xs="6" align="center">
@@ -188,7 +222,7 @@ export default function WaitingScreen(props) {
   );
 
   const waitChat = (
-    <Grid>
+    <Grid container>
       <Box
         sx={{
           width: 600,
@@ -198,15 +232,9 @@ export default function WaitingScreen(props) {
           justifyContent: "space-between",
         }}
       >
-        <div className="chat-messages">
+        <Chat>
 
-        </div>
-        {/* <Typography fontSize={"32px"} sx={{ width: "100%" }}>
-          Terran: Hi!
-        </Typography>
-        <Typography fontSize={"32px"} sx={{ width: "100%" }}>
-          xx: Hi!
-        </Typography> */}
+        </Chat>
         <Box component="form" onSubmit={handleChat} noValidate>
           <TextField
           id="chat"
@@ -283,16 +311,17 @@ export default function WaitingScreen(props) {
 
 
   
-const messages = [];
-const user2message = [];
+
+
+
 
 function outputMessage(user, message){
-  for(var i =0; i<messages.length; i++){
-    const div = document.createElement('div'); 
-    div.classList.add('message');
-    div.innerHTML =`<p> ${user2message[i]}: ${messages[i]}</p>`;
-    document.querySelector('.chat-messages').appendChild(div)
-  }
+  // for(var i =0; i<messages.length; i++){
+  //   const div = document.createElement('Typography'); 
+  //   div.classList.add('message');
+  //   div.innerHTML =`<p> ${user2message[i]}: ${messages[i]}</p>`;
+  //   document.querySelector('.chat-messages').appendChild(div)
+  // }
   // const div = document.createElement('div'); 
   // div.classList.add('message');
   // div.innerHTML =`<p> ${user}: ${message}</p>`;
@@ -300,30 +329,30 @@ function outputMessage(user, message){
 }
 
 
-  useEffect(() => {
-    const displayMessage = async (message, username) => {
-      console.log("the message is", message)
-      messages.push(message)
-      user2message.push(username)
-      // if(game.currentPlayer == auth.user.username){
-      //   console.log("is the current player")
-      //   outputMessage(username,message);
-      // }
-      // else{
-        const div = document.createElement('div'); 
-        div.classList.add('message');
-        div.style.width = "100%"
-        div.style.height = "100%"
-        div.className='inline-block'
-        div.innerHTML =`<p> ${username}: ${message}</p>`;
-        document.querySelector('.chat-messages').appendChild(div)
-      // }
-    };
-    socket.on("receive-message", displayMessage);
-    return () => {
-      socket.off("receive-message", displayMessage);
-    };
-  }, []);
+  // useEffect(() => {
+  //   const displayMessage = async (message, username) => {
+  //     console.log("the message is", message)
+  //     messages.push([username,message])
+  //     // user2message.push(username)
+  //     // if(game.currentPlayer == auth.user.username){
+  //     //   console.log("is the current player")
+  //     //   outputMessage(username,message);
+  //     // }
+  //     // else{
+  //       // const div = document.createElement('div'); 
+  //       // div.classList.add('message');
+  //       // div.style.width = "100%"
+  //       // div.style.height = "100%"
+  //       // div.className='inline-block'
+  //       // div.innerHTML =`<p> ${username}: ${message}</p>`;
+  //       // document.querySelector('.chat-messages').appendChild(div)
+  //     // }
+  //   };
+  //   socket.on("receive-message", displayMessage);
+  //   return () => {
+  //     socket.off("receive-message", displayMessage);
+  //   };
+  // }, []);
 
 
   return (

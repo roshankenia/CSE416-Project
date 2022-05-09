@@ -443,12 +443,3 @@ input {
   top: 30%;
   /* bottom: 0;  */
 }
-
-.inline-block {
-  display: inline-block;
-  width: 100px;
-  height: 20px;
-  white-space: normal;
-  overflow: auto;
-  
-}

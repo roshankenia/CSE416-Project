@@ -1,6 +1,7 @@
 import AppBanner from "./AppBanner";
 import ChangeBioModal from "./ChangeBioModal";
 import ChangePasswordModal from "./ChangePasswordModal";
+import Chat from "./Chat"
 import CommentCard from "./CommentCard";
 import CommunityCard from "./CommunityCard";
 import CommunitiesScreen from "./CommunitiesScreen";
@@ -83,4 +84,5 @@ export {
   Timer,
   StoryPopout,
   ReportModal,
+  Chat
 };
