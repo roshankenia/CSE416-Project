@@ -1231,6 +1231,11 @@ function GlobalCommunityContextProvider(props) {
       else {
         likeArray.splice(likeIndex);
       }
+      console.log("this is passed to the api request:", comment._id,
+      comment.username,
+      comment.comment,
+      likeArray,
+      dislikeArray,)
       let response = await api.updateCommentById(
         comment._id,
         comment.username,

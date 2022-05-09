@@ -23,7 +23,6 @@ export default function CommentCard(props) {
   const { comment } = props;
   const { auth } = useContext(AuthContext);
 
-  console.log(comment)
   function handleLike(event) {
     event.stopPropagation();
     // console.log(comment)
