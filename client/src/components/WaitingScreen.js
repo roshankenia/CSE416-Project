@@ -82,6 +82,9 @@ export default function WaitingScreen(props) {
     const message = data.get("chat")
     console.log(game.lobby)
     socket.emit("send-chat-message", message, game.lobby, auth.user.username);
+    document.getElementById('chat').placeholder= "Type Something";
+    document.getElementById('chat').value= "";
+
   };
   //#region wait elements
   let waitCenterPanel = (
@@ -198,12 +201,12 @@ export default function WaitingScreen(props) {
         <div className="chat-messages">
 
         </div>
-        <Typography fontSize={"32px"} sx={{ width: "100%" }}>
+        {/* <Typography fontSize={"32px"} sx={{ width: "100%" }}>
           Terran: Hi!
         </Typography>
         <Typography fontSize={"32px"} sx={{ width: "100%" }}>
           xx: Hi!
-        </Typography>
+        </Typography> */}
         <Box component="form" onSubmit={handleChat} noValidate>
           <TextField
           id="chat"
@@ -278,18 +281,43 @@ export default function WaitingScreen(props) {
     </Grid>
   );
 
+
+  
+const messages = [];
+const user2message = [];
+
 function outputMessage(user, message){
-  const div = document.createElement('div'); 
-  div.classList.add('message');
-  div.innerHTML =`<p> ${user}: ${message}</p>`;
-  document.querySelector('.chat-messages').appendChild(div)
+  for(var i =0; i<messages.length; i++){
+    const div = document.createElement('div'); 
+    div.classList.add('message');
+    div.innerHTML =`<p> ${user2message[i]}: ${messages[i]}</p>`;
+    document.querySelector('.chat-messages').appendChild(div)
+  }
+  // const div = document.createElement('div'); 
+  // div.classList.add('message');
+  // div.innerHTML =`<p> ${user}: ${message}</p>`;
+  // document.querySelector('.chat-messages').appendChild(div)
 }
+
+
   useEffect(() => {
     const displayMessage = async (message, username) => {
       console.log("the message is", message)
-      outputMessage(username,message);
-      //TODO
-      
+      messages.push(message)
+      user2message.push(username)
+      // if(game.currentPlayer == auth.user.username){
+      //   console.log("is the current player")
+      //   outputMessage(username,message);
+      // }
+      // else{
+        const div = document.createElement('div'); 
+        div.classList.add('message');
+        div.style.width = "100%"
+        div.style.height = "100%"
+        div.className='inline-block'
+        div.innerHTML =`<p> ${username}: ${message}</p>`;
+        document.querySelector('.chat-messages').appendChild(div)
+      // }
     };
     socket.on("receive-message", displayMessage);
     return () => {
