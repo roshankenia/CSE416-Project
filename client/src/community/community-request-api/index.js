@@ -162,6 +162,19 @@ export const searchUserExact = (username) => {
   });
 };
 
+export const createReport = (
+  userID,
+  postID,
+  report,
+
+) => {
+  return api.post(`/report`, {
+    userID: userID,
+    postID: postID,
+    report: report
+  });
+};
+
 const apis = {
   createCommunity,
   getCommunityList,

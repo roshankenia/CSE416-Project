@@ -93,6 +93,12 @@ export default function PostCard(props) {
     event.stopPropagation();
     community.updatePost("dislike", post, null, auth.user);
   }
+
+  function handleOpenReportModal(event) {
+    event.stopPropagation();
+    community.setReportModal(true, post._id)
+  }
+
   let postData = "";
 
   if (post.postComic) {
@@ -257,7 +263,7 @@ export default function PostCard(props) {
             </Typography>
           </Grid>
           <Grid item xs={3}>
-            <IconButton color="primary">
+            <IconButton color="primary" onClick={handleOpenReportModal}>
               <FlagIcon />
               <Typography>{"Report"}</Typography>
             </IconButton>
@@ -456,7 +462,7 @@ export default function PostCard(props) {
             </Typography>
           </Grid>
           <Grid item xs={3}>
-            <IconButton color="primary">
+            <IconButton color="primary" onClick={handleOpenReportModal}>
               <FlagIcon />
               <Typography>{"Report"}</Typography>
             </IconButton>

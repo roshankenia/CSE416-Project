@@ -4,6 +4,7 @@ const Comic = require("../models/comic-model");
 const Story = require("../models/story-model");
 const Comment = require("../models/comment-model");
 const Post = require("../models/post-model");
+const Report = require("../models/report-model");
 
 //#region community
 //front-end payload: response.data.community
@@ -791,6 +792,46 @@ searchStoryByAuthor = async (req, res) => {
         return res.status(200).json({ success: true, storyList: story });
       }
     ).catch((err) => console.log(err));
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
+createReport = async (req, res) => {
+  try {
+    const body = req.body;
+    if (!body) {
+      return res.status(400).json({
+        errorMessage: "Improperly formatted request",
+      });
+    }
+    if (Object.keys(body).length < 3) {
+      return res.status(400).json({
+        errorMessage: "Improperly formatted request",
+      });
+    }
+    const report = new Report(body);
+    console.log("creating report: " + JSON.stringify(report));
+    if (!report) {
+      return res.status(400).json({
+        errorMessage: "Improperly formatted request",
+      });
+    }
+
+    report
+      .save()
+      .then(() => {
+        return res.status(200).json({
+          report: report,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        return res.status(400).json({
+          errorMessage: "Report Not Created!",
+        });
+      });
   } catch (err) {
     console.error(err);
     res.status(500).send();

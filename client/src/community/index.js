@@ -36,6 +36,7 @@ export const GlobalCommunityActionType = {
   SEARCH_POSTS: "SEARCH_POSTS",
   SORT_POSTS: "SORT_POSTS",
   UPDATE_CURRENT_COMMUNITY: "UPDATE_CURRENT_COMMUNITY",
+  SET_REPORT_MODAL: "SET_REPORT_MODAL",
 };
 
 function GlobalCommunityContextProvider(props) {
@@ -54,6 +55,8 @@ function GlobalCommunityContextProvider(props) {
     deletePostModal: false,
     userProfile: auth.user,
     changeBioModal: false,
+    reportModal: false,
+    reportPostID : null,
     deletePost: null,
     searchPosts: null,
   });
@@ -83,6 +86,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          reportModal: community.reportModal,
+          reportPostID : community.reportPostID,
           deletePost: community.deletePost,
           searchPosts: payload.communityPosts,
         });
@@ -102,6 +107,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          reportModal: community.reportModal,
+          reportPostID : community.reportPostID,
           deletePost: community.deletePost,
           searchPosts: community.searchPosts,
         });
@@ -121,6 +128,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          reportModal: community.reportModal,
+          reportPostID : community.reportPostID,
           deletePost: community.deletePost,
           searchPosts: community.searchPosts,
         });
@@ -141,6 +150,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          reportModal: community.reportModal,
+          reportPostID : community.reportPostID,
           deletePost: community.deletePost,
           searchPosts: community.searchPosts,
         });
@@ -160,6 +171,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          reportModal: community.reportModal,
+          reportPostID : community.reportPostID,
           deletePost: community.deletePost,
           searchPosts: payload.communityPosts,
         });
@@ -179,6 +192,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: auth.user,
           changeBioModal: community.changeBioModal,
+          reportModal: community.reportModal,
+          reportPostID : community.reportPostID,
           deletePost: community.deletePost,
           searchPosts: payload.communityPosts,
         });
@@ -198,6 +213,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          reportModal: community.reportModal,
+          reportPostID : community.reportPostID,
           deletePost: community.deletePost,
           searchPosts: community.searchPosts,
         });
@@ -217,6 +234,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          reportModal: community.reportModal,
+          reportPostID : community.reportPostID,
           deletePost: community.deletePost,
           searchPosts: community.searchPosts,
         });
@@ -236,6 +255,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          reportModal: community.reportModal,
+          reportPostID : community.reportPostID,
           deletePost: community.deletePost,
           searchPosts: community.searchPosts,
         });
@@ -255,6 +276,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: payload.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          reportModal: community.reportModal,
+          reportPostID : community.reportPostID,
           deletePost: payload.deletePost,
           searchPosts: community.searchPosts,
         });
@@ -274,6 +297,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: payload.userProfile,
           changeBioModal: community.changeBioModal,
+          reportModal: community.reportModal,
+          reportPostID : community.reportPostID,
           deletePost: community.deletePost,
           searchPosts: payload.communityPosts,
         });
@@ -293,6 +318,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: payload,
+          reportModal: community.reportModal,
+          reportPostID : community.reportPostID,
           deletePost: community.deletePost,
           searchPosts: community.searchPosts,
         });
@@ -312,6 +339,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: false,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          reportModal: community.reportModal,
+          reportPostID : community.reportPostID,
           deletePost: null,
           searchPosts: payload.communityPosts,
         });
@@ -331,6 +360,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          reportModal: community.reportModal,
+          reportPostID : community.reportPostID,
           deletePost: community.deletePost,
           searchPosts: payload,
         });
@@ -350,6 +381,8 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          reportModal: community.reportModal,
+          reportPostID : community.reportPostID,
           deletePost: community.deletePost,
           searchPosts: payload.searchPosts,
         });
@@ -369,6 +402,29 @@ function GlobalCommunityContextProvider(props) {
           deletePostModal: community.deletePostModal,
           userProfile: community.userProfile,
           changeBioModal: community.changeBioModal,
+          reportModal: community.reportModal,
+          reportPostID : community.reportPostID,
+          deletePost: community.deletePost,
+          searchPosts: community.searchPosts,
+        });
+      }
+      case GlobalCommunityActionType.SET_REPORT_MODAL: {
+        return setCommunity({
+          communityList: community.communityList,
+          currentCommunity: community.currentCommunity,
+          communityPosts: community.communityPosts,
+          search: community.search,
+          errorMessage: community.errorMessage,
+          sort: community.sort,
+          screen: community.screen,
+          deleteAccountModal: community.deleteAccountModal,
+          changePasswordModal: community.changePasswordModal,
+          feedbackModal: community.feedbackModal,
+          deletePostModal: community.deletePostModal,
+          userProfile: community.userProfile,
+          changeBioModal: community.changeBioModal,
+          reportModal: payload.openBoolean,
+          reportPostID : payload.postID,
           deletePost: community.deletePost,
           searchPosts: community.searchPosts,
         });
@@ -855,7 +911,23 @@ function GlobalCommunityContextProvider(props) {
           post.dateAndTime,
           post.communityName
         );
-        console.log("Like reponse: ", response);
+        if (response.status === 200){
+          console.log("Update Post Successful")
+
+          //ATTEMPTING TO UPDATE JUST THE UPDATED POST ON THE SCREEN
+          console.log(response)
+          let newPost = response.data.post
+          let newCommunityPosts = []
+          for (let i = 0; i < community.communityPosts.length; i++){
+            if (community.communityPosts[i]._id == newPost._id){
+              console.log("found a match")
+              newCommunityPosts.push(newPost)
+            } else {
+              newCommunityPosts.push(community.communityPosts[i])
+            }
+          }
+          console.log(newCommunityPosts)
+        }
       } else if (updateType == "dislike") {
         let likeArray = post.likes;
         let dislikeArray = post.dislikes;
@@ -1070,6 +1142,15 @@ function GlobalCommunityContextProvider(props) {
     communityReducer({
       type: GlobalCommunityActionType.SET_CHANGE_BIO,
       payload: changeBio,
+    });
+  };
+  community.setReportModal = async function (openBoolean, postID) {
+    communityReducer({
+      type: GlobalCommunityActionType.SET_CHANGE_BIO,
+      payload: {
+        openBoolean: openBoolean,
+        postID: postID,
+      },
     });
   };
   community.setFeedback = async function (feedback) {
@@ -1563,6 +1644,24 @@ function GlobalCommunityContextProvider(props) {
         }
       }
     }
+  };
+
+  community.createReport = async function (userID, postID, report) {
+    try{
+      let response = await api.createReport(
+        userID,
+        postID,
+        report
+      );
+      if (response.status === 200){
+        console.log("Report Made!");
+      } else {
+        console.log("Create Report Reponses Status FAIL")
+      }
+    } catch (err) {
+      console.log("Report not created.")
+    }
+    
   };
 
   return (
