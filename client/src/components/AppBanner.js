@@ -14,6 +14,7 @@ import DeleteAccountModal from "./DeleteAccountModal";
 import FeedbackModal from "./FeedbackModal";
 import ChangePasswordModal from "./ChangePasswordModal";
 import DeletePostModal from "./DeletePostModal";
+import ReportModal from "./ReportModal";
 
 export default function AppBanner() {
   const { auth } = useContext(AuthContext);
@@ -173,6 +174,7 @@ export default function AppBanner() {
       <FeedbackModal />
       <ChangePasswordModal />
       <DeletePostModal />
+      <ReportModal />
     </Box>
   );
 }

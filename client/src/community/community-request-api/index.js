@@ -165,12 +165,33 @@ export const searchUserExact = (username) => {
 export const createReport = (
   userID,
   postID,
+  username,
+  postTitle,
+  postCommunity,
   report,
 ) => {
   return api.post(`/report`, {
     userID: userID,
     postID: postID,
+    username: username,
+    postTitle: postTitle,
+    postCommunity: postCommunity,
     report: report
+  });
+};
+
+export const updateCommentById = (
+  id,
+  username,
+  comment,
+  likes,
+  dislikes,
+) => {
+  return api.put(`/comment/${id}`, {
+    username: username,
+    comment: comment,
+    likes: likes,
+    dislikes: dislikes,
   });
 };
 
@@ -196,6 +217,7 @@ const apis = {
   createComment,
   getCommentByID,
   createReport,
+  updateCommentById,
 };
 
 export default apis;

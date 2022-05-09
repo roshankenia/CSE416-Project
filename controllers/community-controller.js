@@ -628,7 +628,7 @@ updateCommentById = async (req, res) => {
         });
       }
 
-      //This line could be wrong here
+      comment.username = body.comment.username
       comment.comment = body.comment.comment;
       comment.likes = body.comment.likes;
       comment.dislikes = body.comment.dislikes;
@@ -806,7 +806,7 @@ createReport = async (req, res) => {
         errorMessage: "Improperly formatted request",
       });
     }
-    if (Object.keys(body).length < 3) {
+    if (Object.keys(body).length < 6) {
       return res.status(400).json({
         errorMessage: "Improperly formatted request",
       });
