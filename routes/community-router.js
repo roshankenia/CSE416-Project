@@ -66,6 +66,8 @@ router.put("/comment/:id", auth.verify, CommunityController.updateCommentById);
 
 router.post("/searchUserExact", auth.verify, CommunityController.searchUserExact);
 
+router.post("/report", auth.verify, CommunityController.createReport)
+
 
 //handles a delete post request
 router.delete(
