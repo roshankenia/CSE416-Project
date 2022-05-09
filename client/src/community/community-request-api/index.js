@@ -166,7 +166,6 @@ export const createReport = (
   userID,
   postID,
   report,
-
 ) => {
   return api.post(`/report`, {
     userID: userID,
@@ -196,6 +195,7 @@ const apis = {
   searchCommunity,
   createComment,
   getCommentByID,
+  createReport,
 };
 
 export default apis;
