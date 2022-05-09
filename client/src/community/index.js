@@ -37,6 +37,7 @@ export const GlobalCommunityActionType = {
   SORT_POSTS: "SORT_POSTS",
   UPDATE_CURRENT_COMMUNITY: "UPDATE_CURRENT_COMMUNITY",
   SET_REPORT_MODAL: "SET_REPORT_MODAL",
+  UPDATE_POST_LIVE: "UPDATE_POST_LIVE",
 };
 
 function GlobalCommunityContextProvider(props) {
@@ -427,6 +428,27 @@ function GlobalCommunityContextProvider(props) {
           reportPost: payload.post,
           deletePost: community.deletePost,
           searchPosts: community.searchPosts,
+        });
+      }
+      case GlobalCommunityActionType.UPDATE_POST_LIVE: {
+        return setCommunity({
+          communityList: community.communityList,
+          currentCommunity: community.currentCommunity,
+          communityPosts: payload.communityPosts,
+          search: community.search,
+          errorMessage: community.errorMessage,
+          sort: community.sort,
+          screen: community.screen,
+          deleteAccountModal: community.deleteAccountModal,
+          changePasswordModal: community.changePasswordModal,
+          feedbackModal: community.feedbackModal,
+          deletePostModal: community.deletePostModal,
+          userProfile: community.userProfile,
+          changeBioModal: community.changeBioModal,
+          reportModal: community.reportModal,
+          reportPost: community.reportPost,
+          deletePost: community.deletePost,
+          searchPosts: payload.searchPosts,
         });
       }
       default:
@@ -871,6 +893,12 @@ function GlobalCommunityContextProvider(props) {
           console.log("Update Post Response:", response)
           if (response.status === 200){
             console.log("Comment added to post")
+  
+            //LIVE UPDATE PORTION
+            console.log(response)
+            let newPost = response.data.post
+            community.doLiveUpdate(newPost);
+            
           } else {
             console.log("Comment was not added to post")
           }
@@ -914,20 +942,12 @@ function GlobalCommunityContextProvider(props) {
         if (response.status === 200){
           console.log("Update Post Successful")
 
-          //ATTEMPTING TO UPDATE JUST THE UPDATED POST ON THE SCREEN
+          //LIVE UPDATE PORTION
           console.log(response)
           let newPost = response.data.post
-          let newCommunityPosts = []
-          for (let i = 0; i < community.communityPosts.length; i++){
-            if (community.communityPosts[i]._id == newPost._id){
-              console.log("found a match")
-              newCommunityPosts.push(newPost)
-            } else {
-              newCommunityPosts.push(community.communityPosts[i])
-            }
-          }
-          console.log(newCommunityPosts)
+          community.doLiveUpdate(newPost);
         }
+        
       } else if (updateType == "dislike") {
         let likeArray = post.likes;
         let dislikeArray = post.dislikes;
@@ -958,6 +978,14 @@ function GlobalCommunityContextProvider(props) {
           post.dateAndTime,
           post.communityName
         );
+        if (response.status === 200){
+          console.log("Update Post Successful")
+
+          //LIVE UPDATE PORTION
+          console.log(response)
+          let newPost = response.data.post
+          community.doLiveUpdate(newPost);
+        }
         console.log("Dislike reponse: ", response);
       } else {
         console.log("Update Type not given or invalid!");
@@ -1132,6 +1160,57 @@ function GlobalCommunityContextProvider(props) {
       console.log(error);
     }
   };
+
+  community.doLiveUpdate = async function (newPost) {
+    // comments array isn't always filled with comment objects
+    let commentsArr = newPost.comments;
+    let commentsObjArr = []
+    for (let i = 0; i < commentsArr.length; i++){
+      if (commentsArr[i].username){
+        // console.log(commentsArr[i])
+        commentsObjArr.push(commentsArr[i]);
+      } else {
+        let getCommResponse = await api.getCommentByID(commentsArr[i]);
+        commentsObjArr.push(getCommResponse.data.comment[0]);
+      }
+    }
+    newPost.comments = commentsObjArr
+
+    if (newPost.postComic) {
+      const comicResponse = await api.getComicById(newPost.postComic);
+      console.log("comic:", comicResponse.data.comic);
+      newPost.data = comicResponse.data.comic;
+    } else if (newPost.postStory) {
+      const storyResponse = await api.getStoryById(newPost.postStory);
+      console.log("story:", storyResponse.data.story);
+      newPost.data = storyResponse.data.story;
+    }
+
+    let newCommunityPosts = community.communityPosts
+    for (let i = 0; i < community.communityPosts.length; i++){
+      if (newCommunityPosts[i]._id == newPost._id){
+        console.log("found a match")
+        newCommunityPosts[i] = newPost
+        break;
+      }
+    }
+
+    let newSearchPosts = community.searchPosts
+    for (let i = 0; i < community.searchPosts.length; i++){
+      if (newSearchPosts[i]._id == newPost._id){
+        console.log("found a match")
+        newSearchPosts[i] = newPost
+        break;
+      }
+    }
+    communityReducer({
+      type: GlobalCommunityActionType.UPDATE_POST_LIVE,
+      payload: {
+        communityPosts: newCommunityPosts,
+        searchPosts: newSearchPosts
+      },
+    });
+  }
   community.setChangePassword = async function (changePassword) {
     communityReducer({
       type: GlobalCommunityActionType.SET_CHANGE_PASSWORD,
