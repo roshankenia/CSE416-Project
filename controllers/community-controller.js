@@ -866,5 +866,6 @@ module.exports = {
   searchPostByTitle,
   searchComicByAuthor,
   searchStoryByAuthor,
-  searchUserExact
+  searchUserExact,
+  createReport
 };
