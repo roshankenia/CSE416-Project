@@ -43,7 +43,7 @@ export default function ReportModal() {
         community.reportPost.communityName, 
         newReport,
         );
-    console.log(response)
+    console.log("Create report response:", response)
     handleClose()
   }
 

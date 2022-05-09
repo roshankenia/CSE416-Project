@@ -1646,11 +1646,14 @@ function GlobalCommunityContextProvider(props) {
     }
   };
 
-  community.createReport = async function (userID, postID, report) {
+  community.createReport = async function (userID, postID, username, postTitle, postComm, report) {
     try{
       let response = await api.createReport(
         userID,
         postID,
+        username,
+        postTitle,
+        postComm,
         report
       );
       if (response.status === 200){

@@ -173,7 +173,7 @@ export const createReport = (
   return api.post(`/report`, {
     userID: userID,
     postID: postID,
-    username:username,
+    username: username,
     postTitle: postTitle,
     postCommunity: postCommunity,
     report: report
