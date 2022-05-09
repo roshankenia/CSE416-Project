@@ -243,7 +243,6 @@ export default function PostCard(props) {
         }}
         sx={{ mt: 2, width: "100%" }}
       >
-        <ReportModal/>
         <Grid container justifyContent="center" alignItems="center">
           <Grid item xs={3}>
             {communityName}
@@ -443,7 +442,6 @@ export default function PostCard(props) {
         }}
         sx={{ mt: 2, width: "100%" }}
       >
-        <ReportModal/>
         <Grid container justifyContent="center" alignItems="center">
           <Grid item xs={3}>
             {communityName}
