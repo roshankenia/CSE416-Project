@@ -1211,6 +1211,43 @@ function GlobalCommunityContextProvider(props) {
       },
     });
   }
+
+  community.updateComment = async function (updateType, comment, user){
+    if (updateType == "like"){
+      let likeArray = comment.likes;
+      let dislikeArray = comment.dislikes;
+      let likeIndex = likeArray.indexOf(user._id);
+      let dislikeIndex = dislikeArray.indexOf(user._id);
+      //If user has already disliked, then remove the dislike and change to like
+      if (dislikeIndex != -1) {
+        dislikeArray.splice(dislikeIndex);
+      }
+      //If user has not liked, then add their username
+      if (likeIndex == -1) {
+        likeArray.push(user._id);
+        console.log("pushed user to like Array");
+      }
+      //If user has liked, then remove their like and username
+      else {
+        likeArray.splice(likeIndex);
+      }
+      let response = await api.updateCommentById(
+        comment._id,
+        comment.username,
+        comment.comment,
+        likeArray,
+        dislikeArray,
+      );
+      if (response.status === 200){
+        console.log("Update Comment Successful")
+      }
+    } else if (updateType == "dislike") {
+      
+    } else {
+      console.log("Comment UpdateType Not Valid");
+    }
+  }
+
   community.setChangePassword = async function (changePassword) {
     communityReducer({
       type: GlobalCommunityActionType.SET_CHANGE_PASSWORD,

@@ -180,6 +180,21 @@ export const createReport = (
   });
 };
 
+export const updateCommentById = (
+  id,
+  username,
+  comment,
+  likes,
+  dislikes,
+) => {
+  return api.put(`/comment/${id}`, {
+    username: username,
+    comment: comment,
+    likes: likes,
+    dislikes: dislikes,
+  });
+};
+
 const apis = {
   createCommunity,
   getCommunityList,
@@ -202,6 +217,7 @@ const apis = {
   createComment,
   getCommentByID,
   createReport,
+  updateCommentById,
 };
 
 export default apis;

@@ -628,7 +628,7 @@ updateCommentById = async (req, res) => {
         });
       }
 
-      //This line could be wrong here
+      comment.username = body.comment.username
       comment.comment = body.comment.comment;
       comment.likes = body.comment.likes;
       comment.dislikes = body.comment.dislikes;
