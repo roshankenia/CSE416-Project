@@ -221,16 +221,24 @@ function AuthContextProvider(props) {
           if (friendRequestIds[i].username) {
             friendRequests.push(friendRequestIds[i]);
           } else {
-            let response = await api.findById(friendRequestIds[i]);
-            friendRequests.push(response.data.user);
+            try {
+              let response = await api.findById(friendRequestIds[i]);
+              friendRequests.push(response.data.user);
+            } catch (err) {
+              continue;
+            }
           }
         }
         for (let i = 0; i < friendIds.length; i++) {
           if (friendIds[i].username) {
             friends.push(friendIds[i]);
           } else {
-            let response = await api.findById(friendIds[i]);
-            friends.push(response.data.user);
+            try {
+              let response = await api.findById(friendIds[i]);
+              friends.push(response.data.user);
+            } catch (err) {
+              continue;
+            }
           }
         }
 
@@ -269,16 +277,24 @@ function AuthContextProvider(props) {
           if (friendRequestIds[i].username) {
             friendRequests.push(friendRequestIds[i]);
           } else {
-            let response = await api.findById(friendRequestIds[i]);
-            friendRequests.push(response.data.user);
+            try {
+              let response = await api.findById(friendRequestIds[i]);
+              friendRequests.push(response.data.user);
+            } catch (err) {
+              continue;
+            }
           }
         }
         for (let i = 0; i < friendIds.length; i++) {
           if (friendIds[i].username) {
             friends.push(friendIds[i]);
           } else {
-            let response = await api.findById(friendIds[i]);
-            friends.push(response.data.user);
+            try {
+              let response = await api.findById(friendIds[i]);
+              friends.push(response.data.user);
+            } catch (err) {
+              continue;
+            }
           }
         }
         console.log("current friends:", friends);
@@ -321,16 +337,24 @@ function AuthContextProvider(props) {
           if (friendRequestIds[i].username) {
             friendRequests.push(friendRequestIds[i]);
           } else {
-            let response = await api.findById(friendRequestIds[i]);
-            friendRequests.push(response.data.user);
+            try {
+              let response = await api.findById(friendRequestIds[i]);
+              friendRequests.push(response.data.user);
+            } catch (err) {
+              continue;
+            }
           }
         }
         for (let i = 0; i < friendIds.length; i++) {
           if (friendIds[i].username) {
             friends.push(friendIds[i]);
           } else {
-            let response = await api.findById(friendIds[i]);
-            friends.push(response.data.user);
+            try {
+              let response = await api.findById(friendIds[i]);
+              friends.push(response.data.user);
+            } catch (err) {
+              continue;
+            }
           }
         }
 
@@ -369,19 +393,26 @@ function AuthContextProvider(props) {
           if (friendRequestIds[i].username) {
             friendRequests.push(friendRequestIds[i]);
           } else {
-            let response = await api.findById(friendRequestIds[i]);
-            friendRequests.push(response.data.user);
+            try {
+              let response = await api.findById(friendRequestIds[i]);
+              friendRequests.push(response.data.user);
+            } catch (err) {
+              continue;
+            }
           }
         }
         for (let i = 0; i < friendIds.length; i++) {
           if (friendIds[i].username) {
             friends.push(friendIds[i]);
           } else {
-            let response = await api.findById(friendIds[i]);
-            friends.push(response.data.user);
+            try {
+              let response = await api.findById(friendIds[i]);
+              friends.push(response.data.user);
+            } catch (err) {
+              continue;
+            }
           }
         }
-
         authReducer({
           type: AuthActionType.SET_FRIENDS_AND_REQUESTS,
           payload: {
@@ -541,16 +572,24 @@ function AuthContextProvider(props) {
           if (friendRequestIds[i].username) {
             friendRequests.push(friendRequestIds[i]);
           } else {
-            let response = await api.findById(friendRequestIds[i]);
-            friendRequests.push(response.data.user);
+            try {
+              let response = await api.findById(friendRequestIds[i]);
+              friendRequests.push(response.data.user);
+            } catch (err) {
+              continue;
+            }
           }
         }
         for (let i = 0; i < friendIds.length; i++) {
           if (friendIds[i].username) {
             friends.push(friendIds[i]);
           } else {
-            let response = await api.findById(friendIds[i]);
-            friends.push(response.data.user);
+            try {
+              let response = await api.findById(friendIds[i]);
+              friends.push(response.data.user);
+            } catch (err) {
+              continue;
+            }
           }
         }
 
@@ -628,16 +667,24 @@ function AuthContextProvider(props) {
           if (friendRequestIds[i].username) {
             friendRequests.push(friendRequestIds[i]);
           } else {
-            let response = await api.findById(friendRequestIds[i]);
-            friendRequests.push(response.data.user);
+            try {
+              let response = await api.findById(friendRequestIds[i]);
+              friendRequests.push(response.data.user);
+            } catch (err) {
+              continue;
+            }
           }
         }
         for (let i = 0; i < friendIds.length; i++) {
           if (friendIds[i].username) {
             friends.push(friendIds[i]);
           } else {
-            let response = await api.findById(friendIds[i]);
-            friends.push(response.data.user);
+            try {
+              let response = await api.findById(friendIds[i]);
+              friends.push(response.data.user);
+            } catch (err) {
+              continue;
+            }
           }
         }
 
