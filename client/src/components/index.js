@@ -36,6 +36,7 @@ import ResetScreen from "./ResetScreen";
 import GameTools from "./GameTools";
 import Timer from "./Timer";
 import StoryPopout from "./StoryPopout";
+import SinglePlayer from "./SinglePlayer"
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -56,6 +57,7 @@ export {
   DrawPanelScreen,
   FeedbackModal,
   LobbyScreen,
+  SinglePlayer,
   GameScreen,
   GameWrapper,
   LoginScreen,

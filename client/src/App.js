@@ -15,6 +15,7 @@ import {
   GuestScreen,
   GameWrapper,
   ResetScreen,
+  SinglePlayer
 } from "./components";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import io from "socket.io-client";
@@ -66,6 +67,7 @@ const App = () => {
                       <Route path="/game/:id" exact component={GameWrapper} />
                       <Route path="/reset" exact component={ResetScreen} />
                       <Route path="/test" exact component={Test} />
+                      <Route path="/singleplayer/:id" exact component={SinglePlayer} />
                     </Switch>
                   </Box>
                 </Box>

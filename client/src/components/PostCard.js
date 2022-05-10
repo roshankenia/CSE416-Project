@@ -3,6 +3,7 @@ import { GlobalCommunityContext } from "../community";
 import AuthContext from "../auth";
 import CommentCard from "./CommentCard.js";
 import StoryPopout from "./StoryPopout.js";
+import { useHistory } from "react-router-dom";
 
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -95,6 +96,10 @@ export default function PostCard(props) {
   //     </Typography>
   //   );
   // }
+  const history = useHistory();
+  function handleEdit(event){
+    history.push('/singleplayer/' + post._id)
+  }
   function handleViewProfile(event, username) {
     console.log("in view profile");
     event.stopPropagation();
@@ -448,6 +453,7 @@ export default function PostCard(props) {
             >
               {post.comments.length}
             </Typography>
+            <Button onClick={handleEdit}> Edit </Button>
           </Grid>
           <Grid item xs={10}>
             {postData}
