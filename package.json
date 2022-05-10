@@ -17,6 +17,7 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
+    "jspdf": "^2.5.1",
     "mongoose": "^5.7.5",
     "nodemon": "^2.0.16",
     "package.json": "^2.0.1",

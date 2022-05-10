@@ -1,6 +1,7 @@
 import AppBanner from "./AppBanner";
 import ChangeBioModal from "./ChangeBioModal";
 import ChangePasswordModal from "./ChangePasswordModal";
+import Chat from "./Chat"
 import CommentCard from "./CommentCard";
 import CommunityCard from "./CommunityCard";
 import CommunitiesScreen from "./CommunitiesScreen";
@@ -37,6 +38,7 @@ import GameTools from "./GameTools";
 import Timer from "./Timer";
 import StoryPopout from "./StoryPopout";
 import SinglePlayer from "./SinglePlayer"
+import ReportModal from "./ReportModal";
 /*
     This serves as a module so that we can import
     all the other components as we wish.
@@ -83,4 +85,6 @@ export {
   GameTools,
   Timer,
   StoryPopout,
+  ReportModal,
+  Chat
 };

@@ -4,6 +4,7 @@ const Comic = require("../models/comic-model");
 const Story = require("../models/story-model");
 const Comment = require("../models/comment-model");
 const Post = require("../models/post-model");
+const Report = require("../models/report-model");
 
 //#region community
 //front-end payload: response.data.community
@@ -465,6 +466,7 @@ updatePost = async (req, res) => {
       dateAndTime,
     } = req.body;
     const id = req.params.id;
+    console.log("Backend Update Post Body:", req.body)
 
     Post.findOne({ _id: id }, (err, post) => {
       // console.log("Post found: " + JSON.stringify(post));
@@ -491,7 +493,7 @@ updatePost = async (req, res) => {
         post.dislikes = dislikes;
       }
       if (comments) {
-        post.comment = comments;
+        post.comments = comments;
       }
       if (communityPublished) {
         post.communityPublished = communityPublished;
@@ -609,6 +611,9 @@ getCommentById = async (req, res) => {
 };
 
 updateCommentById = async (req, res) => {
+  console.log("In controller")
+  console.log("req.body:", req.body)
+  console.log("req.body.username:", req.body.username)
   try {
     const body = req.body;
     const id = req.params.id;
@@ -626,10 +631,10 @@ updateCommentById = async (req, res) => {
         });
       }
 
-      //This line could be wrong here
-      comment.comment = body.comment.comment;
-      comment.likes = body.comment.likes;
-      comment.dislikes = body.comment.dislikes;
+      comment.username = req.body.username
+      comment.comment = req.body.comment;
+      comment.likes = req.body.likes;
+      comment.dislikes = req.body.dislikes;
 
       comment
         .save()
@@ -796,6 +801,46 @@ searchStoryByAuthor = async (req, res) => {
   }
 };
 
+createReport = async (req, res) => {
+  try {
+    const body = req.body;
+    if (!body) {
+      return res.status(400).json({
+        errorMessage: "Improperly formatted request",
+      });
+    }
+    if (Object.keys(body).length < 6) {
+      return res.status(400).json({
+        errorMessage: "Improperly formatted request",
+      });
+    }
+    const report = new Report(body);
+    console.log("creating report: " + JSON.stringify(report));
+    if (!report) {
+      return res.status(400).json({
+        errorMessage: "Improperly formatted request",
+      });
+    }
+
+    report
+      .save()
+      .then(() => {
+        return res.status(200).json({
+          report: report,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        return res.status(400).json({
+          errorMessage: "Report Not Created!",
+        });
+      });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
 //#endregion query
 
 module.exports = {
@@ -824,5 +869,6 @@ module.exports = {
   searchPostByTitle,
   searchComicByAuthor,
   searchStoryByAuthor,
-  searchUserExact
+  searchUserExact,
+  createReport,
 };

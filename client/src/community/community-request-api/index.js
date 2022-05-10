@@ -51,6 +51,10 @@ export const getStoryById = (id) => {
   return api.get(`/story/${id}`);
 };
 
+export const getCommentByID = (id) => {
+  return api.get(`/comment/${id}`);
+};
+
 export const createComic = (authors, panels) => {
   return api.post(`/comic`, {
     authors: authors,
@@ -85,6 +89,7 @@ export const createPost = (
   postStory,
   likes,
   dislikes,
+  comments,
   communityPublished,
   discoveryPublished,
   dateAndTime,
@@ -96,6 +101,7 @@ export const createPost = (
     postStory: postStory,
     likes: likes,
     dislikes: dislikes,
+    comments: comments,
     communityPublished: communityPublished,
     discoveryPublished: discoveryPublished,
     dateAndTime: dateAndTime,
@@ -110,6 +116,7 @@ export const updatePost = (
   postStory,
   likes,
   dislikes,
+  comments,
   communityPublished,
   discoveryPublished,
   dateAndTime,
@@ -121,10 +128,27 @@ export const updatePost = (
     postStory: postStory,
     likes: likes,
     dislikes: dislikes,
+    comments: comments,
     communityPublished: communityPublished,
     discoveryPublished: discoveryPublished,
     dateAndTime: dateAndTime,
     communityName: communityName,
+  });
+};
+
+export const createComment = (
+  username,
+  comment,
+  likes,
+  dislikes,
+  reply,
+) => {
+  return api.post(`/comment`, {
+    username: username,
+    comment: comment,
+    likes: likes,
+    dislikes: dislikes,
+    reply: reply,
   });
 };
 
@@ -135,6 +159,40 @@ export const searchCommunityByName = (name) => {
 export const searchUserExact = (username) => {
   return api.post("/searchUserExact/", {
     username: username,
+  });
+};
+
+export const createReport = (
+  userID,
+  postID,
+  username,
+  postTitle,
+  postCommunity,
+  report,
+) => {
+  return api.post(`/report`, {
+    userID: userID,
+    postID: postID,
+    username: username,
+    postTitle: postTitle,
+    postCommunity: postCommunity,
+    report: report
+  });
+};
+
+export const updateCommentById = (
+  id,
+  username,
+  comment,
+  likes,
+  dislikes,
+) => {
+  console.log("In request API")
+  return api.put(`/comment/${id}`, {
+    username: username,
+    comment: comment,
+    likes: likes,
+    dislikes: dislikes,
   });
 };
 
@@ -157,6 +215,10 @@ const apis = {
   createStory,
   searchUserExact,
   searchCommunity,
+  createComment,
+  getCommentByID,
+  createReport,
+  updateCommentById,
 };
 
 export default apis;

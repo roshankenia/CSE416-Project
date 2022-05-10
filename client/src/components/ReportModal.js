@@ -17,26 +17,33 @@ const style = {
   textAlign: "left",
   p: 4,
 };
-export default function ChangeBioModal() {
+export default function ReportModal() {
   const { auth } = useContext(AuthContext);
   const { community } = useContext(GlobalCommunityContext);
 
-  const [newBio, setNewBio] = useState('')
+  const [newReport, setNewReport] = useState('')
 
   function handleChange(event) {
     console.log(event.target.value)
-    setNewBio(event.target.value)
-    
+    setNewReport(event.target.value)
   }
 
   function handleClose(event) {
-    setNewBio('')
+    setNewReport('')
     auth.setErrorMessage('')
-    community.setChangeBio(false);
+    community.setReportModal(false, null)
   }
 
-  async function handleChangeBio(event) {
-    const response = await auth.updateBio(auth.user.username, newBio)
+  async function handleCreateReport(event) {
+    const response = await community.createReport(
+        auth.user._id, 
+        community.reportPost._id, 
+        auth.user.username, 
+        community.reportPost.postTitle, 
+        community.reportPost.communityName, 
+        newReport,
+        );
+    console.log("Create report response:", response)
     handleClose()
   }
 
@@ -55,7 +62,7 @@ export default function ChangeBioModal() {
 
   return (
     <Modal
-      open={community.changeBioModal}
+      open={community.reportModal}
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
@@ -64,7 +71,7 @@ export default function ChangeBioModal() {
         <Box sx={style}>
           <Typography 
             sx={{fontSize: 28, marginBottom:'-10px'}}>
-            New Biography:
+            Reason for Report:
           </Typography>
           <FormControl fullWidth sx={{ }} variant="standard" >
               <Input
@@ -74,7 +81,7 @@ export default function ChangeBioModal() {
           </FormControl>
           <Button
             variant="contained"
-            onClick={handleChangeBio}
+            onClick={handleCreateReport}
             sx={{ m: 1 }}
           >
             Confirm
