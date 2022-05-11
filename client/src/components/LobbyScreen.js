@@ -1,41 +1,27 @@
-import React, { useContext, useEffect, useState } from "react";
-import { GlobalCommunityContext } from "../community";
-import { GameContext } from "../game";
 import {
-  Typography,
-  Box,
-  Grid,
-  Button,
-  List,
-  ListItem,
-  TextField,
-} from "@mui/material";
-import Sidebar from "./Sidebar.js";
-import { useHistory } from "react-router-dom";
-//Table stuff
-import {
-  Table,
+  Box, Button, Grid, List,
+  ListItem, Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
-  Paper,
+  TableRow, Typography
 } from "@mui/material";
-import StarIcon from "@mui/icons-material/Star";
-import AuthContext from "../auth";
+import MuiInput from "@mui/material/Input";
+import Slider from "@mui/material/Slider";
 //slider
 import { styled } from "@mui/material/styles";
-import Slider from "@mui/material/Slider";
-import MuiInput from "@mui/material/Input";
-import VolumeUp from "@mui/icons-material/VolumeUp";
+import React, { useContext } from "react";
+import { useHistory } from "react-router-dom";
+import AuthContext from "../auth";
+import { GameContext } from "../game";
 import { SocketContext } from "../socket";
 
 //put all the lobby settings stuff on the right side!!!
 export default function LobbyScreen() {
   const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
-  const socket  = useContext(SocketContext);
+  const socket = useContext(SocketContext);
 
   const history = useHistory();
 
@@ -85,7 +71,7 @@ export default function LobbyScreen() {
   //not implemented, should return a model
   const handleInvite = (username) => {
     console.log("the name of the user is", username);
-    socket.emit("send-invite", username, game.lobby)
+    socket.emit("send-invite", username, game.lobby);
   };
   const handleLeave = (event) => {
     game.leaveLobby();

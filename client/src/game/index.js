@@ -22,6 +22,7 @@ export const GameActionType = {
   NEXT_TURN: "NEXT_TURN",
   CHANGE_GAMEMODE: "CHANGE_GAMEMODE",
   UPDATE_VOTES: "UPDATE_VOTES",
+  RESET_GAME: "RESET_GAME",
 };
 
 function GameContextProvider(props) {
@@ -56,6 +57,25 @@ function GameContextProvider(props) {
   const gameReducer = (action) => {
     const { type, payload } = action;
     switch (type) {
+      case GameActionType.RESET_GAME: {
+        return setGame({
+          game: null,
+          lobby: null,
+          voting: false,
+          votes: [0, 0, 0],
+          players: [],
+          readyPlayers: [],
+          screen: "lobby",
+          timer: null,
+          host: null,
+          turn: null,
+          currentPlayer: null,
+          panelNumber: null,
+          communityName: null,
+          panels: [],
+          gamemode: "comic",
+        });
+      }
       case GameActionType.CREATE_NEW_LOBBY: {
         return setGame({
           game: null,
@@ -509,6 +529,22 @@ function GameContextProvider(props) {
 
     socket.once("switch-gamemode", switchGamemode);
 
+    const playerLeft = async (user) => {
+      console.log(user, "has left the game.");
+      try {
+        console.log("resetting game");
+        gameReducer({
+          type: GameActionType.RESET_GAME,
+          payload: null,
+        });
+        history.push("/");
+      } catch {
+        console.log("Failed to leave lobby");
+      }
+    };
+
+    socket.once("player-left", playerLeft);
+
     return () => {
       socket.off("new-player", newP);
       socket.off("add-players", addP);
@@ -519,10 +555,25 @@ function GameContextProvider(props) {
       socket.off("game-started", gameStart);
       socket.off("switch-gamemode", switchGamemode);
       socket.off("update-votes-cb", newVotes);
+      socket.off("player-left", playerLeft);
 
       // socket.off('count1');
     };
   }, [game]);
+
+  game.disconnectPlayer = async function () {
+    try {
+      let lobbyID = game.lobby;
+      socket.emit("disconnect-player", auth.user.username, lobbyID);
+      gameReducer({
+        type: GameActionType.RESET_GAME,
+        payload: null,
+      });
+      history.push("/");
+    } catch {
+      console.log("Failed to leave lobby");
+    }
+  };
 
   game.changeGamemode = async function (gamemode) {
     console.log("host switching gamemode to:", gamemode);
@@ -592,7 +643,7 @@ function GameContextProvider(props) {
     let sortPlayers = game.players.sort();
     try {
       console.log(game.gamemode);
-      let id = "madeupgameid";
+      let id = game.lobby;
       let newgame = { game: "gameOBJ", players: sortPlayers };
       // backend stuff
       // const response = await api.createGame();
@@ -718,7 +769,7 @@ function GameContextProvider(props) {
 
   game.enterVoting = async function (lastPanel) {
     try {
-      const id = "madeupgameid";
+      const id = game.lobby;
       // if (game.host != auth.user.username) {
       // game.exitVoting();
       // } else {
@@ -738,7 +789,6 @@ function GameContextProvider(props) {
 
   game.exitVoting = async function () {
     try {
-      const id = "madeupgameid";
       gameReducer({
         type: GameActionType.EXIT_VOTING,
         payload: null,

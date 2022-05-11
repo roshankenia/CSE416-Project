@@ -4,7 +4,7 @@ import { GlobalCommunityContext } from "../community";
 import { GameContext } from "../game";
 import AuthContext from "../auth";
 import { Box, Button, List, ListItem, TextField } from "@mui/material";
-import Chat from "./Chat"
+import Chat from "./Chat";
 import EditIcon from "@mui/icons-material/Edit";
 import BrushIcon from "@mui/icons-material/Brush";
 import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
@@ -64,7 +64,7 @@ export default function WaitingScreen(props) {
     quillRef,
   } = props;
   const handleLeave = (event) => {
-    game.leaveLobby();
+    game.disconnectPlayer();
   };
   const flexContainer = {
     display: "flex",
@@ -79,12 +79,11 @@ export default function WaitingScreen(props) {
     event.preventDefault();
     console.log("handleAddFriend");
     const data = new FormData(event.currentTarget);
-    const message = data.get("chat")
-    console.log(game.lobby)
+    const message = data.get("chat");
+    console.log(game.lobby);
     socket.emit("send-chat-message", message, game.lobby, auth.user.username);
-    document.getElementById('chat').placeholder= "Type Something";
-    document.getElementById('chat').value= "";
-
+    document.getElementById("chat").placeholder = "Type Something";
+    document.getElementById("chat").value = "";
   };
   //Handles the messages
   // const messages = [["alan","hi"]];
@@ -232,35 +231,29 @@ export default function WaitingScreen(props) {
           justifyContent: "space-between",
         }}
       >
-        <Chat>
-
-        </Chat>
+        <Chat></Chat>
         <Box component="form" onSubmit={handleChat} noValidate>
-          <TextField
-          id="chat"
-          name="chat"
-           sx={{ top: "65%", width: "60%" }}>
-             Type Message
-           </TextField>
-            <Button
-              type="submit"
-              sx={{
-                marginLeft: 2,
-                width: "20%",
-                top: "65%",
-                backgroundColor: "yellow",
-                "&:hover": {
-                  backgroundColor: "primary.main",
-                  opacity: [0.9, 0.8, 0.7],
-                },
-                borderRadius: 5,
-                border: 3,
-                color: "black",
-              }}
-            >
-
-              <Typography fontSize={"32px"}>chat</Typography>
-            </Button>
+          <TextField id="chat" name="chat" sx={{ top: "65%", width: "60%" }}>
+            Type Message
+          </TextField>
+          <Button
+            type="submit"
+            sx={{
+              marginLeft: 2,
+              width: "20%",
+              top: "65%",
+              backgroundColor: "yellow",
+              "&:hover": {
+                backgroundColor: "primary.main",
+                opacity: [0.9, 0.8, 0.7],
+              },
+              borderRadius: 5,
+              border: 3,
+              color: "black",
+            }}
+          >
+            <Typography fontSize={"32px"}>chat</Typography>
+          </Button>
         </Box>
       </Box>
     </Grid>
@@ -278,13 +271,14 @@ export default function WaitingScreen(props) {
           color: "black",
         }}
       >
-        <Timer 
-        stageRef={stageRef} 
-        actions={actions} 
-        setActions={setActions}  
-        storyText={storyText}
-        setStoryText={setStoryText}>
-        {storyText}
+        <Timer
+          stageRef={stageRef}
+          actions={actions}
+          setActions={setActions}
+          storyText={storyText}
+          setStoryText={setStoryText}
+        >
+          {storyText}
         </Timer>
       </Box>
 
@@ -309,25 +303,18 @@ export default function WaitingScreen(props) {
     </Grid>
   );
 
-
-  
-
-
-
-
-function outputMessage(user, message){
-  // for(var i =0; i<messages.length; i++){
-  //   const div = document.createElement('Typography'); 
-  //   div.classList.add('message');
-  //   div.innerHTML =`<p> ${user2message[i]}: ${messages[i]}</p>`;
-  //   document.querySelector('.chat-messages').appendChild(div)
-  // }
-  // const div = document.createElement('div'); 
-  // div.classList.add('message');
-  // div.innerHTML =`<p> ${user}: ${message}</p>`;
-  // document.querySelector('.chat-messages').appendChild(div)
-}
-
+  function outputMessage(user, message) {
+    // for(var i =0; i<messages.length; i++){
+    //   const div = document.createElement('Typography');
+    //   div.classList.add('message');
+    //   div.innerHTML =`<p> ${user2message[i]}: ${messages[i]}</p>`;
+    //   document.querySelector('.chat-messages').appendChild(div)
+    // }
+    // const div = document.createElement('div');
+    // div.classList.add('message');
+    // div.innerHTML =`<p> ${user}: ${message}</p>`;
+    // document.querySelector('.chat-messages').appendChild(div)
+  }
 
   // useEffect(() => {
   //   const displayMessage = async (message, username) => {
@@ -339,7 +326,7 @@ function outputMessage(user, message){
   //     //   outputMessage(username,message);
   //     // }
   //     // else{
-  //       // const div = document.createElement('div'); 
+  //       // const div = document.createElement('div');
   //       // div.classList.add('message');
   //       // div.style.width = "100%"
   //       // div.style.height = "100%"
@@ -353,7 +340,6 @@ function outputMessage(user, message){
   //     socket.off("receive-message", displayMessage);
   //   };
   // }, []);
-
 
   return (
     <List style={flexContainer} sx={{ justifyContent: "center" }}>
