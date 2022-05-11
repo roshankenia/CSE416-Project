@@ -63,10 +63,22 @@ app.use((req, res, next) => {
   next();
 });
 
-var userID = {}
+var userID = {};
 
 io.on("connection", (socket) => {
   console.log("new client connected", socket.id);
+
+  socket.on("disconnect-player", (username, lobbyID) => {
+    console.log(username, "has left lobby", lobbyID);
+    socket.to(lobbyID).emit("player-left", username);
+
+    console.log("disconnecting all players from lobby");
+
+    io.sockets.clients(lobbyID).forEach(function (s) {
+      console.log("disconnecting", s);
+      s.leave(lobbyID);
+    });
+  });
 
   socket.on("send-message", (message) => {
     io.emit("message", message);
@@ -78,10 +90,15 @@ io.on("connection", (socket) => {
     socket.to(lobbyID).emit("new-player", username, lobbyID);
   });
 
-  socket.on("consolidate-players", (players, readyPlayers, lobbyID, gameMode) => {
-    console.log("sending players to users in lobby ", lobbyID);
-    socket.to(lobbyID).emit("add-players", players, readyPlayers, lobbyID, gameMode);
-  });
+  socket.on(
+    "consolidate-players",
+    (players, readyPlayers, lobbyID, gameMode) => {
+      console.log("sending players to users in lobby ", lobbyID);
+      socket
+        .to(lobbyID)
+        .emit("add-players", players, readyPlayers, lobbyID, gameMode);
+    }
+  );
 
   socket.on("leave-lobby", (username, lobbyID) => {
     console.log(username, "is leaving", lobbyID);
@@ -137,26 +154,25 @@ io.on("connection", (socket) => {
     socket.to(lobbyID).emit("add-host", host);
   });
 
-  socket.on("socket-username", (username,socketID) => {
+  socket.on("socket-username", (username, socketID) => {
     console.log("setting the username for the socket", username);
-    socket.username = username
-    console.log("the socket id is", socketID)
-    userID[username] = socketID
+    socket.username = username;
+    console.log("the socket id is", socketID);
+    userID[username] = socketID;
   });
-//testing
+  //testing
   socket.on("send-invite", (username, lobbyID) => {
     console.log("sending invite to user ", username);
-    socketid = userID[username]
+    socketid = userID[username];
     console.log("the socketid is", socketid);
-    socket.to(socketid).emit("receive-invite",lobbyID, socketid); 
+    socket.to(socketid).emit("receive-invite", lobbyID, socketid);
   });
-//Chat testing
+  //Chat testing
   socket.on("send-chat-message", (message, lobbyID, username) => {
     console.log("sending invite to user ", username);
     console.log("the message is", message);
-    io.to(lobbyID).emit("receive-message", message, username); 
+    io.to(lobbyID).emit("receive-message", message, username);
   });
-
 });
 
 // socket.to(lobbyID).emit("new-player", username, lobbyID);
