@@ -1,43 +1,27 @@
-import React, { useContext, useEffect, useState } from "react";
-import { GlobalCommunityContext } from "../community";
-import AuthContext from "../auth";
-import CommentCard from "./CommentCard.js";
-import StoryPopout from "./StoryPopout.js";
-import { useHistory } from "react-router-dom";
-
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import TextField from "@mui/material/TextField";
-
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import CommentIcon from "@mui/icons-material/Comment";
-import FlagIcon from "@mui/icons-material/Flag";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import DownloadIcon from "@mui/icons-material/Download";
-
-import SortIcon from "@mui/icons-material/Sort";
-
-import AddIcon from "@mui/icons-material/Add";
-import Fab from "@mui/material/Fab";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import FlagIcon from "@mui/icons-material/Flag";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-
+import IconButton from "@mui/material/IconButton";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import jsPDF from "jspdf";
-
-import ReportModal from "./ReportModal";
-
+import React, { useContext, useState } from "react";
+import { useHistory } from "react-router-dom";
+import AuthContext from "../auth";
+import { GlobalCommunityContext } from "../community";
+import CommentCard from "./CommentCard.js";
+import StoryPopout from "./StoryPopout.js";
 
 export default function PostCard(props) {
   const { community } = useContext(GlobalCommunityContext);
@@ -46,41 +30,40 @@ export default function PostCard(props) {
 
   //Keeps track if post is expanded or not
   const [expanded, setExpanded] = useState(false);
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState("");
 
   const enterKeyDown = (event) => {
-    if (event.key === "Enter"){
+    if (event.key === "Enter") {
       console.log("Enter was pressed.");
       handleSubmitComment();
-      setComment('');
+      setComment("");
       setExpanded(false);
     }
-  }
+  };
 
-  function handleSubmitComment(){
+  function handleSubmitComment() {
     // call update post, creating new update type "comment" and just push the comment into array
-    if (comment !== ''){
-      console.log("comment submitted:", comment)
+    if (comment !== "") {
+      console.log("comment submitted:", comment);
       community.updatePost("comment", post, comment, auth.user);
     } else {
       console.log("no comment to submit");
     }
   }
 
-
   function handleExpand(event) {
     event.stopPropagation();
     let ex = !expanded;
     setExpanded(ex);
-    setComment('');
+    setComment("");
     // if (ex) {
     //   store.updateViews(top5List);
     // }
   }
 
   function handleUpdateComment(event) {
-    console.log(event.target.value)
-    setComment(event.target.value)
+    console.log(event.target.value);
+    setComment(event.target.value);
   }
 
   function handleDelete(event) {
@@ -100,8 +83,8 @@ export default function PostCard(props) {
 
   function handleOpenReportModal(event) {
     event.stopPropagation();
-    console.log("Open report modal")
-    community.setReportModal(true, post)
+    console.log("Open report modal");
+    community.setReportModal(true, post);
   }
 
   let postData = "";
@@ -157,8 +140,8 @@ export default function PostCard(props) {
   //   );
   // }
   const history = useHistory();
-  function handleEdit(event){
-    history.push('/singleplayer/' + post._id)
+  function handleEdit(event) {
+    history.push("/singleplayer/" + post._id);
   }
   function handleViewProfile(event, username) {
     console.log("in view profile");
