@@ -74,10 +74,22 @@ io.on("connection", (socket) => {
 
     console.log("disconnecting all players from lobby");
 
-    io.sockets.clients(lobbyID).forEach(function (s) {
-      console.log("disconnecting", s);
-      s.leave(lobbyID);
-    });
+    io.of("/")
+      .in(lobbyID)
+      .clients(function (error, clients) {
+        if (clients.length > 0) {
+          console.log("clients in the room:", lobbyID, ":\n");
+          console.log(clients);
+          clients.forEach(function (socket_id) {
+            io.sockets.sockets[socket_id].leave(lobbyID);
+          });
+        }
+      });
+
+    // io.sockets.clients(lobbyID).forEach(function (s) {
+    //   console.log("disconnecting", s);
+    //   s.leave(lobbyID);
+    // });
   });
 
   socket.on("send-message", (message) => {
