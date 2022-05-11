@@ -691,6 +691,31 @@ function GameContextProvider(props) {
     });
   };
 
+  //Solo Game replaces panels
+  //might need to set game.turn to 0 when clicking edit
+  game.nextTurn = function (newPanel) {
+    let panels = game.panels;
+
+    panels[game.turn] = newPanel
+    let currentTurn = game.turn + 1;
+    console.log("currentTurn:", currentTurn);
+
+    let sortedArray = game.players.sort();
+    console.log(sortedArray);
+
+    let currPlayer = sortedArray[currentTurn % game.players.length];
+    console.log(currPlayer);
+
+    gameReducer({
+      type: GameActionType.NEXT_TURN,
+      payload: {
+        turn: currentTurn,
+        currentPlayer: currPlayer,
+        panels: panels,
+      },
+    });
+  };
+
   game.enterVoting = async function (lastPanel) {
     try {
       const id = "madeupgameid";

@@ -43,6 +43,7 @@ import StoryEditor from "./StoryEditor";
 //#endregion quilljs
 
 export default function GameScreen() {
+    const { game } = useContext(GameContext);
 
     const [actions, setActions] = React.useState([]);
     const [panels, setPanels] = useState([]) 
@@ -87,11 +88,13 @@ export default function GameScreen() {
     setCharacterToggle(!characterToggle);
   };
   const [bubbleToggle, setBubbleToggle] = useState(false);
-  const toggleBubbles = () => {
-    if (!bubbleToggle) {
-      setTool("image");
-    }
-    setBubbleToggle(!bubbleToggle);
+
+  const nextPanel = () => {
+  //TODO
+  //change to next panel  
+  let imageData = stageRef.current.toDataURL();
+  game.nextTurn(imageData)   //Updates the image Data
+  //
   };
 
   const [themeToggle, setThemeToggle] = useState(false);
@@ -570,7 +573,7 @@ export default function GameScreen() {
 //   if (game.gamemode === "comic") {
     gameUtils = (
       <Grid item xs={3} align="center">
-        <Box
+        {/* <Box
           sx={{
             width: 450,
             height: 75,
@@ -588,8 +591,8 @@ export default function GameScreen() {
             storyText={storyText}
             setStoryText={setStoryText}
           />
-        </Box>
-        <Button
+        </Box> */}
+        {/* <Button
           sx={{
             width: 450,
             height: 75,
@@ -606,8 +609,8 @@ export default function GameScreen() {
           onClick={toggleThemes}
         >
           <Typography fontSize={"32px"}>Themes</Typography>
-        </Button>
-        {themeToggle && (
+        </Button> */}
+        {/* {themeToggle && (
           <Box
             sx={{
               margin: 1,
@@ -651,8 +654,8 @@ export default function GameScreen() {
               </ImageListItem>
             </ImageList>
           </Box>
-        )}
-        <Button
+        )} */}
+        {/* <Button
           sx={{
             width: 450,
             height: 75,
@@ -669,8 +672,8 @@ export default function GameScreen() {
           onClick={toggleCharacters}
         >
           <Typography fontSize={"32px"}>Characters</Typography>
-        </Button>
-        {characterToggle && (
+        </Button> */}
+        {/* {characterToggle && (
           <Box
             sx={{
               margin: 1,
@@ -698,7 +701,7 @@ export default function GameScreen() {
               ))}
             </ImageList>
           </Box>
-        )}
+        )} */}
         <Button
           sx={{
             width: 450,
@@ -713,39 +716,11 @@ export default function GameScreen() {
             border: 3,
             color: "black",
           }}
-          onClick={toggleBubbles}
+          //TODO
+          onClick={nextPanel}
         >
-          <Typography fontSize={"32px"}>Speech Bubbles</Typography>
+          <Typography fontSize={"32px"}>NEXT</Typography>
         </Button>
-        {bubbleToggle && (
-          <Box
-            sx={{
-              margin: 1,
-              backgroundColor: "primary.dark",
-              "&:hover": {
-                backgroundColor: "primary.main",
-                opacity: [0.9, 0.8, 0.7],
-              },
-              borderRadius: 5,
-              border: 3,
-              color: "black",
-            }}
-          >
-            <ImageList sx={{ width: "95%" }} cols={3}>
-              {[1, 2, 3, 4, 5, 6].map((picture) => (
-                <ImageListItem key={picture}>
-                  <img
-                    src={require("../images/Speech_bubble.png")}
-                    draggable="true"
-                    onDragStart={(e) => {
-                      dragUrl.current = e.target.src;
-                    }}
-                  />
-                </ImageListItem>
-              ))}
-            </ImageList>
-          </Box>
-        )}
       </Grid>
     );
 //   } else {
