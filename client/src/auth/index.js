@@ -552,6 +552,9 @@ function AuthContextProvider(props) {
     });
   };
 
+  function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
   auth.getLoggedIn = async function () {
     console.log("trying to get log in info");
     try {
@@ -561,6 +564,14 @@ function AuthContextProvider(props) {
         console.log("updating friends and friend requests");
         let friendRequestIds = user.requests;
         let friendIds = user.friends;
+            if(socket.id != null){
+              socket.emit("socket-username", user.username, socket.id);
+            }
+            else{
+              await delay(1500)
+              socket.emit("socket-username", user.username, socket.id);
+              
+            }
 
         let friendRequests = [];
         let friends = [];
