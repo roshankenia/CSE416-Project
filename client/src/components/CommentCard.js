@@ -1,22 +1,8 @@
-import { useContext, useState } from "react";
-import { GlobalCommunityContext } from "../community";
-import AuthContext from "../auth";
-import ListItem from "@mui/material/ListItem";
-import IconButton from "@mui/material/IconButton";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { Grid, Stack, Typography } from "@mui/material";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import CommentIcon from "@mui/icons-material/Comment";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import { Collapse } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { List } from "@mui/material";
-import { Link } from "react-router-dom";
-import TextField from "@mui/material/TextField";
-
+import { useContext } from "react";
+import AuthContext from "../auth";
+import { GlobalCommunityContext } from "../community";
 
 export default function CommentCard(props) {
   const { community } = useContext(GlobalCommunityContext);
