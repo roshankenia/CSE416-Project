@@ -744,10 +744,12 @@ function GameContextProvider(props) {
 
   //Solo Game replaces panels
   //might need to set game.turn to 0 when clicking edit
-  game.nextTurn = function (newPanel) {
+  game.soloNextTurn = function (newPanel) {
+    console.log("inside next turn method in game-index.js")
     let panels = game.panels;
 
-    panels[game.turn] = newPanel
+    //If we add new panel, this code works.
+    panels.push(newPanel)
     let currentTurn = game.turn + 1;
     console.log("currentTurn:", currentTurn);
 

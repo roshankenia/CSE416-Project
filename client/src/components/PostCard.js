@@ -22,10 +22,12 @@ import AuthContext from "../auth";
 import { GlobalCommunityContext } from "../community";
 import CommentCard from "./CommentCard.js";
 import StoryPopout from "./StoryPopout.js";
+import { GameContext } from "../game";
 
 export default function PostCard(props) {
   const { community } = useContext(GlobalCommunityContext);
   const { auth } = useContext(AuthContext);
+  const { game } = useContext(GameContext);
   const { post, index } = props;
 
   //Keeps track if post is expanded or not
@@ -142,6 +144,8 @@ export default function PostCard(props) {
   const history = useHistory();
   function handleEdit(event) {
     history.push("/singleplayer/" + post._id);
+    game.turn =0
+    console.log("game.turn should be 0",game.turn)
   }
   function handleViewProfile(event, username) {
     console.log("in view profile");

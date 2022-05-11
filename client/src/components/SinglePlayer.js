@@ -48,17 +48,18 @@ export default function GameScreen() {
     const [actions, setActions] = React.useState([]);
     const [panels, setPanels] = useState([]) 
     const [postID, setPostID] = useState(window.location.pathname.toString().substring(14))
-
+    
     async function getPost() {
         const postResponse = await api.getPostById(postID);
            //also need to check for story
            const comicResponse = await api.getComicById(postResponse.data.post.postComic)
            setPanels(comicResponse.data.comic.panels)
+           console.log("the value of game.turn in getPost ",game.turn)
            setActions(
                actions.concat([
                    {
                    ...stageRef.current.getPointerPosition(),
-                   src: comicResponse.data.comic.panels[0],
+                   src: comicResponse.data.comic.panels[game.turn],
                    key: actions.length + 1
                    },
                ])
@@ -91,10 +92,27 @@ export default function GameScreen() {
 
   const nextPanel = () => {
   //TODO
-  //change to next panel  
+  //change to next panel
+  console.log("next panel method");
   let imageData = stageRef.current.toDataURL();
-  game.nextTurn(imageData)   //Updates the image Data
-  //
+  const currTurn = game.turn
+  if(currTurn+1 == panels.length){
+    console.log("inside go to voting")
+    game.enterVoting(imageData)
+  }
+  else{
+    game.soloNextTurn(imageData)   //Updates the image Data
+    setActions(
+      [
+          {
+          ...stageRef.current.getPointerPosition(),
+          src: panels[currTurn +1],
+          key: actions.length + 1
+          },
+      ]
+    );
+  }
+  
   };
 
   const [themeToggle, setThemeToggle] = useState(false);
