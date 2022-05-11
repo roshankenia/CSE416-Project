@@ -81,6 +81,10 @@ export default function GameScreen() {
     setThemeToggle(!themeToggle);
   };
 
+  const handleLeave = (event) => {
+    game.disconnectPlayer();
+  };
+
   const charactersLeft = 147;
 
   const flexContainer = {
@@ -373,7 +377,7 @@ export default function GameScreen() {
     gamePanels = (
       <Box sx={{ width: "70%", height: "70%" }}>
         <ImageList sx={{ width: "95%" }} cols={6}>
-          {game.panels.map((picture,index) => (
+          {game.panels.map((picture, index) => (
             <ImageListItem key={index}>
               <img src={picture} loading="lazy" />
             </ImageListItem>
@@ -615,6 +619,24 @@ export default function GameScreen() {
             width: 450,
             height: 75,
             margin: 1,
+            backgroundColor: "red",
+            "&:hover": {
+              backgroundColor: "primary.main",
+              opacity: [0.9, 0.8, 0.7],
+            },
+            borderRadius: 5,
+            border: 3,
+            color: "black",
+          }}
+          onClick={(event) => handleLeave()}
+        >
+          <Typography fontSize={"32px"}>Leave</Typography>
+        </Button>
+        <Button
+          sx={{
+            width: 450,
+            height: 75,
+            margin: 1,
             backgroundColor: "primary.dark",
             "&:hover": {
               backgroundColor: "primary.main",
@@ -795,6 +817,24 @@ export default function GameScreen() {
             setStoryText={setStoryText}
           />
         </Box>
+        <Button
+          sx={{
+            width: 450,
+            height: 75,
+            margin: 1,
+            backgroundColor: "red",
+            "&:hover": {
+              backgroundColor: "primary.main",
+              opacity: [0.9, 0.8, 0.7],
+            },
+            borderRadius: 5,
+            border: 3,
+            color: "black",
+          }}
+          onClick={(event) => handleLeave()}
+        >
+          <Typography fontSize={"32px"}>Leave</Typography>
+        </Button>
         {/* <Typography
           fontSize={"32px"}
           sx={{
