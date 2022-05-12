@@ -52,7 +52,10 @@ var server = app.listen(PORT, function () {
 });
 
 //comment out the line below
-var io = require("socket.io")(server, {'pingInterval': 3000, 'pingTimeout': 2500});
+var io = require("socket.io")(server, {
+  pingInterval: 3000,
+  pingTimeout: 2500,
+});
 
 //and uncomment the line below to start a local websocket server
 // var io = require("socket.io")(5000, {cors:{origin: ["http://localhost:3000"]}});
@@ -70,6 +73,10 @@ io.on("connection", (socket) => {
 
   socket.on("disconnecting", (reason) => {
     console.log(socket.rooms); // Set { ... }
+    let rooms = socket.rooms;
+    rooms.forEach(function (lobbyID) {
+      socket.to(lobbyID).emit("player-left", "User");
+    });
   });
 
   socket.on("disconnect-player", (username, lobbyID) => {
