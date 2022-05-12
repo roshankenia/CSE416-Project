@@ -68,6 +68,11 @@ var userID = {};
 io.on("connection", (socket) => {
   console.log("new client connected", socket.id);
 
+  socket.on("disconnect", (reason) => {
+    console.log("A user left with rooms:");
+    console.log(socket.rooms);
+  });
+
   socket.on("disconnect-player", (username, lobbyID) => {
     console.log(username, "has left lobby", lobbyID);
     socket.to(lobbyID).emit("player-left", username);
