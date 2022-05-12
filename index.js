@@ -52,7 +52,10 @@ var server = app.listen(PORT, function () {
 });
 
 //comment out the line below
-var io = require("socket.io")(server);
+var io = require("socket.io").listen(server, {
+  pingTimeout: 5000,
+  pingInterval: 10000,
+});
 
 //and uncomment the line below to start a local websocket server
 // var io = require("socket.io")(5000, {cors:{origin: ["http://localhost:3000"]}});
