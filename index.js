@@ -75,7 +75,14 @@ io.on("connection", (socket) => {
     console.log(socket.rooms); // Set { ... }
     let rooms = socket.rooms;
     rooms.forEach(function (lobbyID) {
-      socket.to(lobbyID).emit("player-left", "User");
+      if (lobbyID != socket.id) {
+        console.log(socket.id, "has left lobby", lobbyID);
+        socket.to(lobbyID).emit("player-left", "User");
+        console.log("disconnecting all players from lobby");
+        io.socketsLeave(lobbyID);
+      } else {
+        console.log("skipping", lobbyID);
+      }
     });
   });
 
