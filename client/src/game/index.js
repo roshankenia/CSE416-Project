@@ -545,12 +545,6 @@ function GameContextProvider(props) {
 
     socket.once("player-left", playerLeft);
 
-    window.addEventListener("beforeunload", () => {
-      console.log("player has closed tab");
-      let lobbyID = game.lobby;
-      socket.emit("disconnect-player", auth.user.username, lobbyID);
-    });
-
     return () => {
       socket.off("new-player", newP);
       socket.off("add-players", addP);
@@ -562,12 +556,6 @@ function GameContextProvider(props) {
       socket.off("switch-gamemode", switchGamemode);
       socket.off("update-votes-cb", newVotes);
       socket.off("player-left", playerLeft);
-
-      window.removeEventListener("beforeunload", () => {
-        console.log("player has closed tab");
-        let lobbyID = game.lobby;
-        socket.emit("disconnect-player", auth.user.username, lobbyID);
-      });
 
       // socket.off('count1');
     };
