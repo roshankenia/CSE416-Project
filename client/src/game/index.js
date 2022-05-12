@@ -545,6 +545,12 @@ function GameContextProvider(props) {
 
     socket.once("player-left", playerLeft);
 
+    window.addEventListener("beforeunload", () => {
+      console.log("player has closed tab");
+      let lobbyID = game.lobby;
+      socket.emit("disconnect-player", auth.user.username, lobbyID);
+    });
+
     return () => {
       socket.off("new-player", newP);
       socket.off("add-players", addP);
@@ -556,6 +562,12 @@ function GameContextProvider(props) {
       socket.off("switch-gamemode", switchGamemode);
       socket.off("update-votes-cb", newVotes);
       socket.off("player-left", playerLeft);
+
+      window.removeEventListener("beforeunload", () => {
+        console.log("player has closed tab");
+        let lobbyID = game.lobby;
+        socket.emit("disconnect-player", auth.user.username, lobbyID);
+      });
 
       // socket.off('count1');
     };
@@ -745,11 +757,11 @@ function GameContextProvider(props) {
   //Solo Game replaces panels
   //might need to set game.turn to 0 when clicking edit
   game.soloNextTurn = function (newPanel) {
-    console.log("inside next turn method in game-index.js")
+    console.log("inside next turn method in game-index.js");
     let panels = game.panels;
 
     //If we add new panel, this code works.
-    panels.push(newPanel)
+    panels.push(newPanel);
     let currentTurn = game.turn + 1;
     console.log("currentTurn:", currentTurn);
 
