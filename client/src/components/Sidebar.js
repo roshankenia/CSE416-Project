@@ -112,8 +112,7 @@ export default function Sidebar() {
                 align="center"
                 id="email"
                 name="email"
-                label="Enter email:"
-                autoFocus
+                label="Enter friend's email:"
                 variant="standard"
                 InputProps={{
                   disableUnderline: true,
@@ -190,7 +189,6 @@ export default function Sidebar() {
                 id="lobbyCode"
                 name="lobbyCode"
                 label="Enter Lobby Code:"
-                autoFocus
                 variant="standard"
                 InputProps={{
                   disableUnderline: true,

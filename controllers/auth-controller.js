@@ -188,12 +188,16 @@ registerUser = async (req, res) => {
       });
     }
     console.log("password and password verify match");
-    const existingUser = await User.findOne({ email: email });
+    const existingUser = await User.findOne({
+      $or: [{ email: email }, { username: username }],
+    });
+
     console.log("existingUser: " + existingUser);
     if (existingUser) {
       return res.status(400).json({
         success: false,
-        errorMessage: "An account with this email address already exists.",
+        errorMessage:
+          "An account with this email address or username already exists.",
       });
     }
 
@@ -542,8 +546,6 @@ addFriend = async (req, res) => {
     }).catch((err2) => console.log(err));
   }).catch((err1) => console.log(err));
 };
-
-
 
 searchUsers = async (req, res) => {
   const body = req.body;

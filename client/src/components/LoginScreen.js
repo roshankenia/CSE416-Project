@@ -157,14 +157,6 @@ export default function LoginScreen() {
                     </Box>
                   </Box>
                 </Grid>
-                <Grid item xs={5}></Grid>
-                <Grid item xs={7}>
-                  <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Remember me"
-                    sx={{ color: "gray", textDecoration: "line-through" }}
-                  />
-                </Grid>
                 <Grid item xs={12}>
                   <Button
                     type="submit"
@@ -187,16 +179,16 @@ export default function LoginScreen() {
                 </Grid>
                 <Grid container justifyContent="flex-end">
                   <Grid item xs>
-                    <Link
-                      href="/reset/"
-                      variant="body2"
-                      sx={{fontSize:24}}
-                    >
+                    <Link href="/reset/" variant="body2" sx={{ fontSize: 24 }}>
                       Forgot password?
                     </Link>
                   </Grid>
                   <Grid item>
-                    <Link href="/register/" variant="body2" sx={{fontSize:24}}>
+                    <Link
+                      href="/register/"
+                      variant="body2"
+                      sx={{ fontSize: 24 }}
+                    >
                       {"Don't have an account? Sign Up"}
                     </Link>
                   </Grid>
@@ -313,14 +305,6 @@ export default function LoginScreen() {
                     </Box>
                   </Box>
                 </Grid>
-                <Grid item xs={5}></Grid>
-                <Grid item xs={7}>
-                  <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Remember me"
-                    sx={{ color: "gray", textDecoration: "line-through" }}
-                  />
-                </Grid>
                 <Grid item xs={12}>
                   <Button
                     type="submit"
@@ -343,16 +327,16 @@ export default function LoginScreen() {
                 </Grid>
                 <Grid container justifyContent="flex-end">
                   <Grid item xs>
-                    <Link
-                      href="/reset/"
-                      variant="body2"
-                      sx={{fontSize:24}}
-                    >
+                    <Link href="/reset/" variant="body2" sx={{ fontSize: 24 }}>
                       Forgot password?
                     </Link>
                   </Grid>
                   <Grid item>
-                    <Link href="/register/" variant="body2" sx={{fontSize:24}}>
+                    <Link
+                      href="/register/"
+                      variant="body2"
+                      sx={{ fontSize: 24 }}
+                    >
                       {"Don't have an account? Sign Up"}
                     </Link>
                   </Grid>

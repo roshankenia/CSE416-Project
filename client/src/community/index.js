@@ -68,10 +68,15 @@ function GlobalCommunityContextProvider(props) {
 
   const [notifyOpen, setNotifyOpen] = useState(false);
 
+  const [loaded, setLoaded] = useState(false);
+
   useEffect(() => {
     // call api or anything
-    community.getCommunities();
-  }, []);
+    if (!loaded) {
+      community.getCommunities();
+      setLoaded(true);
+    }
+  }, [loaded, community]);
   const handleNotifyClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
