@@ -5,6 +5,7 @@ import AuthContext from "../auth";
 import io from "socket.io-client";
 import { SocketContext } from "../socket";
 import $ from "jquery";
+import { GlobalCommunityContext } from "../community";
 
 export const GameContext = createContext({});
 
@@ -53,6 +54,7 @@ function GameContextProvider(props) {
   const history = useHistory();
 
   const { auth } = useContext(AuthContext);
+  const { community } = useContext(GlobalCommunityContext);
 
   const gameReducer = (action) => {
     const { type, payload } = action;
@@ -531,15 +533,20 @@ function GameContextProvider(props) {
 
     const playerLeft = async (user) => {
       console.log(user, "has left the game.");
-      try {
-        console.log("resetting game");
-        gameReducer({
-          type: GameActionType.RESET_GAME,
-          payload: null,
-        });
-        history.push("/");
-      } catch {
-        console.log("Failed to leave lobby");
+      if (game != null) {
+        try {
+          console.log("resetting game");
+          gameReducer({
+            type: GameActionType.RESET_GAME,
+            payload: null,
+          });
+          history.push("/");
+          community.notifyLeft();
+        } catch {
+          console.log("Failed to leave lobby");
+        }
+      } else {
+        console.log("stay in lobby");
       }
     };
 

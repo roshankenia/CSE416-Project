@@ -1,11 +1,13 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import api from "./community-request-api";
 import AuthContext from "../auth";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-
+import Snackbar from "@mui/material/Snackbar";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
 /*
     This is our global data Community. Note that it uses the Flux design pattern,
     which makes use of things like actions and reducers. 
@@ -64,10 +66,32 @@ function GlobalCommunityContextProvider(props) {
   const [load, setLoad] = useState(false);
   const history = useHistory();
 
+  const [notifyOpen, setNotifyOpen] = useState(false);
+
   useEffect(() => {
     // call api or anything
     community.getCommunities();
   }, []);
+  const handleNotifyClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setNotifyOpen(false);
+  };
+
+  const action = (
+    <React.Fragment>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleNotifyClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   const communityReducer = (action) => {
     const { type, payload } = action;
@@ -455,6 +479,9 @@ function GlobalCommunityContextProvider(props) {
         return community;
     }
   };
+  community.notifyLeft = function () {
+    setNotifyOpen(true);
+  };
   community.joinCommunity = async function (communityName) {
     try {
       let getCommunityResponse = await api.searchCommunity(communityName);
@@ -587,14 +614,18 @@ function GlobalCommunityContextProvider(props) {
     }
 
     return sortedPosts;
-  }; 
+  };
   community.searchPostsUp = async function (search) {
     search = search.toLowerCase();
     let newCommunityPosts = [];
     for (let i = 0; i < community.communityPosts.length; i++) {
       if (
-        community.communityPosts[i].postTitle.toLowerCase().startsWith(search) ||
-        community.communityPosts[i].communityName.toLowerCase().startsWith(search)
+        community.communityPosts[i].postTitle
+          .toLowerCase()
+          .startsWith(search) ||
+        community.communityPosts[i].communityName
+          .toLowerCase()
+          .startsWith(search)
       ) {
         newCommunityPosts.push(community.communityPosts[i]);
       }
@@ -674,9 +705,9 @@ function GlobalCommunityContextProvider(props) {
 
             // comments array isn't always filled with comment objects
             let commentsArr = post.comments;
-            let commentsObjArr = []
-            for (let i = 0; i < commentsArr.length; i++){
-              if (commentsArr[i].username){
+            let commentsObjArr = [];
+            for (let i = 0; i < commentsArr.length; i++) {
+              if (commentsArr[i].username) {
                 // console.log(commentsArr[i])
                 commentsObjArr.push(commentsArr[i]);
               } else {
@@ -684,8 +715,8 @@ function GlobalCommunityContextProvider(props) {
                 commentsObjArr.push(getCommResponse.data.comment[0]);
               }
             }
-            post.comments = commentsObjArr
-            console.log(post.comments)
+            post.comments = commentsObjArr;
+            console.log(post.comments);
 
             if (post.postComic) {
               const comicResponse = await api.getComicById(post.postComic);
@@ -717,9 +748,9 @@ function GlobalCommunityContextProvider(props) {
 
             // comments array isn't always filled with comment objects
             let commentsArr = post.comments;
-            let commentsObjArr = []
-            for (let i = 0; i < commentsArr.length; i++){
-              if (commentsArr[i].username){
+            let commentsObjArr = [];
+            for (let i = 0; i < commentsArr.length; i++) {
+              if (commentsArr[i].username) {
                 // console.log(commentsArr[i])
                 commentsObjArr.push(commentsArr[i]);
               } else {
@@ -727,8 +758,8 @@ function GlobalCommunityContextProvider(props) {
                 commentsObjArr.push(getCommResponse.data.comment[0]);
               }
             }
-            post.comments = commentsObjArr
-            console.log(post.comments)
+            post.comments = commentsObjArr;
+            console.log(post.comments);
 
             if (post.postComic) {
               const comicResponse = await api.getComicById(post.postComic);
@@ -809,9 +840,9 @@ function GlobalCommunityContextProvider(props) {
 
           // comments array isn't always filled with comment objects
           let commentsArr = post.comments;
-          let commentsObjArr = []
-          for (let i = 0; i < commentsArr.length; i++){
-            if (commentsArr[i].username){
+          let commentsObjArr = [];
+          for (let i = 0; i < commentsArr.length; i++) {
+            if (commentsArr[i].username) {
               // console.log(commentsArr[i])
               commentsObjArr.push(commentsArr[i]);
             } else {
@@ -819,8 +850,8 @@ function GlobalCommunityContextProvider(props) {
               commentsObjArr.push(getCommResponse.data.comment[0]);
             }
           }
-          post.comments = commentsObjArr
-          console.log(post.comments)
+          post.comments = commentsObjArr;
+          console.log(post.comments);
 
           if (post.postComic) {
             const comicResponse = await api.getComicById(post.postComic);
@@ -870,13 +901,13 @@ function GlobalCommunityContextProvider(props) {
           [],
           [],
           []
-        )
-        console.log("Create Comment Response", commresponse.data.comment)
-        if (commresponse.status === 200){
-          console.log("Comment Object successfully made")
+        );
+        console.log("Create Comment Response", commresponse.data.comment);
+        if (commresponse.status === 200) {
+          console.log("Comment Object successfully made");
           let commentArr = post.comments;
-          commentArr.push(commresponse.data.comment)
-          console.log("Updated comment array:", commentArr)
+          commentArr.push(commresponse.data.comment);
+          console.log("Updated comment array:", commentArr);
           let response = await api.updatePost(
             post._id,
             post.postTitle,
@@ -889,30 +920,28 @@ function GlobalCommunityContextProvider(props) {
             post.discoveryPublished,
             post.dateAndTime,
             post.communityName
-          )
-          console.log("Update Post Response:", response)
-          if (response.status === 200){
-            console.log("Comment added to post")
-  
+          );
+          console.log("Update Post Response:", response);
+          if (response.status === 200) {
+            console.log("Comment added to post");
+
             //LIVE UPDATE PORTION
-            console.log(response)
-            let newPost = response.data.post
+            console.log(response);
+            let newPost = response.data.post;
             community.doLiveUpdate(newPost);
-            
           } else {
-            console.log("Comment was not added to post")
+            console.log("Comment was not added to post");
           }
         } else {
-          console.log("Comment Object was not made.")
+          console.log("Comment Object was not made.");
         }
-      }
-      else if (updateType == "like") {
+      } else if (updateType == "like") {
         let likeArray = post.likes;
         let dislikeArray = post.dislikes;
         let likeIndex = likeArray.indexOf(user._id);
         let dislikeIndex = dislikeArray.indexOf(user._id);
-        console.log(likeIndex)
-        console.log(dislikeIndex)
+        console.log(likeIndex);
+        console.log(dislikeIndex);
         //If user has already disliked, then remove the dislike and change to like
         if (dislikeIndex != -1) {
           dislikeArray.splice(dislikeIndex);
@@ -939,15 +968,14 @@ function GlobalCommunityContextProvider(props) {
           post.dateAndTime,
           post.communityName
         );
-        if (response.status === 200){
-          console.log("Update Post Successful")
+        if (response.status === 200) {
+          console.log("Update Post Successful");
 
           //LIVE UPDATE PORTION
-          console.log(response)
-          let newPost = response.data.post
+          console.log(response);
+          let newPost = response.data.post;
           community.doLiveUpdate(newPost);
         }
-        
       } else if (updateType == "dislike") {
         let likeArray = post.likes;
         let dislikeArray = post.dislikes;
@@ -978,12 +1006,12 @@ function GlobalCommunityContextProvider(props) {
           post.dateAndTime,
           post.communityName
         );
-        if (response.status === 200){
-          console.log("Update Post Successful")
+        if (response.status === 200) {
+          console.log("Update Post Successful");
 
           //LIVE UPDATE PORTION
-          console.log(response)
-          let newPost = response.data.post
+          console.log(response);
+          let newPost = response.data.post;
           community.doLiveUpdate(newPost);
         }
         console.log("Dislike reponse: ", response);
@@ -1164,9 +1192,9 @@ function GlobalCommunityContextProvider(props) {
   community.doLiveUpdate = async function (newPost) {
     // comments array isn't always filled with comment objects
     let commentsArr = newPost.comments;
-    let commentsObjArr = []
-    for (let i = 0; i < commentsArr.length; i++){
-      if (commentsArr[i].username){
+    let commentsObjArr = [];
+    for (let i = 0; i < commentsArr.length; i++) {
+      if (commentsArr[i].username) {
         // console.log(commentsArr[i])
         commentsObjArr.push(commentsArr[i]);
       } else {
@@ -1174,7 +1202,7 @@ function GlobalCommunityContextProvider(props) {
         commentsObjArr.push(getCommResponse.data.comment[0]);
       }
     }
-    newPost.comments = commentsObjArr
+    newPost.comments = commentsObjArr;
 
     if (newPost.postComic) {
       const comicResponse = await api.getComicById(newPost.postComic);
@@ -1186,20 +1214,20 @@ function GlobalCommunityContextProvider(props) {
       newPost.data = storyResponse.data.story;
     }
 
-    let newCommunityPosts = community.communityPosts
-    for (let i = 0; i < community.communityPosts.length; i++){
-      if (newCommunityPosts[i]._id == newPost._id){
-        console.log("found a match")
-        newCommunityPosts[i] = newPost
+    let newCommunityPosts = community.communityPosts;
+    for (let i = 0; i < community.communityPosts.length; i++) {
+      if (newCommunityPosts[i]._id == newPost._id) {
+        console.log("found a match");
+        newCommunityPosts[i] = newPost;
         break;
       }
     }
 
-    let newSearchPosts = community.searchPosts
-    for (let i = 0; i < community.searchPosts.length; i++){
-      if (newSearchPosts[i]._id == newPost._id){
-        console.log("found a match")
-        newSearchPosts[i] = newPost
+    let newSearchPosts = community.searchPosts;
+    for (let i = 0; i < community.searchPosts.length; i++) {
+      if (newSearchPosts[i]._id == newPost._id) {
+        console.log("found a match");
+        newSearchPosts[i] = newPost;
         break;
       }
     }
@@ -1207,13 +1235,13 @@ function GlobalCommunityContextProvider(props) {
       type: GlobalCommunityActionType.UPDATE_POST_LIVE,
       payload: {
         communityPosts: newCommunityPosts,
-        searchPosts: newSearchPosts
+        searchPosts: newSearchPosts,
       },
     });
-  }
+  };
 
-  community.updateComment = async function (updateType, comment, user){
-    if (updateType == "like"){
+  community.updateComment = async function (updateType, comment, user) {
+    if (updateType == "like") {
       let likeArray = comment.likes;
       let dislikeArray = comment.dislikes;
       let likeIndex = likeArray.indexOf(user._id);
@@ -1236,10 +1264,10 @@ function GlobalCommunityContextProvider(props) {
         comment.username,
         comment.comment,
         likeArray,
-        dislikeArray,
+        dislikeArray
       );
-      if (response.status === 200){
-        console.log("Update Comment Successful")
+      if (response.status === 200) {
+        console.log("Update Comment Successful");
       }
     } else if (updateType == "dislike") {
       let likeArray = comment.likes;
@@ -1249,7 +1277,7 @@ function GlobalCommunityContextProvider(props) {
       //If user has already liked, then remove the like and change to dislike
       if (likeIndex != -1) {
         likeArray.splice(likeIndex);
-        console.log("removed user from like Array")
+        console.log("removed user from like Array");
       }
       //If user has not disliked, then add their username
       if (dislikeIndex == -1) {
@@ -1265,15 +1293,15 @@ function GlobalCommunityContextProvider(props) {
         comment.username,
         comment.comment,
         likeArray,
-        dislikeArray,
+        dislikeArray
       );
-      if (response.status === 200){
-        console.log("Update Comment Successful")
+      if (response.status === 200) {
+        console.log("Update Comment Successful");
       }
     } else {
       console.log("Comment UpdateType Not Valid");
     }
-  }
+  };
 
   community.setChangePassword = async function (changePassword) {
     communityReducer({
@@ -1789,8 +1817,15 @@ function GlobalCommunityContextProvider(props) {
     }
   };
 
-  community.createReport = async function (userID, postID, username, postTitle, postComm, report) {
-    try{
+  community.createReport = async function (
+    userID,
+    postID,
+    username,
+    postTitle,
+    postComm,
+    report
+  ) {
+    try {
       let response = await api.createReport(
         userID,
         postID,
@@ -1799,15 +1834,14 @@ function GlobalCommunityContextProvider(props) {
         postComm,
         report
       );
-      if (response.status === 200){
+      if (response.status === 200) {
         console.log("Report Made!");
       } else {
-        console.log("Create Report Reponses Status FAIL")
+        console.log("Create Report Reponses Status FAIL");
       }
     } catch (err) {
-      console.log("Report not created.")
+      console.log("Report not created.");
     }
-    
   };
 
   return (
@@ -1817,6 +1851,13 @@ function GlobalCommunityContextProvider(props) {
       }}
     >
       {props.children}
+      <Snackbar
+        open={notifyOpen}
+        autoHideDuration={3000}
+        message="A user has left the game."
+        onClose={handleNotifyClose}
+        action={action}
+      />
       <Modal open={load}>
         <Box
           style={{
