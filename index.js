@@ -53,8 +53,8 @@ var server = app.listen(PORT, function () {
 
 //comment out the line below
 var io = require("socket.io").listen(server, {
-  pingTimeout: 5000,
-  pingInterval: 10000,
+  pingTimeout: 2500,
+  pingInterval: 5000,
 });
 
 //and uncomment the line below to start a local websocket server
@@ -71,9 +71,8 @@ var userID = {};
 io.on("connection", (socket) => {
   console.log("new client connected", socket.id);
 
-  socket.on("disconnect", (reason) => {
-    console.log("A user left with rooms:");
-    console.log(socket.rooms);
+  socket.on("disconnecting", (reason) => {
+    console.log(socket.rooms); // Set { ... }
   });
 
   socket.on("disconnect-player", (username, lobbyID) => {
