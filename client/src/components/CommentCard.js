@@ -9,17 +9,6 @@ export default function CommentCard(props) {
   const { comment } = props;
   const { auth } = useContext(AuthContext);
 
-  function handleLike(event) {
-    event.stopPropagation();
-    // console.log(comment)
-    community.updateComment("like", comment, auth.user);
-  }
-
-  function handleDislike(event) {
-    event.stopPropagation();
-    community.updateComment("dislike", comment, auth.user);
-  }
-
   return (
     <Box
       variant="contained"
@@ -79,7 +68,7 @@ export default function CommentCard(props) {
               paddingLeft: 10,
             }}
           >
-            {comment.username + ": " + comment.comment}
+            {comment[1] + ": " + comment[2]}
           </Typography>
         </Grid>
       </Grid>
