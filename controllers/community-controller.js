@@ -36,7 +36,7 @@ getProfilePosts = async (req, res) => {
           let curComic = comics[i];
           //find corresponding post
 
-          await Post.findOne({ postComic: curComic._id }, (err, post) => {
+          Post.findOne({ postComic: curComic._id }, (err, post) => {
             if (err) {
               return res.status(400).json({ success: false, error: err });
             }
