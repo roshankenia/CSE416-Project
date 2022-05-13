@@ -208,7 +208,18 @@ export const updateCommentById = (
   });
 };
 
+export const updateBio = (
+  username,
+  bio
+) => {
+  return api.post("/updateBio/", {
+    username: username,
+    bio: bio
+  })
+}
+
 const apis = {
+  updateBio,
   createCommunity,
   getCommunityList,
   updateCommunityById,

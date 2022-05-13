@@ -488,28 +488,6 @@ function AuthContextProvider(props) {
     }
   };
 
-  auth.updateBio = async function (username, bio) {
-    try {
-      const response = await api.updateBio(username, bio);
-      console.log("from index.js response:", response);
-      console.log("from index.js response status:", response.status);
-      if (response.status === 200) {
-        // authReducer({
-        //   type: AuthActionType.UPDATE_BIO,
-        //   payload: {
-        //     user: response.data.user,
-        //   },
-        // });
-        community.setUserProfile(response.data.user);
-        return true;
-      }
-    } catch (error) {
-      // console.log(error.response.data.errorMessage);
-      // auth.setErrorMessage(error.response.data.errorMessage);
-      return false;
-    }
-  };
-
   auth.changePassword = async function (
     username,
     currPassword,
@@ -553,7 +531,7 @@ function AuthContextProvider(props) {
   };
 
   function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
   auth.getLoggedIn = async function () {
     console.log("trying to get log in info");
@@ -564,14 +542,12 @@ function AuthContextProvider(props) {
         console.log("updating friends and friend requests");
         let friendRequestIds = user.requests;
         let friendIds = user.friends;
-            if(socket.id != null){
-              socket.emit("socket-username", user.username, socket.id);
-            }
-            else{
-              await delay(1500)
-              socket.emit("socket-username", user.username, socket.id);
-              
-            }
+        if (socket.id != null) {
+          socket.emit("socket-username", user.username, socket.id);
+        } else {
+          await delay(1500);
+          socket.emit("socket-username", user.username, socket.id);
+        }
 
         let friendRequests = [];
         let friends = [];

@@ -61,16 +61,6 @@ export const registerUser = (
   });
 };
 
-export const updateBio = (
-  username,
-  bio
-) => {
-  return api.post("/updateBio/", {
-    username: username,
-    bio: bio
-  })
-}
-
 // @Jeff Hu front end request auth apis TO DO
 export const changePassword = (
   username,
@@ -156,7 +146,6 @@ const apis = {
   friend,
   removeFriendRequest,
   removeFriend,
-  updateBio,
   // ,
   // changePassword,
   // resetPassword,

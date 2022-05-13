@@ -134,6 +134,20 @@ export default function PostFeed() {
         >
           <MenuItem
             onClick={(event) => {
+              handleSort(event, "A to Z");
+            }}
+          >
+            A to Z{" "}
+          </MenuItem>
+          <MenuItem
+            onClick={(event) => {
+              handleSort(event, "Z to A");
+            }}
+          >
+            Z to A{" "}
+          </MenuItem>
+          <MenuItem
+            onClick={(event) => {
               handleSort(event, "newest date");
             }}
           >

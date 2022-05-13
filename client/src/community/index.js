@@ -40,6 +40,7 @@ export const GlobalCommunityActionType = {
   UPDATE_CURRENT_COMMUNITY: "UPDATE_CURRENT_COMMUNITY",
   SET_REPORT_MODAL: "SET_REPORT_MODAL",
   UPDATE_POST_LIVE: "UPDATE_POST_LIVE",
+  CHANGE_USER_BIO: "CHANGE_USER_BIO",
 };
 
 function GlobalCommunityContextProvider(props) {
@@ -333,6 +334,27 @@ function GlobalCommunityContextProvider(props) {
           searchPosts: payload.communityPosts,
         });
       }
+      case GlobalCommunityActionType.CHANGE_USER_BIO: {
+        return setCommunity({
+          communityList: community.communityList,
+          currentCommunity: community.currentCommunity,
+          communityPosts: community.communityPosts,
+          search: community.search,
+          errorMessage: community.errorMessage,
+          sort: community.sort,
+          screen: community.screen,
+          deleteAccountModal: community.deleteAccountModal,
+          changePasswordModal: community.changePasswordModal,
+          feedbackModal: community.feedbackModal,
+          deletePostModal: community.deletePostModal,
+          userProfile: payload,
+          changeBioModal: false,
+          reportModal: community.reportModal,
+          reportPost: community.reportPost,
+          deletePost: community.deletePost,
+          searchPosts: community.communityPosts,
+        });
+      }
       case GlobalCommunityActionType.SET_CHANGE_BIO: {
         return setCommunity({
           communityList: community.communityList,
@@ -484,6 +506,29 @@ function GlobalCommunityContextProvider(props) {
         return community;
     }
   };
+
+  community.updateBio = async function (username, bio) {
+    try {
+      const response = await api.updateBio(username, bio);
+      console.log("from index.js response:", response);
+      console.log("from index.js response status:", response.status);
+      if (response.status === 200) {
+        console.log("in response method");
+        let curUser = community.userProfile;
+        curUser.bio = response.data.user.bio;
+        communityReducer({
+          type: GlobalCommunityActionType.CHANGE_USER_BIO,
+          payload: curUser,
+        });
+        return true;
+      }
+    } catch (error) {
+      // console.log(error.response.data.errorMessage);
+      // auth.setErrorMessage(error.response.data.errorMessage);
+      return false;
+    }
+  };
+
   community.notifyLeft = function () {
     setNotifyOpen(true);
   };
@@ -616,6 +661,26 @@ function GlobalCommunityContextProvider(props) {
           return 0;
         }
       });
+    } else if (sort === "Z to A") {
+      sortedPosts = sortedPosts.sort(function (a, b) {
+        if (a.postTitle > b.postTitle) {
+          return -1;
+        } else if (a.postTitle < b.postTitle) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    } else if (sort === "A to Z") {
+      sortedPosts = sortedPosts.sort(function (a, b) {
+        if (a.postTitle > b.postTitle) {
+          return 1;
+        } else if (a.postTitle < b.postTitle) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
     }
 
     return sortedPosts;
@@ -641,11 +706,12 @@ function GlobalCommunityContextProvider(props) {
       payload: newCommunityPosts,
     });
   };
-
   community.setUserProfile = async function (username) {
+    console.log("in user profile function");
     setLoad(true);
     try {
       let userResponse = await api.searchUserExact(username);
+      console.log("user response:", userResponse);
       if (userResponse.status == 200) {
         let newUser = userResponse.data.user;
         console.log("user found:", newUser);
@@ -854,17 +920,17 @@ function GlobalCommunityContextProvider(props) {
 
   community.updatePost = async function (updateType, post, payload, user) {
     try {
-      if (updateType == "delComment"){
+      if (updateType == "delComment") {
         let commentArr = post.comments;
         let commentToRemoveIndex = null;
-        for (let i = 0; i < commentArr.length; i++){
-          if (commentArr[i][0] == payload){
+        for (let i = 0; i < commentArr.length; i++) {
+          if (commentArr[i][0] == payload) {
             console.log("comment to remove found");
             commentToRemoveIndex = i;
             break;
           }
         }
-        if (commentToRemoveIndex != null){
+        if (commentToRemoveIndex != null) {
           commentArr.splice(commentToRemoveIndex, 1);
           let response = await api.updatePost(
             post._id,
@@ -879,22 +945,21 @@ function GlobalCommunityContextProvider(props) {
             post.dateAndTime,
             post.communityName
           );
-          console.log("Update Post Response:", response)
-          if (response.status === 200){
-            console.log("Comment removed from post")
-  
+          console.log("Update Post Response:", response);
+          if (response.status === 200) {
+            console.log("Comment removed from post");
+
             //LIVE UPDATE PORTION
-            console.log(response)
-            let newPost = response.data.post
+            console.log(response);
+            let newPost = response.data.post;
             community.doLiveUpdate(newPost);
           } else {
-            console.log("Comment was not removed from post")
+            console.log("Comment was not removed from post");
           }
         } else {
           console.log("Comment to remove could not be found");
         }
-      }
-      else if (updateType == "comment") {
+      } else if (updateType == "comment") {
         let commentArrObj = [];
         let time = Date.now();
         commentArrObj.push(time);
@@ -915,16 +980,16 @@ function GlobalCommunityContextProvider(props) {
           post.dateAndTime,
           post.communityName
         );
-        console.log("Update Post Response:", response)
-        if (response.status === 200){
-          console.log("Comment added to post")
+        console.log("Update Post Response:", response);
+        if (response.status === 200) {
+          console.log("Comment added to post");
 
           //LIVE UPDATE PORTION
-          console.log(response)
-          let newPost = response.data.post
+          console.log(response);
+          let newPost = response.data.post;
           community.doLiveUpdate(newPost);
         } else {
-          console.log("Comment was not added to post")
+          console.log("Comment was not added to post");
         }
       } else if (updateType == "like") {
         let likeArray = post.likes;
@@ -1758,9 +1823,13 @@ function GlobalCommunityContextProvider(props) {
     }
   };
 
-  community.sendFeedback = async function (feedback){
-    const response = await api.sendFeedback(auth.user._id, auth.user.username, feedback)
-  }
+  community.sendFeedback = async function (feedback) {
+    const response = await api.sendFeedback(
+      auth.user._id,
+      auth.user.username,
+      feedback
+    );
+  };
 
   return (
     <GlobalCommunityContext.Provider

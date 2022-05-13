@@ -1,9 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalCommunityContext } from "../community";
 import AuthContext from "../auth";
-import {Box, Button, Typography, Modal, Grid} from "@mui/material/";
+import { Box, Button, Typography, Modal, Grid } from "@mui/material/";
 
-import {IconButton, Input, InputAdornment, FormHelperText, FormControl} from '@mui/material/';
+import {
+  IconButton,
+  Input,
+  InputAdornment,
+  FormHelperText,
+  FormControl,
+} from "@mui/material/";
 
 const style = {
   position: "absolute",
@@ -21,23 +27,21 @@ export default function ChangeBioModal() {
   const { auth } = useContext(AuthContext);
   const { community } = useContext(GlobalCommunityContext);
 
-  const [newBio, setNewBio] = useState('')
+  const [newBio, setNewBio] = useState("");
 
   function handleChange(event) {
-    console.log(event.target.value)
-    setNewBio(event.target.value)
-    
+    console.log(event.target.value);
+    setNewBio(event.target.value);
   }
 
   function handleClose(event) {
-    setNewBio('')
-    auth.setErrorMessage('')
+    setNewBio("");
+    auth.setErrorMessage("");
     community.setChangeBio(false);
   }
 
   async function handleChangeBio(event) {
-    const response = await auth.updateBio(auth.user.username, newBio)
-    handleClose()
+    community.updateBio(auth.user.username, newBio);
   }
 
   const style = {
@@ -51,7 +55,7 @@ export default function ChangeBioModal() {
     boxShadow: 24,
     textAlign: "left",
     p: 4,
-  };  
+  };
 
   return (
     <Modal
@@ -59,30 +63,26 @@ export default function ChangeBioModal() {
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
-      style={{display:'flex',alignItems:'center',justifyContent:'center'}}
-      >
-        <Box sx={style}>
-          <Typography 
-            sx={{fontSize: 28, marginBottom:'-10px'}}>
-            New Biography:
-          </Typography>
-          <FormControl fullWidth sx={{ }} variant="standard" >
-              <Input
-                id="standard-adornment-biography"
-                onChange={handleChange}
-              />
-          </FormControl>
-          <Button
-            variant="contained"
-            onClick={handleChangeBio}
-            sx={{ m: 1 }}
-          >
-            Confirm
-          </Button>
-          <Button variant="outlined" onClick={handleClose} sx={{ m: 1 }}>
-            Close
-          </Button>
-        </Box>
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Box sx={style}>
+        <Typography sx={{ fontSize: 28, marginBottom: "-10px" }}>
+          New Biography:
+        </Typography>
+        <FormControl fullWidth sx={{}} variant="standard">
+          <Input id="standard-adornment-biography" onChange={handleChange} />
+        </FormControl>
+        <Button variant="contained" onClick={handleChangeBio} sx={{ m: 1 }}>
+          Confirm
+        </Button>
+        <Button variant="outlined" onClick={handleClose} sx={{ m: 1 }}>
+          Close
+        </Button>
+      </Box>
     </Modal>
   );
 }
