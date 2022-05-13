@@ -12,18 +12,18 @@ const UserSchema = new Schema(
     email: { type: String, required: false },
     passwordHash: { type: String, required: false },
     bio: { type: String, required: false },
-    likedPosts: { type: [String], required: false },
-    dislikedPosts: { type: [String], required: false },
-    likedComments: { type: [String], required: false },
-    dislikedComments: { type: [String], required: false },
+    // likedPosts: { type: [String], required: false },
+    // dislikedPosts: { type: [String], required: false },
+    // likedComments: { type: [String], required: false },
+    // dislikedComments: { type: [String], required: false },
     friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", required: false }],
     requests: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", required: false }],
-    comments: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "Comment", required: false },
-    ],
-    contributedPosts: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "Post", required: false },
-    ],
+    // comments: [
+    //   { type: mongoose.Schema.Types.ObjectId, ref: "Comment", required: false },
+    // ],
+    // contributedPosts: [
+    //   { type: mongoose.Schema.Types.ObjectId, ref: "Post", required: false },
+    // ],
   },
   { timestamps: true }
 );
