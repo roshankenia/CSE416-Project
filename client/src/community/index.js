@@ -865,7 +865,7 @@ function GlobalCommunityContextProvider(props) {
           }
         }
         if (commentToRemoveIndex != null){
-          commentArr.splice(commentToRemoveIndex);
+          commentArr.splice(commentToRemoveIndex, 1);
           let response = await api.updatePost(
             post._id,
             post.postTitle,
@@ -935,7 +935,7 @@ function GlobalCommunityContextProvider(props) {
         console.log(dislikeIndex);
         //If user has already disliked, then remove the dislike and change to like
         if (dislikeIndex != -1) {
-          dislikeArray.splice(dislikeIndex);
+          dislikeArray.splice(dislikeIndex, 1);
         }
         //If user has not liked, then add their username
         if (likeIndex == -1) {
@@ -944,7 +944,7 @@ function GlobalCommunityContextProvider(props) {
         }
         //If user has liked, then remove their like and username
         else {
-          likeArray.splice(likeIndex);
+          likeArray.splice(likeIndex, 1);
         }
         let response = await api.updatePost(
           post._id,
@@ -974,7 +974,7 @@ function GlobalCommunityContextProvider(props) {
         let dislikeIndex = dislikeArray.indexOf(user._id);
         //If user has already liked, then remove the like and change to dislike
         if (likeIndex != -1) {
-          likeArray.splice(likeIndex);
+          likeArray.splice(likeIndex, 1);
         }
         //If user has not disliked, then add their username
         if (dislikeIndex == -1) {
@@ -982,7 +982,7 @@ function GlobalCommunityContextProvider(props) {
         }
         //If user has disliked, then remove their dislike and username
         else {
-          dislikeArray.splice(dislikeIndex);
+          dislikeArray.splice(dislikeIndex, 1);
         }
         let response = await api.updatePost(
           post._id,
@@ -1216,10 +1216,6 @@ function GlobalCommunityContextProvider(props) {
       },
     });
   };
-
-  community.deleteComment = async function (commentID){
-    let repsonse = await api.deleteCommentById(commentID);
-  }
 
   community.setChangePassword = async function (changePassword) {
     communityReducer({
