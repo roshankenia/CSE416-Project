@@ -98,13 +98,28 @@ export default function GameScreen() {
     event.stopPropagation();
     console.log("Add panel method");
     let imageData = stageRef.current.toDataURL();
-    //set panel to update
-    let pan = panels;
-    pan[game.turn] = imageData;
-    setPanels(pan);
-    game.soloNextTurn(imageData);
+    const data = new FormData();
+    data.append("file", imageData);
+    data.append("upload_preset", "jartimages");
+    data.append("cloud_name", "jart-cse416");
 
-    setActions([]);
+    fetch("  https://api.cloudinary.com/v1_1/jart-cse416/image/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        imageData = data.url;
+
+        //set panel to update
+        let pan = panels;
+        pan[game.turn] = imageData;
+        setPanels(pan);
+        game.soloNextTurn(imageData);
+
+        setActions([]);
+      })
+      .catch((err) => console.log(err));
   };
 
   const nextPanel = (event) => {
@@ -113,24 +128,40 @@ export default function GameScreen() {
     //change to next panel
     console.log("next panel method");
     let imageData = stageRef.current.toDataURL();
-    const currTurn = game.turn;
-    //set panel to update
-    let pan = panels;
-    pan[currTurn] = imageData;
-    setPanels(pan);
-    if (currTurn + 1 == panels.length) {
-      console.log("inside go to voting");
-      game.enterVoting(imageData);
-    } else {
-      game.soloNextTurn(imageData); //Updates the image Data
-      setActions([
-        {
-          ...stageRef.current.getPointerPosition(),
-          src: panels[currTurn + 1],
-          key: actions.length + 1,
-        },
-      ]);
-    }
+
+    const data = new FormData();
+    data.append("file", imageData);
+    data.append("upload_preset", "jartimages");
+    data.append("cloud_name", "jart-cse416");
+
+    fetch("  https://api.cloudinary.com/v1_1/jart-cse416/image/upload", {
+      method: "post",
+      body: data,
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        imageData = data.url;
+
+        const currTurn = game.turn;
+        //set panel to update
+        let pan = panels;
+        pan[currTurn] = imageData;
+        setPanels(pan);
+        if (currTurn + 1 == panels.length) {
+          console.log("inside go to voting");
+          game.enterVoting(imageData);
+        } else {
+          game.soloNextTurn(imageData); //Updates the image Data
+          setActions([
+            {
+              ...stageRef.current.getPointerPosition(),
+              src: panels[currTurn + 1],
+              key: actions.length + 1,
+            },
+          ]);
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   const [themeToggle, setThemeToggle] = useState(false);

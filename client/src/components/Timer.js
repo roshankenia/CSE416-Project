@@ -82,18 +82,48 @@ export default function Timer(props) {
       if (game.gamemode == "comic") {
         // check if game.turn == amount of panels
         if (game.panelNumber - 1 == game.turn) {
-          game.enterVoting(stageRef.current.toDataURL());
+          let imageData = stageRef.current.toDataURL();
+          const data = new FormData();
+          data.append("file", imageData);
+          data.append("upload_preset", "jartimages");
+          data.append("cloud_name", "jart-cse416");
+
+          fetch("  https://api.cloudinary.com/v1_1/jart-cse416/image/upload", {
+            method: "post",
+            body: data,
+          })
+            .then((resp) => resp.json())
+            .then((data) => {
+              game.enterVoting(data.url);
+            })
+            .catch((err) => console.log(err));
         } else {
           console.log("stageref:", stageRef);
           let imageData = stageRef.current.toDataURL();
-          setActions([]);
-          console.log("after reset:", actions);
-          //console.log(imageData);
 
-          game.changeTurn(imageData);
-          if (auth.user.username === game.host) {
-            socket.emit("timer", auth.user.username, time, game.lobby);
-          }
+          const data = new FormData();
+          data.append("file", imageData);
+          data.append("upload_preset", "jartimages");
+          data.append("cloud_name", "jart-cse416");
+
+          fetch("  https://api.cloudinary.com/v1_1/jart-cse416/image/upload", {
+            method: "post",
+            body: data,
+          })
+            .then((resp) => resp.json())
+            .then((data) => {
+              imageData = data.url;
+
+              setActions([]);
+              console.log("after reset:", actions);
+              //console.log(imageData);
+
+              game.changeTurn(imageData);
+              if (auth.user.username === game.host) {
+                socket.emit("timer", auth.user.username, time, game.lobby);
+              }
+            })
+            .catch((err) => console.log(err));
         }
       } else if (game.gamemode == "story") {
         console.log("inside timer gamemode story");

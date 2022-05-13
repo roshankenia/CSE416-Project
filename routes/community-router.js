@@ -3,8 +3,6 @@ const router = express.Router();
 const auth = require("../auth");
 const CommunityController = require("../controllers/community-controller");
 
-//handles getting posts for a user
-router.post("/userPosts", auth.verify, CommunityController.getProfilePosts);
 
 //handles creating a new commmunity in database request
 router.post("/community", auth.verify, CommunityController.createCommunity);
