@@ -708,20 +708,20 @@ function GlobalCommunityContextProvider(props) {
             const response = await api.getPostById(postID);
             let post = response.data.post;
 
-            // comments array isn't always filled with comment objects
-            let commentsArr = post.comments;
-            let commentsObjArr = [];
-            for (let i = 0; i < commentsArr.length; i++) {
-              if (commentsArr[i].username) {
-                // console.log(commentsArr[i])
-                commentsObjArr.push(commentsArr[i]);
-              } else {
-                let getCommResponse = await api.getCommentByID(commentsArr[i]);
-                commentsObjArr.push(getCommResponse.data.comment[0]);
-              }
-            }
-            post.comments = commentsObjArr;
-            console.log(post.comments);
+            // // comments array isn't always filled with comment objects
+            // let commentsArr = post.comments;
+            // let commentsObjArr = [];
+            // for (let i = 0; i < commentsArr.length; i++) {
+            //   if (commentsArr[i].username) {
+            //     // console.log(commentsArr[i])
+            //     commentsObjArr.push(commentsArr[i]);
+            //   } else {
+            //     let getCommResponse = await api.getCommentByID(commentsArr[i]);
+            //     commentsObjArr.push(getCommResponse.data.comment[0]);
+            //   }
+            // }
+            // post.comments = commentsObjArr;
+            // console.log(post.comments);
 
             if (post.postComic) {
               const comicResponse = await api.getComicById(post.postComic);
@@ -751,20 +751,20 @@ function GlobalCommunityContextProvider(props) {
             const response = await api.getPostById(postID);
             let post = response.data.post;
 
-            // comments array isn't always filled with comment objects
-            let commentsArr = post.comments;
-            let commentsObjArr = [];
-            for (let i = 0; i < commentsArr.length; i++) {
-              if (commentsArr[i].username) {
-                // console.log(commentsArr[i])
-                commentsObjArr.push(commentsArr[i]);
-              } else {
-                let getCommResponse = await api.getCommentByID(commentsArr[i]);
-                commentsObjArr.push(getCommResponse.data.comment[0]);
-              }
-            }
-            post.comments = commentsObjArr;
-            console.log(post.comments);
+            // // comments array isn't always filled with comment objects
+            // let commentsArr = post.comments;
+            // let commentsObjArr = [];
+            // for (let i = 0; i < commentsArr.length; i++) {
+            //   if (commentsArr[i].username) {
+            //     // console.log(commentsArr[i])
+            //     commentsObjArr.push(commentsArr[i]);
+            //   } else {
+            //     let getCommResponse = await api.getCommentByID(commentsArr[i]);
+            //     commentsObjArr.push(getCommResponse.data.comment[0]);
+            //   }
+            // }
+            // post.comments = commentsObjArr;
+            // console.log(post.comments);
 
             if (post.postComic) {
               const comicResponse = await api.getComicById(post.postComic);
@@ -843,20 +843,20 @@ function GlobalCommunityContextProvider(props) {
           const response = await api.getPostById(postID);
           let post = response.data.post;
 
-          // comments array isn't always filled with comment objects
-          let commentsArr = post.comments;
-          let commentsObjArr = [];
-          for (let i = 0; i < commentsArr.length; i++) {
-            if (commentsArr[i].username) {
-              // console.log(commentsArr[i])
-              commentsObjArr.push(commentsArr[i]);
-            } else {
-              let getCommResponse = await api.getCommentByID(commentsArr[i]);
-              commentsObjArr.push(getCommResponse.data.comment[0]);
-            }
-          }
-          post.comments = commentsObjArr;
-          console.log(post.comments);
+          // // comments array isn't always filled with comment objects
+          // let commentsArr = post.comments;
+          // let commentsObjArr = [];
+          // for (let i = 0; i < commentsArr.length; i++) {
+          //   if (commentsArr[i].username) {
+          //     // console.log(commentsArr[i])
+          //     commentsObjArr.push(commentsArr[i]);
+          //   } else {
+          //     let getCommResponse = await api.getCommentByID(commentsArr[i]);
+          //     commentsObjArr.push(getCommResponse.data.comment[0]);
+          //   }
+          // }
+          // post.comments = commentsObjArr;
+          // console.log(post.comments);
 
           if (post.postComic) {
             const comicResponse = await api.getComicById(post.postComic);
