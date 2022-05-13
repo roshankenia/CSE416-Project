@@ -514,13 +514,12 @@ export default function PostCard(props) {
             >
               {post.comments.length}
             </Typography>
-            <Button onClick={handleEdit}> Edit </Button>
           </Grid>
           <Grid item xs={10}>
             {postData}
           </Grid>
           <Grid item xs={2}></Grid>
-          <Grid item xs={8}>
+          <Grid item xs={7}>
             <Typography
               display="inline"
               style={{
@@ -543,6 +542,8 @@ export default function PostCard(props) {
               );
             })}
           </Grid>
+          {(auth.user.username == post.data.authors[0] && post.data.authors.length == 1) &&
+          <Grid item xs={1}><Button onClick={handleEdit} sx={{fontSize:24}}> Edit </Button></Grid>}
           <Grid item xs={1}>
             {post.postComic && (
               <IconButton color="primary" onClick={downloadPost}>

@@ -23,8 +23,16 @@ export default function FeedbackModal() {
   const { auth } = useContext(AuthContext);
   const { community } = useContext(GlobalCommunityContext);
 
-  function handleFeedback(event) {
-    // auth.deleteAccount();
+  const [feedback, setFeedback] = useState('')
+
+  const handleChange = (event) => {
+    setFeedback(event.target.value);
+  };
+  function handleFeedback() {
+    console.log(feedback)
+    community.sendFeedback(feedback)
+    setFeedback('')
+
   }
   function handleClose(event) {
     community.setFeedback(false);
@@ -41,6 +49,7 @@ export default function FeedbackModal() {
           Feedback
         </Typography>
         <TextField
+          onChange={handleChange}
           name="feedback"
           fullWidth
           id="feedback"

@@ -162,6 +162,18 @@ export const searchUserExact = (username) => {
   });
 };
 
+export const sendFeedback = (
+  userID,
+  username,
+  feedback,
+) => {
+  return api.post(`/feedback`, {
+    userID: userID,
+    username: username,
+    feedback: feedback
+  });
+};
+
 export const createReport = (
   userID,
   postID,
@@ -219,6 +231,7 @@ const apis = {
   getCommentByID,
   createReport,
   updateCommentById,
+  sendFeedback
 };
 
 export default apis;

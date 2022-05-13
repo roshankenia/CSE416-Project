@@ -1849,6 +1849,10 @@ function GlobalCommunityContextProvider(props) {
     }
   };
 
+  community.sendFeedback = async function (feedback){
+    const response = await api.sendFeedback(auth.user._id, auth.user.username, feedback)
+  }
+
   return (
     <GlobalCommunityContext.Provider
       value={{
