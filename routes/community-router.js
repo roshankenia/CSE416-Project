@@ -3,6 +3,9 @@ const router = express.Router();
 const auth = require("../auth");
 const CommunityController = require("../controllers/community-controller");
 
+//handles getting posts for a user
+router.post("/userPosts", auth.verify, CommunityController.getProfilePosts);
+
 //handles creating a new commmunity in database request
 router.post("/community", auth.verify, CommunityController.createCommunity);
 
@@ -64,10 +67,13 @@ router.get("/comment/:id", auth.verify, CommunityController.getCommentById);
 //handles an update comment request
 router.put("/comment/:id", auth.verify, CommunityController.updateCommentById);
 
-router.post("/searchUserExact", auth.verify, CommunityController.searchUserExact);
+router.post(
+  "/searchUserExact",
+  auth.verify,
+  CommunityController.searchUserExact
+);
 
 router.post("/report", auth.verify, CommunityController.createReport);
-
 
 //handles a delete post request
 router.delete(

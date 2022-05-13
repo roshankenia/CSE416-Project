@@ -6,6 +6,39 @@ const Comment = require("../models/comment-model");
 const Post = require("../models/post-model");
 const Report = require("../models/report-model");
 
+//find posts for a specific profile
+getProfilePosts = async (req, res) => {
+  const body = req.body;
+  if (!body) {
+    return res.status(400).json({
+      errorMessage: "Improperly formatted request",
+    });
+  }
+
+  let username = body.username;
+
+  //find all posts for this user
+  try {
+    await Comic.find(
+      {
+        $expr: {
+          $in: [username, "$authors"],
+        },
+      },
+      (err, comics) => {
+        if (err) {
+          return res.status(400).json({ success: false, error: err });
+        }
+        console.log("Found comics: " + comics);
+        console.log("\n\ncomics: " + JSON.stringify(comics));
+        //return res.status(200).json({ success: true, post: post });
+      }
+    ).catch((err) => console.log(err));
+  } catch (err) {
+    console.error(err);
+    return res.status(400).json({ success: false, error: err });
+  }
+};
 //#region community
 //front-end payload: response.data.community
 createCommunity = async (req, res) => {
@@ -466,7 +499,7 @@ updatePost = async (req, res) => {
       dateAndTime,
     } = req.body;
     const id = req.params.id;
-    console.log("Backend Update Post Body:", req.body)
+    console.log("Backend Update Post Body:", req.body);
 
     Post.findOne({ _id: id }, (err, post) => {
       // console.log("Post found: " + JSON.stringify(post));
@@ -611,9 +644,9 @@ getCommentById = async (req, res) => {
 };
 
 updateCommentById = async (req, res) => {
-  console.log("In controller")
-  console.log("req.body:", req.body)
-  console.log("req.body.username:", req.body.username)
+  console.log("In controller");
+  console.log("req.body:", req.body);
+  console.log("req.body.username:", req.body.username);
   try {
     const body = req.body;
     const id = req.params.id;
@@ -631,7 +664,7 @@ updateCommentById = async (req, res) => {
         });
       }
 
-      comment.username = req.body.username
+      comment.username = req.body.username;
       comment.comment = req.body.comment;
       comment.likes = req.body.likes;
       comment.dislikes = req.body.dislikes;
@@ -871,4 +904,5 @@ module.exports = {
   searchStoryByAuthor,
   searchUserExact,
   createReport,
+  getProfilePosts,
 };
