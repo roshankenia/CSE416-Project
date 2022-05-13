@@ -213,7 +213,7 @@ export default function PostCard(props) {
     <List>
       {comments.map((comment, index) => (
         <ListItem key={index}>
-          <CommentCard comment={comment} />
+          <CommentCard comment={comment} post={post}/>
         </ListItem>
       ))}
     </List>

@@ -854,7 +854,47 @@ function GlobalCommunityContextProvider(props) {
 
   community.updatePost = async function (updateType, post, payload, user) {
     try {
-      if (updateType == "comment") {
+      if (updateType == "delComment"){
+        let commentArr = post.comments;
+        let commentToRemoveIndex = null;
+        for (let i = 0; i < commentArr.length; i++){
+          if (commentArr[i][0] == payload){
+            console.log("comment to remove found");
+            commentToRemoveIndex = i;
+            break;
+          }
+        }
+        if (commentToRemoveIndex != null){
+          commentArr.splice(commentToRemoveIndex);
+          let response = await api.updatePost(
+            post._id,
+            post.postTitle,
+            post.postComic,
+            post.postStory,
+            post.likes,
+            post.dislikes,
+            commentArr,
+            post.communityPublished,
+            post.discoveryPublished,
+            post.dateAndTime,
+            post.communityName
+          );
+          console.log("Update Post Response:", response)
+          if (response.status === 200){
+            console.log("Comment removed from post")
+  
+            //LIVE UPDATE PORTION
+            console.log(response)
+            let newPost = response.data.post
+            community.doLiveUpdate(newPost);
+          } else {
+            console.log("Comment was not removed from post")
+          }
+        } else {
+          console.log("Comment to remove could not be found");
+        }
+      }
+      else if (updateType == "comment") {
         let commentArrObj = [];
         let time = Date.now();
         commentArrObj.push(time);
@@ -1176,6 +1216,10 @@ function GlobalCommunityContextProvider(props) {
       },
     });
   };
+
+  community.deleteComment = async function (commentID){
+    let repsonse = await api.deleteCommentById(commentID);
+  }
 
   community.setChangePassword = async function (changePassword) {
     communityReducer({
