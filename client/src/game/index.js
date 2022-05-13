@@ -675,7 +675,7 @@ function GameContextProvider(props) {
       let lobbyID = game.lobby;
       socket.emit("leave-lobby", auth.user.username, lobbyID);
       gameReducer({
-        type: GameActionType.LEAVE_LOBBY,
+        type: GameActionType.RESET_GAME,
         payload: null,
       });
       history.push("/");
@@ -799,7 +799,7 @@ function GameContextProvider(props) {
   game.exitVoting = async function () {
     try {
       gameReducer({
-        type: GameActionType.EXIT_VOTING,
+        type: GameActionType.RESET_GAME,
         payload: null,
       });
       history.push("/");
