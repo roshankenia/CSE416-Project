@@ -850,25 +850,25 @@ createFeedback = async (req, res) => {
         errorMessage: "Improperly formatted request",
       });
     }
-    const report = new Report(body);
-    console.log("creating report: " + JSON.stringify(report));
-    if (!report) {
+    const feedback = new Feedback(body);
+    console.log("creating feedback: " + JSON.stringify(feedback));
+    if (!feedback) {
       return res.status(400).json({
         errorMessage: "Improperly formatted request",
       });
     }
 
-    report
+    feedback
       .save()
       .then(() => {
         return res.status(200).json({
-          report: report,
+          feedback: feedback,
         });
       })
       .catch((error) => {
         console.log(error);
         return res.status(400).json({
-          errorMessage: "Report Not Created!",
+          errorMessage: "Feedback Not Created!",
         });
       });
   } catch (err) {
