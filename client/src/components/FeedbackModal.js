@@ -29,9 +29,8 @@ export default function FeedbackModal() {
     setFeedback(event.target.value);
   };
   function handleFeedback() {
-    console.log(feedback)
     community.sendFeedback(feedback)
-    setFeedback('')
+    setFeedback(1)
 
   }
   function handleClose(event) {
@@ -44,7 +43,9 @@ export default function FeedbackModal() {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
+      {feedback !== 1 ?
       <Box sx={style}>
+      
         <Typography id="modal-modal-title" variant="h5" component="h2">
           Feedback
         </Typography>
@@ -76,6 +77,16 @@ export default function FeedbackModal() {
           Cancel
         </Button>
       </Box>
+      :
+      <Box sx={style}>
+        <Typography id="modal-modal-title" variant="h5" component="h2">
+        Thank You For Your Feedback!
+        </Typography>
+        <Button variant="outlined" onClick={handleClose} sx={{ m: 1 }}>
+          Close
+        </Button>
+      </Box>
+      }
     </Modal>
   );
 }
