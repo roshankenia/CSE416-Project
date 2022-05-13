@@ -878,6 +878,34 @@ createFeedback = async (req, res) => {
 };
 //#endregion query
 
+updateBio = async (req, res) => {
+  try {
+    const { username, bio } = req.body;
+    console.log("body:", req.body);
+    console.log("username:", username);
+    console.log("bio:", bio);
+
+    const currentUser = await User.findOne({ username: username });
+    console.log("currentUser: " + currentUser);
+    if (!currentUser) {
+      return res.status(401).json({
+        errorMessage: "Current User's username not found in database.",
+      });
+    }
+
+    currentUser.bio = bio;
+    await currentUser.save();
+
+    return res.status(200).json({
+      success: true,
+      user: currentUser,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+};
+
 module.exports = {
   createCommunity,
   getCommunityList,
@@ -907,4 +935,5 @@ module.exports = {
   searchUserExact,
   createReport,
   createFeedback,
+  updateBio
 };
