@@ -907,5 +907,4 @@ module.exports = {
   searchUserExact,
   createReport,
   createFeedback,
-  getProfilePosts,
 };
