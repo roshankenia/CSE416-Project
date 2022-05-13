@@ -708,21 +708,6 @@ function GlobalCommunityContextProvider(props) {
             const response = await api.getPostById(postID);
             let post = response.data.post;
 
-            // comments array isn't always filled with comment objects
-            let commentsArr = post.comments;
-            let commentsObjArr = [];
-            for (let i = 0; i < commentsArr.length; i++) {
-              if (commentsArr[i].username) {
-                // console.log(commentsArr[i])
-                commentsObjArr.push(commentsArr[i]);
-              } else {
-                let getCommResponse = await api.getCommentByID(commentsArr[i]);
-                commentsObjArr.push(getCommResponse.data.comment[0]);
-              }
-            }
-            post.comments = commentsObjArr;
-            console.log(post.comments);
-
             if (post.postComic) {
               const comicResponse = await api.getComicById(post.postComic);
               console.log("comic:", comicResponse.data.comic);
@@ -750,21 +735,6 @@ function GlobalCommunityContextProvider(props) {
             let postID = curCumm.communityPosts[i];
             const response = await api.getPostById(postID);
             let post = response.data.post;
-
-            // comments array isn't always filled with comment objects
-            let commentsArr = post.comments;
-            let commentsObjArr = [];
-            for (let i = 0; i < commentsArr.length; i++) {
-              if (commentsArr[i].username) {
-                // console.log(commentsArr[i])
-                commentsObjArr.push(commentsArr[i]);
-              } else {
-                let getCommResponse = await api.getCommentByID(commentsArr[i]);
-                commentsObjArr.push(getCommResponse.data.comment[0]);
-              }
-            }
-            post.comments = commentsObjArr;
-            console.log(post.comments);
 
             if (post.postComic) {
               const comicResponse = await api.getComicById(post.postComic);
@@ -842,21 +812,6 @@ function GlobalCommunityContextProvider(props) {
           let postID = setCommunity.communityPosts[i];
           const response = await api.getPostById(postID);
           let post = response.data.post;
-
-          // comments array isn't always filled with comment objects
-          let commentsArr = post.comments;
-          let commentsObjArr = [];
-          for (let i = 0; i < commentsArr.length; i++) {
-            if (commentsArr[i].username) {
-              // console.log(commentsArr[i])
-              commentsObjArr.push(commentsArr[i]);
-            } else {
-              let getCommResponse = await api.getCommentByID(commentsArr[i]);
-              commentsObjArr.push(getCommResponse.data.comment[0]);
-            }
-          }
-          post.comments = commentsObjArr;
-          console.log(post.comments);
 
           if (post.postComic) {
             const comicResponse = await api.getComicById(post.postComic);
@@ -1186,20 +1141,6 @@ function GlobalCommunityContextProvider(props) {
   };
 
   community.doLiveUpdate = async function (newPost) {
-    // comments array isn't always filled with comment objects
-    // let commentsArr = newPost.comments;
-    // let commentsObjArr = []
-    // for (let i = 0; i < commentsArr.length; i++){
-    //   if (commentsArr[i].username){
-    //     // console.log(commentsArr[i])
-    //     commentsObjArr.push(commentsArr[i]);
-    //   } else {
-    //     let getCommResponse = await api.getCommentByID(commentsArr[i]);
-    //     commentsObjArr.push(getCommResponse.data.comment[0]);
-    //   }
-    // }
-    // newPost.comments = commentsObjArr
-
     if (newPost.postComic) {
       const comicResponse = await api.getComicById(newPost.postComic);
       console.log("comic:", comicResponse.data.comic);
@@ -1235,70 +1176,6 @@ function GlobalCommunityContextProvider(props) {
       },
     });
   };
-
-  community.updateComment = async function (updateType, comment, user){
-    console.log("updateComment method deprecated. Do NOT USE THIS FUNCTION")
-    // if (updateType == "like"){
-    //   let likeArray = comment.likes;
-    //   let dislikeArray = comment.dislikes;
-    //   let likeIndex = likeArray.indexOf(user._id);
-    //   let dislikeIndex = dislikeArray.indexOf(user._id);
-    //   //If user has already disliked, then remove the dislike and change to like
-    //   if (dislikeIndex != -1) {
-    //     dislikeArray.splice(dislikeIndex);
-    //   }
-    //   //If user has not liked, then add their username
-    //   if (likeIndex == -1) {
-    //     likeArray.push(user._id);
-    //     console.log("pushed user to like Array");
-    //   }
-    //   //If user has liked, then remove their like and username
-    //   else {
-    //     likeArray.splice(likeIndex);
-    //   }
-    //   let response = await api.updateCommentById(
-    //     comment._id,
-    //     comment.username,
-    //     comment.comment,
-    //     likeArray,
-    //     dislikeArray,
-    //   );
-    //   if (response.status === 200){
-    //     console.log("Update Comment Successful")
-    //   }
-    // } else if (updateType == "dislike") {
-    //   let likeArray = comment.likes;
-    //   let dislikeArray = comment.dislikes;
-    //   let likeIndex = likeArray.indexOf(user._id);
-    //   let dislikeIndex = dislikeArray.indexOf(user._id);
-    //   //If user has already liked, then remove the like and change to dislike
-    //   if (likeIndex != -1) {
-    //     likeArray.splice(likeIndex);
-    //     console.log("removed user from like Array")
-    //   }
-    //   //If user has not disliked, then add their username
-    //   if (dislikeIndex == -1) {
-    //     dislikeArray.push(user._id);
-    //     console.log("pushed user to dislike Array");
-    //   }
-    //   //If user has disliked, then remove their dislike and username
-    //   else {
-    //     dislikeArray.splice(dislikeIndex);
-    //   }
-    //   let response = await api.updateCommentById(
-    //     comment._id,
-    //     comment.username,
-    //     comment.comment,
-    //     likeArray,
-    //     dislikeArray,
-    //   );
-    //   if (response.status === 200){
-    //     console.log("Update Comment Successful")
-    //   }
-    // } else {
-    //   console.log("Comment UpdateType Not Valid");
-    // }
-  }
 
   community.setChangePassword = async function (changePassword) {
     communityReducer({
