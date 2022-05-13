@@ -19,9 +19,7 @@ const PostSchema = new Schema(
     },
     likes: { type: [String], required: true },
     dislikes: { type: [String], required: true },
-    comments: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "Comment", required: false },
-    ],
+    comments: { type: [[Object]], required: false },
     communityPublished: { type: Boolean, required: true },
     discoveryPublished: { type: Boolean, required: true },
     dateAndTime: { type: Date, required: true },
