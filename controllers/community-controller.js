@@ -17,6 +17,8 @@ getProfilePosts = async (req, res) => {
 
   let username = body.username;
 
+  let userPosts = [];
+
   //find all posts for this user
   try {
     await Comic.find(
@@ -29,8 +31,22 @@ getProfilePosts = async (req, res) => {
         if (err) {
           return res.status(400).json({ success: false, error: err });
         }
-        console.log("Found comics: " + comics);
-        console.log("\n\ncomics: " + JSON.stringify(comics));
+        // console.log("Found comics: " + comics);
+        for (let i = 0; i < comics.length; i++) {
+          let curComic = comics[i];
+          //find corresponding post
+
+          await Post.findOne({ postComic: curComic._id }, (err, post) => {
+            if (err) {
+              return res.status(400).json({ success: false, error: err });
+            }
+            post.data = curComic;
+            userPosts.push(post);
+
+            // console.log("Found post: " + JSON.stringify(post));
+          }).catch((err) => console.log(err));
+        }
+
         //return res.status(200).json({ success: true, post: post });
       }
     ).catch((err) => console.log(err));
@@ -38,6 +54,8 @@ getProfilePosts = async (req, res) => {
     console.error(err);
     return res.status(400).json({ success: false, error: err });
   }
+
+  return res.status(200).json({ success: true, userPosts: userPosts });
 };
 //#region community
 //front-end payload: response.data.community
