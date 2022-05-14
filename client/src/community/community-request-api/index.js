@@ -136,6 +136,10 @@ export const updatePost = (
   });
 };
 
+export const updateStoryById = (id, authors, panels) =>{
+  return api.put(`/story/${id}`, {comic: {authors: authors, panels: panels}})
+}
+
 export const createComment = (
   username,
   comment,
@@ -226,6 +230,7 @@ const apis = {
   createComic,
   createPost,
   searchCommunityByName,
+  updateStoryById,
   // for testing purpose
   deleteCommunity,
   getPostById,

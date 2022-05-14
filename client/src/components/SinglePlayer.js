@@ -1,6 +1,7 @@
 //#region imports
 import { Grid, Typography } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";  
 import { GameContext } from "../game";
 import AuthContext from "../auth";
 import { Box, Button, List, ListItem, TextField } from "@mui/material";
@@ -40,34 +41,61 @@ import URLImage from "./URLImage";
 
 //#region quilljs import
 import StoryEditor from "./StoryEditor";
+import { post } from "jquery";
 //#endregion quilljs
 
 export default function GameScreen() {
   const { game } = useContext(GameContext);
-
-  const [actions, setActions] = React.useState([]);
+  const [isComic, setIsComic] = useState(true)
+  const history = useHistory();
+  
   const [panels, setPanels] = useState([]);
+  const [index, setIndex] = useState(0);
+  
   const [postID, setPostID] = useState(
     window.location.pathname.toString().substring(14)
   );
 
+  //comic or story Id
+  const [csID, setCSID] = useState('')
+  const [author, setAuthor] = useState('')
+
+  const [actions, setActions] = React.useState([]);
+  const [storyText, setStoryText] = React.useState("");
+  const charLimit = 9999999;
+
   async function getPost() {
     const postResponse = await api.getPostById(postID);
     //also need to check for story
-    const comicResponse = await api.getComicById(
-      postResponse.data.post.postComic
-    );
-    setPanels(comicResponse.data.comic.panels);
-    console.log("the value of game.turn in getPost ", game.turn);
-    setActions(
-      actions.concat([
-        {
-          ...stageRef.current.getPointerPosition(),
-          src: comicResponse.data.comic.panels[game.turn],
-          key: actions.length + 1,
-        },
-      ])
-    );
+    if (postResponse.data.post.postStory === null){
+      setCSID(postResponse.data.post.postComic)
+      const comicResponse = await api.getComicById(
+        postResponse.data.post.postComic
+      );
+      setAuthor(comicResponse.data.comic.authors)
+      setPanels(comicResponse.data.comic.panels);
+      console.log("the value of game.turn in getPost ", game.turn);
+      setActions(
+        actions.concat([
+          {
+            ...stageRef.current.getPointerPosition(),
+            src: comicResponse.data.comic.panels[game.turn],
+            key: actions.length + 1,
+          },
+        ])
+      );
+    }else{
+      setIsComic(false)
+      setCSID(postResponse.data.post.postStory)
+      const storyResponse = await api.getStoryById(
+        postResponse.data.post.postStory
+      );
+      setAuthor(storyResponse.data.story.authors)
+      setPanels(storyResponse.data.story.panels);
+      console.log("the value of game.turn in getPost ", game.turn);
+      setStoryText(storyResponse.data.story.panels[0])
+      
+    }
   }
 
   useEffect(() => {
@@ -75,9 +103,6 @@ export default function GameScreen() {
   }, []);
 
   const { auth } = useContext(AuthContext);
-
-  const [storyText, setStoryText] = React.useState("");
-  const charLimit = 9999999;
 
   //#region css
   const buttonCSS = { color: "black", fontSize: "40pt" };
@@ -95,74 +120,101 @@ export default function GameScreen() {
   const [bubbleToggle, setBubbleToggle] = useState(false);
 
   const addPanel = (event) => {
-    event.stopPropagation();
-    console.log("Add panel method");
-    let imageData = stageRef.current.toDataURL();
-    const data = new FormData();
-    data.append("file", imageData);
-    data.append("upload_preset", "jartimages");
-    data.append("cloud_name", "jart-cse416");
+    if(isComic){
+      event.stopPropagation();
+      console.log("Add panel method");
+      let imageData = stageRef.current.toDataURL();
+      const data = new FormData();
+      data.append("file", imageData);
+      data.append("upload_preset", "jartimages");
+      data.append("cloud_name", "jart-cse416");
 
-    fetch("  https://api.cloudinary.com/v1_1/jart-cse416/image/upload", {
-      method: "post",
-      body: data,
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        imageData = data.url;
-
-        //set panel to update
-        let pan = panels;
-        pan[game.turn] = imageData;
-        setPanels(pan);
-        game.soloNextTurn(imageData);
-
-        setActions([]);
+      fetch("  https://api.cloudinary.com/v1_1/jart-cse416/image/upload", {
+        method: "post",
+        body: data,
       })
-      .catch((err) => console.log(err));
+        .then((resp) => resp.json())
+        .then((data) => {
+          imageData = data.url;
+
+          //set panel to update
+          let pan = panels;
+          pan[game.turn] = imageData;
+          setPanels(pan);
+          game.soloNextTurn(imageData);
+
+          setActions([]);
+        })
+        .catch((err) => console.log(err));
+    }else{
+      let newPanels = panels
+      newPanels[index] = storyText
+      setPanels(newPanels)
+      setIndex(index + 1)
+      setStoryText('')
+    }
   };
 
   const nextPanel = (event) => {
-    event.stopPropagation();
-    //TODO
-    //change to next panel
-    console.log("next panel method");
-    let imageData = stageRef.current.toDataURL();
+    if(isComic){
+      event.stopPropagation();
+      //TODO
+      //change to next panel
+      console.log("next panel method");
+      let imageData = stageRef.current.toDataURL();
 
-    const data = new FormData();
-    data.append("file", imageData);
-    data.append("upload_preset", "jartimages");
-    data.append("cloud_name", "jart-cse416");
+      const data = new FormData();
+      data.append("file", imageData);
+      data.append("upload_preset", "jartimages");
+      data.append("cloud_name", "jart-cse416");
 
-    fetch("  https://api.cloudinary.com/v1_1/jart-cse416/image/upload", {
-      method: "post",
-      body: data,
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        imageData = data.url;
-
-        const currTurn = game.turn;
-        //set panel to update
-        let pan = panels;
-        pan[currTurn] = imageData;
-        setPanels(pan);
-        if (currTurn + 1 == panels.length) {
-          console.log("inside go to voting");
-          game.enterVoting(imageData);
-        } else {
-          game.soloNextTurn(imageData); //Updates the image Data
-          setActions([
-            {
-              ...stageRef.current.getPointerPosition(),
-              src: panels[currTurn + 1],
-              key: actions.length + 1,
-            },
-          ]);
-        }
+      fetch("  https://api.cloudinary.com/v1_1/jart-cse416/image/upload", {
+        method: "post",
+        body: data,
       })
-      .catch((err) => console.log(err));
+        .then((resp) => resp.json())
+        .then((data) => {
+          imageData = data.url;
+
+          const currTurn = game.turn;
+          //set panel to update
+          let pan = panels;
+          pan[currTurn] = imageData;
+          setPanels(pan);
+          if (currTurn + 1 == panels.length) {
+            console.log("inside go to voting");
+            game.enterVoting(imageData);
+          } else {
+            game.soloNextTurn(imageData); //Updates the image Data
+            setActions([
+              {
+                ...stageRef.current.getPointerPosition(),
+                src: panels[currTurn + 1],
+                key: actions.length + 1,
+              },
+            ]);
+          }
+        })
+        .catch((err) => console.log(err));
+    }else{
+      let newPanels = panels
+      newPanels[index] = storyText
+      setPanels(newPanels)
+      setStoryText(panels[index + 1])
+      setIndex(index + 1)
+    }
   };
+
+  const handleConfirm = (event) =>{
+    let newPanels = panels
+    newPanels[index] = storyText
+    api.updateStoryById(csID,author,newPanels)
+    history.push('/')
+  }
+
+  const handleLeave = (event) =>{
+    history.push('/')
+  }
 
   const [themeToggle, setThemeToggle] = useState(false);
   const toggleThemes = () => {
@@ -415,44 +467,44 @@ export default function GameScreen() {
 
   /* List of current panels drawn goes here */
   let gamePanels = "";
-  //comic check disabled
-  //   if (game.gamemode == "comic") {
-  gamePanels = (
-    <Box sx={{ width: "70%", height: "70%" }}>
-      <ImageList sx={{ width: "95%" }} cols={6}>
-        {panels.map((picture, index) => (
-          <ImageListItem key={index}>
-            <img src={picture} loading="lazy" />
-          </ImageListItem>
+
+  if (isComic) {
+      gamePanels = (
+        <Box sx={{ width: "70%", height: "70%" }}>
+          <ImageList sx={{ width: "95%" }} cols={6}>
+            {panels.map((picture, index) => (
+              <ImageListItem key={index}>
+                <img src={picture} loading="lazy" />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </Box>
+      );
+  } else if (game.gamemode == "story") {
+    gamePanels = (
+      <Grid container spacing={2}>
+        {game.panels.map((text) => (
+          <Grid
+            item
+            key={text}
+            xs={2}
+            sx={{
+              backgroundColor: "white",
+              border: 3,
+            }}
+            style={{ height: 200 }}
+          >
+            <ReactQuill
+              style={{ maxHeight: "100%", overflow: "auto" }}
+              readOnly={true}
+              theme="bubble"
+              value={text}
+            ></ReactQuill>
+          </Grid>
         ))}
-      </ImageList>
-    </Box>
-  );
-  //   } else if (game.gamemode == "story") {
-  //     gamePanels = (
-  //       <Grid container spacing={2}>
-  //         {game.panels.map((text) => (
-  //           <Grid
-  //             item
-  //             key={text}
-  //             xs={2}
-  //             sx={{
-  //               backgroundColor: "white",
-  //               border: 3,
-  //             }}
-  //             style={{ height: 200 }}
-  //           >
-  //             <ReactQuill
-  //               style={{ maxHeight: "100%", overflow: "auto" }}
-  //               readOnly={true}
-  //               theme="bubble"
-  //               value={text}
-  //             ></ReactQuill>
-  //           </Grid>
-  //         ))}
-  //       </Grid>
-  //     );
-  //   }
+      </Grid>
+    );
+  }
 
   const isColorSelected = (buttonColor) => {
     if (color == buttonColor) {
@@ -505,8 +557,8 @@ export default function GameScreen() {
 
   /* Drawing/Writing Canvas */
   let gameWorkSpace = "";
-  //force comic
-  //   if (game.gamemode === "comic") {
+
+  if (isComic) {
   gameWorkSpace = (
     <Grid item xs={6} align="center">
       <Box
@@ -621,25 +673,25 @@ export default function GameScreen() {
       </Box>
     </Grid>
   );
-  //   } else {
-  //     gameWorkSpace = (
-  //       <Grid item xs={6} align="center">
-  //         <StoryEditor
-  //           storyText={storyText}
-  //           setStoryText={setStoryText}
-  //           charLimit={charLimit}
-  //           game={game}
-  //         />
-  //       </Grid>
-  //     );
-  //   }
+    } else {
+      gameWorkSpace = (
+        <Grid item xs={6} align="center">
+          <StoryEditor
+            storyText={storyText}
+            setStoryText={setStoryText}
+            charLimit={charLimit}
+            game={game}
+          />
+        </Grid>
+      );
+    }
 
   //right handside buttons
   let gameUtils = "";
-  //force comic
-  //   if (game.gamemode === "comic") {
-  gameUtils = (
-    <Grid item xs={3} align="center">
+
+  if (isComic) {
+    gameUtils = (
+     <Grid item xs={3} align="center">
       {/* <Box
           sx={{
             width: 450,
@@ -809,72 +861,115 @@ export default function GameScreen() {
           <Typography fontSize={"32px"}>ADD PANEL</Typography>
         </Button>
       )}
+      <Button
+          sx={{
+            width: 450,
+            height: 75,
+            margin: 1,
+            backgroundColor: "primary.dark",
+            "&:hover": {
+              backgroundColor: "primary.main",
+              opacity: [0.9, 0.8, 0.7],
+            },
+            borderRadius: 5,
+            border: 3,
+            color: "black",
+          }}
+        //TODO
+        onClick={handleLeave}
+      >
+        <Typography fontSize={"32px"}>Leave</Typography>
+      </Button>
     </Grid>
   );
-  //   } else {
-  //     gameUtils = (
-  //       <Grid item xs={3} align="center">
-  //         <Box
-  //           sx={{
-  //             width: 450,
-  //             height: 75,
-  //             margin: 1,
-  //             backgroundColor: "#FF7F7F",
-  //             "&:hover": {
-  //               backgroundColor: "#FF7F7F",
-  //               opacity: [1, 1, 1],
-  //             },
-  //             borderRadius: 5,
-  //             border: 3,
-  //             color: "black",
-  //           }}
-  //         >
-  //           <Timer
-  //             stageRef={stageRef}
-  //             actions={actions}
-  //             setActions={setActions}
-  //             storyText={storyText}
-  //             setStoryText={setStoryText}
-  //           />
-  //         </Box>
-  //         {/* <Typography
-  //           fontSize={"32px"}
-  //           sx={{
-  //             width: 450,
-  //             height: 75,
-  //             margin: 1,
-  //             backgroundColor: "#b19cd9",
-  //             "&:hover": {
-  //               backgroundColor: "#b19cd9",
-  //               opacity: [1, 1, 1],
-  //             },
-  //             borderRadius: 5,
-  //             border: 3,
-  //             color: "black",
-  //           }}
-  //         >
-  //           {"Characters Left: "} {charLimit - storyText.replace(/<\/?[^>]+(>|$)/g, "").length}
-  //         </Typography> */}
-  //         <Button
-  //           sx={{
-  //             width: 450,
-  //             height: 75,
-  //             margin: 1,
-  //             backgroundColor: "green",
-  //             "&:hover": {
-  //               backgroundColor: "green",
-  //               opacity: [0.9, 0.8, 0.7],
-  //             },
-  //             borderRadius: 5,
-  //             border: 3,
-  //             color: "black",
-  //           }}
-  //         >
-  //           <Typography fontSize={"32px"}>Submit</Typography>
-  //         </Button>
-  //       </Grid>
-  //     );
-  //   }
+    } else {
+      gameUtils = (
+        <Grid item xs={3} align="center">
+        {index < panels.length - 1 && 
+          <Button
+          sx={{
+            width: 450,
+            height: 75,
+            margin: 1,
+            backgroundColor: "primary.dark",
+            "&:hover": {
+              backgroundColor: "primary.main",
+              opacity: [0.9, 0.8, 0.7],
+            },
+            borderRadius: 5,
+            border: 3,
+            color: "black",
+          }}
+        //TODO
+        onClick={nextPanel}
+      >
+        <Typography fontSize={"32px"}>NEXT</Typography>
+      </Button>
+      }
+      {index >= panels.length - 1 && panels.length < 12 && (
+        <Button
+          sx={{
+            width: 450,
+            height: 75,
+            margin: 1,
+            backgroundColor: "primary.dark",
+            "&:hover": {
+              backgroundColor: "primary.main",
+              opacity: [0.9, 0.8, 0.7],
+            },
+            borderRadius: 5,
+            border: 3,
+            color: "black",
+          }}
+          //TODO
+          onClick={addPanel}
+        >
+          <Typography fontSize={"32px"}>ADD PANEL</Typography>
+        </Button>
+      )}
+      {index >= panels.length - 1 && 
+          <Button
+          sx={{
+            width: 450,
+            height: 75,
+            margin: 1,
+            backgroundColor: "primary.dark",
+            "&:hover": {
+              backgroundColor: "primary.main",
+              opacity: [0.9, 0.8, 0.7],
+            },
+            borderRadius: 5,
+            border: 3,
+            color: "black",
+          }}
+        //TODO
+        onClick={handleConfirm}
+      >
+        <Typography fontSize={"32px"}>Confirm</Typography>
+      </Button>
+      }
+          <Button
+          sx={{
+            width: 450,
+            height: 75,
+            margin: 1,
+            backgroundColor: "primary.dark",
+            "&:hover": {
+              backgroundColor: "primary.main",
+              opacity: [0.9, 0.8, 0.7],
+            },
+            borderRadius: 5,
+            border: 3,
+            color: "black",
+          }}
+        //TODO
+        onClick={handleLeave}
+      >
+        <Typography fontSize={"32px"}>Leave</Typography>
+      </Button>
+    </Grid>
+      );
+    }
   //#endregion render elements
 
   let currentDisplay = (
