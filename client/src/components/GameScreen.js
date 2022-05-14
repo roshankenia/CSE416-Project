@@ -56,6 +56,41 @@ export default function GameScreen() {
   const buttonCSS = { color: "black", fontSize: "40pt" };
   //#endregion css
 
+  let backgroundImages = [
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499280/Background%20Images/sunset-5766785_640_ra1ubj.jpg",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499280/Background%20Images/istockphoto-1141522220-612x612_fmq5k9.jpg",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499280/Background%20Images/6-square-cartoon-radial-background-1_mpfd1i.jpg",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499280/Background%20Images/red-fox-5456627_640_xv9xwr.jpg",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499280/Background%20Images/scenery-5660762_640_uqljyg.jpg",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499279/Background%20Images/cats-7122943_640_omrg42.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499280/Background%20Images/modern-4423814_640_fjh5sk.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499280/Background%20Images/park-4971822_640_rniioc.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499280/Background%20Images/cartoon-2716788_640_yswv0m.jpg",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499279/Background%20Images/icon-4423853_640_nra6au.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499279/Background%20Images/cartoon-2640561_640_uw2ebe.jpg",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499279/Background%20Images/cartoon-2640563_640_fswqjq.jpg",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499279/Background%20Images/cartoon-background-2633730_640_qaxouv.jpg",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499279/Background%20Images/cartoon-7106965_640_zyqmck.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499279/Background%20Images/background-6360861_640_mokesd.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499279/Background%20Images/cartoon-2614617_640_cxirx7.jpg",
+  ];
+  let characters = [
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499850/Characters/pokemon-5426712_640_wkzzcr.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499849/Characters/blonde-1300066_640_toyvok.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499849/Characters/bird-1297727_640_mpsegg.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499850/Characters/cartoon-1296251_640_vgt3tv.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499849/Characters/animal-2029279_640_kjni8i.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499849/Characters/business-2025814_640_j4xuwl.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499849/Characters/boy-2027615_640_masjm7.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499850/Characters/grinch-5849048_640_sewr4l.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499850/Characters/mermaid-1980181_640_iub1wk.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499850/Characters/eggplant-2924511_640_krm26z.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499850/Characters/cat-278845_640_ucmdgw.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499850/Characters/woman-4530909_640_nxaecj.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499850/Characters/santa-4607097_640_fk8vqe.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499850/Characters/zebra-470305_640_im2rwq.png",
+    "https://res.cloudinary.com/jart-cse416/image/upload/v1652499850/Characters/monster-1460885_640_g2xc8n.png",
+  ];
   //#region game control
 
   const [characterToggle, setCharacterToggle] = useState(false);
@@ -664,34 +699,22 @@ export default function GameScreen() {
               color: "black",
             }}
           >
-            <ImageList sx={{ width: "95%" }} cols={3}>
-              <ImageListItem key={1}>
-                <img
-                  src={require("../images/background1.png")}
-                  draggable="true"
-                  onDragStart={(e) => {
-                    dragUrl.current = e.target.src;
-                  }}
-                />
-              </ImageListItem>
-              <ImageListItem key={2}>
-                <img
-                  src={require("../images/background2.png")}
-                  draggable="true"
-                  onDragStart={(e) => {
-                    dragUrl.current = e.target.src;
-                  }}
-                />
-              </ImageListItem>
-              <ImageListItem key={3}>
-                <img
-                  src={require("../images/background3.png")}
-                  draggable="true"
-                  onDragStart={(e) => {
-                    dragUrl.current = e.target.src;
-                  }}
-                />
-              </ImageListItem>
+            <ImageList
+              sx={{ width: "95%" }}
+              cols={3}
+              style={{ maxHeight: 200, overflow: "auto" }}
+            >
+              {backgroundImages.map((picture) => (
+                <ImageListItem key={picture}>
+                  <img
+                    src={picture}
+                    draggable="true"
+                    onDragStart={(e) => {
+                      dragUrl.current = e.target.src;
+                    }}
+                  />
+                </ImageListItem>
+              ))}
             </ImageList>
           </Box>
         )}
@@ -727,11 +750,15 @@ export default function GameScreen() {
               color: "black",
             }}
           >
-            <ImageList sx={{ width: "95%" }} cols={3}>
-              {[1, 2, 3, 4, 5, 6].map((picture) => (
+            <ImageList
+              sx={{ width: "95%" }}
+              cols={3}
+              style={{ maxHeight: 200, overflow: "auto" }}
+            >
+              {characters.map((picture) => (
                 <ImageListItem key={picture}>
                   <img
-                    src={require("../images/Trollface.png")}
+                    src={picture}
                     draggable="true"
                     onDragStart={(e) => {
                       dragUrl.current = e.target.src;
@@ -774,7 +801,11 @@ export default function GameScreen() {
               color: "black",
             }}
           >
-            <ImageList sx={{ width: "95%" }} cols={3}>
+            <ImageList
+              sx={{ width: "95%" }}
+              cols={3}
+              style={{ maxHeight: 200, overflow: "auto" }}
+            >
               {[1, 2, 3, 4, 5, 6].map((picture) => (
                 <ImageListItem key={picture}>
                   <img
