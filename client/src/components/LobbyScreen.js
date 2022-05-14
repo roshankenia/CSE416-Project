@@ -100,7 +100,7 @@ export default function LobbyScreen() {
   //Note, time is the slider value times 3
   const handleStartGame = (event) => {
     console.log(game);
-    game.setTimer(5);
+    game.setTimer(value);
     console.log("game timer(in seconds): " + game.timer);
     game.createNewGame();
   };
