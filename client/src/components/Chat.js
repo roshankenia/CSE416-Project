@@ -1,15 +1,13 @@
-import { Grid, Typography } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
-import { GlobalCommunityContext } from "../community";
-import { GameContext } from "../game";
+import { Box, List, ListItem, Typography } from "@mui/material";
+import React, { useContext, useState } from "react";
 import AuthContext from "../auth";
-import { Box, Button, List, ListItem, TextField } from "@mui/material";
-
-
-
-
+import { GameContext } from "../game";
 //socket
 import { SocketContext } from "../socket";
+
+
+
+
 
 export default function Chat(props) {
   const { game } = useContext(GameContext);
