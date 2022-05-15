@@ -105,20 +105,26 @@ export default function PostCard(props) {
     postData = <StoryPopout index={index} post={post} />;
   }
 
-  function toDataURL(url) {
+  function toDataURL(src) {
     return new Promise((resolve, reject) => {
-      var xhr = new XMLHttpRequest();
-      xhr.onload = function () {
-        var reader = new FileReader();
-        reader.onloadend = function () {
-          resolve(reader.result);
-        };
-        reader.readAsDataURL(xhr.response);
+      var img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.onload = function () {
+        var canvas = document.createElement("CANVAS");
+        var ctx = canvas.getContext("2d");
+        var dataURL;
+        canvas.height = this.naturalHeight;
+        canvas.width = this.naturalWidth;
+        ctx.drawImage(this, 0, 0);
+        dataURL = canvas.toDataURL();
+        resolve(dataURL);
       };
-      xhr.onerror = reject;
-      xhr.open("GET", url);
-      xhr.responseType = "blob";
-      xhr.send();
+      img.src = src;
+      if (img.complete || img.complete === undefined) {
+        img.src =
+          "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+        img.src = src;
+      }
     });
   }
 
