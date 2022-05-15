@@ -139,7 +139,9 @@ io.on("connection", (socket) => {
       socket.on("set-counter-zero", (zeroLobbyID) => {
         console.log("zeroLobbyID:", zeroLobbyID);
         console.log("outside lobbyID:", lobbyID);
-        counter = 0;
+        if (zeroLobbyID == lobbyID) {
+          counter = 0;
+        }
       });
       console.log("counter is:", counter, "for lobby", lobbyID);
       if (counter <= 0) {
@@ -148,6 +150,13 @@ io.on("connection", (socket) => {
         io.in(lobbyID).emit("end-time", time);
         clearInterval(WinnerCountdown);
       }
+      socket.off("set-counter-zero", (zeroLobbyID) => {
+        console.log("zeroLobbyID:", zeroLobbyID);
+        console.log("outside lobbyID:", lobbyID);
+        if (zeroLobbyID == lobbyID) {
+          counter = 0;
+        }
+      });
     }, 1000);
   });
 
