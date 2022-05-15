@@ -34,6 +34,14 @@ function AuthContextProvider(props) {
     searchUsers: [],
     friends: [],
     friendRequests: [],
+    userData: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      passwordVerify: "",
+      username: "",
+    },
   });
   const history = useHistory();
   const { community } = useContext(GlobalCommunityContext);
@@ -56,6 +64,7 @@ function AuthContextProvider(props) {
           searchUsers: auth.searchUsers,
           friends: payload.friends,
           friendRequests: payload.friendRequests,
+          userData: auth.userData,
         });
       }
       case AuthActionType.LOGIN_USER: {
@@ -67,17 +76,26 @@ function AuthContextProvider(props) {
           searchUsers: auth.searchUsers,
           friends: payload.friends,
           friendRequests: payload.friendRequests,
+          userData: auth.userData,
         });
       }
       case AuthActionType.LOGOUT_USER: {
         return setAuth({
           user: null,
           loggedIn: false,
-          errorMessage: auth.errorMessage,
-          isGuest: auth.isGuest,
-          searchUsers: auth.searchUsers,
-          friends: auth.friends,
-          friendRequests: auth.friendRequests,
+          errorMessage: null,
+          isGuest: false, //Add this to the setAuth in the reducer
+          searchUsers: [],
+          friends: [],
+          friendRequests: [],
+          userData: {
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            passwordVerify: "",
+            username: "",
+          },
         });
       }
       case AuthActionType.REGISTER_USER: {
@@ -89,6 +107,7 @@ function AuthContextProvider(props) {
           searchUsers: auth.searchUsers,
           friends: auth.friends,
           friendRequests: auth.friendRequests,
+          userData: auth.userData,
         });
       }
       case AuthActionType.CREATE_GUEST: {
@@ -100,17 +119,19 @@ function AuthContextProvider(props) {
           searchUsers: auth.searchUsers,
           friends: auth.friends,
           friendRequests: auth.friendRequests,
+          userData: auth.userData,
         });
       }
       case AuthActionType.SET_ERROR_MESSAGE: {
         return setAuth({
           user: auth.user,
           loggedIn: auth.loggedIn,
-          errorMessage: payload,
+          errorMessage: payload.message,
           isGuest: auth.isGuest,
           searchUsers: auth.searchUsers,
           friends: auth.friends,
           friendRequests: auth.friendRequests,
+          userData: payload.userData,
         });
       }
       case AuthActionType.CHANGE_PASSWORD: {
@@ -122,6 +143,7 @@ function AuthContextProvider(props) {
           searchUsers: auth.searchUsers,
           friends: auth.friends,
           friendRequests: auth.friendRequests,
+          userData: auth.userData,
         });
       }
       case AuthActionType.RESET_PASSWORD: {
@@ -133,6 +155,7 @@ function AuthContextProvider(props) {
           searchUsers: auth.searchUsers,
           friends: auth.friends,
           friendRequests: auth.friendRequests,
+          userData: auth.userData,
         });
       }
       case AuthActionType.DELETE_ACCOUNT: {
@@ -144,6 +167,7 @@ function AuthContextProvider(props) {
           searchUsers: auth.searchUsers,
           friends: auth.friends,
           friendRequests: auth.friendRequests,
+          userData: auth.userData,
         });
       }
       case AuthActionType.SEARCH_USERS: {
@@ -155,6 +179,7 @@ function AuthContextProvider(props) {
           searchUsers: payload,
           friends: auth.friends,
           friendRequests: auth.friendRequests,
+          userData: auth.userData,
         });
       }
       case AuthActionType.SET_FRIENDS_AND_REQUESTS: {
@@ -166,6 +191,7 @@ function AuthContextProvider(props) {
           searchUsers: auth.searchUsers,
           friends: payload.friends,
           friendRequests: payload.friendRequests,
+          userData: auth.userData,
         });
       }
       // case AuthActionType.UPDATE_BIO: {
@@ -460,7 +486,7 @@ function AuthContextProvider(props) {
       return true;
     } catch (error) {
       console.log(error.response.data.errorMessage);
-      auth.setErrorMessage(error.response.data.errorMessage);
+      auth.setErrorMessage(error.response.data.errorMessage, auth.userData);
       return false;
     }
   };
@@ -468,7 +494,10 @@ function AuthContextProvider(props) {
   auth.resetPassword = async function (email) {
     if (email.indexOf("@") === -1) {
       console.log("what?>");
-      auth.setErrorMessage("Please enter a valid email address!");
+      auth.setErrorMessage(
+        "Please enter a valid email address!",
+        auth.userData
+      );
       return false;
     }
     try {
@@ -512,21 +541,21 @@ function AuthContextProvider(props) {
       }
     } catch (error) {
       console.log(error.response.data.errorMessage);
-      auth.setErrorMessage(error.response.data.errorMessage);
+      auth.setErrorMessage(error.response.data.errorMessage, auth.userData);
       return false;
     }
   };
 
-  auth.setErrorMessage = function (message) {
+  auth.setErrorMessage = function (message, userData) {
     authReducer({
       type: AuthActionType.SET_ERROR_MESSAGE,
-      payload: message,
+      payload: { message: message, userData: userData },
     });
   };
   auth.removeErrorMessage = function () {
     authReducer({
       type: AuthActionType.SET_ERROR_MESSAGE,
-      payload: null,
+      payload: { message: null, userData: auth.userData },
     });
   };
 
@@ -623,9 +652,17 @@ function AuthContextProvider(props) {
         history.push("/");
       }
     } catch (error) {
+      let userD = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        password: password,
+        passwordVerify: passwordVerify,
+        username: username,
+      };
       console.log(error.response.data.errorMessage);
       console.log(auth.errorMessage);
-      auth.setErrorMessage(error.response.data.errorMessage);
+      auth.setErrorMessage(error.response.data.errorMessage, userD);
     }
   };
 
@@ -686,8 +723,16 @@ function AuthContextProvider(props) {
         history.push("/");
       }
     } catch (error) {
+      let userD = {
+        firstName: auth.userData.firstName,
+        lastName: auth.userData.lastName,
+        email: auth.userData.email,
+        password: password,
+        passwordVerify: auth.userData.passwordVerify,
+        username: username,
+      };
       console.log(error);
-      auth.setErrorMessage(error.response.data.errorMessage);
+      auth.setErrorMessage(error.response.data.errorMessage, userD);
     }
   };
 
@@ -737,7 +782,7 @@ function AuthContextProvider(props) {
       return "user";
     } catch (error) {
       console.log(error);
-      auth.setErrorMessage(error.response.data.errorMessage);
+      auth.setErrorMessage(error.response.data.errorMessage, auth.userData);
       return "bad";
     }
   };

@@ -89,6 +89,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
+                        defaultValue={auth.userData.firstName}
                         autoComplete="fname"
                         name="firstName"
                         required
@@ -127,6 +128,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
+                        defaultValue={auth.userData.lastName}
                         required
                         fullWidth
                         variant="standard"
@@ -164,6 +166,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
+                        defaultValue={auth.userData.email}
                         required
                         fullWidth
                         id="email"
@@ -201,6 +204,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
+                        defaultValue={auth.userData.username}
                         required
                         fullWidth
                         name="username"
@@ -239,6 +243,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
+                        defaultValue={auth.userData.password}
                         required
                         fullWidth
                         name="password"
@@ -277,6 +282,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
+                        defaultValue={auth.userData.passwordVerify}
                         required
                         fullWidth
                         name="passwordVerify"
@@ -375,6 +381,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
+                        defaultValue={auth.userData.firstName}
                         autoComplete="fname"
                         name="firstName"
                         required
@@ -413,6 +420,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
+                        defaultValue={auth.userData.lastName}
                         required
                         fullWidth
                         variant="standard"
@@ -450,6 +458,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
+                        defaultValue={auth.userData.email}
                         required
                         fullWidth
                         id="email"
@@ -487,6 +496,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
+                        defaultValue={auth.userData.username}
                         required
                         fullWidth
                         name="username"
@@ -525,6 +535,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
+                        defaultValue={auth.userData.password}
                         required
                         fullWidth
                         name="password"
@@ -563,6 +574,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
+                        defaultValue={auth.userData.passwordVerify}
                         required
                         fullWidth
                         name="passwordVerify"
