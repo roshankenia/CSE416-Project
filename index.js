@@ -136,6 +136,12 @@ io.on("connection", (socket) => {
     let WinnerCountdown = setInterval(function () {
       io.to(lobbyID).emit("counter", counter);
       counter--;
+      socket.on("set-counter-zero", (zeroLobbyID) => {
+        console.log("zeroLobbyID:", zeroLobbyID);
+        console.log("outside lobbyID:", lobbyID);
+        counter = 0;
+      });
+      console.log("counter is:", counter, "for lobby", lobbyID);
       if (counter <= 0) {
         console.log("counter hit 0");
         console.log("emitting end-time to lobby:", lobbyID);
