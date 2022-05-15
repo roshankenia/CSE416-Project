@@ -576,7 +576,9 @@ export default function PostCard(props) {
               );
             })}
           </Grid>
-          {auth.user.username == post.data.authors[0] &&
+          {
+          !post.communityPublished &&
+          auth.user.username == post.data.authors[0] &&
             post.data.authors.length == 1 && (
               <Grid item xs={1}>
                 <Button onClick={handleEdit} sx={{ fontSize: 24 }}>
