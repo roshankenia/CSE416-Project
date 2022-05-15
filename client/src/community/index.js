@@ -68,7 +68,7 @@ function GlobalCommunityContextProvider(props) {
   const [load, setLoad] = useState(false);
   const history = useHistory();
 
-  const [notifyOpen, setNotifyOpen] = useState(false);
+  const [notifyOpen, setNotifyOpen] = useState([false, ""]);
 
   const [loaded, setLoaded] = useState(false);
 
@@ -84,7 +84,7 @@ function GlobalCommunityContextProvider(props) {
       return;
     }
 
-    setNotifyOpen(false);
+    setNotifyOpen([false, ""]);
   };
 
   const action = (
@@ -531,7 +531,10 @@ function GlobalCommunityContextProvider(props) {
   };
 
   community.notifyLeft = function () {
-    setNotifyOpen(true);
+    setNotifyOpen([true, "A user has left the game."]);
+  };
+  community.lobbyUnavailable = function () {
+    setNotifyOpen([true, "This lobby does not exist."]);
   };
   community.joinCommunity = async function (communityName) {
     try {
@@ -923,24 +926,24 @@ function GlobalCommunityContextProvider(props) {
     try {
       if (updateType == "comm") {
         let response = await api.updatePost(
-            post._id,
-            post.postTitle,
-            post.postComic,
-            post.postStory,
-            post.likes,
-            post.dislikes,
-            post.comments,
-            true,
-            false,
-            post.dateAndTime,
-            post.communityName
-          );
-        if (response.status === 200){
-          console.log("update post as comm")
+          post._id,
+          post.postTitle,
+          post.postComic,
+          post.postStory,
+          post.likes,
+          post.dislikes,
+          post.comments,
+          true,
+          false,
+          post.dateAndTime,
+          post.communityName
+        );
+        if (response.status === 200) {
+          console.log("update post as comm");
         } else {
-          console.log("failed to update post")
+          console.log("failed to update post");
         }
-      } else if (updateType == "commdis"){
+      } else if (updateType == "commdis") {
         let response = await api.updatePost(
           post._id,
           post.postTitle,
@@ -954,13 +957,12 @@ function GlobalCommunityContextProvider(props) {
           post.dateAndTime,
           post.communityName
         );
-        if (response.status === 200){
-          console.log("update post as commdis")
+        if (response.status === 200) {
+          console.log("update post as commdis");
         } else {
-          console.log("failed to update post")
+          console.log("failed to update post");
         }
-      }
-      else if (updateType == "delComment") {
+      } else if (updateType == "delComment") {
         let commentArr = post.comments;
         let commentToRemoveIndex = null;
         for (let i = 0; i < commentArr.length; i++) {
@@ -1456,62 +1458,64 @@ function GlobalCommunityContextProvider(props) {
     }
   };
 
-
-  community.updateSinglePlayerCS = async function (game){
+  community.updateSinglePlayerCS = async function (game) {
     let response = await api.getPostById(game.postID);
-    if (response.status === 200){
+    if (response.status === 200) {
       let post = response.data.post;
       let comicID = post.comicID;
       let storyID = post.storyID;
-      if (comicID){
+      if (comicID) {
         let response = await api.getComicById(comicID);
-        if (response.status === 200){
+        if (response.status === 200) {
           let comic = response.data.comic;
           let response = await api.updateComicById(
             comicID,
             comic.authors,
-            game.panels,
-            );
-          if (response.status === 200){
-            console.log("updated comic")
+            game.panels
+          );
+          if (response.status === 200) {
+            console.log("updated comic");
           } else {
-            console.log("failed to update comic")
+            console.log("failed to update comic");
           }
         }
       } else {
         let response = await api.getStoryById(storyID);
-        if (response.status === 200){
+        if (response.status === 200) {
           let story = response.data.story;
           let response = await api.updateStoryById(
             storyID,
             story.authors,
-            game.panels,
-            );
-          if (response.status === 200){
-            console.log("updated story")
+            game.panels
+          );
+          if (response.status === 200) {
+            console.log("updated story");
           } else {
-            console.log("failed to update story")
+            console.log("failed to update story");
           }
         }
       }
     } else {
       console.log("post could not be obtained");
     }
-  }
-  community.makeSinglePlayerDecision = async function (voteVal, title, dateTime, game){
-    if (game.postID != null){
-      if (voteVal == "save"){
+  };
+  community.makeSinglePlayerDecision = async function (
+    voteVal,
+    title,
+    dateTime,
+    game
+  ) {
+    if (game.postID != null) {
+      if (voteVal == "save") {
         community.updateSinglePlayerCS(game);
-      } else if (voteVal == "comm"){
+      } else if (voteVal == "comm") {
         community.updateSinglePlayerCS(game);
         let response = await api.getPostById(game.postID);
-        if (response.status === 200){
-          let post = response.data.post
+        if (response.status === 200) {
+          let post = response.data.post;
           let postID = post._id;
           community.updatePost("comm", post, null, null);
-          let comResponse = await api.searchCommunityByName(
-            game.communityName
-          );
+          let comResponse = await api.searchCommunityByName(game.communityName);
           console.log("Search Comm By Name returns: ", comResponse);
           if (comResponse.status === 200) {
             console.log("Found designated community");
@@ -1545,11 +1549,7 @@ function GlobalCommunityContextProvider(props) {
                 }
 
                 try {
-                  for (
-                    let i = 0;
-                    i < curCommunity.communityPosts.length;
-                    i++
-                  ) {
+                  for (let i = 0; i < curCommunity.communityPosts.length; i++) {
                     let postID = curCommunity.communityPosts[i];
                     const response = await api.getPostById(postID);
                     let post = response.data.post;
@@ -1584,16 +1584,14 @@ function GlobalCommunityContextProvider(props) {
             }
           }
         }
-      } else if (voteVal == "commdis"){
+      } else if (voteVal == "commdis") {
         community.updateSinglePlayerCS(game);
-        let response = await api.getPostById(game.postID)
+        let response = await api.getPostById(game.postID);
         if (response.status === 200) {
           let post = response.data.post;
           let postID = post._id;
           community.updatePost("commdis", post, null, null);
-          let comResponse = await api.searchCommunityByName(
-            game.communityName
-          );
+          let comResponse = await api.searchCommunityByName(game.communityName);
           console.log("Search Comm By Name returns: ", comResponse);
           if (comResponse.status === 200) {
             console.log("Found designated community");
@@ -1627,11 +1625,7 @@ function GlobalCommunityContextProvider(props) {
                 }
 
                 try {
-                  for (
-                    let i = 0;
-                    i < curCommunity.communityPosts.length;
-                    i++
-                  ) {
+                  for (let i = 0; i < curCommunity.communityPosts.length; i++) {
                     let postID = curCommunity.communityPosts[i];
                     const response = await api.getPostById(postID);
                     let post = response.data.post;
@@ -1667,9 +1661,8 @@ function GlobalCommunityContextProvider(props) {
           }
         }
       }
-      
     } else {
-      if (game.gamemode == "comic"){
+      if (game.gamemode == "comic") {
         let response = await api.createComic(game.players, game.panels);
         if (response.status === 200) {
           console.log("Made comic: ", response.data.comic);
@@ -1686,8 +1679,86 @@ function GlobalCommunityContextProvider(props) {
             dateTime,
             game.communityName
           );
+          if (postResponse.status === 200) {
+            console.log("Made post: ", postResponse.data.post);
+            let postID = postResponse.data.post._id;
+            let comResponse = await api.searchCommunityByName(
+              game.communityName
+            );
+            console.log("Search Comm By Name returns: ", comResponse);
+            if (comResponse.status === 200) {
+              console.log("Found designated community");
+              console.log(postID);
+              let newComm = comResponse.data.communityList[0];
+              console.log(newComm);
+              newComm.communityPosts.push(postID);
+              let updateResponse = await api.updateCommunityById(
+                newComm._id,
+                newComm
+              );
+              if (updateResponse.status === 201) {
+                //update posts
+                const listResponse = await api.getCommunityList();
+                console.log(
+                  "getCommunities response: " + listResponse.data.communityList
+                );
+                if (listResponse.status === 201) {
+                  let communityList = listResponse.data.communityList;
+
+                  let curCommunity = null;
+                  let communityPosts = [];
+
+                  for (let k = 0; k < communityList.length; k++) {
+                    if (
+                      communityList[k].communityName ==
+                      community.currentCommunity.communityName
+                    ) {
+                      curCommunity = communityList[k];
+                    }
+                  }
+
+                  try {
+                    for (
+                      let i = 0;
+                      i < curCommunity.communityPosts.length;
+                      i++
+                    ) {
+                      let postID = curCommunity.communityPosts[i];
+                      const response = await api.getPostById(postID);
+                      let post = response.data.post;
+                      if (post.postComic) {
+                        const comicResponse = await api.getComicById(
+                          post.postComic
+                        );
+                        console.log("comic:", comicResponse.data.comic);
+                        post.data = comicResponse.data.comic;
+                      } else if (post.postStory) {
+                        const storyResponse = await api.getStoryById(
+                          post.postStory
+                        );
+                        console.log("story:", storyResponse.data.story);
+                        post.data = storyResponse.data.story;
+                      }
+                      communityPosts.push(post);
+                    }
+                    console.log("posts found:", communityPosts);
+                    communityReducer({
+                      type: GlobalCommunityActionType.SET_COMMUNITY,
+                      payload: {
+                        currentCommunity: curCommunity,
+                        communityPosts: communityPosts,
+                        communityList: communityList,
+                      },
+                    });
+                  } catch (err) {
+                    console.log("could not obtain posts:", err);
+                  }
+                }
+              }
+            }
+          }
         }
-      } else if (game.gamemode == "story"){
+      } else if (game.gamemode == "story") {
         let response = await api.createStory(game.players, game.panels);
         if (response.status === 200) {
           console.log("Made story: ", response.data.story);
@@ -1704,10 +1775,88 @@ function GlobalCommunityContextProvider(props) {
             dateTime,
             game.communityName
           );
+          if (postResponse.status === 200) {
+            console.log("Made post: ", postResponse.data.post);
+            let postID = postResponse.data.post._id;
+            let comResponse = await api.searchCommunityByName(
+              game.communityName
+            );
+            console.log("Search Comm By Name returns: ", comResponse);
+            if (comResponse.status === 200) {
+              console.log("Found designated community");
+              console.log(postID);
+              let newComm = comResponse.data.communityList[0];
+              console.log(newComm);
+              newComm.communityPosts.push(postID);
+              let updateResponse = await api.updateCommunityById(
+                newComm._id,
+                newComm
+              );
+              if (updateResponse.status === 201) {
+                //update posts
+                const listResponse = await api.getCommunityList();
+                console.log(
+                  "getCommunities response: " + listResponse.data.communityList
+                );
+                if (listResponse.status === 201) {
+                  let communityList = listResponse.data.communityList;
+
+                  let curCommunity = null;
+                  let communityPosts = [];
+
+                  for (let k = 0; k < communityList.length; k++) {
+                    if (
+                      communityList[k].communityName ==
+                      community.currentCommunity.communityName
+                    ) {
+                      curCommunity = communityList[k];
+                    }
+                  }
+
+                  try {
+                    for (
+                      let i = 0;
+                      i < curCommunity.communityPosts.length;
+                      i++
+                    ) {
+                      let postID = curCommunity.communityPosts[i];
+                      const response = await api.getPostById(postID);
+                      let post = response.data.post;
+                      if (post.postComic) {
+                        const comicResponse = await api.getComicById(
+                          post.postComic
+                        );
+                        console.log("comic:", comicResponse.data.comic);
+                        post.data = comicResponse.data.comic;
+                      } else if (post.postStory) {
+                        const storyResponse = await api.getStoryById(
+                          post.postStory
+                        );
+                        console.log("story:", storyResponse.data.story);
+                        post.data = storyResponse.data.story;
+                      }
+                      communityPosts.push(post);
+                    }
+                    console.log("posts found:", communityPosts);
+                    communityReducer({
+                      type: GlobalCommunityActionType.SET_COMMUNITY,
+                      payload: {
+                        currentCommunity: curCommunity,
+                        communityPosts: communityPosts,
+                        communityList: communityList,
+                      },
+                    });
+                  } catch (err) {
+                    console.log("could not obtain posts:", err);
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
-  }
+  };
 
   community.makePost = async function (voteVal, title, dateTime, game) {
     if (game.gamemode == "comic") {
@@ -1897,7 +2046,7 @@ function GlobalCommunityContextProvider(props) {
               }
             }
           }
-        } 
+        }
       }
     } else if (game.gamemode == "story") {
       let response = await api.createStory(game.players, game.panels);
@@ -2134,9 +2283,9 @@ function GlobalCommunityContextProvider(props) {
     >
       {props.children}
       <Snackbar
-        open={notifyOpen}
+        open={notifyOpen[0]}
         autoHideDuration={3000}
-        message="A user has left the game."
+        message={notifyOpen[1]}
         onClose={handleNotifyClose}
         action={action}
       />
