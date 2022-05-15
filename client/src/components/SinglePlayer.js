@@ -536,7 +536,7 @@ export default function GameScreen() {
       buttonCSS={buttonCSS}
       setTool={setTool}
       //force comic
-      gameMode={"comic"}
+      gameMode={isComic? "comic" : "story"}
       flexContainer={flexContainer}
       tool={tool}
       changeColor={changeColor}
