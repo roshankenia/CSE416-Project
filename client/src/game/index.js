@@ -1,11 +1,8 @@
-import React, { createContext, useEffect, useState, useContext } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import api from "./game-request-api";
 import AuthContext from "../auth";
-import io from "socket.io-client";
-import { SocketContext } from "../socket";
-import $ from "jquery";
 import { GlobalCommunityContext } from "../community";
+import { SocketContext } from "../socket";
 
 export const GameContext = createContext({});
 
@@ -889,3 +886,4 @@ function GameContextProvider(props) {
 
 export default GameContext;
 export { GameContextProvider };
+
