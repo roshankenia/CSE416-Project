@@ -850,7 +850,7 @@ export default function GameScreen() {
         >
           {"Characters Left: "} {charLimit - storyText.replace(/<\/?[^>]+(>|$)/g, "").length}
         </Typography> */}
-        <Button
+        {/* <Button
           sx={{
             width: 450,
             height: 75,
@@ -866,7 +866,7 @@ export default function GameScreen() {
           }}
         >
           <Typography fontSize={"32px"}>Submit</Typography>
-        </Button>
+        </Button> */}
       </Grid>
     );
   }
