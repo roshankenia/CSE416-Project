@@ -186,7 +186,8 @@ export default function GameScreen() {
   const handleConfirm = (event) => {
     let newPanels = panels;
     newPanels[index] = storyText;
-    api.updateStoryById(csID, author, newPanels);
+    // api.updateStoryById(csID, author, newPanels);
+    game.enterVoting()
     history.push("/");
   };
 

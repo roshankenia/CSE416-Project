@@ -17,7 +17,7 @@ export default function VoteToPublishScreen() {
   const { game } = useContext(GameContext);
   const { community } = useContext(GlobalCommunityContext);
   const { auth } = useContext(AuthContext);
-
+  console.log("in voting screen:", game)
   const style = {
     // position: "absolute",
     // top: "50%",
