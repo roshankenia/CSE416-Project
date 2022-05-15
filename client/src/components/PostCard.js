@@ -177,9 +177,14 @@ export default function PostCard(props) {
   // }
   const history = useHistory();
   function handleEdit(event) {
-    history.push("/singleplayer/" + post._id);
-    game.turn = 0;
-    console.log("game.turn should be 0", game.turn);
+    if (!post.communityPublished){
+      history.push("/singleplayer/" + post._id);
+      game.turn = 0;
+      console.log("game.turn should be 0", game.turn);
+    } else {
+      console.log("this cannot be edited. already published.")
+    }
+    
   }
   function handleViewProfile(event, username) {
     console.log("in view profile");

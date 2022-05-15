@@ -124,7 +124,7 @@ export default function VoteToPublishScreen() {
 
     if (decisionVal == 0) {
       console.log("Voting Decision: Scrap");
-    } else if (game.players.length <= 1){
+    } else if (game.postID){
       console.log("in single player")
       if (decisionVal == 1) {
         console.log("Single Player Decision: Community");
@@ -147,6 +147,10 @@ export default function VoteToPublishScreen() {
       } else if (decisionVal == 2) {
         console.log("Voting Decision: Community and Discovery");
         community.makePost("commdis", title, dateTime, game);
+      } else if (decisionVal == 3) {
+        console.log("Single Player Decision: Save to Edit");
+        console.log(game)
+        community.makeSinglePlayerDecision("save", title, dateTime, game);
       } else {
         console.log("error: improper decision value");
         console.log("post was not posted");
