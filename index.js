@@ -133,18 +133,17 @@ io.on("connection", (socket) => {
 
   socket.on("timer", (username, time, lobbyID) => {
     let counter = time;
+    const setZero = (zeroLobbyID) => {
+      console.log("zeroLobbyID:", zeroLobbyID);
+      console.log("outside lobbyID:", lobbyID);
+      if (zeroLobbyID == lobbyID) {
+        counter = 0;
+      }
+    };
+    socket.on("set-counter-zero", setZero);
     let WinnerCountdown = setInterval(function () {
-      const setZero = (zeroLobbyID) => {
-        console.log("zeroLobbyID:", zeroLobbyID);
-        console.log("outside lobbyID:", lobbyID);
-        if (zeroLobbyID == lobbyID) {
-          counter = 0;
-        }
-      };
-
       io.to(lobbyID).emit("counter", counter);
       counter--;
-      socket.on("set-counter-zero", setZero);
       console.log("counter is:", counter, "for lobby", lobbyID);
       if (counter <= 0) {
         console.log("counter hit 0");
@@ -152,7 +151,6 @@ io.on("connection", (socket) => {
         io.in(lobbyID).emit("end-time", time);
         clearInterval(WinnerCountdown);
       }
-      socket.off("set-counter-zero", setZero);
     }, 1000);
   });
 
