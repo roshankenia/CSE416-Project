@@ -197,6 +197,11 @@ io.on("connection", (socket) => {
     console.log("the message is", message);
     io.to(lobbyID).emit("receive-message", message, username);
   });
+
+  socket.on("close-lobby", (lobbyID) => {
+    console.log("closing lobby")
+    io.socketsLeave(lobbyID);
+  });
 });
 
 // socket.to(lobbyID).emit("new-player", username, lobbyID);
