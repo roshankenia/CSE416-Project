@@ -137,7 +137,7 @@ export const updatePost = (
 };
 
 export const updateStoryById = (id, authors, panels) =>{
-  return api.put(`/story/${id}`, {comic: {authors: authors, panels: panels}})
+  return api.put(`/story/${id}`, {authors: authors, panels: panels})
 }
 
 export const createComment = (

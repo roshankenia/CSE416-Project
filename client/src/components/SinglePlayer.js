@@ -944,7 +944,7 @@ export default function GameScreen() {
             //TODO
             onClick={handleConfirm}
           >
-            <Typography fontSize={"32px"}>Confirm</Typography>
+            <Typography fontSize={"32px"}>Confirm Edit</Typography>
           </Button>
         )}
         <Button
