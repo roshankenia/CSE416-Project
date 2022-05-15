@@ -30,14 +30,12 @@ export default function Chat(props) {
           >
             <Box
               style={{
-                border: "3px solid",
-                borderColor: "black",
                 color: "black",
                 backgroundColor: "white",
-                fontSize: "20px",
-                outline: "none",
-                borderRadius: 20,
+                fontSize: "10px",
                 width: "100%",
+                whiteSpace: 'pre-wrap', 
+                overflowWrap: 'break-word'
               }}
             >
                   <Typography

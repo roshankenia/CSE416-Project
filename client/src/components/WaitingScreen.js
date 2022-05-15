@@ -191,9 +191,20 @@ export default function WaitingScreen(props) {
           backgroundColor: "white",
           border: 3,
           justifyContent: "space-between",
+          overflowY: 'auto',
         }}
       >
         <Chat></Chat>
+        </Box>
+        <Box
+        sx={{
+          width: 600,
+          height: "auto",
+          backgroundColor: "white",
+          border: 3,
+          justifyContent: "space-between",
+          overflowY: 'auto'
+        }}>
         <Box component="form" onSubmit={handleChat} noValidate>
           <TextField id="chat" name="chat" sx={{ top: "65%", width: "60%" }}>
             Type Message
