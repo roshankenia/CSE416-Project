@@ -457,29 +457,51 @@ export default function GameScreen() {
         </ImageList>
       </Box>
     );
-  } else if (game.gamemode == "story") {
+  } else {
+    console.log("story")
     gamePanels = (
-      <Grid container spacing={2}>
-        {game.panels.map((text) => (
-          <Grid
-            item
-            key={text}
-            xs={2}
-            sx={{
-              backgroundColor: "white",
-              border: 3,
-            }}
-            style={{ height: 200 }}
-          >
-            <ReactQuill
-              style={{ maxHeight: "100%", overflow: "auto" }}
-              readOnly={true}
-              theme="bubble"
-              value={text}
+
+      gamePanels = (
+        <Box sx={{ width: "70%", height: "70%" }}>
+          <ImageList sx={{ width: "95%" }} cols={6}>
+            {panels.map((text, index) => (
+              <ImageListItem key={index}
+              sx={{
+                        backgroundColor: "white",
+                        border: 3,
+                      }}>
+                 <ReactQuill
+                  style={{ maxHeight: "100%", overflow: "auto" }}
+                  readOnly={true}
+                  theme="bubble"
+                  value={text}
             ></ReactQuill>
-          </Grid>
-        ))}
-      </Grid>
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </Box>
+      )
+      // <Grid container spacing={2}>
+      //   {panels.map((text) => (
+      //     <Grid
+      //       item
+      //       key={text}
+      //       xs={2}
+      //       sx={{
+      //         backgroundColor: "white",
+      //         border: 3,
+      //       }}
+      //       style={{ height: 200 }}
+      //     >
+      //       <ReactQuill
+      //         style={{ maxHeight: "100%", overflow: "auto" }}
+      //         readOnly={true}
+      //         theme="bubble"
+      //         value={text}
+      //       ></ReactQuill>
+      //     </Grid>
+      //   ))}
+      // </Grid>
     );
   }
 
