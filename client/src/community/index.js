@@ -86,13 +86,16 @@ function GlobalCommunityContextProvider(props) {
 
     const lobbyConfirmed = async (username, lobbyID, confirmed) => {
       console.log("listener:", username, lobbyID, confirmed);
+      console.log(auth.user);
       if (username == auth.user.username) {
+        console.log("checking confirmed");
         if (confirmed) {
           game.confirmJoinLobby(lobbyID);
         }
-      } else {
+       else {
         community.lobbyUnavailable();
       }
+    }
     };
 
     socket.on("lobby-confirmed", lobbyConfirmed);
@@ -100,7 +103,7 @@ function GlobalCommunityContextProvider(props) {
     return () => {
       socket.off("lobby-confirmed", lobbyConfirmed);
     };
-  }, [loaded, community]);
+  }, [loaded, community, auth, game]);
   const handleNotifyClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -556,6 +559,7 @@ function GlobalCommunityContextProvider(props) {
     setNotifyOpen([true, "A user has left the game."]);
   };
   community.lobbyUnavailable = function () {
+    console.log("setting notification");
     setNotifyOpen([true, "This lobby does not exist."]);
   };
   community.joinCommunity = async function (communityName) {
@@ -1486,18 +1490,18 @@ function GlobalCommunityContextProvider(props) {
       let post = response.data.post;
       let comicID = post.postComic;
       let storyID = post.postStory;
-      console.log(comicID)
-      console.log(storyID)
+      console.log(comicID);
+      console.log(storyID);
       if (comicID) {
         let comicresponse = await api.getComicById(comicID);
         if (comicresponse.status === 200) {
           let comic = comicresponse.data.comic;
-          console.log(comic)
-          let authors = comic.authors
+          console.log(comic);
+          let authors = comic.authors;
           let response = await api.updateComicById(
             comicID,
             authors,
-            game.panels,
+            game.panels
           );
           if (response.status === 200) {
             console.log("updated comic");
