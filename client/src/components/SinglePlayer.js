@@ -1,64 +1,42 @@
 //#region imports
-import { Grid, Typography } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";  
-import { GameContext } from "../game";
-import AuthContext from "../auth";
-import { Box, Button, List, ListItem, TextField } from "@mui/material";
-
+import { Box, Button, Grid, List, Typography } from "@mui/material";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 import { styled } from "@mui/material/styles";
 // import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-
-import WaitingScreen from "./WaitingScreen";
-import GameTools from "./GameTools";
-import Timer from "./Timer";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-
-import ReactQuill from "react-quill";
-
-import api from "../community/community-request-api";
+import React, { useContext, useEffect, useState } from "react";
 //#endregion imports
-
 //#region konva import
-import {
-  Stage,
-  Layer,
-  Rect,
-  Text,
-  Circle,
-  Line,
-  Star,
-  Shape,
-  Image,
-  Ellipse,
-} from "react-konva";
-import useImage from "use-image";
-import { BsEraserFill } from "react-icons/bs";
-import URLImage from "./URLImage";
+import { Circle, Ellipse, Layer, Line, Rect, Stage, Text } from "react-konva";
+import ReactQuill from "react-quill";
+import { useHistory } from "react-router-dom";
+import AuthContext from "../auth";
+import api from "../community/community-request-api";
+import { GameContext } from "../game";
+import GameTools from "./GameTools";
 //#endregion konva import
-
 //#region quilljs import
 import StoryEditor from "./StoryEditor";
-import { post } from "jquery";
+import URLImage from "./URLImage";
+
 //#endregion quilljs
 
 export default function GameScreen() {
   const { game } = useContext(GameContext);
-  const [isComic, setIsComic] = useState(true)
+  const [isComic, setIsComic] = useState(true);
   const history = useHistory();
-  
+
   const [panels, setPanels] = useState([]);
   const [index, setIndex] = useState(0);
-  
+
   const [postID, setPostID] = useState(
     window.location.pathname.toString().substring(14)
   );
 
   //comic or story Id
-  const [csID, setCSID] = useState('')
-  const [author, setAuthor] = useState('')
+  const [csID, setCSID] = useState("");
+  const [author, setAuthor] = useState("");
 
   const [actions, setActions] = React.useState([]);
   const [storyText, setStoryText] = React.useState("");
@@ -67,12 +45,12 @@ export default function GameScreen() {
   async function getPost() {
     const postResponse = await api.getPostById(postID);
     //also need to check for story
-    if (postResponse.data.post.postStory === null){
-      setCSID(postResponse.data.post.postComic)
+    if (postResponse.data.post.postStory === null) {
+      setCSID(postResponse.data.post.postComic);
       const comicResponse = await api.getComicById(
         postResponse.data.post.postComic
       );
-      setAuthor(comicResponse.data.comic.authors)
+      setAuthor(comicResponse.data.comic.authors);
       setPanels(comicResponse.data.comic.panels);
       console.log("the value of game.turn in getPost ", game.turn);
       setActions(
@@ -84,17 +62,16 @@ export default function GameScreen() {
           },
         ])
       );
-    }else{
-      setIsComic(false)
-      setCSID(postResponse.data.post.postStory)
+    } else {
+      setIsComic(false);
+      setCSID(postResponse.data.post.postStory);
       const storyResponse = await api.getStoryById(
         postResponse.data.post.postStory
       );
-      setAuthor(storyResponse.data.story.authors)
+      setAuthor(storyResponse.data.story.authors);
       setPanels(storyResponse.data.story.panels);
       console.log("the value of game.turn in getPost ", game.turn);
-      setStoryText(storyResponse.data.story.panels[0])
-      
+      setStoryText(storyResponse.data.story.panels[0]);
     }
   }
 
@@ -120,7 +97,7 @@ export default function GameScreen() {
   const [bubbleToggle, setBubbleToggle] = useState(false);
 
   const addPanel = (event) => {
-    if(isComic){
+    if (isComic) {
       event.stopPropagation();
       console.log("Add panel method");
       let imageData = stageRef.current.toDataURL();
@@ -146,17 +123,17 @@ export default function GameScreen() {
           setActions([]);
         })
         .catch((err) => console.log(err));
-    }else{
-      let newPanels = panels
-      newPanels[index] = storyText
-      setPanels(newPanels)
-      setIndex(index + 1)
-      setStoryText('')
+    } else {
+      let newPanels = panels;
+      newPanels[index] = storyText;
+      setPanels(newPanels);
+      setIndex(index + 1);
+      setStoryText("");
     }
   };
 
   const nextPanel = (event) => {
-    if(isComic){
+    if (isComic) {
       event.stopPropagation();
       //TODO
       //change to next panel
@@ -196,25 +173,25 @@ export default function GameScreen() {
           }
         })
         .catch((err) => console.log(err));
-    }else{
-      let newPanels = panels
-      newPanels[index] = storyText
-      setPanels(newPanels)
-      setStoryText(panels[index + 1])
-      setIndex(index + 1)
+    } else {
+      let newPanels = panels;
+      newPanels[index] = storyText;
+      setPanels(newPanels);
+      setStoryText(panels[index + 1]);
+      setIndex(index + 1);
     }
   };
 
-  const handleConfirm = (event) =>{
-    let newPanels = panels
-    newPanels[index] = storyText
-    api.updateStoryById(csID,author,newPanels)
-    history.push('/')
-  }
+  const handleConfirm = (event) => {
+    let newPanels = panels;
+    newPanels[index] = storyText;
+    api.updateStoryById(csID, author, newPanels);
+    history.push("/");
+  };
 
-  const handleLeave = (event) =>{
-    history.push('/')
-  }
+  const handleLeave = (event) => {
+    history.push("/");
+  };
 
   const [themeToggle, setThemeToggle] = useState(false);
   const toggleThemes = () => {
@@ -469,17 +446,17 @@ export default function GameScreen() {
   let gamePanels = "";
 
   if (isComic) {
-      gamePanels = (
-        <Box sx={{ width: "70%", height: "70%" }}>
-          <ImageList sx={{ width: "95%" }} cols={6}>
-            {panels.map((picture, index) => (
-              <ImageListItem key={index}>
-                <img src={picture} loading="lazy" />
-              </ImageListItem>
-            ))}
-          </ImageList>
-        </Box>
-      );
+    gamePanels = (
+      <Box sx={{ width: "70%", height: "70%" }}>
+        <ImageList sx={{ width: "95%" }} cols={6}>
+          {panels.map((picture, index) => (
+            <ImageListItem key={index}>
+              <img src={picture} loading="lazy" />
+            </ImageListItem>
+          ))}
+        </ImageList>
+      </Box>
+    );
   } else if (game.gamemode == "story") {
     gamePanels = (
       <Grid container spacing={2}>
@@ -559,140 +536,140 @@ export default function GameScreen() {
   let gameWorkSpace = "";
 
   if (isComic) {
-  gameWorkSpace = (
-    <Grid item xs={6} align="center">
-      <Box
-        sx={{
-          width: 600,
-          height: 600,
-          backgroundColor: "white",
-          border: 3,
-        }}
-        onDrop={(e) => {
-          e.preventDefault();
-          // register event position
-          stageRef.current.setPointersPositions(e);
-          // add image
-          actions.push({
-            ...stageRef.current.getPointerPosition(),
-            src: dragUrl.current,
-            key: actions.length + 1,
-            size: strokeWidth,
-          });
-          setActions(
-            actions.concat([
-              {
-                ...stageRef.current.getPointerPosition(),
-                src: dragUrl.current,
-                key: actions.length + 1,
-                size: strokeWidth,
-              },
-            ])
-          );
-        }}
-        onDragOver={(e) => e.preventDefault()}
-      >
-        <Stage
-          width={600}
-          height={600}
-          onMouseDown={handleMouseDown}
-          onMousemove={handleMouseMove}
-          onMouseup={handleMouseUp}
-          ref={stageRef}
+    gameWorkSpace = (
+      <Grid item xs={6} align="center">
+        <Box
+          sx={{
+            width: 600,
+            height: 600,
+            backgroundColor: "white",
+            border: 3,
+          }}
+          onDrop={(e) => {
+            e.preventDefault();
+            // register event position
+            stageRef.current.setPointersPositions(e);
+            // add image
+            actions.push({
+              ...stageRef.current.getPointerPosition(),
+              src: dragUrl.current,
+              key: actions.length + 1,
+              size: strokeWidth,
+            });
+            setActions(
+              actions.concat([
+                {
+                  ...stageRef.current.getPointerPosition(),
+                  src: dragUrl.current,
+                  key: actions.length + 1,
+                  size: strokeWidth,
+                },
+              ])
+            );
+          }}
+          onDragOver={(e) => e.preventDefault()}
         >
-          <Layer>
-            <Rect x={0} y={0} width={600} height={600} fill="white" />
-            {actions.map((action) => {
-              if (action.tool === "pen" || action.tool === "eraser") {
-                return (
-                  <Line
-                    points={action.points}
-                    stroke={action.stroke}
-                    strokeWidth={action.strokeWidth}
-                    tension={0.5}
-                    lineCap="round"
-                    globalCompositeOperation={
-                      action.tool === "eraser"
-                        ? "destination-out"
-                        : "source-over"
-                    }
-                  />
-                );
-              } else if (action.tool === "rectangle") {
-                return (
-                  <Rect
-                    x={action.x}
-                    y={action.y}
-                    width={action.width}
-                    height={action.height}
-                    fill={action.fill}
-                    stroke={action.stroke}
-                    strokeWidth={action.strokeWidth}
-                  />
-                );
-              } else if (action.tool === "ellipse") {
-                return (
-                  <Ellipse
-                    x={action.x}
-                    y={action.y}
-                    width={action.width}
-                    height={action.height}
-                    fill={action.fill}
-                    stroke={action.stroke}
-                    strokeWidth={action.strokeWidth}
-                  />
-                );
-              } else if (action.tool === "circle") {
-                return (
-                  <Circle
-                    x={action.x}
-                    y={action.y}
-                    width={action.width}
-                    height={action.height}
-                    fill={action.fill}
-                    stroke={action.stroke}
-                    strokeWidth={action.strokeWidth}
-                  />
-                );
-              } else if (action.tool === "text") {
-                return (
-                  <Text
-                    x={action.x}
-                    y={action.y}
-                    text={action.text}
-                    fontSize={action.fontSize}
-                    fill={action.fill}
-                  />
-                );
-              } else {
-                return <URLImage image={action} />;
-              }
-            })}
-          </Layer>
-        </Stage>
-      </Box>
-    </Grid>
-  );
-    } else {
-      gameWorkSpace = (
-        <Grid item xs={6} align="center">
-          <StoryEditor
-            storyText={storyText}
-            setStoryText={setStoryText}
-            charLimit={charLimit}
-            game={game}
-          />
-        </Grid>
-      );
-    }
+          <Stage
+            width={600}
+            height={600}
+            onMouseDown={handleMouseDown}
+            onMousemove={handleMouseMove}
+            onMouseup={handleMouseUp}
+            ref={stageRef}
+          >
+            <Layer>
+              <Rect x={0} y={0} width={600} height={600} fill="white" />
+              {actions.map((action) => {
+                if (action.tool === "pen" || action.tool === "eraser") {
+                  return (
+                    <Line
+                      points={action.points}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                      tension={0.5}
+                      lineCap="round"
+                      globalCompositeOperation={
+                        action.tool === "eraser"
+                          ? "destination-out"
+                          : "source-over"
+                      }
+                    />
+                  );
+                } else if (action.tool === "rectangle") {
+                  return (
+                    <Rect
+                      x={action.x}
+                      y={action.y}
+                      width={action.width}
+                      height={action.height}
+                      fill={action.fill}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                    />
+                  );
+                } else if (action.tool === "ellipse") {
+                  return (
+                    <Ellipse
+                      x={action.x}
+                      y={action.y}
+                      width={action.width}
+                      height={action.height}
+                      fill={action.fill}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                    />
+                  );
+                } else if (action.tool === "circle") {
+                  return (
+                    <Circle
+                      x={action.x}
+                      y={action.y}
+                      width={action.width}
+                      height={action.height}
+                      fill={action.fill}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                    />
+                  );
+                } else if (action.tool === "text") {
+                  return (
+                    <Text
+                      x={action.x}
+                      y={action.y}
+                      text={action.text}
+                      fontSize={action.fontSize}
+                      fill={action.fill}
+                    />
+                  );
+                } else {
+                  return <URLImage image={action} />;
+                }
+              })}
+            </Layer>
+          </Stage>
+        </Box>
+      </Grid>
+    );
+  } else {
+    gameWorkSpace = (
+      <Grid item xs={6} align="center">
+        <StoryEditor
+          storyText={storyText}
+          setStoryText={setStoryText}
+          charLimit={charLimit}
+          game={game}
+        />
+      </Grid>
+    );
+  }
 
   //right handside buttons
   let gameUtils = "";
 
   if (isComic) {
     gameUtils = (
-     <Grid item xs={3} align="center">
-      {/* <Box
+      <Grid item xs={3} align="center">
+        {/* <Box
           sx={{
             width: 450,
             height: 75,
@@ -711,7 +688,7 @@ export default function GameScreen() {
             setStoryText={setStoryText}
           />
         </Box> */}
-      {/* <Button
+        {/* <Button
           sx={{
             width: 450,
             height: 75,
@@ -729,7 +706,7 @@ export default function GameScreen() {
         >
           <Typography fontSize={"32px"}>Themes</Typography>
         </Button> */}
-      {/* {themeToggle && (
+        {/* {themeToggle && (
           <Box
             sx={{
               margin: 1,
@@ -774,7 +751,7 @@ export default function GameScreen() {
             </ImageList>
           </Box>
         )} */}
-      {/* <Button
+        {/* <Button
           sx={{
             width: 450,
             height: 75,
@@ -792,7 +769,7 @@ export default function GameScreen() {
         >
           <Typography fontSize={"32px"}>Characters</Typography>
         </Button> */}
-      {/* {characterToggle && (
+        {/* {characterToggle && (
           <Box
             sx={{
               margin: 1,
@@ -821,26 +798,6 @@ export default function GameScreen() {
             </ImageList>
           </Box>
         )} */}
-      <Button
-        sx={{
-          width: 450,
-          height: 75,
-          margin: 1,
-          backgroundColor: "primary.dark",
-          "&:hover": {
-            backgroundColor: "primary.main",
-            opacity: [0.9, 0.8, 0.7],
-          },
-          borderRadius: 5,
-          border: 3,
-          color: "black",
-        }}
-        //TODO
-        onClick={nextPanel}
-      >
-        <Typography fontSize={"32px"}>NEXT</Typography>
-      </Button>
-      {game.turn + 1 >= panels.length && game.turn + 1 < 12 && (
         <Button
           sx={{
             width: 450,
@@ -856,57 +813,31 @@ export default function GameScreen() {
             color: "black",
           }}
           //TODO
-          onClick={addPanel}
+          onClick={nextPanel}
         >
-          <Typography fontSize={"32px"}>ADD PANEL</Typography>
+          <Typography fontSize={"32px"}>NEXT</Typography>
         </Button>
-      )}
-      <Button
-          sx={{
-            width: 450,
-            height: 75,
-            margin: 1,
-            backgroundColor: "primary.dark",
-            "&:hover": {
-              backgroundColor: "primary.main",
-              opacity: [0.9, 0.8, 0.7],
-            },
-            borderRadius: 5,
-            border: 3,
-            color: "black",
-          }}
-        //TODO
-        onClick={handleLeave}
-      >
-        <Typography fontSize={"32px"}>Leave</Typography>
-      </Button>
-    </Grid>
-  );
-    } else {
-      gameUtils = (
-        <Grid item xs={3} align="center">
-        {index < panels.length - 1 && 
+        {game.turn + 1 >= panels.length && game.turn + 1 < 12 && (
           <Button
-          sx={{
-            width: 450,
-            height: 75,
-            margin: 1,
-            backgroundColor: "primary.dark",
-            "&:hover": {
-              backgroundColor: "primary.main",
-              opacity: [0.9, 0.8, 0.7],
-            },
-            borderRadius: 5,
-            border: 3,
-            color: "black",
-          }}
-        //TODO
-        onClick={nextPanel}
-      >
-        <Typography fontSize={"32px"}>NEXT</Typography>
-      </Button>
-      }
-      {index >= panels.length - 1 && panels.length < 12 && (
+            sx={{
+              width: 450,
+              height: 75,
+              margin: 1,
+              backgroundColor: "primary.dark",
+              "&:hover": {
+                backgroundColor: "primary.main",
+                opacity: [0.9, 0.8, 0.7],
+              },
+              borderRadius: 5,
+              border: 3,
+              color: "black",
+            }}
+            //TODO
+            onClick={addPanel}
+          >
+            <Typography fontSize={"32px"}>ADD PANEL</Typography>
+          </Button>
+        )}
         <Button
           sx={{
             width: 450,
@@ -922,13 +853,79 @@ export default function GameScreen() {
             color: "black",
           }}
           //TODO
-          onClick={addPanel}
+          onClick={handleLeave}
         >
-          <Typography fontSize={"32px"}>ADD PANEL</Typography>
+          <Typography fontSize={"32px"}>Leave</Typography>
         </Button>
-      )}
-      {index >= panels.length - 1 && 
+      </Grid>
+    );
+  } else {
+    gameUtils = (
+      <Grid item xs={3} align="center">
+        {index < panels.length - 1 && (
           <Button
+            sx={{
+              width: 450,
+              height: 75,
+              margin: 1,
+              backgroundColor: "primary.dark",
+              "&:hover": {
+                backgroundColor: "primary.main",
+                opacity: [0.9, 0.8, 0.7],
+              },
+              borderRadius: 5,
+              border: 3,
+              color: "black",
+            }}
+            //TODO
+            onClick={nextPanel}
+          >
+            <Typography fontSize={"32px"}>NEXT</Typography>
+          </Button>
+        )}
+        {index >= panels.length - 1 && panels.length < 12 && (
+          <Button
+            sx={{
+              width: 450,
+              height: 75,
+              margin: 1,
+              backgroundColor: "primary.dark",
+              "&:hover": {
+                backgroundColor: "primary.main",
+                opacity: [0.9, 0.8, 0.7],
+              },
+              borderRadius: 5,
+              border: 3,
+              color: "black",
+            }}
+            //TODO
+            onClick={addPanel}
+          >
+            <Typography fontSize={"32px"}>ADD PANEL</Typography>
+          </Button>
+        )}
+        {index >= panels.length - 1 && (
+          <Button
+            sx={{
+              width: 450,
+              height: 75,
+              margin: 1,
+              backgroundColor: "primary.dark",
+              "&:hover": {
+                backgroundColor: "primary.main",
+                opacity: [0.9, 0.8, 0.7],
+              },
+              borderRadius: 5,
+              border: 3,
+              color: "black",
+            }}
+            //TODO
+            onClick={handleConfirm}
+          >
+            <Typography fontSize={"32px"}>Confirm</Typography>
+          </Button>
+        )}
+        <Button
           sx={{
             width: 450,
             height: 75,
@@ -942,34 +939,14 @@ export default function GameScreen() {
             border: 3,
             color: "black",
           }}
-        //TODO
-        onClick={handleConfirm}
-      >
-        <Typography fontSize={"32px"}>Confirm</Typography>
-      </Button>
-      }
-          <Button
-          sx={{
-            width: 450,
-            height: 75,
-            margin: 1,
-            backgroundColor: "primary.dark",
-            "&:hover": {
-              backgroundColor: "primary.main",
-              opacity: [0.9, 0.8, 0.7],
-            },
-            borderRadius: 5,
-            border: 3,
-            color: "black",
-          }}
-        //TODO
-        onClick={handleLeave}
-      >
-        <Typography fontSize={"32px"}>Leave</Typography>
-      </Button>
-    </Grid>
-      );
-    }
+          //TODO
+          onClick={handleLeave}
+        >
+          <Typography fontSize={"32px"}>Leave</Typography>
+        </Button>
+      </Grid>
+    );
+  }
   //#endregion render elements
 
   let currentDisplay = (
@@ -990,8 +967,6 @@ export default function GameScreen() {
       justifyContent="center"
       alignItems="center"
       style={{
-        width: "100vw",
-        height: "100vh",
         backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
       }}
     >

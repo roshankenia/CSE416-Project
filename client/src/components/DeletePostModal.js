@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import { GlobalCommunityContext } from "../community";
-import AuthContext from "../auth";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
+import React, { useContext } from "react";
+import AuthContext from "../auth";
+import { GlobalCommunityContext } from "../community";
 const style = {
   position: "absolute",
   top: "50%",

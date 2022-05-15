@@ -1,17 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
-import { GlobalCommunityContext } from "../community";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import Sidebar from "./Sidebar.js";
-import AuthContext from "../auth";
-import PostFeed from "./PostFeed.js";
-import Sticky from "react-stickynode";
-import Button from "@mui/material/Button";
-import Snackbar from "@mui/material/Snackbar";
-import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
+import Snackbar from "@mui/material/Snackbar";
+import Typography from "@mui/material/Typography";
+import React, { useContext, useEffect } from "react";
+import AuthContext from "../auth";
+import { GlobalCommunityContext } from "../community";
 import ChangeBioModal from "./ChangeBioModal";
-import Box from "@mui/material/Box";
+import PostFeed from "./PostFeed.js";
+import Sidebar from "./Sidebar.js";
 
 export default function ProfileScreen() {
   useEffect(() => {

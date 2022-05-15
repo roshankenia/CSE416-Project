@@ -320,9 +320,11 @@ export default function LobbyScreen() {
       spacing={1}
       justifyContent="center"
       alignItems="center"
-      style={{
+      sx={{
         width: "100vw",
         height: "100vh",
+      }}
+      style={{
         backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
       }}
     >

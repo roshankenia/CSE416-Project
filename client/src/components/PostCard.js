@@ -20,9 +20,9 @@ import React, { useContext, useState } from "react";
 import { useHistory } from "react-router-dom";
 import AuthContext from "../auth";
 import { GlobalCommunityContext } from "../community";
+import { GameContext } from "../game";
 import CommentCard from "./CommentCard.js";
 import StoryPopout from "./StoryPopout.js";
-import { GameContext } from "../game";
 
 export default function PostCard(props) {
   const { community } = useContext(GlobalCommunityContext);
@@ -109,15 +109,15 @@ export default function PostCard(props) {
     let input = document.getElementById("data" + index);
     console.log(input);
 
-    const pdf = new jsPDF("p", "pt", "a4");
-    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pdf = new jsPDF("l", "pt", "a4");
+    const pageLength = pdf.internal.pageSize.getHeight();
 
-    const marginX = (pageWidth - 250) / 2;
+    const marginY = (pageLength - 250) / 2;
     let y = 0;
     for (let i = 0; i < post.data.panels.length; i += 3) {
-      pdf.addImage(post.data.panels[i], "JPEG", marginX, 0, 250, 250);
-      pdf.addImage(post.data.panels[i + 1], "JPEG", marginX, 250, 250, 250);
-      pdf.addImage(post.data.panels[i + 2], "JPEG", marginX, 500, 250, 250);
+      pdf.addImage(post.data.panels[i], "JPEG", 45, marginY, 250, 250);
+      pdf.addImage(post.data.panels[i + 1], "JPEG", 295, marginY, 250, 250);
+      pdf.addImage(post.data.panels[i + 2], "JPEG", 545, marginY, 250, 250);
       if (i + 3 != post.data.panels.length) {
         pdf.addPage();
       }
@@ -144,8 +144,8 @@ export default function PostCard(props) {
   const history = useHistory();
   function handleEdit(event) {
     history.push("/singleplayer/" + post._id);
-    game.turn =0
-    console.log("game.turn should be 0",game.turn)
+    game.turn = 0;
+    console.log("game.turn should be 0", game.turn);
   }
   function handleViewProfile(event, username) {
     console.log("in view profile");
@@ -213,7 +213,7 @@ export default function PostCard(props) {
     <List>
       {comments.map((comment, index) => (
         <ListItem key={index}>
-          <CommentCard comment={comment} post={post}/>
+          <CommentCard comment={comment} post={post} />
         </ListItem>
       ))}
     </List>
@@ -542,8 +542,15 @@ export default function PostCard(props) {
               );
             })}
           </Grid>
-          {(auth.user.username == post.data.authors[0] && post.data.authors.length == 1) &&
-          <Grid item xs={1}><Button onClick={handleEdit} sx={{fontSize:24}}> Edit </Button></Grid>}
+          {auth.user.username == post.data.authors[0] &&
+            post.data.authors.length == 1 && (
+              <Grid item xs={1}>
+                <Button onClick={handleEdit} sx={{ fontSize: 24 }}>
+                  {" "}
+                  Edit{" "}
+                </Button>
+              </Grid>
+            )}
           <Grid item xs={1}>
             {post.postComic && (
               <IconButton color="primary" onClick={downloadPost}>

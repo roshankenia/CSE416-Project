@@ -1,31 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
-import { GlobalCommunityContext } from "../community";
-import CommunityCard from "./CommunityCard.js";
+import React from "react";
+import { Layer, Line, Stage } from "react-konva";
+import URLImage from "./URLImage";
 
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-
-import PersonIcon from "@mui/icons-material/Person";
-import PeopleIcon from "@mui/icons-material/People";
-import HomeIcon from "@mui/icons-material/Home";
-import FunctionsIcon from "@mui/icons-material/Functions";
-import TextField from "@mui/material/TextField";
-import SortIcon from "@mui/icons-material/Sort";
-
-import AddIcon from "@mui/icons-material/Add";
-import Fab from "@mui/material/Fab";
-import List from "@mui/material/List";
-
-import Grid from "@mui/material/Grid";
-
-import AuthContext from "../auth";
-import { Stage, Layer, Image, Line } from "react-konva";
-import useImage from "use-image";
-import URLImage from "./URLImage"
 /*
     This module is used for testing stuff
     modules can be copy+pasted to other components
@@ -33,7 +9,6 @@ import URLImage from "./URLImage"
     @Terran
 */
 const HomeScreen = () => {
-
   const dragUrl = React.useRef();
   const stageRef = React.useRef();
   const [images, setImages] = React.useState([]);
@@ -70,10 +45,13 @@ const HomeScreen = () => {
   const handleOnDrop = (e) => {
     e.preventDefault();
     stageRef.current.setPointersPositions(e);
-    setImages([...images, {
-      ...stageRef.current.getPointerPosition(),
-      src: dragUrl.current
-    }]);
+    setImages([
+      ...images,
+      {
+        ...stageRef.current.getPointerPosition(),
+        src: dragUrl.current,
+      },
+    ]);
     // setImages(
     //     images.concat([
     //       {
@@ -82,10 +60,10 @@ const HomeScreen = () => {
     //       }
     //     ])
     //   );
-  }
+  };
 
-  const wwidth = window.innerWidth
-  const wheight = window.innerHeight
+  const wwidth = window.innerWidth;
+  const wheight = window.innerHeight;
 
   return (
     <div>
@@ -103,8 +81,8 @@ const HomeScreen = () => {
       <div
         onDrop={handleOnDrop}
         onDragOver={(e) => e.preventDefault()}
-        width={'600px'}
-        height={'600px'}
+        width={"600px"}
+        height={"600px"}
       >
         <Stage
           width={wwidth}
@@ -152,8 +130,6 @@ const HomeScreen = () => {
       </select>
     </div>
   );
-
-
 };
 
 export default HomeScreen;

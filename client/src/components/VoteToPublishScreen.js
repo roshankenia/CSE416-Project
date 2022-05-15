@@ -1,19 +1,17 @@
-import { Grid, Typography, List, Box, Button } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
-import { GlobalCommunityContext } from "../community";
-import { GameContext } from "../game";
-import AuthContext from "../auth";
-
+import { Box, Button, Grid, Typography } from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormLabel from "@mui/material/FormLabel";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-
+import Input from "@mui/material/Input";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
-import Input from "@mui/material/Input";
+import React, { useContext, useState } from "react";
 import ReactQuill from "react-quill";
+import AuthContext from "../auth";
+import { GlobalCommunityContext } from "../community";
+import { GameContext } from "../game";
 
 export default function VoteToPublishScreen() {
   const { game } = useContext(GameContext);
@@ -160,8 +158,6 @@ export default function VoteToPublishScreen() {
           justifyContent="center"
           alignItems="center"
           style={{
-            width: "100vw",
-            height: "100vh",
             backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
           }}
         >
@@ -239,8 +235,6 @@ export default function VoteToPublishScreen() {
           justifyContent="center"
           alignItems="center"
           style={{
-            width: "100vw",
-            height: "100vh",
             backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
           }}
         >
@@ -262,8 +256,6 @@ export default function VoteToPublishScreen() {
         justifyContent="center"
         alignItems="center"
         style={{
-          width: "100vw",
-          height: "100vh",
           backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
         }}
       >

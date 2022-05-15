@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
-import { GlobalCommunityContext } from "../community";
-import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import React from "react";
 import { useHistory } from "react-router-dom";
 
 //import { io} from "socket.io-client"

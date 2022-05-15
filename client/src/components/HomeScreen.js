@@ -1,38 +1,20 @@
-import React, { useContext, useEffect, useState } from "react";
-import { GlobalCommunityContext } from "../community";
-import CommunityCard from "./CommunityCard.js";
-import Sidebar from "./Sidebar.js";
-//import MUIDeleteModal from "./MUIDeleteModal";
-//import Statusbar from "./Statusbar";
-
-import Typography from "@mui/material/Typography";
+import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-
-import PersonIcon from "@mui/icons-material/Person";
-import PeopleIcon from "@mui/icons-material/People";
-import HomeIcon from "@mui/icons-material/Home";
-import FunctionsIcon from "@mui/icons-material/Functions";
-import TextField from "@mui/material/TextField";
-import SortIcon from "@mui/icons-material/Sort";
-
-import AddIcon from "@mui/icons-material/Add";
-import Fab from "@mui/material/Fab";
+import Grid from "@mui/material/Grid";
+import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-
 import Snackbar from "@mui/material/Snackbar";
-import CloseIcon from "@mui/icons-material/Close";
-
-import Grid from "@mui/material/Grid";
-
+//import MUIDeleteModal from "./MUIDeleteModal";
+//import Statusbar from "./Statusbar";
+import Typography from "@mui/material/Typography";
+import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../auth";
-import { SocketContext } from "../socket";
+import { GlobalCommunityContext } from "../community";
 import { GameContext } from "../game";
-import { set } from "mongoose";
+import { SocketContext } from "../socket";
+import Sidebar from "./Sidebar.js";
 
 /*
     User gets redirected here after login,

@@ -1,28 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
-import { GlobalCommunityContext } from "../community";
-import PostCard from "./PostCard.js";
-
-import Typography from "@mui/material/Typography";
+import SortIcon from "@mui/icons-material/Sort";
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
-import Button from "@mui/material/Button";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
-
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import CommentIcon from "@mui/icons-material/Comment";
-import FlagIcon from "@mui/icons-material/Flag";
-
-import SortIcon from "@mui/icons-material/Sort";
-
-import AddIcon from "@mui/icons-material/Add";
-import Fab from "@mui/material/Fab";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-
-import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import React, { useContext } from "react";
+import { GlobalCommunityContext } from "../community";
+import PostCard from "./PostCard.js";
 
 export default function PostFeed() {
   const { community } = useContext(GlobalCommunityContext);

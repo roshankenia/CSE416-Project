@@ -1,10 +1,8 @@
 import { useContext } from "react";
-import HomeScreen from "./HomeScreen";
-import WelcomeScreen from "./WelcomeScreen";
-import LobbyScreen from "./LobbyScreen";
+import { GameScreen, VoteToPublishScreen } from ".";
 // import VoteToPublishScreen from "./VoteToPublishScreen";
 import GameContext from "../game";
-import { GameScreen, VoteToPublishScreen } from ".";
+import LobbyScreen from "./LobbyScreen";
 
 export default function GameWrapper() {
   const { game } = useContext(GameContext);

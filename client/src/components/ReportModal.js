@@ -1,9 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
-import { GlobalCommunityContext } from "../community";
+import {
+  Box,
+  Button,
+  FormControl,
+  Input,
+  Modal,
+  Typography,
+} from "@mui/material/";
+import React, { useContext, useState } from "react";
 import AuthContext from "../auth";
-import {Box, Button, Typography, Modal, Grid} from "@mui/material/";
-
-import {IconButton, Input, InputAdornment, FormHelperText, FormControl} from '@mui/material/';
+import { GlobalCommunityContext } from "../community";
 
 const style = {
   position: "absolute",
@@ -21,30 +26,30 @@ export default function ReportModal() {
   const { auth } = useContext(AuthContext);
   const { community } = useContext(GlobalCommunityContext);
 
-  const [newReport, setNewReport] = useState('')
+  const [newReport, setNewReport] = useState("");
 
   function handleChange(event) {
-    console.log(event.target.value)
-    setNewReport(event.target.value)
+    console.log(event.target.value);
+    setNewReport(event.target.value);
   }
 
   function handleClose(event) {
-    setNewReport('')
-    auth.setErrorMessage('')
-    community.setReportModal(false, null)
+    setNewReport("");
+    auth.setErrorMessage("");
+    community.setReportModal(false, null);
   }
 
   async function handleCreateReport(event) {
     const response = await community.createReport(
-        auth.user._id, 
-        community.reportPost._id, 
-        auth.user.username, 
-        community.reportPost.postTitle, 
-        community.reportPost.communityName, 
-        newReport,
-        );
-    console.log("Create report response:", response)
-    handleClose()
+      auth.user._id,
+      community.reportPost._id,
+      auth.user.username,
+      community.reportPost.postTitle,
+      community.reportPost.communityName,
+      newReport
+    );
+    console.log("Create report response:", response);
+    handleClose();
   }
 
   const style = {
@@ -58,7 +63,7 @@ export default function ReportModal() {
     boxShadow: 24,
     textAlign: "left",
     p: 4,
-  };  
+  };
 
   return (
     <Modal
@@ -66,30 +71,26 @@ export default function ReportModal() {
       onClose={handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
-      style={{display:'flex',alignItems:'center',justifyContent:'center'}}
-      >
-        <Box sx={style}>
-          <Typography 
-            sx={{fontSize: 28, marginBottom:'-10px'}}>
-            Reason for Report:
-          </Typography>
-          <FormControl fullWidth sx={{ }} variant="standard" >
-              <Input
-                id="standard-adornment-biography"
-                onChange={handleChange}
-              />
-          </FormControl>
-          <Button
-            variant="contained"
-            onClick={handleCreateReport}
-            sx={{ m: 1 }}
-          >
-            Confirm
-          </Button>
-          <Button variant="outlined" onClick={handleClose} sx={{ m: 1 }}>
-            Close
-          </Button>
-        </Box>
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <Box sx={style}>
+        <Typography sx={{ fontSize: 28, marginBottom: "-10px" }}>
+          Reason for Report:
+        </Typography>
+        <FormControl fullWidth sx={{}} variant="standard">
+          <Input id="standard-adornment-biography" onChange={handleChange} />
+        </FormControl>
+        <Button variant="contained" onClick={handleCreateReport} sx={{ m: 1 }}>
+          Confirm
+        </Button>
+        <Button variant="outlined" onClick={handleClose} sx={{ m: 1 }}>
+          Close
+        </Button>
+      </Box>
     </Modal>
   );
 }

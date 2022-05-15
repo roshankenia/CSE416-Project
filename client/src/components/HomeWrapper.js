@@ -1,12 +1,12 @@
-import { useContext, useEffect } from "react";
-import HomeScreen from "./HomeScreen";
-import WelcomeScreen from "./WelcomeScreen";
+import { useContext } from "react";
+import AuthContext from "../auth";
+import { GlobalCommunityContext } from "../community";
 import CommunityScreen from "./CommunityScreen";
 import DiscoveryScreen from "./DiscoveryScreen";
-import AuthContext from "../auth";
 import FriendsScreen from "./FriendsScreen";
-import { GlobalCommunityContext } from "../community";
+import HomeScreen from "./HomeScreen";
 import ProfileScreen from "./ProfileScreen";
+import WelcomeScreen from "./WelcomeScreen";
 
 export default function HomeWrapper() {
   const { auth } = useContext(AuthContext);

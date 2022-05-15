@@ -1,16 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
-import { GlobalCommunityContext } from "../community";
-import { GameContext } from "../game";
+import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import React, { useContext } from "react";
 import AuthContext from "../auth";
-import Snackbar from "@mui/material/Snackbar";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
+import { GlobalCommunityContext } from "../community";
+import { GameContext } from "../game";
 
 export default function Sidebar() {
   const { game } = useContext(GameContext);
@@ -53,8 +52,8 @@ export default function Sidebar() {
     console.log("create new community");
     const data = new FormData(event.currentTarget);
     let communityName = data.get("communityName");
-    community.createNewCommunity(communityName)
-  }
+    community.createNewCommunity(communityName);
+  };
 
   const action = (
     <React.Fragment>
@@ -247,60 +246,60 @@ export default function Sidebar() {
             Create New Community
           </Typography>
           <Box component="form" onSubmit={handleCreateCommunity} noValidate>
-          <Box
-            m="auto"
-            textAlign="center"
-            style={{
-              border: "3px solid",
-              borderColor: "black",
-              color: "black",
-              backgroundColor: "white",
-              fontSize: "32px",
-              borderRadius: 40,
-              outline: "none",
-              width: "85%",
-            }}
-          >
-            <TextField
-              align="center"
-              id="communityName"
-              name="communityName"
-              label="Enter A Community Name:"
-              variant="standard"
-              InputProps={{
-                disableUnderline: true,
-                style: {
-                  fontSize: 20,
-                  paddingLeft: 20,
-                  paddingBottom: 10,
-                },
-              }}
-              InputLabelProps={{
-                style: { fontSize: 24, paddingLeft: 20 },
-                shrink: true,
-              }}
-            />
-          </Box>
-          <Box textAlign="center" >
-            <Button
-              type="submit"
-              variant="contained"
-              color="success"
-              size="small"
+            <Box
+              m="auto"
+              textAlign="center"
               style={{
-                fontWeight: 600,
                 border: "3px solid",
                 borderColor: "black",
-                backgroundColor: "#46EC2B",
                 color: "black",
-                fontSize: "20px",
-                borderRadius: 20,
+                backgroundColor: "white",
+                fontSize: "32px",
+                borderRadius: 40,
+                outline: "none",
+                width: "85%",
               }}
-              sx={{ mt: 1, mb: 0.5, width: "35%" }}
             >
-              Create!
-            </Button>
-          </Box>
+              <TextField
+                align="center"
+                id="communityName"
+                name="communityName"
+                label="Enter A Community Name:"
+                variant="standard"
+                InputProps={{
+                  disableUnderline: true,
+                  style: {
+                    fontSize: 20,
+                    paddingLeft: 20,
+                    paddingBottom: 10,
+                  },
+                }}
+                InputLabelProps={{
+                  style: { fontSize: 24, paddingLeft: 20 },
+                  shrink: true,
+                }}
+              />
+            </Box>
+            <Box textAlign="center">
+              <Button
+                type="submit"
+                variant="contained"
+                color="success"
+                size="small"
+                style={{
+                  fontWeight: 600,
+                  border: "3px solid",
+                  borderColor: "black",
+                  backgroundColor: "#46EC2B",
+                  color: "black",
+                  fontSize: "20px",
+                  borderRadius: 20,
+                }}
+                sx={{ mt: 1, mb: 0.5, width: "35%" }}
+              >
+                Create!
+              </Button>
+            </Box>
           </Box>
         </Box>
       </ListItem>

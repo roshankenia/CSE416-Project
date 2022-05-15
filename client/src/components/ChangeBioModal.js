@@ -1,15 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
-import { GlobalCommunityContext } from "../community";
-import AuthContext from "../auth";
-import { Box, Button, Typography, Modal, Grid } from "@mui/material/";
-
 import {
-  IconButton,
-  Input,
-  InputAdornment,
-  FormHelperText,
+  Box,
+  Button,
   FormControl,
+  Input,
+  Modal,
+  Typography,
 } from "@mui/material/";
+import React, { useContext, useState } from "react";
+import AuthContext from "../auth";
+import { GlobalCommunityContext } from "../community";
 
 const style = {
   position: "absolute",

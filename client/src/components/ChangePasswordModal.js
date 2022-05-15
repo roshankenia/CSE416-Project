@@ -1,12 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import { GlobalCommunityContext } from "../community";
-import AuthContext from "../auth";
-import {Box, Button, Typography, Modal, Grid} from "@mui/material/";
-
-//hide password stuff
-import {IconButton, Input, InputAdornment, FormHelperText, FormControl} from '@mui/material/';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { Box, Button, FormControl, FormHelperText, Grid, IconButton, Input, InputAdornment, Modal, Typography } from "@mui/material/";
+import React, { useContext, useEffect, useState } from "react";
+import AuthContext from "../auth";
+import { GlobalCommunityContext } from "../community";
+
 
 const style = {
   position: "absolute",

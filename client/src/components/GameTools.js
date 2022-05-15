@@ -1,31 +1,21 @@
-import { Grid, Typography } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
-import { GlobalCommunityContext } from "../community";
-import { GameContext } from "../game";
-import AuthContext from "../auth";
-import { Box, Button, List, ListItem, TextField } from "@mui/material";
-
+import CircleIcon from "@mui/icons-material/Circle";
+import CropSquareIcon from "@mui/icons-material/CropSquare";
+import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import BrushIcon from "@mui/icons-material/Brush";
-
+import RedoIcon from "@mui/icons-material/Redo";
+import SquareIcon from "@mui/icons-material/Square";
+import TextFieldsIcon from "@mui/icons-material/TextFields";
+import UndoIcon from "@mui/icons-material/Undo";
+import VignetteRoundedIcon from "@mui/icons-material/VignetteRounded";
+import { Box, Button, Grid, List, TextField, Typography } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
-
-// konva stuff
-import { Stage, Layer, Rect, Text, Circle, Line, Star } from "react-konva";
+import Slider from "@mui/material/Slider";
+import React, { useContext } from "react";
 import { BsEraserFill } from "react-icons/bs";
-
+import AuthContext from "../auth";
+import { GameContext } from "../game";
 //socket
 import { SocketContext } from "../socket";
-
-import SquareIcon from "@mui/icons-material/Square";
-import CropSquareIcon from "@mui/icons-material/CropSquare";
-import CircleIcon from "@mui/icons-material/Circle";
-import Slider from "@mui/material/Slider";
-import UndoIcon from "@mui/icons-material/Undo";
-import RedoIcon from "@mui/icons-material/Redo";
-import TextFieldsIcon from "@mui/icons-material/TextFields";
-import VignetteRoundedIcon from "@mui/icons-material/VignetteRounded";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function GameTools(props) {
   const { game } = useContext(GameContext);

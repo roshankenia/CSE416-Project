@@ -1,48 +1,27 @@
 //#region imports
-import { Grid, Typography } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
-import { GameContext } from "../game";
-import AuthContext from "../auth";
-import { Box, Button, List, ListItem, TextField } from "@mui/material";
-
+import { Box, Button, Grid, List, Typography } from "@mui/material";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 import { styled } from "@mui/material/styles";
 // import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-
-import WaitingScreen from "./WaitingScreen";
-import GameTools from "./GameTools";
-import Timer from "./Timer";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
-
-import ReactQuill from "react-quill";
-
+import React, { useContext, useEffect, useState } from "react";
 //#endregion imports
-
 //#region konva import
-import {
-  Stage,
-  Layer,
-  Rect,
-  Text,
-  Circle,
-  Line,
-  Star,
-  Shape,
-  Image,
-  Ellipse,
-} from "react-konva";
-import useImage from "use-image";
-import { BsEraserFill } from "react-icons/bs";
-import URLImage from "./URLImage";
-//#endregion konva import
-
-//#region quilljs import
-import StoryEditor from "./StoryEditor";
+import { Circle, Ellipse, Layer, Line, Rect, Stage, Text } from "react-konva";
+import ReactQuill from "react-quill";
+import AuthContext from "../auth";
+import { GameContext } from "../game";
 //#endregion quilljs
-
 //socket
 import { SocketContext } from "../socket";
+import GameTools from "./GameTools";
+//#endregion konva import
+//#region quilljs import
+import StoryEditor from "./StoryEditor";
+import Timer from "./Timer";
+import URLImage from "./URLImage";
+import WaitingScreen from "./WaitingScreen";
 
 export default function GameScreen() {
   const { game } = useContext(GameContext);
@@ -925,8 +904,6 @@ export default function GameScreen() {
       justifyContent="center"
       alignItems="center"
       style={{
-        width: "100vw",
-        height: "100vh",
         backgroundImage: "url('https://i.imgur.com/FQ01edj.jpg')",
       }}
     >

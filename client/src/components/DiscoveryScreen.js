@@ -1,31 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
-import { GlobalCommunityContext } from "../community";
-
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-
-import PersonIcon from "@mui/icons-material/Person";
-import PeopleIcon from "@mui/icons-material/People";
-import HomeIcon from "@mui/icons-material/Home";
-import FunctionsIcon from "@mui/icons-material/Functions";
-import TextField from "@mui/material/TextField";
-import SortIcon from "@mui/icons-material/Sort";
-
-import AddIcon from "@mui/icons-material/Add";
-import Fab from "@mui/material/Fab";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-
 import Grid from "@mui/material/Grid";
-
-import Sidebar from "./Sidebar.js";
+import React, { useContext } from "react";
 import AuthContext from "../auth";
+import { GlobalCommunityContext } from "../community";
 import PostFeed from "./PostFeed.js";
-import Sticky from "react-stickynode";
+import Sidebar from "./Sidebar.js";
 
 export default function DiscoveryScreen() {
   const { community } = useContext(GlobalCommunityContext);

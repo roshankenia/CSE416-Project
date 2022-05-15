@@ -1,24 +1,28 @@
-import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
-import AuthContext from "../auth";
-import { GlobalCommunityContext } from "../community";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import { Button } from "@mui/material/";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import DeleteAccountModal from "./DeleteAccountModal";
-import FeedbackModal from "./FeedbackModal";
+import MenuItem from "@mui/material/MenuItem";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import { useContext, useState } from "react";
+import { Link, useHistory } from "react-router-dom";
+import AuthContext from "../auth";
+import { GlobalCommunityContext } from "../community";
+import { GameContext } from "../game";
 import ChangePasswordModal from "./ChangePasswordModal";
+import DeleteAccountModal from "./DeleteAccountModal";
 import DeletePostModal from "./DeletePostModal";
+import FeedbackModal from "./FeedbackModal";
 import ReportModal from "./ReportModal";
 
 export default function AppBanner() {
   const { auth } = useContext(AuthContext);
   const { community } = useContext(GlobalCommunityContext);
+  const { game } = useContext(GameContext);
+
   const [anchorEl, setAnchorEl] = useState(null);
   const isMenuOpen = Boolean(anchorEl);
 
@@ -139,6 +143,16 @@ export default function AppBanner() {
       return <AccountCircle />;
     }
   }
+  const history = useHistory();
+
+  function backToJART(event) {
+    event.stopPropagation();
+    if (game.lobby) {
+      game.disconnectPlayer();
+    } else {
+      history.push("/");
+    }
+  }
 
   return (
     <Box>
@@ -150,22 +164,31 @@ export default function AppBanner() {
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            <Link style={{ textDecoration: "none", color: "white" }} to="/">
+            <Button
+              onClick={backToJART}
+              style={{
+                textDecoration: "none",
+                color: "white",
+                fontSize: "36px",
+              }}
+            >
               JART
-            </Link>
+            </Button>
           </Typography>
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              {getAccountMenu(auth.loggedIn)}
-            </IconButton>
+            {!game.lobby && (
+              <IconButton
+                size="large"
+                edge="end"
+                aria-label="account of current user"
+                aria-controls={menuId}
+                aria-haspopup="true"
+                onClick={handleProfileMenuOpen}
+                color="inherit"
+              >
+                {getAccountMenu(auth.loggedIn)}
+              </IconButton>
+            )}
           </Box>
         </Toolbar>
       </AppBar>

@@ -1,23 +1,17 @@
-import { useContext } from "react";
-import AuthContext from "../auth";
-import Avatar from "@mui/material/Avatar";
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { useContext } from "react";
+import AuthContext from "../auth";
 import { GlobalCommunityContext } from "../community";
-
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Alert from "@mui/material/Alert";
 
 export default function RegisterScreen() {
   const { auth } = useContext(AuthContext);

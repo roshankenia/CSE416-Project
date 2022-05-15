@@ -1,8 +1,8 @@
+import RedoIcon from "@mui/icons-material/Redo";
+import UndoIcon from "@mui/icons-material/Undo";
 import React from "react";
 import { Quill } from "react-quill";
-import UndoIcon from '@mui/icons-material/Undo';
-import RedoIcon from '@mui/icons-material/Redo';
-import './fonts.css'
+import "./fonts.css";
 
 // Undo and redo functions for Custom Toolbar
 function undoChange() {
@@ -23,14 +23,14 @@ export const modules = {
     container: "#toolbar",
     handlers: {
       undo: undoChange,
-      redo: redoChange
-    }
+      redo: redoChange,
+    },
   },
   history: {
     delay: 500,
     maxStack: 100,
-    userOnly: true
-  }
+    userOnly: true,
+  },
 };
 
 // Formats objects for setting up the Quill editor
@@ -51,7 +51,7 @@ export const formats = [
   "indent",
   "link",
   "color",
-  "code-block"
+  "code-block",
 ];
 
 // Quill Toolbar component
@@ -126,7 +126,7 @@ Font.whitelist = [
   "courier-new",
   "georgia",
   "helvetica",
-  "lucida"
+  "lucida",
 ];
 Quill.register(Font, true);
 

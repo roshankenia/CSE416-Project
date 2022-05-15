@@ -1,28 +1,19 @@
-import { useContext } from "react";
-import AuthContext from "../auth";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Container from "@mui/material/Container";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
+import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { GlobalCommunityContext } from "../community";
-import { GameContext } from "../game";
-
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Alert from "@mui/material/Alert";
+import Grid from "@mui/material/Grid";
+import Link from "@mui/material/Link";
+import { createTheme } from "@mui/material/styles";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import { useContext } from "react";
+import AuthContext from "../auth";
+import { GlobalCommunityContext } from "../community";
+import { GameContext } from "../game";
 
 const theme = createTheme();
 

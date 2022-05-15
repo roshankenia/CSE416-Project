@@ -1,13 +1,13 @@
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Grid, Typography } from "@mui/material";
+import IconButton from '@mui/material/IconButton';
 import { Box } from "@mui/system";
 import { useContext, useState } from "react";
 import AuthContext from "../auth";
 import { GlobalCommunityContext } from "../community";
 
-import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
 
 export default function CommentCard(props) {
   const { community } = useContext(GlobalCommunityContext);

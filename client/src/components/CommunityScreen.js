@@ -1,37 +1,19 @@
-import React, { useContext, useEffect, useState } from "react";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import React, { useContext, useEffect } from "react";
+import AuthContext from "../auth";
 import { GlobalCommunityContext } from "../community";
 import { GameContext } from "../game";
-import AuthContext from "../auth";
-
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-
-import PersonIcon from "@mui/icons-material/Person";
-import PeopleIcon from "@mui/icons-material/People";
-import HomeIcon from "@mui/icons-material/Home";
-import FunctionsIcon from "@mui/icons-material/Functions";
-import TextField from "@mui/material/TextField";
-import SortIcon from "@mui/icons-material/Sort";
-
-import AddIcon from "@mui/icons-material/Add";
-import Fab from "@mui/material/Fab";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-
-import Grid from "@mui/material/Grid";
-
-import Sidebar from "./Sidebar.js";
 import PostFeed from "./PostFeed.js";
+import Sidebar from "./Sidebar.js";
 
 export default function CommunityScreen() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  
+
   const { community } = useContext(GlobalCommunityContext);
   const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
