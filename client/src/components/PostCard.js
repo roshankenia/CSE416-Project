@@ -104,7 +104,31 @@ export default function PostCard(props) {
   } else if (post.postStory) {
     postData = <StoryPopout index={index} post={post} />;
   }
-  function downloadPost(event) {
+
+  function toDataURL(src) {
+    return new Promise((resolve, reject) => {
+      var img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.onload = function () {
+        var canvas = document.createElement("CANVAS");
+        var ctx = canvas.getContext("2d");
+        var dataURL;
+        canvas.height = this.naturalHeight;
+        canvas.width = this.naturalWidth;
+        ctx.drawImage(this, 0, 0);
+        dataURL = canvas.toDataURL();
+        resolve(dataURL);
+      };
+      img.src = src;
+      if (img.complete || img.complete === undefined) {
+        img.src =
+          "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+        img.src = src;
+      }
+    });
+  }
+
+  async function downloadPost(event) {
     event.stopPropagation();
     let input = document.getElementById("data" + index);
     console.log(input);
@@ -113,11 +137,21 @@ export default function PostCard(props) {
     const pageLength = pdf.internal.pageSize.getHeight();
 
     const marginY = (pageLength - 250) / 2;
-    let y = 0;
+
     for (let i = 0; i < post.data.panels.length; i += 3) {
-      pdf.addImage(post.data.panels[i], "JPEG", 45, marginY, 250, 250);
-      pdf.addImage(post.data.panels[i + 1], "JPEG", 295, marginY, 250, 250);
-      pdf.addImage(post.data.panels[i + 2], "JPEG", 545, marginY, 250, 250);
+      if (post.data.panels[i]) {
+        const url1 = await toDataURL(post.data.panels[i]);
+        pdf.addImage(url1, "JPEG", 45, marginY, 250, 250);
+      }
+      if (post.data.panels[i + 1]) {
+        const url2 = await toDataURL(post.data.panels[i + 1]);
+        pdf.addImage(url2, "JPEG", 295, marginY, 250, 250);
+      }
+      if (post.data.panels[i + 2]) {
+        const url3 = await toDataURL(post.data.panels[i + 2]);
+        pdf.addImage(url3, "JPEG", 545, marginY, 250, 250);
+      }
+
       if (i + 3 != post.data.panels.length) {
         pdf.addPage();
       }
