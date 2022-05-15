@@ -136,9 +136,31 @@ export const updatePost = (
   });
 };
 
-export const updateStoryById = (id, authors, panels) =>{
-  return api.put(`/story/${id}`, {authors: authors, panels: panels})
-}
+// export const updateStoryById = (id, authors, panels) =>{
+//   return api.put(`/story/${id}`, {comic: {authors: authors, panels: panels}})
+// }
+
+export const updateStoryById = (
+  id,
+  authors,
+  panels,
+) => {
+  return api.put(`/story/${id}`, {
+    authors: authors,
+    panels: panels,
+  });
+};
+
+export const updateComicById = (
+  id,
+  authors,
+  panels,
+) => {
+  return api.put(`/comic/${id}`, {
+    authors: authors,
+    panels: panels,
+  });
+};
 
 export const createComment = (
   username,
@@ -231,6 +253,7 @@ const apis = {
   createPost,
   searchCommunityByName,
   updateStoryById,
+  updateComicById,
   // for testing purpose
   deleteCommunity,
   getPostById,

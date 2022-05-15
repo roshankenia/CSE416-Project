@@ -161,7 +161,7 @@ export default function GameScreen() {
           setPanels(pan);
           if (currTurn + 1 == panels.length) {
             console.log("inside go to voting");
-            game.enterVoting(imageData);
+            game.enterVoting(imageData, postID);
           } else {
             game.soloNextTurn(imageData); //Updates the image Data
             setActions([
