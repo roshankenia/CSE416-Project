@@ -85,6 +85,7 @@ export default function LoginScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
+                        defaultValue={auth.userData.username}
                         required
                         fullWidth
                         variant="standard"
@@ -122,6 +123,7 @@ export default function LoginScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
+                        defaultValue={auth.userData.password}
                         margin="normal"
                         required
                         fullWidth
@@ -233,6 +235,7 @@ export default function LoginScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
+                        defaultValue={auth.userData.username}
                         required
                         fullWidth
                         variant="standard"
@@ -270,6 +273,7 @@ export default function LoginScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
+                        defaultValue={auth.userData.password}
                         margin="normal"
                         required
                         fullWidth

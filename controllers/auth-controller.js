@@ -182,6 +182,11 @@ registerUser = async (req, res) => {
       });
     }
     console.log("password long enough");
+    if (!(email.includes("@") && email.includes("."))) {
+      return res.status(400).json({
+        errorMessage: "Please enter a valid email.",
+      });
+    }
     if (password !== passwordVerify) {
       return res.status(400).json({
         errorMessage: "Please enter the same password twice.",
