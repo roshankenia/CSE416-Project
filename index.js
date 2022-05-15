@@ -100,6 +100,19 @@ io.on("connection", (socket) => {
   socket.on("send-message", (message) => {
     io.emit("message", message);
   });
+  
+  socket.on("confirm-lobby", (username, lobbyID) => {
+    console.log(username, "is confirming", lobbyID);
+    if(io.sockets.adapter.rooms["room name"]){
+      console.lo("valid lobby")
+      socket.join(lobbyID);
+      socket.to(lobbyID).emit("lobby-confirmed", username, lobbyID, true);
+    }
+    else{
+      console.lo("invalid lobby")
+      socket.to(lobbyID).emit("lobby-confirmed", username, lobbyID, false);
+    }
+  });
 
   socket.on("join-lobby", (username, lobbyID) => {
     console.log(username, " has joined lobby ", lobbyID);
