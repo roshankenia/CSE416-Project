@@ -53,13 +53,14 @@ export default function GameScreen() {
       setAuthor(comicResponse.data.comic.authors);
       setPanels(comicResponse.data.comic.panels);
       console.log("the value of game.turn in getPost ", game.turn);
+      
       setActions(
         actions.concat([
           {
             ...stageRef.current.getPointerPosition(),
             src: comicResponse.data.comic.panels[game.turn],
             key: actions.length + 1,
-          },
+          }
         ])
       );
     } else {
@@ -152,7 +153,7 @@ export default function GameScreen() {
         .then((resp) => resp.json())
         .then((data) => {
           imageData = data.url;
-
+          console.log(imageData)
           const currTurn = game.turn;
           //set panel to update
           let pan = panels;
@@ -285,6 +286,7 @@ export default function GameScreen() {
   };
 
   const handleMouseDown = (e) => {
+    console.log(panels)
     isDrawing.current = true;
     if (tool == "pen" || tool == "eraser") {
       const pos = e.target.getStage().getPointerPosition();
@@ -534,7 +536,7 @@ export default function GameScreen() {
       buttonCSS={buttonCSS}
       setTool={setTool}
       //force comic
-      gameMode={"comic"}
+      gameMode={isComic? "comic" : "story"}
       flexContainer={flexContainer}
       tool={tool}
       changeColor={changeColor}
@@ -944,7 +946,7 @@ export default function GameScreen() {
             //TODO
             onClick={handleConfirm}
           >
-            <Typography fontSize={"32px"}>Confirm</Typography>
+            <Typography fontSize={"32px"}>Confirm Edit</Typography>
           </Button>
         )}
         <Button

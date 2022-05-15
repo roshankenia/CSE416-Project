@@ -245,8 +245,8 @@ updateStoryById = async (req, res) => {
           message: "Story not found!",
         });
       }
-      story.authors = req.body.story.authors;
-      story.panels = req.body.story.panels;
+      story.authors = req.body.authors;
+      story.panels = req.body.panels;
 
       story.save().then(() => {
         return res.status(200).json({
