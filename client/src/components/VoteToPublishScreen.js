@@ -12,12 +12,13 @@ import ReactQuill from "react-quill";
 import AuthContext from "../auth";
 import { GlobalCommunityContext } from "../community";
 import { GameContext } from "../game";
+import { SocketContext } from "../socket";
 
 export default function VoteToPublishScreen() {
   const { game } = useContext(GameContext);
   const { community } = useContext(GlobalCommunityContext);
   const { auth } = useContext(AuthContext);
-  console.log("in voting screen:", game)
+  const socket = useContext(SocketContext);
   const style = {
     // position: "absolute",
     // top: "50%",
@@ -166,6 +167,8 @@ export default function VoteToPublishScreen() {
       console.log("error: improper decision value");
       console.log("post was not posted");
     }
+
+    socket.emit("close-lobby", game.lobby)
   }
 
   function submitAction(event, voteVal) {
