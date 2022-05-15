@@ -645,25 +645,13 @@ export default function GameScreen() {
   if (game.gamemode === "comic") {
     gameUtils = (
       <Grid item xs={3} align="center">
-        <Box
-          sx={{
-            width: 450,
-            height: 75,
-            margin: 1,
-            backgroundColor: "#FF7F7F",
-            borderRadius: 5,
-            border: 3,
-            color: "black",
-          }}
-        >
-          <Timer
-            stageRef={stageRef}
-            actions={actions}
-            setActions={setActions}
-            storyText={storyText}
-            setStoryText={setStoryText}
-          />
-        </Box>
+        <Timer
+          stageRef={stageRef}
+          actions={actions}
+          setActions={setActions}
+          storyText={storyText}
+          setStoryText={setStoryText}
+        />
         <Button
           sx={{
             width: 450,
@@ -840,29 +828,13 @@ export default function GameScreen() {
   } else {
     gameUtils = (
       <Grid item xs={3} align="center">
-        <Box
-          sx={{
-            width: 450,
-            height: 75,
-            margin: 1,
-            backgroundColor: "#FF7F7F",
-            "&:hover": {
-              backgroundColor: "#FF7F7F",
-              opacity: [1, 1, 1],
-            },
-            borderRadius: 5,
-            border: 3,
-            color: "black",
-          }}
-        >
-          <Timer
-            stageRef={stageRef}
-            actions={actions}
-            setActions={setActions}
-            storyText={storyText}
-            setStoryText={setStoryText}
-          />
-        </Box>
+        <Timer
+          stageRef={stageRef}
+          actions={actions}
+          setActions={setActions}
+          storyText={storyText}
+          setStoryText={setStoryText}
+        />
         <Button
           sx={{
             width: 450,

@@ -149,5 +149,42 @@ export default function Timer(props) {
     };
   }, [timer, stageRef, actions, storyText]);
 
-  return <Typography fontSize={"32px"}>Time Left: {timer}</Typography>;
+  function handleSubmit(event) {
+    event.stopPropagation();
+    socket.emit("set-counter-zero", game.lobby);
+  }
+
+  return (
+    <Box>
+      <Box
+        sx={{
+          width: 450,
+          height: 75,
+          margin: 1,
+          backgroundColor: "#FF7F7F",
+          borderRadius: 5,
+          border: 3,
+          color: "black",
+        }}
+      >
+        <Typography fontSize={"32px"}>Time Left: {timer}</Typography>
+      </Box>
+      {game.currentPlayer == auth.user.username && (
+        <Button
+          sx={{
+            width: 450,
+            height: 75,
+            margin: 1,
+            backgroundColor: "green",
+            borderRadius: 5,
+            border: 3,
+            color: "black",
+          }}
+          onClick={handleSubmit}
+        >
+          <Typography fontSize={"32px"}>Submit</Typography>
+        </Button>
+      )}
+    </Box>
+  );
 }

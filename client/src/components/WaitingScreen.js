@@ -260,28 +260,13 @@ export default function WaitingScreen(props) {
   );
   const waitUtils = (
     <Grid item xs="3" align="center">
-      <Box
-        sx={{
-          width: 450,
-          height: 75,
-          margin: 1,
-          backgroundColor: "#FF7F7F",
-          borderRadius: 5,
-          border: 3,
-          color: "black",
-        }}
-      >
-        <Timer
-          stageRef={stageRef}
-          actions={actions}
-          setActions={setActions}
-          storyText={storyText}
-          setStoryText={setStoryText}
-        >
-          {storyText}
-        </Timer>
-      </Box>
-
+      <Timer
+        stageRef={stageRef}
+        actions={actions}
+        setActions={setActions}
+        storyText={storyText}
+        setStoryText={setStoryText}
+      ></Timer>
       <Button
         sx={{
           width: 450,
