@@ -64,7 +64,7 @@ function GameContextProvider(props) {
           game: null,
           lobby: null,
           voting: false,
-          votes: [0, 0, 0],
+          votes: [0, 0, 0, 0],
           players: [],
           readyPlayers: [],
           screen: "lobby",
