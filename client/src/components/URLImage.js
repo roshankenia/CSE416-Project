@@ -3,7 +3,7 @@ import { Image } from "react-konva";
 import useImage from "use-image";
 
 const URLImage = ({ image }) => {
-  const [img] = useImage(image.src);
+  const [img] = useImage(image.src, 'Anonymous');
   return (
     <Image
       image={img}
