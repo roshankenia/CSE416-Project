@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import api from "./community-request-api";
 import AuthContext from "../auth";
+import GameContext from "../game";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -9,6 +10,8 @@ import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { responsiveFontSizes } from "@mui/material";
+import { SocketContext } from "../socket";
+
 /*
     This is our global data Community. Note that it uses the Flux design pattern,
     which makes use of things like actions and reducers. 
@@ -46,6 +49,7 @@ export const GlobalCommunityActionType = {
 
 function GlobalCommunityContextProvider(props) {
   const { auth } = useContext(AuthContext);
+  const { game } = useContext(GameContext);
   const [community, setCommunity] = useState({
     communityList: null,
     currentCommunity: null,
@@ -71,6 +75,7 @@ function GlobalCommunityContextProvider(props) {
   const [notifyOpen, setNotifyOpen] = useState([false, ""]);
 
   const [loaded, setLoaded] = useState(false);
+  const socket = useContext(SocketContext);
 
   useEffect(() => {
     // call api or anything
@@ -78,6 +83,23 @@ function GlobalCommunityContextProvider(props) {
       community.getCommunities();
       setLoaded(true);
     }
+
+    const lobbyConfirmed = async (username, lobbyID, confirmed) => {
+      console.log("listener:", username, lobbyID, confirmed);
+      if (username == auth.user.username) {
+        if (confirmed) {
+          game.confirmJoinLobby(lobbyID);
+        }
+      } else {
+        community.lobbyUnavailable();
+      }
+    };
+
+    socket.on("lobby-confirmed", lobbyConfirmed);
+
+    return () => {
+      socket.off("lobby-confirmed", lobbyConfirmed);
+    };
   }, [loaded, community]);
   const handleNotifyClose = (event, reason) => {
     if (reason === "clickaway") {

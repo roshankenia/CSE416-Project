@@ -100,18 +100,17 @@ io.on("connection", (socket) => {
   socket.on("send-message", (message) => {
     io.emit("message", message);
   });
-  
+
   socket.on("confirm-lobby", (username, lobbyID) => {
     console.log(username, "is confirming", lobbyID);
-    let socketID = userID[username] 
-      console.log(socketID)
-    if(io.sockets.adapter.rooms[lobbyID]){
-      console.log("valid lobby")
-      socket.to(socketID).emit("lobby-confirmed", username, lobbyID, true);
-    }
-    else{
-      console.log("invalid lobby")
-      socket.to(socketID).emit("lobby-confirmed", username, lobbyID, false);
+    let socketID = userID[username];
+    console.log(socketID);
+    if (io.sockets.adapter.rooms[lobbyID]) {
+      console.log("valid lobby");
+      socket.emit("lobby-confirmed", username, lobbyID, true);
+    } else {
+      console.log("invalid lobby");
+      socket.emit("lobby-confirmed", username, lobbyID, false);
     }
   });
 
@@ -213,7 +212,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("close-lobby", (lobbyID) => {
-    console.log("closing lobby")
+    console.log("closing lobby");
     io.socketsLeave(lobbyID);
   });
 });

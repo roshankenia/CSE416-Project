@@ -609,31 +609,6 @@ function GameContextProvider(props) {
     };
     socket.on("receive-message", displayMessage);
 
-    const lobbyConfirmed = async (username, lobbyID, confirmed) => {
-      console.log("listener:", username, lobbyID, confirmed);
-      if (username == auth.user.username) {
-        if (confirmed) {
-          try {
-            let players = game.players;
-            players.push(auth.user.username);
-            gameReducer({
-              type: GameActionType.JOIN_LOBBY,
-              payload: { lobby: lobbyID, players: players },
-            });
-            history.push("/game/" + lobbyID);
-          } catch {
-            console.log("Failed to join lobby");
-          }
-
-          socket.emit("join-lobby", auth.user.username, lobbyID);
-        }
-      } else {
-        community.lobbyUnavailable();
-      }
-    };
-
-    socket.on("lobby-confirmed", lobbyConfirmed);
-
     return () => {
       socket.off("new-player", newP);
       socket.off("add-players", addP);
@@ -651,6 +626,22 @@ function GameContextProvider(props) {
       // socket.off('count1');
     };
   }, [game]);
+
+  game.confirmJoinLobby = async function (lobbyID) {
+    try {
+      let players = game.players;
+      players.push(auth.user.username);
+      gameReducer({
+        type: GameActionType.JOIN_LOBBY,
+        payload: { lobby: lobbyID, players: players },
+      });
+      history.push("/game/" + lobbyID);
+    } catch {
+      console.log("Failed to join lobby");
+    }
+
+    socket.emit("join-lobby", auth.user.username, lobbyID);
+  }
 
   game.storeChat = async function (userMessage) {
     try {
