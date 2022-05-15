@@ -105,7 +105,7 @@ io.on("connection", (socket) => {
     console.log(username, "is confirming", lobbyID);
     let socketID = userID[username] 
       console.log(socketID)
-    if(io.sockets.adapter.rooms["room name"]){
+    if(io.sockets.adapter.rooms[lobbyID]){
       console.log("valid lobby")
       socket.to(socketID).emit("lobby-confirmed", username, lobbyID, true);
     }
