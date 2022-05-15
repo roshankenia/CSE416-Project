@@ -68,6 +68,8 @@ app.use((req, res, next) => {
 
 var userID = {};
 
+var lobbyTimes = {};
+
 io.on("connection", (socket) => {
   console.log("new client connected", socket.id);
 
@@ -131,21 +133,19 @@ io.on("connection", (socket) => {
     socket.to(lobbyID).emit("update-votes-cb", voteVal, username);
   });
 
+  socket.on("set-counter-zero", (zeroLobbyID) => {
+    console.log("zeroLobbyID:", zeroLobbyID);
+    lobbyTimes[zeroLobbyID] = 0;
+  });
+
   socket.on("timer", (username, time, lobbyID) => {
-    let counter = time;
-    const setZero = (zeroLobbyID) => {
-      console.log("zeroLobbyID:", zeroLobbyID);
-      console.log("outside lobbyID:", lobbyID);
-      if (zeroLobbyID == lobbyID) {
-        counter = 0;
-      }
-    };
-    socket.on("set-counter-zero", setZero);
+    lobbyTimes[lobbyID] = time;
+
     let WinnerCountdown = setInterval(function () {
-      io.to(lobbyID).emit("counter", counter);
-      counter--;
-      console.log("counter is:", counter, "for lobby", lobbyID);
-      if (counter <= 0) {
+      io.to(lobbyID).emit("counter", lobbyTimes[lobbyID]);
+      lobbyTimes[lobbyID] = lobbyTimes[lobbyID] - 1;
+      console.log("counter is:", lobbyTimes[lobbyID], "for lobby", lobbyID);
+      if (lobbyTimes[lobbyID] <= 0) {
         console.log("counter hit 0");
         console.log("emitting end-time to lobby:", lobbyID);
         io.in(lobbyID).emit("end-time", time);
