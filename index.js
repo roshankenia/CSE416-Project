@@ -131,15 +131,15 @@ io.on("connection", (socket) => {
     socket.to(lobbyID).emit("update-votes-cb", voteVal, username);
   });
 
-  socket.on("timer", (username, time, lobbyID) => {
+  socket.on("timer", (username, time, lobbyID, turn) => {
     let counter = time;
     let WinnerCountdown = setInterval(function () {
-      io.to(lobbyID).emit("counter", counter);
+      io.to(lobbyID).emit("counter", counter, turn);
       counter--;
       if (counter <= 0) {
         console.log("counter hit 0");
         console.log("emitting end-time to lobby:", lobbyID);
-        io.in(lobbyID).emit("end-time", time);
+        io.in(lobbyID).emit("end-time", time, turn);
         clearInterval(WinnerCountdown);
       }
     }, 1000);
@@ -150,8 +150,8 @@ io.on("connection", (socket) => {
     io.to(lobbyID).emit("switch-gamemode", gamemode);
   });
 
-  socket.on("start-game", (players, lobbyID) => {
-    io.to(lobbyID).emit("game-started", players);
+  socket.on("start-game", (players, lobbyID, timer) => {
+    io.to(lobbyID).emit("game-started", players, timer);
   });
 
   socket.on("draw-actions", (userId, actions, lobbyID) => {
