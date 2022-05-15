@@ -71,7 +71,7 @@ export default function LobbyScreen() {
   //not implemented, should return a model
   const handleInvite = (username) => {
     console.log("the name of the user is", username);
-    socket.emit("send-invite", username, game.lobby);
+    socket.emit("send-invite", username, game.lobby, auth.user.username);
   };
   const handleLeave = (event) => {
     game.leaveLobby();

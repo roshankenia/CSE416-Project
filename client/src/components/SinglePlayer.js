@@ -161,7 +161,7 @@ export default function GameScreen() {
           setPanels(pan);
           if (currTurn + 1 == panels.length) {
             console.log("inside go to voting");
-            game.enterVoting(imageData);
+            game.enterVoting(imageData, postID);
           } else {
             game.soloNextTurn(imageData); //Updates the image Data
             setActions([
@@ -186,7 +186,8 @@ export default function GameScreen() {
   const handleConfirm = (event) => {
     let newPanels = panels;
     newPanels[index] = storyText;
-    api.updateStoryById(csID, author, newPanels);
+    // api.updateStoryById(csID, author, newPanels);
+    game.enterVoting()
     history.push("/");
   };
 
