@@ -22,7 +22,7 @@ export default function Chat(props) {
 
   let chatbox =(
     <List>
-        {messageArray.map((message) => (
+        {game.chat.map((message) => (
           <ListItem key={message}
           style ={{
               width: "90%"
@@ -54,18 +54,19 @@ export default function Chat(props) {
         ))}
       </List>
   );
-  useEffect(() => {
-    const displayMessage = async (message, username) => {
-      console.log("the message is", message)
-      console.log("username is ", username)
-      setMessageArray(messageArray => [...messageArray, [username,message]]);
+  // useEffect(() => {
+  //   const displayMessage = async (message, username) => {
+  //     console.log("the message is", message)
+  //     console.log("username is ", username)
+  //     // setMessageArray(messageArray => [...messageArray, [username,message]]);
+  //     game.storeChat([username, message])
    
-    };
-    socket.on("receive-message", displayMessage);
-    return () => {
-      socket.off("receive-message", displayMessage);
-    };
-  }, [messageArray]);
+  //   };
+  //   socket.on("receive-message", displayMessage);
+  //   return () => {
+  //     socket.off("receive-message", displayMessage);
+  //   };
+  // }, [messageArray]);
 
   return <Typography fontSize={"12px"}> {chatbox} </Typography>;
 }

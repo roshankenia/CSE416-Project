@@ -16,6 +16,8 @@ export default function WaitingScreen(props) {
   const { auth } = useContext(AuthContext);
   const socket = useContext(SocketContext);
 
+  console.log(game);
+
   let {
     stageRef,
     actions,
@@ -43,6 +45,7 @@ export default function WaitingScreen(props) {
     const data = new FormData(event.currentTarget);
     const message = data.get("chat");
     console.log(game.lobby);
+    // game.storeChat([username, message])
     socket.emit("send-chat-message", message, game.lobby, auth.user.username);
     document.getElementById("chat").placeholder = "Type Something";
     document.getElementById("chat").value = "";

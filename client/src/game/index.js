@@ -24,6 +24,7 @@ export const GameActionType = {
   CHANGE_GAMEMODE: "CHANGE_GAMEMODE",
   UPDATE_VOTES: "UPDATE_VOTES",
   RESET_GAME: "RESET_GAME",
+  STORE_CHAT: "STORE_CHAT"
 };
 
 function GameContextProvider(props) {
@@ -50,6 +51,7 @@ function GameContextProvider(props) {
     communityName: null,
     panels: [],
     gamemode: "comic",
+    chat: []
   });
   const history = useHistory();
 
@@ -76,6 +78,7 @@ function GameContextProvider(props) {
           communityName: null,
           panels: [],
           gamemode: "comic",
+          chat: []
         });
       }
       case GameActionType.CREATE_NEW_LOBBY: {
@@ -95,6 +98,7 @@ function GameContextProvider(props) {
           communityName: payload.communityName,
           panels: game.panels,
           gamemode: game.gamemode,
+          chat: game.chat
         });
       }
       case GameActionType.UPDATE_TIMER: {
@@ -114,6 +118,7 @@ function GameContextProvider(props) {
           communityName: game.communityName,
           panels: game.panels,
           gamemode: game.gamemode,
+          chat: game.chat
         });
       }
       case GameActionType.CREATE_NEW_GAME: {
@@ -134,6 +139,7 @@ function GameContextProvider(props) {
           communityName: game.communityName,
           panels: game.panels,
           gamemode: game.gamemode,
+          chat: game.chat
         });
       }
       case GameActionType.ENTER_VOTING: {
@@ -153,6 +159,7 @@ function GameContextProvider(props) {
           communityName: game.communityName,
           panels: payload,
           gamemode: game.gamemode,
+          chat: game.chat
         });
       }
       case GameActionType.EXIT_VOTING: {
@@ -172,6 +179,7 @@ function GameContextProvider(props) {
           communityName: game.communityName,
           panels: game.panels,
           gamemode: game.gamemode,
+          chat: game.chat
         });
       }
       case GameActionType.JOIN_LOBBY: {
@@ -191,6 +199,7 @@ function GameContextProvider(props) {
           communityName: game.communityName,
           panels: game.panels,
           gamemode: game.gamemode,
+          chat: game.chat
         });
       }
       case GameActionType.UPDATE_PLAYERS: {
@@ -210,6 +219,7 @@ function GameContextProvider(props) {
           communityName: game.communityName,
           panels: game.panels,
           gamemode: payload.gamemode,
+          chat: game.chat
         });
       }
       case GameActionType.LEAVE_LOBBY: {
@@ -229,6 +239,7 @@ function GameContextProvider(props) {
           communityName: game.communityName,
           panels: game.panels,
           gamemode: game.gamemode,
+          chat: game.chat
         });
       }
       case GameActionType.ADD_READY: {
@@ -248,6 +259,7 @@ function GameContextProvider(props) {
           communityName: game.communityName,
           panels: game.panels,
           gamemode: game.gamemode,
+          chat: game.chat
         });
       }
       case GameActionType.NEXT_TURN: {
@@ -266,6 +278,7 @@ function GameContextProvider(props) {
           communityName: game.communityName,
           panels: payload.panels,
           gamemode: game.gamemode,
+          chat: game.chat
         });
       }
       case GameActionType.ADD_HOST: {
@@ -284,6 +297,7 @@ function GameContextProvider(props) {
           communityName: game.communityName,
           panels: game.panels,
           gamemode: game.gamemode,
+          chat: game.chat
         });
       }
       case GameActionType.CHANGE_GAMEMODE: {
@@ -302,6 +316,7 @@ function GameContextProvider(props) {
           communityName: game.communityName,
           panels: game.panels,
           gamemode: payload,
+          chat: game.chat
         });
       }
       case GameActionType.UPDATE_VOTES: {
@@ -320,8 +335,29 @@ function GameContextProvider(props) {
           communityName: game.communityName,
           panels: game.panels,
           gamemode: game.gamemode,
+          chat: game.chat
         });
       }
+      case GameActionType.STORE_CHAT: {
+        return setGame({
+          game: game.game,
+          lobby: game.lobby,
+          voting: game.voting,
+          votes: game.votes,
+          players: game.players,
+          readyPlayers: game.readyPlayers,
+          screen: game.screen,
+          host: game.host,
+          turn: game.turn,
+          currentPlayer: game.currentPlayer,
+          panelNumber: game.panelNumber,
+          communityName: game.communityName,
+          panels: game.panels,
+          gamemode: game.gamemode,
+          chat: payload
+        });
+      }
+      
       default:
         return game;
     }
@@ -552,6 +588,15 @@ function GameContextProvider(props) {
 
     socket.once("player-left", playerLeft);
 
+    const displayMessage = async (message, username) => {
+      console.log("the message is", message)
+      console.log("username is ", username)
+      // setMessageArray(messageArray => [...messageArray, [username,message]]);
+      game.storeChat([username, message])
+   
+    };
+    socket.on("receive-message", displayMessage);
+    
     return () => {
       socket.off("new-player", newP);
       socket.off("add-players", addP);
@@ -563,10 +608,26 @@ function GameContextProvider(props) {
       socket.off("switch-gamemode", switchGamemode);
       socket.off("update-votes-cb", newVotes);
       socket.off("player-left", playerLeft);
+      socket.off("receive-message", displayMessage);
 
       // socket.off('count1');
     };
   }, [game]);
+
+  game.storeChat = async function (userMessage) {
+    try {
+      console.log("in storeChat method")
+      let chat = game.chat;
+      chat.push(userMessage)
+      gameReducer({
+        type: GameActionType.STORE_CHAT,
+        payload: chat,
+      });
+    } catch {
+      console.log("Failed to update chat");
+    }
+  };
+
 
   game.disconnectPlayer = async function () {
     try {
