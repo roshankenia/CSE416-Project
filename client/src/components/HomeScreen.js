@@ -36,7 +36,7 @@ const HomeScreen = () => {
   const { auth } = useContext(AuthContext);
   const socket = useContext(SocketContext);
 
-  const [inviteName, setInviteName] = React.useState(false)
+  const [inviteName, setInviteName] = React.useState(false);
 
   const [openInvite, setOpen] = React.useState(false);
   const handleClick = () => {
@@ -232,7 +232,7 @@ const HomeScreen = () => {
   useEffect(() => {
     const invite = async (lobbyID, socketid, hostName) => {
       setLobbyID(lobbyID);
-      setInviteName(hostName)
+      setInviteName(hostName);
       console.log("inside the invite with lobbyID", lobbyID);
       console.log("socketID is", socketid);
       handleClick();
@@ -279,7 +279,7 @@ const HomeScreen = () => {
         open={openInvite}
         autoHideDuration={6000}
         onClose={handleClose}
-        message= {inviteName + " has invited you to the game"} 
+        message={inviteName + " has invited you to the game"}
         action={action}
       />
     </Box>
