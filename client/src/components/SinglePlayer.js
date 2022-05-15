@@ -42,6 +42,57 @@ export default function GameScreen() {
   const [storyText, setStoryText] = React.useState("");
   const charLimit = 9999999;
 
+  let backgroundImages = [
+    require("../images/Backgrounds/6-square-cartoon-radial-background-1.jpg"),
+    require("../images/Backgrounds/background-6360861_640.png"),
+    require("../images/Backgrounds/cartoon-2614617_640.jpg"),
+    require("../images/Backgrounds/cartoon-2640561_640.jpg"),
+    require("../images/Backgrounds/cartoon-2640563_640.jpg"),
+    require("../images/Backgrounds/cartoon-2716788_640.jpg"),
+    require("../images/Backgrounds/cartoon-7106965_640.png"),
+    require("../images/Backgrounds/sunset-5766785_640.jpg"),
+    require("../images/Backgrounds/scenery-5660762_640.jpg"),
+    require("../images/Backgrounds/red-fox-5456627_640.jpg"),
+    require("../images/Backgrounds/park-4971822_640.png"),
+    require("../images/Backgrounds/cartoon-background-2633730_640.jpg"),
+    require("../images/Backgrounds/cats-7122943_640.png"),
+    require("../images/Backgrounds/icon-4423853_640.png"),
+    require("../images/Backgrounds/istockphoto-1141522220-612x612.jpg"),
+    require("../images/Backgrounds/modern-4423814_640.png"),
+  ];
+
+  let characters = [
+    require("../images/Characters/pokemon-5426712_640.png"),
+    require("../images/Characters/blonde-1300066_640.png"),
+    require("../images/Characters/business-2025814_640.png"),
+    require("../images/Characters/boy-2027615_640.png"),
+    require("../images/Characters/animal-2029279_640.png"),
+    require("../images/Characters/bird-1297727_640.png"),
+    require("../images/Characters/cartoon-1296251_640.png"),
+    require("../images/Characters/cat-278845_640.png"),
+    require("../images/Characters/eggplant-2924511_640.png"),
+    require("../images/Characters/grinch-5849048_640.png"),
+    require("../images/Characters/mermaid-1980181_640.png"),
+    require("../images/Characters/monster-1460885_640.png"),
+    require("../images/Characters/santa-4607097_640.png"),
+    require("../images/Characters/woman-4530909_640.png"),
+    require("../images/Characters/zebra-470305_640.png"),
+  ];
+
+  let speechBubbles = [
+    require("../images/Speech Bubbles/bubble-154255_640.png"),
+    require("../images/Speech Bubbles/bubble-160786_640.png"),
+    require("../images/Speech Bubbles/bubble-160851_640.png"),
+    require("../images/Speech Bubbles/cloud-304979_640.png"),
+    require("../images/Speech Bubbles/comics-151341_640.png"),
+    require("../images/Speech Bubbles/comic-speech-bubbles-4997661_640.png"),
+    require("../images/Speech Bubbles/comic-speech-bubbles-4997664_640.png"),
+    require("../images/Speech Bubbles/speech-25902_640.png"),
+    require("../images/Speech Bubbles/speech-bubble-145975_640.png"),
+    require("../images/Speech Bubbles/speech-bubble-145979_640.png"),
+    require("../images/Speech Bubbles/speech-bubble-156056_640.png"),
+  ];
+
   async function getPost() {
     const postResponse = await api.getPostById(postID);
     //also need to check for story
@@ -96,6 +147,12 @@ export default function GameScreen() {
     setCharacterToggle(!characterToggle);
   };
   const [bubbleToggle, setBubbleToggle] = useState(false);
+  const toggleBubbles = () => {
+    if (!bubbleToggle) {
+      setTool("image");
+    }
+    setBubbleToggle(!bubbleToggle);
+  };
 
   const addPanel = (event) => {
     if (isComic) {
@@ -694,26 +751,7 @@ export default function GameScreen() {
   if (isComic) {
     gameUtils = (
       <Grid item xs={3} align="center">
-        {/* <Box
-          sx={{
-            width: 450,
-            height: 75,
-            margin: 1,
-            backgroundColor: "#FF7F7F",
-            borderRadius: 5,
-            border: 3,
-            color: "black",
-          }}
-        >
-          <Timer
-            stageRef={stageRef}
-            actions={actions}
-            setActions={setActions}
-            storyText={storyText}
-            setStoryText={setStoryText}
-          />
-        </Box> */}
-        {/* <Button
+        <Button
           sx={{
             width: 450,
             height: 75,
@@ -730,8 +768,8 @@ export default function GameScreen() {
           onClick={toggleThemes}
         >
           <Typography fontSize={"32px"}>Themes</Typography>
-        </Button> */}
-        {/* {themeToggle && (
+        </Button>
+        {themeToggle && (
           <Box
             sx={{
               margin: 1,
@@ -745,38 +783,26 @@ export default function GameScreen() {
               color: "black",
             }}
           >
-            <ImageList sx={{ width: "95%" }} cols={3}>
-              <ImageListItem key={1}>
-                <img
-                  src={require("../images/background1.png")}
-                  draggable="true"
-                  onDragStart={(e) => {
-                    dragUrl.current = e.target.src;
-                  }}
-                />
-              </ImageListItem>
-              <ImageListItem key={2}>
-                <img
-                  src={require("../images/background2.png")}
-                  draggable="true"
-                  onDragStart={(e) => {
-                    dragUrl.current = e.target.src;
-                  }}
-                />
-              </ImageListItem>
-              <ImageListItem key={3}>
-                <img
-                  src={require("../images/background3.png")}
-                  draggable="true"
-                  onDragStart={(e) => {
-                    dragUrl.current = e.target.src;
-                  }}
-                />
-              </ImageListItem>
+            <ImageList
+              sx={{ width: "95%" }}
+              cols={3}
+              style={{ maxHeight: 200, overflow: "auto" }}
+            >
+              {backgroundImages.map((picture) => (
+                <ImageListItem key={picture}>
+                  <img
+                    src={picture}
+                    draggable="true"
+                    onDragStart={(e) => {
+                      dragUrl.current = e.target.src;
+                    }}
+                  />
+                </ImageListItem>
+              ))}
             </ImageList>
           </Box>
-        )} */}
-        {/* <Button
+        )}
+        <Button
           sx={{
             width: 450,
             height: 75,
@@ -793,8 +819,59 @@ export default function GameScreen() {
           onClick={toggleCharacters}
         >
           <Typography fontSize={"32px"}>Characters</Typography>
-        </Button> */}
-        {/* {characterToggle && (
+        </Button>
+        {characterToggle && (
+          <Box
+          sx={{
+            margin: 1,
+            backgroundColor: "primary.dark",
+            "&:hover": {
+              backgroundColor: "primary.main",
+              opacity: [0.9, 0.8, 0.7],
+            },
+            borderRadius: 5,
+            border: 3,
+            color: "black",
+          }}
+        >
+          <ImageList
+            sx={{ width: "95%" }}
+            cols={3}
+            style={{ maxHeight: 200, overflow: "auto" }}
+          >
+            {characters.map((picture) => (
+              <ImageListItem key={picture}>
+                <img
+                  src={picture}
+                  draggable="true"
+                  onDragStart={(e) => {
+                    dragUrl.current = e.target.src;
+                  }}
+                />
+              </ImageListItem>
+            ))}
+          </ImageList>
+        </Box>
+        )}
+        <Button
+          sx={{
+            width: 450,
+            height: 75,
+            margin: 1,
+            backgroundColor: "primary.dark",
+            "&:hover": {
+              backgroundColor: "primary.main",
+              opacity: [0.9, 0.8, 0.7],
+            },
+            borderRadius: 5,
+            border: 3,
+            color: "black",
+          }}
+          onClick={toggleBubbles}
+        >
+          <Typography fontSize={"32px"}>Speech Bubbles</Typography>
+        </Button>
+        {bubbleToggle && (
           <Box
             sx={{
               margin: 1,
@@ -808,11 +885,15 @@ export default function GameScreen() {
               color: "black",
             }}
           >
-            <ImageList sx={{ width: "95%" }} cols={3}>
-              {[1, 2, 3, 4, 5, 6].map((picture) => (
+            <ImageList
+              sx={{ width: "95%" }}
+              cols={3}
+              style={{ maxHeight: 200, overflow: "auto" }}
+            >
+              {speechBubbles.map((picture) => (
                 <ImageListItem key={picture}>
                   <img
-                    src={require("../images/Trollface.png")}
+                    src={picture}
                     draggable="true"
                     onDragStart={(e) => {
                       dragUrl.current = e.target.src;
@@ -822,7 +903,7 @@ export default function GameScreen() {
               ))}
             </ImageList>
           </Box>
-        )} */}
+        )}
         <Button
           sx={{
             width: 450,
