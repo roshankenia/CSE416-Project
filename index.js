@@ -185,11 +185,11 @@ io.on("connection", (socket) => {
     userID[username] = socketID;
   });
   //testing
-  socket.on("send-invite", (username, lobbyID) => {
+  socket.on("send-invite", (username, lobbyID, hostName) => {
     console.log("sending invite to user ", username);
     socketid = userID[username];
     console.log("the socketid is", socketid);
-    socket.to(socketid).emit("receive-invite", lobbyID, socketid);
+    socket.to(socketid).emit("receive-invite", lobbyID, socketid, hostName);
   });
   //Chat testing
   socket.on("send-chat-message", (message, lobbyID, username) => {
