@@ -342,8 +342,8 @@ updateComicById = async (req, res) => {
           message: "Comic not found!",
         });
       }
-      comic.authors = req.body.comic.authors;
-      comic.panels = req.body.comic.panels;
+      comic.authors = req.body.authors;
+      comic.panels = req.body.panels;
 
       comic.save().then(() => {
         return res.status(200).json({

@@ -1462,16 +1462,20 @@ function GlobalCommunityContextProvider(props) {
     let response = await api.getPostById(game.postID);
     if (response.status === 200) {
       let post = response.data.post;
-      let comicID = post.comicID;
-      let storyID = post.storyID;
+      let comicID = post.postComic;
+      let storyID = post.postStory;
+      console.log(comicID)
+      console.log(storyID)
       if (comicID) {
-        let response = await api.getComicById(comicID);
-        if (response.status === 200) {
-          let comic = response.data.comic;
+        let comicresponse = await api.getComicById(comicID);
+        if (comicresponse.status === 200) {
+          let comic = comicresponse.data.comic;
+          console.log(comic)
+          let authors = comic.authors
           let response = await api.updateComicById(
             comicID,
-            comic.authors,
-            game.panels
+            authors,
+            game.panels,
           );
           if (response.status === 200) {
             console.log("updated comic");
@@ -1480,9 +1484,9 @@ function GlobalCommunityContextProvider(props) {
           }
         }
       } else {
-        let response = await api.getStoryById(storyID);
-        if (response.status === 200) {
-          let story = response.data.story;
+        let storyresponse = await api.getStoryById(storyID);
+        if (storyresponse.status === 200) {
+          let story = storyresponse.data.story;
           let response = await api.updateStoryById(
             storyID,
             story.authors,
