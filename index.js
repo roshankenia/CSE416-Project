@@ -217,5 +217,3 @@ io.on("connection", (socket) => {
     io.socketsLeave(lobbyID);
   });
 });
-
-// socket.to(lobbyID).emit("new-player", username, lobbyID);
