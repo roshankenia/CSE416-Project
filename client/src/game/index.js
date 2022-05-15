@@ -621,8 +621,6 @@ function GameContextProvider(props) {
       socket.off("update-votes-cb", newVotes);
       socket.off("player-left", playerLeft);
       socket.off("receive-message", displayMessage);
-      socket.off("lobby-confirmed", lobbyConfirmed);
-
       // socket.off('count1');
     };
   }, [game]);
