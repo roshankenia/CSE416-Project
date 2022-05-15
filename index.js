@@ -104,11 +104,11 @@ io.on("connection", (socket) => {
   socket.on("confirm-lobby", (username, lobbyID) => {
     console.log(username, "is confirming", lobbyID);
     if(io.sockets.adapter.rooms["room name"]){
-      console.lo("valid lobby")
+      console.log("valid lobby")
       socket.to(lobbyID).emit("lobby-confirmed", username, lobbyID, true);
     }
     else{
-      console.lo("invalid lobby")
+      console.log("invalid lobby")
       socket.to(lobbyID).emit("lobby-confirmed", username, lobbyID, false);
     }
   });
