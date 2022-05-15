@@ -21,7 +21,7 @@ export const GameActionType = {
   CHANGE_GAMEMODE: "CHANGE_GAMEMODE",
   UPDATE_VOTES: "UPDATE_VOTES",
   RESET_GAME: "RESET_GAME",
-  STORE_CHAT: "STORE_CHAT"
+  STORE_CHAT: "STORE_CHAT",
 };
 
 function GameContextProvider(props) {
@@ -370,7 +370,7 @@ function GameContextProvider(props) {
           postID: game.postID,
         });
       }
-      
+
       default:
         return game;
     }
@@ -602,14 +602,38 @@ function GameContextProvider(props) {
     socket.once("player-left", playerLeft);
 
     const displayMessage = async (message, username) => {
-      console.log("the message is", message)
-      console.log("username is ", username)
+      console.log("the message is", message);
+      console.log("username is ", username);
       // setMessageArray(messageArray => [...messageArray, [username,message]]);
-      game.storeChat([username, message])
-   
+      game.storeChat([username, message]);
     };
     socket.on("receive-message", displayMessage);
-    
+
+    const lobbyConfirmed = async (username, lobbyID, confirmed) => {
+      console.log("listener:", username, lobbyID, confirmed);
+      if (username == auth.user.username) {
+        if (confirmed) {
+          try {
+            let players = game.players;
+            players.push(auth.user.username);
+            gameReducer({
+              type: GameActionType.JOIN_LOBBY,
+              payload: { lobby: lobbyID, players: players },
+            });
+            history.push("/game/" + lobbyID);
+          } catch {
+            console.log("Failed to join lobby");
+          }
+
+          socket.emit("join-lobby", auth.user.username, lobbyID);
+        }
+      } else {
+        community.lobbyUnavailable();
+      }
+    };
+
+    socket.on("lobby-confirmed", lobbyConfirmed);
+
     return () => {
       socket.off("new-player", newP);
       socket.off("add-players", addP);
@@ -622,6 +646,7 @@ function GameContextProvider(props) {
       socket.off("update-votes-cb", newVotes);
       socket.off("player-left", playerLeft);
       socket.off("receive-message", displayMessage);
+      socket.off("lobby-confirmed", lobbyConfirmed);
 
       // socket.off('count1');
     };
@@ -629,9 +654,9 @@ function GameContextProvider(props) {
 
   game.storeChat = async function (userMessage) {
     try {
-      console.log("in storeChat method")
+      console.log("in storeChat method");
       let chat = game.chat;
-      chat.push(userMessage)
+      chat.push(userMessage);
       gameReducer({
         type: GameActionType.STORE_CHAT,
         payload: chat,
@@ -640,7 +665,6 @@ function GameContextProvider(props) {
       console.log("Failed to update chat");
     }
   };
-
 
   game.disconnectPlayer = async function () {
     try {
@@ -767,19 +791,7 @@ function GameContextProvider(props) {
   };
 
   game.joinLobby = async function (lobbyID) {
-    try {
-      let players = game.players;
-      players.push(auth.user.username);
-      gameReducer({
-        type: GameActionType.JOIN_LOBBY,
-        payload: { lobby: lobbyID, players: players },
-      });
-      history.push("/game/" + lobbyID);
-    } catch {
-      console.log("Failed to join lobby");
-    }
-
-    socket.emit("join-lobby", auth.user.username, lobbyID);
+    socket.emit("confirm-lobby", auth.user.username, lobbyID);
   };
 
   game.hostNewLobby = async function (communityName) {
@@ -913,4 +925,3 @@ function GameContextProvider(props) {
 
 export default GameContext;
 export { GameContextProvider };
-
