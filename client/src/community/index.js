@@ -98,7 +98,7 @@ function GlobalCommunityContextProvider(props) {
     }
     };
 
-    socket.on("lobby-confirmed", lobbyConfirmed);
+    // socket.on("lobby-confirmed", lobbyConfirmed);
 
     return () => {
       socket.off("lobby-confirmed", lobbyConfirmed);

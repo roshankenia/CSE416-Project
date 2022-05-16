@@ -37,6 +37,7 @@ const HomeScreen = () => {
   const socket = useContext(SocketContext);
 
   const [inviteName, setInviteName] = React.useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   const [openInvite, setOpen] = React.useState(false);
   const handleClick = () => {
@@ -240,10 +241,34 @@ const HomeScreen = () => {
       // game.joinLobby(lobbyID)
     };
     socket.on("receive-invite", invite);
+
+    if (!loaded) {
+      community.getCommunities();
+      setLoaded(true);
+    }
+
+    const lobbyConfirmed = async (username, lobbyID, confirmed) => {
+      console.log("listener:", username, lobbyID, confirmed);
+      console.log(auth.user);
+      if (username == auth.user.username) {
+        console.log("checking confirmed");
+        if (confirmed) {
+          game.confirmJoinLobby(lobbyID);
+        }
+       else {
+        community.lobbyUnavailable();
+      }
+    }
+    };
+
+    socket.on("lobby-confirmed", lobbyConfirmed);
+
     return () => {
       socket.off("receive-invite", invite);
+      socket.off("lobby-confirmed", lobbyConfirmed);
+
     };
-  }, []);
+  }, [auth]);
   return (
     <Box
       style={{

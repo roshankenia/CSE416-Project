@@ -4,12 +4,14 @@ import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Snackbar from "@mui/material/Snackbar";
 import Typography from "@mui/material/Typography";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../auth";
 import { GlobalCommunityContext } from "../community";
 import ChangeBioModal from "./ChangeBioModal";
 import PostFeed from "./PostFeed.js";
 import Sidebar from "./Sidebar.js";
+import { GameContext } from "../game";
+import { SocketContext } from "../socket";
 
 export default function ProfileScreen() {
   useEffect(() => {
@@ -18,6 +20,26 @@ export default function ProfileScreen() {
   const { community } = useContext(GlobalCommunityContext);
   const { auth } = useContext(AuthContext);
   const [notifyOpen, setNotifyOpen] = React.useState(false);
+
+  const { game } = useContext(GameContext);
+  const socket = useContext(SocketContext);
+
+  const [inviteName, setInviteName] = React.useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [gameLobbyID, setLobbyID] = React.useState(false);
+
+  const [openInvite, setOpen] = React.useState(false);
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const handleBackToCommunities = (event) => {
     event.stopPropagation();
@@ -51,6 +73,70 @@ export default function ProfileScreen() {
     // const response = await auth.updateBio(auth.user.username, newBio)
     // console.log(response)
   }
+
+  const handleJoin = (event) => {
+    event.preventDefault();
+    console.log("new lobby");
+    console.log("lobby join from invite:", gameLobbyID);
+    game.joinLobby(gameLobbyID);
+  };
+
+  useEffect(() => {
+    const invite = async (lobbyID, socketid, hostName) => {
+      setLobbyID(lobbyID);
+      setInviteName(hostName);
+      console.log("inside the invite with lobbyID", lobbyID);
+      console.log("socketID is", socketid);
+      handleClick();
+
+      // game.joinLobby(lobbyID)
+    };
+    socket.on("receive-invite", invite);
+
+    if (!loaded) {
+      community.getCommunities();
+      setLoaded(true);
+    }
+
+    const lobbyConfirmed = async (username, lobbyID, confirmed) => {
+      console.log("listener:", username, lobbyID, confirmed);
+      console.log(auth.user);
+      if (username == auth.user.username) {
+        console.log("checking confirmed");
+        if (confirmed) {
+          game.confirmJoinLobby(lobbyID);
+        }
+       else {
+        community.lobbyUnavailable();
+      }
+    }
+    };
+
+    socket.on("lobby-confirmed", lobbyConfirmed);
+
+    return () => {
+      socket.off("receive-invite", invite);
+      socket.off("lobby-confirmed", lobbyConfirmed);
+
+    };
+  }, [auth]);
+
+  const action1 = (
+    <React.Fragment>
+      {/* On click here will join the game lobby (button) */}
+      <Button color="secondary" size="large" onClick={handleJoin}>
+        JOIN
+      </Button>
+      <IconButton
+        size="large"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
   const action = (
     <React.Fragment>
@@ -106,6 +192,7 @@ export default function ProfileScreen() {
   if (community.userProfile.bio == "") {
     bioToPrint = "No Bio Yet";
   }
+  
 
   if (isSelf) {
     return (
@@ -167,6 +254,13 @@ export default function ProfileScreen() {
           <Sidebar />
         </div>
         <ChangeBioModal />
+        <Snackbar
+        open={openInvite}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message={inviteName + " has invited you to the game"}
+        action={action1}
+      />
       </Grid>
     );
   } else if (isFriend) {
@@ -287,6 +381,8 @@ export default function ProfileScreen() {
         <div className="sticky">
           <Sidebar />
         </div>
+
+        
       </Grid>
     );
   }
