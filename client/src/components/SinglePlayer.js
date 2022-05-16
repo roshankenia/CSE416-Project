@@ -243,9 +243,12 @@ export default function GameScreen() {
   const handleConfirm = (event) => {
     let newPanels = panels;
     newPanels[index] = storyText;
-    // api.updateStoryById(csID, author, newPanels);
-    game.enterVoting()
-    history.push("/");
+    const currTurn = game.turn;
+    if (currTurn + 1 == panels.length) {
+      console.log("inside go to voting");
+      game.enterVoting(storyText, postID);
+    }
+    // history.push("/");
   };
 
   const handleLeave = (event) => {
