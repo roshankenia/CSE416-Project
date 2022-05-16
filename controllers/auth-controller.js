@@ -140,7 +140,7 @@ createGuest = async (req, res) => {
 
 registerUser = async (req, res) => {
   try {
-    const {
+    let {
       firstName,
       lastName,
       email,
