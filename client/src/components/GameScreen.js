@@ -29,7 +29,7 @@ export default function GameScreen() {
   const socket = useContext(SocketContext);
 
   const [storyText, setStoryText] = React.useState("");
-  const charLimit = 9999999;
+  const [charLimit, setCharLimit] = useState(9999999);
 
   //#region css
   const buttonCSS = { color: "black", fontSize: "40pt" };
@@ -89,6 +89,7 @@ export default function GameScreen() {
 
   const [characterToggle, setCharacterToggle] = useState(false);
   const toggleCharacters = () => {
+    console.log(actions)
     if (!characterToggle) {
       setTool("image");
     }
@@ -488,6 +489,30 @@ export default function GameScreen() {
     />
   );
 
+
+  
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // register event position
+    stageRef.current.setPointersPositions(e);
+    // add image
+
+    actions.push({
+      ...stageRef.current.getPointerPosition(),
+      src: dragUrl.current,
+      key: actions.length + 1,
+      size: strokeWidth,
+    });
+    
+    console.log(actions)
+
+    setActions(actions)
+    //force update
+    setCharLimit(charLimit - 1)
+    socket.emit("draw-actions", auth.user._id, actions, game.lobby);
+  }
+
   /* Drawing/Writing Canvas */
   let gameWorkSpace = "";
   if (game.gamemode === "comic") {
@@ -500,29 +525,7 @@ export default function GameScreen() {
             backgroundColor: "white",
             border: 3,
           }}
-          onDrop={(e) => {
-            e.preventDefault();
-            // register event position
-            stageRef.current.setPointersPositions(e);
-            // add image
-            actions.push({
-              ...stageRef.current.getPointerPosition(),
-              src: dragUrl.current,
-              key: actions.length + 1,
-              size: strokeWidth,
-            });
-            setActions(
-              actions.concat([
-                {
-                  ...stageRef.current.getPointerPosition(),
-                  src: dragUrl.current,
-                  key: actions.length + 1,
-                  size: strokeWidth,
-                },
-              ])
-            );
-            socket.emit("draw-actions", auth.user._id, actions, game.lobby);
-          }}
+          onDrop={handleDrop}
           onDragOver={(e) => e.preventDefault()}
         >
           <Stage

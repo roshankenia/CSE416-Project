@@ -40,7 +40,7 @@ export default function GameScreen() {
 
   const [actions, setActions] = React.useState([]);
   const [storyText, setStoryText] = React.useState("");
-  const charLimit = 9999999;
+  const [charLimit, setCharLimit] = useState(9999999);
 
   let backgroundImages = [
     require("../images/Backgrounds/6-square-cartoon-radial-background-1.jpg"),
@@ -243,9 +243,12 @@ export default function GameScreen() {
   const handleConfirm = (event) => {
     let newPanels = panels;
     newPanels[index] = storyText;
-    // api.updateStoryById(csID, author, newPanels);
-    game.enterVoting()
-    history.push("/");
+    const currTurn = game.turn;
+    if (currTurn + 1 == panels.length) {
+      console.log("inside go to voting");
+      game.enterVoting(storyText, postID);
+    }
+    // history.push("/");
   };
 
   const handleLeave = (event) => {
@@ -614,6 +617,28 @@ export default function GameScreen() {
     />
   );
 
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // register event position
+    stageRef.current.setPointersPositions(e);
+    // add image
+
+    actions.push({
+      ...stageRef.current.getPointerPosition(),
+      src: dragUrl.current,
+      key: actions.length + 1,
+      size: strokeWidth,
+    });
+    
+    console.log(actions)
+
+    setActions(actions)
+    //force update
+    setCharLimit(charLimit - 1)
+  }
+
   /* Drawing/Writing Canvas */
   let gameWorkSpace = "";
 
@@ -627,28 +652,7 @@ export default function GameScreen() {
             backgroundColor: "white",
             border: 3,
           }}
-          onDrop={(e) => {
-            e.preventDefault();
-            // register event position
-            stageRef.current.setPointersPositions(e);
-            // add image
-            actions.push({
-              ...stageRef.current.getPointerPosition(),
-              src: dragUrl.current,
-              key: actions.length + 1,
-              size: strokeWidth,
-            });
-            setActions(
-              actions.concat([
-                {
-                  ...stageRef.current.getPointerPosition(),
-                  src: dragUrl.current,
-                  key: actions.length + 1,
-                  size: strokeWidth,
-                },
-              ])
-            );
-          }}
+          onDrop={handleDrop}
           onDragOver={(e) => e.preventDefault()}
         >
           <Stage
