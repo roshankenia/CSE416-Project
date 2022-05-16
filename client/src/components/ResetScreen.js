@@ -88,7 +88,7 @@ export default function LoginScreen() {
                       fullWidth
                       variant="standard"
                       id="email"
-                      label="Eamil:"
+                      label="Email:"
                       name="email"
                       InputProps={{
                         disableUnderline: true,

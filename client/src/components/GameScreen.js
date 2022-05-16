@@ -1019,23 +1019,6 @@ export default function GameScreen() {
         >
           {"Characters Left: "} {charLimit - storyText.replace(/<\/?[^>]+(>|$)/g, "").length}
         </Typography> */}
-        <Button
-          sx={{
-            width: 450,
-            height: 75,
-            margin: 1,
-            backgroundColor: "green",
-            "&:hover": {
-              backgroundColor: "green",
-              opacity: [0.9, 0.8, 0.7],
-            },
-            borderRadius: 5,
-            border: 3,
-            color: "black",
-          }}
-        >
-          <Typography fontSize={"32px"}>Submit</Typography>
-        </Button>
       </Grid>
     );
   }
