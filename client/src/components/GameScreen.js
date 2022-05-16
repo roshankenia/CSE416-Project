@@ -89,6 +89,7 @@ export default function GameScreen() {
 
   const [characterToggle, setCharacterToggle] = useState(false);
   const toggleCharacters = () => {
+    console.log(actions)
     if (!characterToggle) {
       setTool("image");
     }
@@ -502,15 +503,21 @@ export default function GameScreen() {
           }}
           onDrop={(e) => {
             e.preventDefault();
+            e.stopPropagation();
+            console.log('only print once!!!')
             // register event position
             stageRef.current.setPointersPositions(e);
             // add image
-            actions.push({
-              ...stageRef.current.getPointerPosition(),
-              src: dragUrl.current,
-              key: actions.length + 1,
-              size: strokeWidth,
-            });
+            // console.log(actions)
+            // let newActions = actions
+            // newActions.push({
+            //   src: dragUrl.current,
+            //   key: actions.length + 1,
+            //   size: strokeWidth,
+            // });
+            
+            // console.log(actions)
+
             setActions(
               actions.concat([
                 {
