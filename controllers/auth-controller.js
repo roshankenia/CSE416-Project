@@ -149,7 +149,7 @@ registerUser = async (req, res) => {
       username,
       guest,
     } = req.body;
-    let email = email.toLowerCase();
+    email = email.toLowerCase();
     console.log(
       "create user: " +
         firstName +
