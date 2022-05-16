@@ -382,7 +382,6 @@ function GameContextProvider(props) {
     });
 
     const newP = async (username, lobbyID) => {
-      console.log("new player joined");
       let players = game.players;
       if (!players.includes(username)) {
         players.push(username);
@@ -412,7 +411,6 @@ function GameContextProvider(props) {
     socket.once("new-player", newP);
 
     const addH = async (host) => {
-      console.log("adding host:", host);
       if (host != game.host) {
         gameReducer({
           type: GameActionType.ADD_HOST,
@@ -424,7 +422,6 @@ function GameContextProvider(props) {
     socket.once("add-host", addH);
 
     const addP = async (addPlayer, addReady, lobbyID, gameMode) => {
-      console.log("adding all unknown players");
       let players = game.players;
       for (var i = 0; i < addPlayer.length; i++) {
         let a = addPlayer[i];
@@ -453,7 +450,6 @@ function GameContextProvider(props) {
     socket.once("add-players", addP);
 
     const removeP = async (username, lobbyID) => {
-      console.log("removing user", username);
       let players = game.players;
 
       const index = players.indexOf(username);
@@ -481,12 +477,9 @@ function GameContextProvider(props) {
 
     const readyP = async (username) => {
       let readyPlayers = game.readyPlayers;
-      console.log("trying to ready a player");
       if (!readyPlayers.includes(username)) {
-        console.log("readying", username);
         readyPlayers.push(username);
       } else {
-        console.log("unreadying", username);
         readyPlayers.splice(readyPlayers.indexOf(username), 1);
       }
       gameReducer({
@@ -498,37 +491,30 @@ function GameContextProvider(props) {
     socket.once("player-ready", readyP);
 
     const newVotes = async (voteVal, username) => {
-      console.log("inside votes callback");
       try {
         let votesArr = game.votes;
         if (votesArr.indexOf(username) == -1) {
           if (voteVal == "scrap") {
-            console.log("vote to scrap was made by somebody else");
             votesArr[0] = votesArr[0] + 1;
             votesArr.push(username);
             gameReducer({
               type: GameActionType.UPDATE_VOTES,
               payload: votesArr,
             });
-            console.log("votes array updated");
           } else if (voteVal == "comm") {
-            console.log("vote to comm was made by somebody else");
             votesArr[1] = votesArr[1] + 1;
             votesArr.push(username);
             gameReducer({
               type: GameActionType.UPDATE_VOTES,
               payload: votesArr,
             });
-            console.log("votes array updated");
           } else if (voteVal == "commdis") {
-            console.log("vote to commdis was made by somebody else");
             votesArr[2] = votesArr[2] + 1;
             votesArr.push(username);
             gameReducer({
               type: GameActionType.UPDATE_VOTES,
               payload: votesArr,
             });
-            console.log("votes array updated");
           } else {
             console.log("error in updating votes: vote value not found");
           }
@@ -553,8 +539,7 @@ function GameContextProvider(props) {
 
     //pass real game obj when backend is ready
     const gameStart = async (players) => {
-      console.log(players);
-      let fakeGameObj = { game: "random bullshit go!", players: players };
+      let fakeGameObj = { game: "deprecated", players: players };
       gameReducer({
         type: GameActionType.CREATE_NEW_GAME,
         payload: fakeGameObj,
@@ -563,15 +548,7 @@ function GameContextProvider(props) {
     //right now it passes player array
     socket.once("game-started", gameStart);
 
-    // const syncL = async (lines) => {
-    //   console.log('lines\n!!!!!!!!')
-    //   console.log(lines)
-
-    // };
-    // socket.on("sync-lines", syncL);
-
     const switchGamemode = async (gamemode) => {
-      console.log("host switching gamemode to:", gamemode);
       gameReducer({
         type: GameActionType.CHANGE_GAMEMODE,
         payload: gamemode,
@@ -581,10 +558,8 @@ function GameContextProvider(props) {
     socket.once("switch-gamemode", switchGamemode);
 
     const playerLeft = async (user) => {
-      console.log(user, "has left the game.");
       if (game != null) {
         try {
-          console.log("resetting game");
           gameReducer({
             type: GameActionType.RESET_GAME,
             payload: null,
@@ -602,8 +577,6 @@ function GameContextProvider(props) {
     socket.once("player-left", playerLeft);
 
     const displayMessage = async (message, username) => {
-      console.log("the message is", message);
-      console.log("username is ", username);
       // setMessageArray(messageArray => [...messageArray, [username,message]]);
       game.storeChat([username, message]);
     };
@@ -643,7 +616,6 @@ function GameContextProvider(props) {
 
   game.storeChat = async function (userMessage) {
     try {
-      console.log("in storeChat method");
       let chat = game.chat;
       chat.push(userMessage);
       gameReducer({
@@ -670,7 +642,6 @@ function GameContextProvider(props) {
   };
 
   game.changeGamemode = async function (gamemode) {
-    console.log("host switching gamemode to:", gamemode);
     gameReducer({
       type: GameActionType.CHANGE_GAMEMODE,
       payload: gamemode,
@@ -697,7 +668,6 @@ function GameContextProvider(props) {
       let votesArr = game.votes;
       if (votesArr.indexOf(username) == -1) {
         if (voteVal == "scrap") {
-          console.log("vote to scrap was made");
           votesArr[0] = votesArr[0] + 1;
           votesArr.push(username);
           gameReducer({
@@ -705,7 +675,6 @@ function GameContextProvider(props) {
             payload: votesArr,
           });
         } else if (voteVal == "comm") {
-          console.log("vote to comm was made");
           votesArr[1] = votesArr[1] + 1;
           votesArr.push(username);
           gameReducer({
@@ -713,7 +682,6 @@ function GameContextProvider(props) {
             payload: votesArr,
           });
         } else if (voteVal == "commdis") {
-          console.log("vote to commdis was made");
           votesArr[2] = votesArr[2] + 1;
           votesArr.push(username);
           gameReducer({
@@ -721,7 +689,6 @@ function GameContextProvider(props) {
             payload: votesArr,
           });
         } else if (voteVal == "save") {
-          console.log("vote to save was made");
           votesArr[3] = votesArr[3] + 1;
           votesArr.push(username);
           gameReducer({
@@ -744,7 +711,6 @@ function GameContextProvider(props) {
   game.createNewGame = async function () {
     let sortPlayers = game.players.sort();
     try {
-      console.log(game.gamemode);
       let id = game.lobby;
       let newgame = { game: "gameOBJ", players: sortPlayers };
       // backend stuff
@@ -756,9 +722,6 @@ function GameContextProvider(props) {
         payload: newgame,
       });
       history.push("/game/" + id);
-      //}
-      console.log("new game created:");
-      console.log(game);
     } catch {
       console.log("API FAILED TO CREATE A GAME MONGODB INSTANCE");
     }
@@ -789,11 +752,6 @@ function GameContextProvider(props) {
       let lobbyID = "" + id;
       let players = game.players;
       players.push(auth.user.username);
-      // backend stuff
-      // const response = await api.createGame();
-      // if (response.status === 201) {
-      //   let game = response.data.game;
-      console.log("creating lobby for:", communityName);
       gameReducer({
         type: GameActionType.CREATE_NEW_LOBBY,
         payload: {
@@ -814,13 +772,10 @@ function GameContextProvider(props) {
     let panels = game.panels;
     panels.push(newPanel);
     let currentTurn = game.turn + 1;
-    console.log("currentTurn:", currentTurn);
 
     let sortedArray = game.players.sort();
-    console.log(sortedArray);
 
     let currPlayer = sortedArray[currentTurn % game.players.length];
-    console.log(currPlayer);
 
     gameReducer({
       type: GameActionType.NEXT_TURN,
@@ -835,19 +790,15 @@ function GameContextProvider(props) {
   //Solo Game replaces panels
   //might need to set game.turn to 0 when clicking edit
   game.soloNextTurn = function (newPanel) {
-    console.log("inside next turn method in game-index.js");
     let panels = game.panels;
 
     //If we add new panel, this code works.
     panels.push(newPanel);
     let currentTurn = game.turn + 1;
-    console.log("currentTurn:", currentTurn);
 
     let sortedArray = game.players.sort();
-    console.log(sortedArray);
 
     let currPlayer = sortedArray[currentTurn % game.players.length];
-    console.log(currPlayer);
 
     gameReducer({
       type: GameActionType.NEXT_TURN,
@@ -892,7 +843,6 @@ function GameContextProvider(props) {
 
   //TIMER CODE- make sure time only starts when start game happens
   game.setTimer = async function (time) {
-    console.log("set timer... " + time);
     socket.emit("timer", auth.user.username, time, game.lobby);
   };
 

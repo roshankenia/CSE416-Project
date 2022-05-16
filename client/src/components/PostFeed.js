@@ -36,7 +36,6 @@ export default function PostFeed() {
   function handleKeyPress(event) {
     if (event.code === "Enter") {
       let text = event.target.value;
-      console.log(text);
       community.searchPostsUp(text);
     }
   }

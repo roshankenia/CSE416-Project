@@ -103,7 +103,6 @@ export default function GameScreen() {
       );
       setAuthor(comicResponse.data.comic.authors);
       setPanels(comicResponse.data.comic.panels);
-      console.log("the value of game.turn in getPost ", game.turn);
 
       setActions(
         actions.concat([
@@ -122,7 +121,6 @@ export default function GameScreen() {
       );
       setAuthor(storyResponse.data.story.authors);
       setPanels(storyResponse.data.story.panels);
-      console.log("the value of game.turn in getPost ", game.turn);
       setStoryText(storyResponse.data.story.panels[0]);
     }
   }
@@ -159,7 +157,6 @@ export default function GameScreen() {
   const addPanel = (event) => {
     if (isComic) {
       event.stopPropagation();
-      console.log("Add panel method");
       let imageData = stageRef.current.toDataURL();
       const data = new FormData();
       data.append("file", imageData);
@@ -195,9 +192,6 @@ export default function GameScreen() {
   const nextPanel = (event) => {
     if (isComic) {
       event.stopPropagation();
-      //TODO
-      //change to next panel
-      console.log("next panel method");
       let imageData = stageRef.current.toDataURL();
 
       const data = new FormData();
@@ -212,14 +206,12 @@ export default function GameScreen() {
         .then((resp) => resp.json())
         .then((data) => {
           imageData = data.url;
-          console.log(imageData);
           const currTurn = game.turn;
           //set panel to update
           let pan = panels;
           pan[currTurn] = imageData;
           setPanels(pan);
           if (currTurn + 1 == panels.length) {
-            console.log("inside go to voting");
             game.enterVoting(imageData, postID);
           } else {
             game.soloNextTurn(imageData); //Updates the image Data
@@ -243,20 +235,7 @@ export default function GameScreen() {
   };
 
   const handleConfirm = (event) => {
-    let newPanels = panels;
-    newPanels[index] = storyText;
-    const currTurn = game.turn;
-    console.log(newPanels);
-    console.log(storyText);
-    console.log(postID);
     game.enterVoting(storyText, postID);
-    // if (currTurn + 1 == panels.length) {
-    //   console.log("inside go to voting");
-    //   game.enterVoting(storyText, postID);
-    // }
-    // history.push("/");
-    // api.updateStoryById(csID, author, newPanels);
-    // history.push("/");
   };
 
   const handleLeave = (event) => {
@@ -365,33 +344,9 @@ export default function GameScreen() {
   useEffect(()=>{
     document.addEventListener('keydown', handleUndoRedoKey);
     return () => {
-      console.log('removed')
       document.removeEventListener('keydown', handleUndoRedoKey);
     }
-  },[handleUndoRedoKey])
-
-  
-  
-  // useCallback((event) => {
-  //   if (event.keyCode == 90 && event.ctrlKey){ 
-  //     console.log(actions.length)
-  //     console.log(panels)
-  //     // if (actions.length) {
-  //     //   let redo = actions.pop();
-  //     //   setActions(actions);
-  //     //   setRedos([...redos, redo]);
-  //     // }
-  //   }else if(event.keyCode == 89 && event.ctrlKey){ 
-  //     console.log(actions.length)
-  //     // if (redos.length) {
-  //     //   let action = redos.pop();
-  //     //   setActions([...actions, action]);
-  //     //   setRedos(redos);
-  //     // }
-  //   }
-  // }, []);
-
-  
+  },[handleUndoRedoKey])  
 
   const handleMouseDown = (e) => {
     isDrawing.current = true;
@@ -670,7 +625,6 @@ export default function GameScreen() {
       </Box>
     );
   } else {
-    console.log("story");
     gamePanels = (
       // gamePanels = (
       //   <Box sx={{ width: "70%", height: "70%" }}>
@@ -780,8 +734,6 @@ export default function GameScreen() {
       size: strokeWidth,
     });
     
-    console.log(actions)
-
     setActions(actions)
     //force update
     setCharLimit(charLimit - 1)
