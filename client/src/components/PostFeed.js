@@ -11,9 +11,13 @@ import Typography from "@mui/material/Typography";
 import React, { useContext } from "react";
 import { GlobalCommunityContext } from "../community";
 import PostCard from "./PostCard.js";
+import AuthContext from "../auth";
+
 
 export default function PostFeed() {
   const { community } = useContext(GlobalCommunityContext);
+  const { auth } = useContext(AuthContext);
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleMenuClick = (event) => {
@@ -37,7 +41,7 @@ export default function PostFeed() {
     }
   }
 
-  const postFeed = (
+  let postFeed = (
     <List>
       {community.searchPosts.map((post, index) => (
         <ListItem key={index}>
@@ -46,6 +50,39 @@ export default function PostFeed() {
       ))}
     </List>
   );
+
+  if (community.currentCommunity || community.screen == "discovery") {
+    postFeed = (
+      <List>
+        {community.searchPosts.map(
+          (post, index) =>
+            post.communityPublished && (
+              <ListItem key={index}>
+                <PostCard post={post} index={index} />
+              </ListItem>
+            )
+        )}
+      </List>
+    );
+  }
+
+  if (
+    community.screen == "profile" &&
+    community.userProfile.username != auth.user.username
+  ) {
+    postFeed = (
+      <List>
+        {community.searchPosts.map(
+          (post, index) =>
+            post.communityPublished && (
+              <ListItem key={index}>
+                <PostCard post={post} index={index} />
+              </ListItem>
+            )
+        )}
+      </List>
+    );
+  }
 
   return (
     <Grid container alignItems="center">
