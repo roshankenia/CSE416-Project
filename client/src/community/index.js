@@ -1451,6 +1451,7 @@ function GlobalCommunityContextProvider(props) {
       }
     } catch {
       console.log("API FAILED TO CREATE A NEW COMMUNITY");
+      return true
     }
   };
 

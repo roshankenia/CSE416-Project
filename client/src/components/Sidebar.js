@@ -6,7 +6,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import AuthContext from "../auth";
 import { GlobalCommunityContext } from "../community";
 import { GameContext } from "../game";
@@ -61,12 +61,15 @@ export default function Sidebar() {
     game.joinLobby(lobbyID);
   };
 
-  const handleCreateCommunity = (event) => {
+  const [comError, setComError] = useState(false)
+
+  async function handleCreateCommunity(event){
     event.preventDefault();
     console.log("create new community");
     const data = new FormData(event.currentTarget);
     let communityName = data.get("communityName");
-    community.createNewCommunity(communityName);
+    let value = community.createNewCommunity(communityName);
+    setComError(value)
   };
 
   const action = (
@@ -275,6 +278,8 @@ export default function Sidebar() {
               }}
             >
               <TextField
+                error={comError}
+                helperText = {comError && 'Community Already Created'}
                 align="center"
                 id="communityName"
                 name="communityName"
