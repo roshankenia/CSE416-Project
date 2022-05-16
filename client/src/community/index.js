@@ -950,39 +950,89 @@ function GlobalCommunityContextProvider(props) {
 
   community.updatePost = async function (updateType, post, payload, user) {
     try {
-      if (updateType == "comm") {
+      if (updateType == "title"){
         let response = await api.updatePost(
           post._id,
-          post.postTitle,
+          payload,
           post.postComic,
           post.postStory,
           post.likes,
           post.dislikes,
           post.comments,
-          true,
-          false,
+          post.communityPublished,
+          post.discoveryPublished,
           post.dateAndTime,
           post.communityName
         );
+        console.log("Title updated", response)
+      }
+      else if (updateType == "comm") {
+        let response = null;
+        if (payload != "Untitled"){
+          response = await api.updatePost(
+            post._id,
+            payload,
+            post.postComic,
+            post.postStory,
+            post.likes,
+            post.dislikes,
+            post.comments,
+            true,
+            false,
+            post.dateAndTime,
+            post.communityName
+          );
+        } else {
+          response = await api.updatePost(
+            post._id,
+            post.postTitle,
+            post.postComic,
+            post.postStory,
+            post.likes,
+            post.dislikes,
+            post.comments,
+            true,
+            false,
+            post.dateAndTime,
+            post.communityName
+          );
+        }
         if (response.status === 200) {
           console.log("update post as comm");
         } else {
           console.log("failed to update post");
         }
       } else if (updateType == "commdis") {
-        let response = await api.updatePost(
-          post._id,
-          post.postTitle,
-          post.postComic,
-          post.postStory,
-          post.likes,
-          post.dislikes,
-          post.comments,
-          true,
-          true,
-          post.dateAndTime,
-          post.communityName
-        );
+        let response = null
+        if (payload != "Untitled"){
+          response = await api.updatePost(
+            post._id,
+            payload,
+            post.postComic,
+            post.postStory,
+            post.likes,
+            post.dislikes,
+            post.comments,
+            true,
+            true,
+            post.dateAndTime,
+            post.communityName
+          );
+        } else {
+          response = await api.updatePost(
+            post._id,
+            post.postTitle,
+            post.postComic,
+            post.postStory,
+            post.likes,
+            post.dislikes,
+            post.comments,
+            true,
+            true,
+            post.dateAndTime,
+            post.communityName
+          );
+        }
         if (response.status === 200) {
           console.log("update post as commdis");
         } else {
@@ -1484,10 +1534,13 @@ function GlobalCommunityContextProvider(props) {
     }
   };
 
-  community.updateSinglePlayerCS = async function (game) {
+  community.updateSinglePlayerCS = async function (game, title="Untitled") {
     let response = await api.getPostById(game.postID);
     if (response.status === 200) {
       let post = response.data.post;
+      if (title != "Untitled"){
+        community.updatePost("title", post, title, null);
+      }
       let comicID = post.postComic;
       let storyID = post.postStory;
       console.log(comicID);
@@ -1537,14 +1590,14 @@ function GlobalCommunityContextProvider(props) {
   ) {
     if (game.postID != null) {
       if (voteVal == "save") {
-        community.updateSinglePlayerCS(game);
+        community.updateSinglePlayerCS(game, title);
       } else if (voteVal == "comm") {
         community.updateSinglePlayerCS(game);
         let response = await api.getPostById(game.postID);
         if (response.status === 200) {
           let post = response.data.post;
           let postID = post._id;
-          community.updatePost("comm", post, null, null);
+          community.updatePost("comm", post, title, null);
           community.doLiveUpdate(post);
         }
       } else if (voteVal == "commdis") {
@@ -1553,7 +1606,7 @@ function GlobalCommunityContextProvider(props) {
         if (response.status === 200) {
           let post = response.data.post;
           let postID = post._id;
-          community.updatePost("commdis", post, null, null);
+          community.updatePost("commdis", post, title, null);
           community.doLiveUpdate(post);
         }
       }
