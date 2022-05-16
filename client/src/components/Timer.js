@@ -47,7 +47,7 @@ export default function Timer(props) {
           })
             .then((resp) => resp.json())
             .then((data) => {
-              game.enterVoting(data.url);
+              game.enterVoting(data.url, "comic");
             })
             .catch((err) => console.log(err));
         } else {
@@ -83,7 +83,7 @@ export default function Timer(props) {
         console.log(storyText);
         // check if game.turn == amount of panels
         if (game.panelNumber - 1 == game.turn) {
-          game.enterVoting(storyText);
+          game.enterVoting(storyText, "story");
         } else {
           //Might be uneccessary to do this here... Maybe reset the text whenever the turn starts?
           setStoryText("");

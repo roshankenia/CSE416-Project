@@ -160,7 +160,7 @@ function GameContextProvider(props) {
           panelNumber: null,
           communityName: game.communityName,
           panels: payload.panels,
-          gamemode: game.gamemode,
+          gamemode: payload.gamemode,
           chat: game.chat,
           postID: payload.postID,
         });
@@ -859,7 +859,7 @@ function GameContextProvider(props) {
     });
   };
 
-  game.enterVoting = async function (lastPanel, postID = null) {
+  game.enterVoting = async function (lastPanel, gamemode, postID = null) {
     try {
       const id = game.lobby;
       let panels = game.panels;
@@ -869,6 +869,7 @@ function GameContextProvider(props) {
         payload: {
           panels: panels,
           postID: postID,
+          gamemode: gamemode,
         },
       });
       history.push("/game/" + id);

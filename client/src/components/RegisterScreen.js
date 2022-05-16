@@ -89,7 +89,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
-                        defaultValue={auth.userData.firstName}
+                        defaultValue={auth.userData ? auth.userData.firstName : ""}
                         autoComplete="fname"
                         name="firstName"
                         required
@@ -128,7 +128,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
-                        defaultValue={auth.userData.lastName}
+                        defaultValue={auth.userData ? auth.userData.lastName : ""}
                         required
                         fullWidth
                         variant="standard"
@@ -166,7 +166,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
-                        defaultValue={auth.userData.email}
+                        defaultValue={auth.userData ? auth.userData.email : ""}
                         required
                         fullWidth
                         id="email"
@@ -204,7 +204,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
-                        defaultValue={auth.userData.username}
+                        defaultValue={auth.userData ? auth.userData.username : ""}
                         required
                         fullWidth
                         name="username"
@@ -243,7 +243,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
-                        defaultValue={auth.userData.password}
+                        defaultValue={auth.userData ? auth.userData.password : ""}
                         required
                         fullWidth
                         name="password"
@@ -282,7 +282,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
-                        defaultValue={auth.userData.passwordVerify}
+                        defaultValue={auth.userData ? auth.userData.passwordVerify : ""}
                         required
                         fullWidth
                         name="passwordVerify"
@@ -381,7 +381,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
-                        defaultValue={auth.userData.firstName}
+                        defaultValue={auth.userData ? auth.userData.firstName : ""}
                         autoComplete="fname"
                         name="firstName"
                         required
@@ -420,7 +420,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
-                        defaultValue={auth.userData.lastName}
+                        defaultValue={auth.userData ? auth.userData.lastName : ""}
                         required
                         fullWidth
                         variant="standard"
@@ -458,7 +458,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
-                        defaultValue={auth.userData.email}
+                        defaultValue={auth.userData ? auth.userData.email : ""}
                         required
                         fullWidth
                         id="email"
@@ -496,7 +496,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
-                        defaultValue={auth.userData.username}
+                        defaultValue={auth.userData ? auth.userData.username : ""}
                         required
                         fullWidth
                         name="username"
@@ -535,7 +535,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
-                        defaultValue={auth.userData.password}
+                        defaultValue={auth.userData ? auth.userData.password : ""}
                         required
                         fullWidth
                         name="password"
@@ -574,7 +574,7 @@ export default function RegisterScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
-                        defaultValue={auth.userData.passwordVerify}
+                        defaultValue={auth.userData ? auth.userData.passwordVerify : ""}
                         required
                         fullWidth
                         name="passwordVerify"

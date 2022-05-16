@@ -8,7 +8,16 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import React, { useContext, useEffect, useState, useCallback } from "react";
 //#endregion imports
 //#region konva import
-import { Circle, Ellipse, Layer, Line, Rect, Stage, Text, RegularPolygon } from "react-konva";
+import {
+  Circle,
+  Ellipse,
+  Layer,
+  Line,
+  Rect,
+  Stage,
+  Text,
+  RegularPolygon,
+} from "react-konva";
 import ReactQuill from "react-quill";
 import { useHistory } from "react-router-dom";
 import AuthContext from "../auth";
@@ -28,7 +37,6 @@ export default function GameScreen() {
   const history = useHistory();
 
   const [panels, setPanels] = useState([]);
-  const [index, setIndex] = useState(0);
 
   const [postID, setPostID] = useState(
     window.location.pathname.toString().substring(14)
@@ -131,8 +139,6 @@ export default function GameScreen() {
     getPost();
   }, []);
 
-  
-
   const { auth } = useContext(AuthContext);
 
   //#region css
@@ -185,9 +191,10 @@ export default function GameScreen() {
         .catch((err) => console.log(err));
     } else {
       let newPanels = panels;
-      newPanels[index] = storyText;
+      panels[game.turn] = storyText;
       setPanels(newPanels);
-      setIndex(index + 1);
+      game.soloNextTurn(storyText);
+
       setStoryText("");
     }
   };
@@ -220,7 +227,7 @@ export default function GameScreen() {
           setPanels(pan);
           if (currTurn + 1 == panels.length) {
             console.log("inside go to voting");
-            game.enterVoting(imageData, postID);
+            game.enterVoting(imageData, "comic", postID);
           } else {
             game.soloNextTurn(imageData); //Updates the image Data
             setActions([
@@ -234,33 +241,23 @@ export default function GameScreen() {
         })
         .catch((err) => console.log(err));
     } else {
-      let newPanels = panels;
-      newPanels[index] = storyText;
-      setPanels(newPanels);
-      setStoryText(panels[index + 1]);
-      setIndex(index + 1);
+      const currTurn = game.turn;
+      //set panel to update
+      let pan = panels;
+      pan[currTurn] = storyText;
+      setPanels(pan);
+      if (currTurn + 1 == panels.length) {
+        console.log("inside go to voting");
+        game.enterVoting(storyText, "story", postID);
+      } else {
+        game.soloNextTurn(storyText); //Updates the story Data
+        setStoryText(panels[currTurn + 1]);
+      }
     }
   };
 
-  const handleConfirm = (event) => {
-    let newPanels = panels;
-    newPanels[index] = storyText;
-    const currTurn = game.turn;
-    console.log(newPanels);
-    console.log(storyText);
-    console.log(postID);
-    game.enterVoting(storyText, postID);
-    // if (currTurn + 1 == panels.length) {
-    //   console.log("inside go to voting");
-    //   game.enterVoting(storyText, postID);
-    // }
-    // history.push("/");
-    // api.updateStoryById(csID, author, newPanels);
-    // history.push("/");
-  };
-
   const handleLeave = (event) => {
-    history.push("/");
+    game.exitVoting();
   };
 
   const [themeToggle, setThemeToggle] = useState(false);
@@ -354,26 +351,27 @@ export default function GameScreen() {
     setColor(color);
   };
 
-  const handleUndoRedoKey = useCallback((event) => {
-    if (event.keyCode == 90 && event.ctrlKey){ 
-      handleUndo()
-    }else if(event.keyCode == 89 && event.ctrlKey){ 
-      handleRedo()
-    }
-  },[actions,redos]);
+  const handleUndoRedoKey = useCallback(
+    (event) => {
+      if (event.keyCode == 90 && event.ctrlKey) {
+        handleUndo();
+      } else if (event.keyCode == 89 && event.ctrlKey) {
+        handleRedo();
+      }
+    },
+    [actions, redos]
+  );
 
-  useEffect(()=>{
-    document.addEventListener('keydown', handleUndoRedoKey);
+  useEffect(() => {
+    document.addEventListener("keydown", handleUndoRedoKey);
     return () => {
-      console.log('removed')
-      document.removeEventListener('keydown', handleUndoRedoKey);
-    }
-  },[handleUndoRedoKey])
+      console.log("removed");
+      document.removeEventListener("keydown", handleUndoRedoKey);
+    };
+  }, [handleUndoRedoKey]);
 
-  
-  
   // useCallback((event) => {
-  //   if (event.keyCode == 90 && event.ctrlKey){ 
+  //   if (event.keyCode == 90 && event.ctrlKey){
   //     console.log(actions.length)
   //     console.log(panels)
   //     // if (actions.length) {
@@ -381,7 +379,7 @@ export default function GameScreen() {
   //     //   setActions(actions);
   //     //   setRedos([...redos, redo]);
   //     // }
-  //   }else if(event.keyCode == 89 && event.ctrlKey){ 
+  //   }else if(event.keyCode == 89 && event.ctrlKey){
   //     console.log(actions.length)
   //     // if (redos.length) {
   //     //   let action = redos.pop();
@@ -390,8 +388,6 @@ export default function GameScreen() {
   //     // }
   //   }
   // }, []);
-
-  
 
   const handleMouseDown = (e) => {
     isDrawing.current = true;
@@ -765,7 +761,6 @@ export default function GameScreen() {
     />
   );
 
-
   const handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -779,13 +774,13 @@ export default function GameScreen() {
       key: actions.length + 1,
       size: strokeWidth,
     });
-    
-    console.log(actions)
 
-    setActions(actions)
+    console.log(actions);
+
+    setActions(actions);
     //force update
-    setCharLimit(charLimit - 1)
-  }
+    setCharLimit(charLimit - 1);
+  };
 
   /* Drawing/Writing Canvas */
   let gameWorkSpace = "";
@@ -1155,28 +1150,27 @@ export default function GameScreen() {
   } else {
     gameUtils = (
       <Grid item xs={3} align="center">
-        {index < panels.length - 1 && (
-          <Button
-            sx={{
-              width: 450,
-              height: 75,
-              margin: 1,
-              backgroundColor: "primary.dark",
-              "&:hover": {
-                backgroundColor: "primary.main",
-                opacity: [0.9, 0.8, 0.7],
-              },
-              borderRadius: 5,
-              border: 3,
-              color: "black",
-            }}
-            //TODO
-            onClick={nextPanel}
-          >
-            <Typography fontSize={"32px"}>NEXT</Typography>
-          </Button>
-        )}
-        {index >= panels.length - 1 && panels.length < 12 && (
+        <Button
+          sx={{
+            width: 450,
+            height: 75,
+            margin: 1,
+            backgroundColor: "primary.dark",
+            "&:hover": {
+              backgroundColor: "primary.main",
+              opacity: [0.9, 0.8, 0.7],
+            },
+            borderRadius: 5,
+            border: 3,
+            color: "black",
+          }}
+          //TODO
+          onClick={nextPanel}
+        >
+          <Typography fontSize={"32px"}>NEXT</Typography>
+        </Button>
+
+        {game.turn >= panels.length - 1 && panels.length < 12 && (
           <Button
             sx={{
               width: 450,
@@ -1195,27 +1189,6 @@ export default function GameScreen() {
             onClick={addPanel}
           >
             <Typography fontSize={"32px"}>ADD PANEL</Typography>
-          </Button>
-        )}
-        {index >= panels.length - 1 && (
-          <Button
-            sx={{
-              width: 450,
-              height: 75,
-              margin: 1,
-              backgroundColor: "primary.dark",
-              "&:hover": {
-                backgroundColor: "primary.main",
-                opacity: [0.9, 0.8, 0.7],
-              },
-              borderRadius: 5,
-              border: 3,
-              color: "black",
-            }}
-            //TODO
-            onClick={handleConfirm}
-          >
-            <Typography fontSize={"32px"}>Confirm Edit</Typography>
           </Button>
         )}
         <Button

@@ -167,12 +167,19 @@ function AuthContextProvider(props) {
         return setAuth({
           user: payload.user,
           loggedIn: false,
-          errorMessage: auth.errorMessage,
-          isGuest: auth.isGuest,
-          searchUsers: auth.searchUsers,
-          friends: auth.friends,
-          friendRequests: auth.friendRequests,
-          userData: auth.userData,
+          errorMessage: null,
+          isGuest: false, //Add this to the setAuth in the reducer
+          searchUsers: [],
+          friends: [],
+          friendRequests: [],
+          userData: {
+            firstName: "",
+            lastName: "",
+            email: "",
+            password: "",
+            passwordVerify: "",
+            username: "",
+          },
         });
       }
       case AuthActionType.SEARCH_USERS: {
@@ -280,17 +287,16 @@ function AuthContextProvider(props) {
             friendRequests: friendRequests,
           },
         });
-        
+
         history.push("/");
-        return true
+        return true;
       }
-      
     } catch (error) {
       console.log(error.response.data.errorMessage);
       //auth.setErrorMessage(error.response.data.errorMessage);
     }
     history.push("/");
-    return false
+    return false;
   };
 
   auth.addFriend = async function (sentUserEmail, receivedUserEmail) {
@@ -736,11 +742,11 @@ function AuthContextProvider(props) {
       }
     } catch (error) {
       let userD = {
-        firstName: auth.userData.firstName,
-        lastName: auth.userData.lastName,
-        email: auth.userData.email,
+        firstName: auth.userData ? auth.userData.firstName : "",
+        lastName: auth.userData ? auth.userData.lastName : "",
+        email: auth.userData ? auth.userData.email : "",
         password: password,
-        passwordVerify: auth.userData.passwordVerify,
+        passwordVerify: auth.userData ? auth.userData.passwordVerify : "",
         username: username,
       };
       console.log(error);

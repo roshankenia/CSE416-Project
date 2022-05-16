@@ -19,6 +19,7 @@ const theme = createTheme();
 export default function LoginScreen() {
   const { auth } = useContext(AuthContext);
   const { community } = useContext(GlobalCommunityContext);
+  console.log("auth currently:", auth);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -85,7 +86,9 @@ export default function LoginScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
-                        defaultValue={auth.userData.username}
+                        defaultValue={
+                          auth.userData ? auth.userData.username : ""
+                        }
                         required
                         fullWidth
                         variant="standard"
@@ -123,7 +126,7 @@ export default function LoginScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
-                        defaultValue={auth.userData.password}
+                        defaultValue={auth.userData ? auth.userData.password : ""}
                         margin="normal"
                         required
                         fullWidth
@@ -235,7 +238,7 @@ export default function LoginScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
-                        defaultValue={auth.userData.username}
+                        defaultValue={auth.userData ? auth.userData.username : ""}
                         required
                         fullWidth
                         variant="standard"
@@ -273,7 +276,7 @@ export default function LoginScreen() {
                   >
                     <Box style={{ width: "96%" }}>
                       <TextField
-                        defaultValue={auth.userData.password}
+                        defaultValue={auth.userData ? auth.userData.password : ""}
                         margin="normal"
                         required
                         fullWidth
