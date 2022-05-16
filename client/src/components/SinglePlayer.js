@@ -249,7 +249,7 @@ export default function GameScreen() {
     console.log(newPanels);
     console.log(storyText);
     console.log(postID);
-    game.enterVoting(newPanels, postID);
+    game.enterVoting(storyText, postID);
     // if (currTurn + 1 == panels.length) {
     //   console.log("inside go to voting");
     //   game.enterVoting(storyText, postID);
