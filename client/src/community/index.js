@@ -91,11 +91,10 @@ function GlobalCommunityContextProvider(props) {
         console.log("checking confirmed");
         if (confirmed) {
           game.confirmJoinLobby(lobbyID);
+        } else {
+          community.lobbyUnavailable();
         }
-       else {
-        community.lobbyUnavailable();
       }
-    }
     };
 
     // socket.on("lobby-confirmed", lobbyConfirmed);
@@ -693,9 +692,9 @@ function GlobalCommunityContextProvider(props) {
       });
     } else if (sort === "Z to A") {
       sortedPosts = sortedPosts.sort(function (a, b) {
-        if (a.postTitle > b.postTitle) {
+        if (a.postTitle.toLowerCase() > b.postTitle.toLowerCase()) {
           return -1;
-        } else if (a.postTitle < b.postTitle) {
+        } else if (a.postTitle.toLowerCase() < b.postTitle.toLowerCase()) {
           return 1;
         } else {
           return 0;
@@ -703,9 +702,9 @@ function GlobalCommunityContextProvider(props) {
       });
     } else if (sort === "A to Z") {
       sortedPosts = sortedPosts.sort(function (a, b) {
-        if (a.postTitle > b.postTitle) {
+        if (a.postTitle.toLowerCase() > b.postTitle.toLowerCase()) {
           return 1;
-        } else if (a.postTitle < b.postTitle) {
+        } else if (a.postTitle.toLowerCase() < b.postTitle.toLowerCase()) {
           return -1;
         } else {
           return 0;
@@ -770,7 +769,10 @@ function GlobalCommunityContextProvider(props) {
               }
             }
             console.log("posts found:", communityPosts);
-
+            communityPosts = await community.sortPosts(
+              communityPosts,
+              "newest date"
+            );
             communityReducer({
               type: GlobalCommunityActionType.SET_USER_PROFILE,
               payload: {
@@ -853,6 +855,7 @@ function GlobalCommunityContextProvider(props) {
     }
 
     console.log("community posts are:", communityPosts);
+    communityPosts = await community.sortPosts(communityPosts, "newest date");
     communityReducer({
       type: GlobalCommunityActionType.SET_SCREEN,
       payload: { screen: screen, communityPosts: communityPosts },
@@ -921,6 +924,10 @@ function GlobalCommunityContextProvider(props) {
           communityPosts.push(post);
         }
         console.log("posts found:", communityPosts);
+        communityPosts = await community.sortPosts(
+          communityPosts,
+          "newest date"
+        );
         communityReducer({
           type: GlobalCommunityActionType.SET_COMMUNITY,
           payload: {
@@ -950,7 +957,7 @@ function GlobalCommunityContextProvider(props) {
 
   community.updatePost = async function (updateType, post, payload, user) {
     try {
-      if (updateType == "title"){
+      if (updateType == "title") {
         let response = await api.updatePost(
           post._id,
           payload,
@@ -964,11 +971,10 @@ function GlobalCommunityContextProvider(props) {
           post.dateAndTime,
           post.communityName
         );
-        console.log("Title updated", response)
-      }
-      else if (updateType == "comm") {
+        console.log("Title updated", response);
+      } else if (updateType == "comm") {
         let response = null;
-        if (payload != "Untitled"){
+        if (payload != "Untitled") {
           response = await api.updatePost(
             post._id,
             payload,
@@ -1003,8 +1009,8 @@ function GlobalCommunityContextProvider(props) {
           console.log("failed to update post");
         }
       } else if (updateType == "commdis") {
-        let response = null
-        if (payload != "Untitled"){
+        let response = null;
+        if (payload != "Untitled") {
           response = await api.updatePost(
             post._id,
             payload,
@@ -1198,6 +1204,7 @@ function GlobalCommunityContextProvider(props) {
   };
 
   community.removePost = async function () {
+    setLoad(true);
     try {
       //first delete comic
       let post = community.deletePost;
@@ -1262,7 +1269,10 @@ function GlobalCommunityContextProvider(props) {
                         }
                       }
                       console.log("posts found:", communityPosts);
-
+                      communityPosts = await community.sortPosts(
+                        communityPosts,
+                        "newest date"
+                      );
                       communityReducer({
                         type: GlobalCommunityActionType.DELETE_POST,
                         payload: {
@@ -1340,7 +1350,10 @@ function GlobalCommunityContextProvider(props) {
                         }
                       }
                       console.log("posts found:", communityPosts);
-
+                      communityPosts = await community.sortPosts(
+                        communityPosts,
+                        "newest date"
+                      );
                       communityReducer({
                         type: GlobalCommunityActionType.DELETE_POST,
                         payload: {
@@ -1361,6 +1374,7 @@ function GlobalCommunityContextProvider(props) {
     } catch (error) {
       console.log(error);
     }
+    setLoad(false);
   };
 
   community.doLiveUpdate = async function (newPost) {
@@ -1534,11 +1548,11 @@ function GlobalCommunityContextProvider(props) {
     }
   };
 
-  community.updateSinglePlayerCS = async function (game, title="Untitled") {
+  community.updateSinglePlayerCS = async function (game, title = "Untitled") {
     let response = await api.getPostById(game.postID);
     if (response.status === 200) {
       let post = response.data.post;
-      if (title != "Untitled"){
+      if (title != "Untitled") {
         community.updatePost("title", post, title, null);
       }
       let comicID = post.postComic;
@@ -1691,6 +1705,10 @@ function GlobalCommunityContextProvider(props) {
                       communityPosts.push(post);
                     }
                     console.log("posts found:", communityPosts);
+                    communityPosts = await community.sortPosts(
+                      communityPosts,
+                      "newest date"
+                    );
                     communityReducer({
                       type: GlobalCommunityActionType.SET_COMMUNITY,
                       payload: {
@@ -1787,6 +1805,10 @@ function GlobalCommunityContextProvider(props) {
                       communityPosts.push(post);
                     }
                     console.log("posts found:", communityPosts);
+                    communityPosts = await community.sortPosts(
+                      communityPosts,
+                      "newest date"
+                    );
                     communityReducer({
                       type: GlobalCommunityActionType.SET_COMMUNITY,
                       payload: {
@@ -1889,6 +1911,10 @@ function GlobalCommunityContextProvider(props) {
                       communityPosts.push(post);
                     }
                     console.log("posts found:", communityPosts);
+                    communityPosts = await community.sortPosts(
+                      communityPosts,
+                      "newest date"
+                    );
                     communityReducer({
                       type: GlobalCommunityActionType.SET_COMMUNITY,
                       payload: {
@@ -1980,6 +2006,10 @@ function GlobalCommunityContextProvider(props) {
                       communityPosts.push(post);
                     }
                     console.log("posts found:", communityPosts);
+                    communityPosts = await community.sortPosts(
+                      communityPosts,
+                      "newest date"
+                    );
                     communityReducer({
                       type: GlobalCommunityActionType.SET_COMMUNITY,
                       payload: {
@@ -2078,6 +2108,10 @@ function GlobalCommunityContextProvider(props) {
                       communityPosts.push(post);
                     }
                     console.log("posts found:", communityPosts);
+                    communityPosts = await community.sortPosts(
+                      communityPosts,
+                      "newest date"
+                    );
                     communityReducer({
                       type: GlobalCommunityActionType.SET_COMMUNITY,
                       payload: {
@@ -2169,6 +2203,10 @@ function GlobalCommunityContextProvider(props) {
                       communityPosts.push(post);
                     }
                     console.log("posts found:", communityPosts);
+                    communityPosts = await community.sortPosts(
+                      communityPosts,
+                      "newest date"
+                    );
                     communityReducer({
                       type: GlobalCommunityActionType.SET_COMMUNITY,
                       payload: {
