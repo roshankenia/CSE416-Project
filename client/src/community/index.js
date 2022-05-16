@@ -765,6 +765,7 @@ function GlobalCommunityContextProvider(props) {
         console.log(userResponse);
       }
     } catch (err) {
+      setNotifyOpen([true, "This user no longer exists."]);
       console.log(err);
     }
     setLoad(false);
@@ -1160,7 +1161,6 @@ function GlobalCommunityContextProvider(props) {
               post.communityName
             );
             if (comResponse.status === 200) {
-
               let newComm = comResponse.data.communityList[0];
 
               const index = newComm.communityPosts.indexOf(post._id);
@@ -1233,7 +1233,6 @@ function GlobalCommunityContextProvider(props) {
               post.communityName
             );
             if (comResponse.status === 200) {
-
               let newComm = comResponse.data.communityList[0];
 
               const index = newComm.communityPosts.indexOf(post._id);
@@ -1377,7 +1376,7 @@ function GlobalCommunityContextProvider(props) {
       }
     } catch {
       console.log("API FAILED TO CREATE A NEW COMMUNITY");
-      return true
+      return true;
     }
   };
 
@@ -1564,7 +1563,6 @@ function GlobalCommunityContextProvider(props) {
             );
             console.log("Search Comm By Name returns: ", comResponse);
             if (comResponse.status === 200) {
-
               let newComm = comResponse.data.communityList[0];
               newComm.communityPosts.push(postID);
               let updateResponse = await api.updateCommunityById(
@@ -1654,7 +1652,6 @@ function GlobalCommunityContextProvider(props) {
               game.communityName
             );
             if (comResponse.status === 200) {
-
               let newComm = comResponse.data.communityList[0];
               newComm.communityPosts.push(postID);
               let updateResponse = await api.updateCommunityById(
@@ -1750,7 +1747,6 @@ function GlobalCommunityContextProvider(props) {
               game.communityName
             );
             if (comResponse.status === 200) {
-
               let newComm = comResponse.data.communityList[0];
               newComm.communityPosts.push(postID);
               let updateResponse = await api.updateCommunityById(
@@ -1836,7 +1832,6 @@ function GlobalCommunityContextProvider(props) {
               game.communityName
             );
             if (comResponse.status === 200) {
-
               let newComm = comResponse.data.communityList[0];
               newComm.communityPosts.push(postID);
               let updateResponse = await api.updateCommunityById(
@@ -1928,7 +1923,6 @@ function GlobalCommunityContextProvider(props) {
               game.communityName
             );
             if (comResponse.status === 200) {
-
               let newComm = comResponse.data.communityList[0];
               newComm.communityPosts.push(postID);
               let updateResponse = await api.updateCommunityById(
@@ -2014,7 +2008,6 @@ function GlobalCommunityContextProvider(props) {
               game.communityName
             );
             if (comResponse.status === 200) {
-
               let newComm = comResponse.data.communityList[0];
               newComm.communityPosts.push(postID);
               let updateResponse = await api.updateCommunityById(

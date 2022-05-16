@@ -152,7 +152,7 @@ export default function PostCard(props) {
         pdf.addImage(url3, "JPEG", 545, marginY, 250, 250);
       }
 
-      if (i + 3 != post.data.panels.length) {
+      if (post.data.panels.length - (i + 3) > 0) {
         pdf.addPage();
       }
     }
@@ -177,14 +177,13 @@ export default function PostCard(props) {
   // }
   const history = useHistory();
   function handleEdit(event) {
-    if (!post.communityPublished){
+    if (!post.communityPublished) {
       history.push("/singleplayer/" + post._id);
       game.turn = 0;
       console.log("game.turn should be 0", game.turn);
     } else {
-      console.log("this cannot be edited. already published.")
+      console.log("this cannot be edited. already published.");
     }
-    
   }
   function handleViewProfile(event, username) {
     console.log("in view profile");
@@ -581,9 +580,8 @@ export default function PostCard(props) {
               );
             })}
           </Grid>
-          {
-          !post.communityPublished &&
-          auth.user.username == post.data.authors[0] &&
+          {!post.communityPublished &&
+            auth.user.username == post.data.authors[0] &&
             post.data.authors.length == 1 && (
               <Grid item xs={1}>
                 <Button onClick={handleEdit} sx={{ fontSize: 24 }}>

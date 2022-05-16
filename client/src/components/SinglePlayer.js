@@ -1083,7 +1083,7 @@ export default function GameScreen() {
             width: 450,
             height: 75,
             margin: 1,
-            backgroundColor: "primary.dark",
+            backgroundColor: "green",
             "&:hover": {
               backgroundColor: "primary.main",
               opacity: [0.9, 0.8, 0.7],
@@ -1123,7 +1123,7 @@ export default function GameScreen() {
             width: 450,
             height: 75,
             margin: 1,
-            backgroundColor: "primary.dark",
+            backgroundColor: "red",
             "&:hover": {
               backgroundColor: "primary.main",
               opacity: [0.9, 0.8, 0.7],
@@ -1147,7 +1147,7 @@ export default function GameScreen() {
             width: 450,
             height: 75,
             margin: 1,
-            backgroundColor: "primary.dark",
+            backgroundColor: "green",
             "&:hover": {
               backgroundColor: "primary.main",
               opacity: [0.9, 0.8, 0.7],
@@ -1188,7 +1188,7 @@ export default function GameScreen() {
             width: 450,
             height: 75,
             margin: 1,
-            backgroundColor: "primary.dark",
+            backgroundColor: "red",
             "&:hover": {
               backgroundColor: "primary.main",
               opacity: [0.9, 0.8, 0.7],
