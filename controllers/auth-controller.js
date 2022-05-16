@@ -149,14 +149,14 @@ registerUser = async (req, res) => {
       username,
       guest,
     } = req.body;
-    let lcEmail = email.toLowerCase();
+    let email = email.toLowerCase();
     console.log(
       "create user: " +
         firstName +
         " " +
         lastName +
         " " +
-        lcEmail +
+        email +
         " " +
         password +
         " " +
@@ -195,7 +195,7 @@ registerUser = async (req, res) => {
     }
     console.log("password and password verify match");
     const existingUser = await User.findOne({
-      $or: [{ email: lcEmail }, { username: username }],
+      $or: [{ email: email }, { username: username }],
     });
 
     console.log("existingUser: " + existingUser);
@@ -217,7 +217,7 @@ registerUser = async (req, res) => {
       guest,
       firstName,
       lastName,
-      lcEmail,
+      email,
       passwordHash,
       username,
       bio,
