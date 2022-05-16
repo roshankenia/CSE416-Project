@@ -4,6 +4,9 @@ import api from "./auth-request-api";
 import { GlobalCommunityContext } from "../community";
 import { GameContext } from "../game";
 import { SocketContext } from "../socket";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
 
 const AuthContext = createContext();
 
@@ -47,6 +50,8 @@ function AuthContextProvider(props) {
   const { community } = useContext(GlobalCommunityContext);
   const { game } = useContext(GameContext);
   const socket = useContext(SocketContext);
+
+  const [load, setLoad] = useState(false);
 
   useEffect(() => {
     auth.getLoggedIn();
@@ -563,6 +568,7 @@ function AuthContextProvider(props) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
   auth.getLoggedIn = async function () {
+    setLoad(true);
     console.log("trying to get log in info");
     try {
       const response = await api.getLoggedIn();
@@ -622,6 +628,7 @@ function AuthContextProvider(props) {
     } catch (err) {
       console.log(err);
     }
+    setLoad(false);
   };
 
   auth.registerUser = async function (
@@ -794,6 +801,20 @@ function AuthContextProvider(props) {
       }}
     >
       {props.children}
+      <Modal open={load}>
+        <Box
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            textAlign: "center",
+            p: 4,
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      </Modal>
     </AuthContext.Provider>
   );
 }
