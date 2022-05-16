@@ -111,7 +111,6 @@ export default function GameScreen() {
       );
       setAuthor(comicResponse.data.comic.authors);
       setPanels(comicResponse.data.comic.panels);
-      console.log("the value of game.turn in getPost ", game.turn);
 
       setActions(
         actions.concat([
@@ -130,7 +129,6 @@ export default function GameScreen() {
       );
       setAuthor(storyResponse.data.story.authors);
       setPanels(storyResponse.data.story.panels);
-      console.log("the value of game.turn in getPost ", game.turn);
       setStoryText(storyResponse.data.story.panels[0]);
     }
   }
@@ -165,7 +163,6 @@ export default function GameScreen() {
   const addPanel = (event) => {
     if (isComic) {
       event.stopPropagation();
-      console.log("Add panel method");
       let imageData = stageRef.current.toDataURL();
       const data = new FormData();
       data.append("file", imageData);
@@ -202,9 +199,6 @@ export default function GameScreen() {
   const nextPanel = (event) => {
     if (isComic) {
       event.stopPropagation();
-      //TODO
-      //change to next panel
-      console.log("next panel method");
       let imageData = stageRef.current.toDataURL();
 
       const data = new FormData();
@@ -219,7 +213,6 @@ export default function GameScreen() {
         .then((resp) => resp.json())
         .then((data) => {
           imageData = data.url;
-          console.log(imageData);
           const currTurn = game.turn;
           //set panel to update
           let pan = panels;
@@ -666,7 +659,6 @@ export default function GameScreen() {
       </Box>
     );
   } else {
-    console.log("story");
     gamePanels = (
       // gamePanels = (
       //   <Box sx={{ width: "70%", height: "70%" }}>

@@ -15,7 +15,6 @@ export default function Timer(props) {
   let { stageRef, actions, setActions, storyText, setStoryText } = props;
   useEffect(() => {
     const countDown = async (count) => {
-      console.log("Inside the countDown", count);
       setTimer(count);
     };
 
@@ -23,14 +22,6 @@ export default function Timer(props) {
 
     //TODO Alan heck to see which turn it is, who is the current
     const changeTurn = async (time) => {
-      console.log(
-        "Inside Change Turn / end Time the game turn value is ",
-        game.turn
-      );
-      console.log(
-        "Check to make sure all players are organized the same",
-        game.players
-      );
       //check game
       if (game.gamemode == "comic") {
         // check if game.turn == amount of panels
@@ -51,7 +42,6 @@ export default function Timer(props) {
             })
             .catch((err) => console.log(err));
         } else {
-          console.log("stageref:", stageRef);
           let imageData = stageRef.current.toDataURL();
 
           const data = new FormData();
@@ -68,8 +58,6 @@ export default function Timer(props) {
               imageData = data.url;
 
               setActions([]);
-              console.log("after reset:", actions);
-              //console.log(imageData);
 
               game.changeTurn(imageData);
               if (auth.user.username === game.host) {
@@ -79,8 +67,6 @@ export default function Timer(props) {
             .catch((err) => console.log(err));
         }
       } else if (game.gamemode == "story") {
-        console.log("inside timer gamemode story");
-        console.log(storyText);
         // check if game.turn == amount of panels
         if (game.panelNumber - 1 == game.turn) {
           game.enterVoting(storyText, "story");
