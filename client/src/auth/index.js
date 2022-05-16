@@ -280,12 +280,17 @@ function AuthContextProvider(props) {
             friendRequests: friendRequests,
           },
         });
+        
+        history.push("/");
+        return true
       }
+      
     } catch (error) {
       console.log(error.response.data.errorMessage);
       //auth.setErrorMessage(error.response.data.errorMessage);
     }
     history.push("/");
+    return false
   };
 
   auth.addFriend = async function (sentUserEmail, receivedUserEmail) {
