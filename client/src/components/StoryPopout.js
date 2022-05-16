@@ -38,7 +38,7 @@ export default function StoryPopout(props) {
     let input = document.getElementById("data" + index);
     console.log(input);
     const pdf = new jsPDF("p", "pt", "a4");
-    pdf.html(input).then(() => pdf.save("jart.pdf"));
+    pdf.html(input).then(() => pdf.save(post.postTitle + ".pdf"));
   }
 
   return (

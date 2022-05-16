@@ -156,7 +156,7 @@ export default function PostCard(props) {
         pdf.addPage();
       }
     }
-    pdf.save("jart.pdf");
+    pdf.save(post.postTitle + ".pdf");
   }
 
   // if (index % 2 == 1) {
