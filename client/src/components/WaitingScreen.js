@@ -1,7 +1,7 @@
 import { Box, Button, Grid, List, TextField, Typography } from "@mui/material";
 import React, { useContext } from "react";
 // konva stuff
-import { Circle, Ellipse, Layer, Line, Rect, Stage, Text } from "react-konva";
+import { Circle, Ellipse, Layer, Line, Rect, Stage, Text, RegularPolygon } from "react-konva";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.bubble.css";
 import AuthContext from "../auth";
@@ -145,8 +145,43 @@ export default function WaitingScreen(props) {
                     <Circle
                       x={action.x}
                       y={action.y}
-                      width={action.width}
-                      height={action.height}
+                      radius={action.radius}
+                      fill={action.fill}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                    />
+                  );
+                } else if (action.tool === "triangle") {
+                  return (
+                    <RegularPolygon
+                      x={action.x}
+                      y={action.y}
+                      sides={action.sides}
+                      radius={action.radius}
+                      fill={action.fill}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                    />
+                  );
+                } else if (action.tool === "pentagon") {
+                  return (
+                    <RegularPolygon
+                      x={action.x}
+                      y={action.y}
+                      sides={action.sides}
+                      radius={action.radius}
+                      fill={action.fill}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                    />
+                  );
+                } else if (action.tool === "hexagon") {
+                  return (
+                    <RegularPolygon
+                      x={action.x}
+                      y={action.y}
+                      sides={action.sides}
+                      radius={action.radius}
                       fill={action.fill}
                       stroke={action.stroke}
                       strokeWidth={action.strokeWidth}
@@ -194,20 +229,21 @@ export default function WaitingScreen(props) {
           backgroundColor: "white",
           border: 3,
           justifyContent: "space-between",
-          overflowY: 'auto',
+          overflowY: "auto",
         }}
       >
         <Chat></Chat>
-        </Box>
-        <Box
+      </Box>
+      <Box
         sx={{
           width: 600,
           height: "auto",
           backgroundColor: "white",
           border: 3,
           justifyContent: "space-between",
-          overflowY: 'auto'
-        }}>
+          overflowY: "auto",
+        }}
+      >
         <Box component="form" onSubmit={handleChat} noValidate>
           <TextField id="chat" name="chat" sx={{ top: "65%", width: "60%" }}>
             Type Message

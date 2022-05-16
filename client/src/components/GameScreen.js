@@ -8,7 +8,16 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import React, { useContext, useEffect, useState, useCallback } from "react";
 //#endregion imports
 //#region konva import
-import { Circle, Ellipse, Layer, Line, Rect, Stage, Text } from "react-konva";
+import {
+  Circle,
+  Ellipse,
+  Layer,
+  Line,
+  Rect,
+  Stage,
+  Text,
+  RegularPolygon,
+} from "react-konva";
 import ReactQuill from "react-quill";
 import AuthContext from "../auth";
 import { GameContext } from "../game";
@@ -282,8 +291,55 @@ export default function GameScreen() {
           tool,
           x,
           y,
-          width: 0,
-          height: 0,
+          radius: 0,
+          key: actions.length + 1,
+          stroke: color,
+          strokeWidth: strokeWidth,
+          fill: fill,
+        },
+      ]);
+    } else if (tool == "triangle") {
+      const { x, y } = e.target.getStage().getPointerPosition();
+      setActions([
+        ...actions,
+        {
+          tool,
+          x,
+          y,
+          sides: 3,
+          radius: 0,
+          key: actions.length + 1,
+          stroke: color,
+          strokeWidth: strokeWidth,
+          fill: fill,
+        },
+      ]);
+    } else if (tool == "pentagon") {
+      const { x, y } = e.target.getStage().getPointerPosition();
+      setActions([
+        ...actions,
+        {
+          tool,
+          x,
+          y,
+          sides: 5,
+          radius: 0,
+          key: actions.length + 1,
+          stroke: color,
+          strokeWidth: strokeWidth,
+          fill: fill,
+        },
+      ]);
+    } else if (tool == "hexagon") {
+      const { x, y } = e.target.getStage().getPointerPosition();
+      setActions([
+        ...actions,
+        {
+          tool,
+          x,
+          y,
+          sides: 6,
+          radius: 0,
           key: actions.length + 1,
           stroke: color,
           strokeWidth: strokeWidth,
@@ -363,19 +419,75 @@ export default function GameScreen() {
       const sy = actions[actions.length - 1].y;
       const key = actions[actions.length - 1].key;
       const { x, y } = e.target.getStage().getPointerPosition();
-
+      const newRadius = Math.sqrt(Math.pow(x - sx, 2) + Math.pow(y - sx, 2));
       let lastCircle = {
         tool,
         x: sx,
         y: sy,
-        width: Math.abs(x - sx),
-        height: Math.abs(y - sy),
+        radius: newRadius,
         key: key,
         stroke: color,
         strokeWidth: strokeWidth,
         fill: fill,
       };
       actions.splice(actions.length - 1, 1, lastCircle);
+      setActions(actions.concat());
+    } else if (tool == "triangle") {
+      const sx = actions[actions.length - 1].x;
+      const sy = actions[actions.length - 1].y;
+      const key = actions[actions.length - 1].key;
+      const { x, y } = e.target.getStage().getPointerPosition();
+      const newRadius = Math.sqrt(Math.pow(x - sx, 2) + Math.pow(y - sx, 2));
+      let lastTriangle = {
+        tool,
+        x: sx,
+        y: sy,
+        sides: 3,
+        radius: newRadius,
+        key: key,
+        stroke: color,
+        strokeWidth: strokeWidth,
+        fill: fill,
+      };
+      actions.splice(actions.length - 1, 1, lastTriangle);
+      setActions(actions.concat());
+    } else if (tool == "pentagon") {
+      const sx = actions[actions.length - 1].x;
+      const sy = actions[actions.length - 1].y;
+      const key = actions[actions.length - 1].key;
+      const { x, y } = e.target.getStage().getPointerPosition();
+      const newRadius = Math.sqrt(Math.pow(x - sx, 2) + Math.pow(y - sx, 2));
+      let lastTriangle = {
+        tool,
+        x: sx,
+        y: sy,
+        sides: 5,
+        radius: newRadius,
+        key: key,
+        stroke: color,
+        strokeWidth: strokeWidth,
+        fill: fill,
+      };
+      actions.splice(actions.length - 1, 1, lastTriangle);
+      setActions(actions.concat());
+    } else if (tool == "hexagon") {
+      const sx = actions[actions.length - 1].x;
+      const sy = actions[actions.length - 1].y;
+      const key = actions[actions.length - 1].key;
+      const { x, y } = e.target.getStage().getPointerPosition();
+      const newRadius = Math.sqrt(Math.pow(x - sx, 2) + Math.pow(y - sx, 2));
+      let lastTriangle = {
+        tool,
+        x: sx,
+        y: sy,
+        sides: 6,
+        radius: newRadius,
+        key: key,
+        stroke: color,
+        strokeWidth: strokeWidth,
+        fill: fill,
+      };
+      actions.splice(actions.length - 1, 1, lastTriangle);
       setActions(actions.concat());
     }
     socket.emit("draw-actions", auth.user._id, actions, game.lobby);
@@ -600,8 +712,43 @@ export default function GameScreen() {
                     <Circle
                       x={action.x}
                       y={action.y}
-                      width={action.width}
-                      height={action.height}
+                      radius={action.radius}
+                      fill={action.fill}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                    />
+                  );
+                } else if (action.tool === "triangle") {
+                  return (
+                    <RegularPolygon
+                      x={action.x}
+                      y={action.y}
+                      sides={action.sides}
+                      radius={action.radius}
+                      fill={action.fill}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                    />
+                  );
+                } else if (action.tool === "pentagon") {
+                  return (
+                    <RegularPolygon
+                      x={action.x}
+                      y={action.y}
+                      sides={action.sides}
+                      radius={action.radius}
+                      fill={action.fill}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                    />
+                  );
+                } else if (action.tool === "hexagon") {
+                  return (
+                    <RegularPolygon
+                      x={action.x}
+                      y={action.y}
+                      sides={action.sides}
+                      radius={action.radius}
                       fill={action.fill}
                       stroke={action.stroke}
                       strokeWidth={action.strokeWidth}
@@ -870,7 +1017,7 @@ export default function GameScreen() {
         >
           {"Characters Left: "} {charLimit - storyText.replace(/<\/?[^>]+(>|$)/g, "").length}
         </Typography> */}
-        {/* <Button
+        <Button
           sx={{
             width: 450,
             height: 75,
@@ -886,7 +1033,7 @@ export default function GameScreen() {
           }}
         >
           <Typography fontSize={"32px"}>Submit</Typography>
-        </Button> */}
+        </Button>
       </Grid>
     );
   }

@@ -121,11 +121,10 @@ export default function VoteToPublishScreen() {
     const decisionVal = arr.indexOf(max);
     console.log("index of max:", decisionVal);
 
-
     if (decisionVal == 0) {
       console.log("Voting Decision: Scrap");
-    } else if (game.postID){
-      console.log("in single player")
+    } else if (game.postID) {
+      console.log("in single player");
       if (decisionVal == 1) {
         console.log("Single Player Decision: Community");
         community.makeSinglePlayerDecision("comm", title, dateTime, game);
@@ -134,7 +133,7 @@ export default function VoteToPublishScreen() {
         community.makeSinglePlayerDecision("commdis", title, dateTime, game);
       } else if (decisionVal == 3) {
         console.log("Single Player Decision: Save to Edit");
-        console.log(game)
+        console.log(game);
         community.makeSinglePlayerDecision("save", title, dateTime, game);
       } else {
         console.log("error: improper decision value");
@@ -149,14 +148,14 @@ export default function VoteToPublishScreen() {
         community.makePost("commdis", title, dateTime, game);
       } else if (decisionVal == 3) {
         console.log("Single Player Decision: Save to Edit");
-        console.log(game)
+        console.log(game);
         community.makeSinglePlayerDecision("save", title, dateTime, game);
       } else {
         console.log("error: improper decision value");
         console.log("post was not posted");
       }
+      socket.emit("close-lobby", game.lobby);
     }
-
 
     // if (decisionVal == 0) {
     //   console.log("Voting Decision: Scrap");
@@ -186,7 +185,7 @@ export default function VoteToPublishScreen() {
     }
     handleExitVoting();
   }
-  if (game.players.length == 0){
+  if (game.players.length == 0) {
     return (
       <Grid
         container
@@ -270,8 +269,7 @@ export default function VoteToPublishScreen() {
         </Button>
       </Grid>
     );
-  }
-  else if (game.players.length == 1) {
+  } else if (game.players.length == 1) {
     return (
       <Grid
         container
@@ -355,8 +353,7 @@ export default function VoteToPublishScreen() {
         </Button>
       </Grid>
     );
-  }
-  else if (auth.user.username == game.host) {
+  } else if (auth.user.username == game.host) {
     if (
       game.votes[0] + game.votes[1] + game.votes[2] ==
       game.players.length - 1
