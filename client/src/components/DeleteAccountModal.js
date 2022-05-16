@@ -137,7 +137,8 @@ export default function DeleteAccountModal() {
     box = (
       <Box sx={style}>
         <Typography id="modal-modal-title" variant="h5" component="h2">
-          User {auth.user.username} has been successfully deleted.
+          User {auth.user ? auth.user.username : ""} has been successfully
+          deleted.
         </Typography>
         <Button variant="outlined" onClick={handleClose} sx={{ m: 1 }}>
           Cancel

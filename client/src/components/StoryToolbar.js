@@ -67,10 +67,9 @@ export const StoryToolbar = () => (
         <option value="lucida">Lucida</option>
       </select> */}
       <select className="ql-size" defaultValue="medium">
-        <option value="extra-small">Size 1</option>
-        <option value="small">Size 2</option>
-        <option value="medium">Size 3</option>
-        <option value="large">Size 4</option>
+        <option value="small">Size 1</option>
+        <option value="medium">Size 2</option>
+        <option value="large">Size 3</option>
       </select>
       <select className="ql-header" defaultValue="3">
         <option value="1">Heading</option>
@@ -99,9 +98,6 @@ export const StoryToolbar = () => (
       <select className="ql-align" />
       <select className="ql-color" />
       <select className="ql-background" />
-    </span>
-    <span className="ql-formats">
-      <button className="ql-link" />
     </span>
     <span className="ql-formats">
       <button className="ql-code-block" />
