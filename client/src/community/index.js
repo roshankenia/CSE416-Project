@@ -1600,6 +1600,8 @@ function GlobalCommunityContextProvider(props) {
     if (game.postID != null) {
       if (voteVal == "save") {
         await community.updateSinglePlayerCS(game, title);
+        let response = await api.getPostById(game.postID);
+        await community.doLiveUpdate(response.data.post);
       } else if (voteVal == "comm") {
         await community.updateSinglePlayerCS(game);
         let response = await api.getPostById(game.postID);
