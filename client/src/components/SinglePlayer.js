@@ -8,7 +8,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import React, { useContext, useEffect, useState } from "react";
 //#endregion imports
 //#region konva import
-import { Circle, Ellipse, Layer, Line, Rect, Stage, Text } from "react-konva";
+import { Circle, Ellipse, Layer, Line, Rect, Stage, Text, RegularPolygon } from "react-konva";
 import ReactQuill from "react-quill";
 import { useHistory } from "react-router-dom";
 import AuthContext from "../auth";
@@ -104,14 +104,14 @@ export default function GameScreen() {
       setAuthor(comicResponse.data.comic.authors);
       setPanels(comicResponse.data.comic.panels);
       console.log("the value of game.turn in getPost ", game.turn);
-      
+
       setActions(
         actions.concat([
           {
             ...stageRef.current.getPointerPosition(),
             src: comicResponse.data.comic.panels[game.turn],
             key: actions.length + 1,
-          }
+          },
         ])
       );
     } else {
@@ -210,7 +210,7 @@ export default function GameScreen() {
         .then((resp) => resp.json())
         .then((data) => {
           imageData = data.url;
-          console.log(imageData)
+          console.log(imageData);
           const currTurn = game.turn;
           //set panel to update
           let pan = panels;
@@ -249,6 +249,9 @@ export default function GameScreen() {
       game.enterVoting(storyText, postID);
     }
     // history.push("/");
+    // api.updateStoryById(csID, author, newPanels);
+    game.enterVoting();
+    history.push("/");
   };
 
   const handleLeave = (event) => {
@@ -347,7 +350,7 @@ export default function GameScreen() {
   };
 
   const handleMouseDown = (e) => {
-    console.log(panels)
+    console.log(panels);
     isDrawing.current = true;
     if (tool == "pen" || tool == "eraser") {
       const pos = e.target.getStage().getPointerPosition();
@@ -401,8 +404,55 @@ export default function GameScreen() {
           tool,
           x,
           y,
-          width: 0,
-          height: 0,
+          radius: 0,
+          key: actions.length + 1,
+          stroke: color,
+          strokeWidth: strokeWidth,
+          fill: fill,
+        },
+      ]);
+    } else if (tool == "triangle") {
+      const { x, y } = e.target.getStage().getPointerPosition();
+      setActions([
+        ...actions,
+        {
+          tool,
+          x,
+          y,
+          sides: 3,
+          radius: 0,
+          key: actions.length + 1,
+          stroke: color,
+          strokeWidth: strokeWidth,
+          fill: fill,
+        },
+      ]);
+    } else if (tool == "pentagon") {
+      const { x, y } = e.target.getStage().getPointerPosition();
+      setActions([
+        ...actions,
+        {
+          tool,
+          x,
+          y,
+          sides: 5,
+          radius: 0,
+          key: actions.length + 1,
+          stroke: color,
+          strokeWidth: strokeWidth,
+          fill: fill,
+        },
+      ]);
+    } else if (tool == "hexagon") {
+      const { x, y } = e.target.getStage().getPointerPosition();
+      setActions([
+        ...actions,
+        {
+          tool,
+          x,
+          y,
+          sides: 6,
+          radius: 0,
           key: actions.length + 1,
           stroke: color,
           strokeWidth: strokeWidth,
@@ -481,19 +531,75 @@ export default function GameScreen() {
       const sy = actions[actions.length - 1].y;
       const key = actions[actions.length - 1].key;
       const { x, y } = e.target.getStage().getPointerPosition();
-
+      const newRadius = Math.sqrt(Math.pow(x - sx, 2) + Math.pow(y - sx, 2));
       let lastCircle = {
         tool,
         x: sx,
         y: sy,
-        width: Math.abs(x - sx),
-        height: Math.abs(y - sy),
+        radius: newRadius,
         key: key,
         stroke: color,
         strokeWidth: strokeWidth,
         fill: fill,
       };
       actions.splice(actions.length - 1, 1, lastCircle);
+      setActions(actions.concat());
+    } else if (tool == "triangle") {
+      const sx = actions[actions.length - 1].x;
+      const sy = actions[actions.length - 1].y;
+      const key = actions[actions.length - 1].key;
+      const { x, y } = e.target.getStage().getPointerPosition();
+      const newRadius = Math.sqrt(Math.pow(x - sx, 2) + Math.pow(y - sx, 2));
+      let lastTriangle = {
+        tool,
+        x: sx,
+        y: sy,
+        sides: 3,
+        radius: newRadius,
+        key: key,
+        stroke: color,
+        strokeWidth: strokeWidth,
+        fill: fill,
+      };
+      actions.splice(actions.length - 1, 1, lastTriangle);
+      setActions(actions.concat());
+    } else if (tool == "pentagon") {
+      const sx = actions[actions.length - 1].x;
+      const sy = actions[actions.length - 1].y;
+      const key = actions[actions.length - 1].key;
+      const { x, y } = e.target.getStage().getPointerPosition();
+      const newRadius = Math.sqrt(Math.pow(x - sx, 2) + Math.pow(y - sx, 2));
+      let lastTriangle = {
+        tool,
+        x: sx,
+        y: sy,
+        sides: 5,
+        radius: newRadius,
+        key: key,
+        stroke: color,
+        strokeWidth: strokeWidth,
+        fill: fill,
+      };
+      actions.splice(actions.length - 1, 1, lastTriangle);
+      setActions(actions.concat());
+    } else if (tool == "hexagon") {
+      const sx = actions[actions.length - 1].x;
+      const sy = actions[actions.length - 1].y;
+      const key = actions[actions.length - 1].key;
+      const { x, y } = e.target.getStage().getPointerPosition();
+      const newRadius = Math.sqrt(Math.pow(x - sx, 2) + Math.pow(y - sx, 2));
+      let lastTriangle = {
+        tool,
+        x: sx,
+        y: sy,
+        sides: 6,
+        radius: newRadius,
+        key: key,
+        stroke: color,
+        strokeWidth: strokeWidth,
+        fill: fill,
+      };
+      actions.splice(actions.length - 1, 1, lastTriangle);
       setActions(actions.concat());
     }
   };
@@ -521,9 +627,8 @@ export default function GameScreen() {
       </Box>
     );
   } else {
-    console.log("story")
+    console.log("story");
     gamePanels = (
-
       // gamePanels = (
       //   <Box sx={{ width: "70%", height: "70%" }}>
       //     <ImageList sx={{ width: "95%" }} cols={6}>
@@ -597,7 +702,7 @@ export default function GameScreen() {
       buttonCSS={buttonCSS}
       setTool={setTool}
       //force comic
-      gameMode={isComic? "comic" : "story"}
+      gameMode={isComic ? "comic" : "story"}
       flexContainer={flexContainer}
       tool={tool}
       changeColor={changeColor}
@@ -710,8 +815,43 @@ export default function GameScreen() {
                     <Circle
                       x={action.x}
                       y={action.y}
-                      width={action.width}
-                      height={action.height}
+                      radius={action.radius}
+                      fill={action.fill}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                    />
+                  );
+                } else if (action.tool === "triangle") {
+                  return (
+                    <RegularPolygon
+                      x={action.x}
+                      y={action.y}
+                      sides={action.sides}
+                      radius={action.radius}
+                      fill={action.fill}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                    />
+                  );
+                } else if (action.tool === "pentagon") {
+                  return (
+                    <RegularPolygon
+                      x={action.x}
+                      y={action.y}
+                      sides={action.sides}
+                      radius={action.radius}
+                      fill={action.fill}
+                      stroke={action.stroke}
+                      strokeWidth={action.strokeWidth}
+                    />
+                  );
+                } else if (action.tool === "hexagon") {
+                  return (
+                    <RegularPolygon
+                      x={action.x}
+                      y={action.y}
+                      sides={action.sides}
+                      radius={action.radius}
                       fill={action.fill}
                       stroke={action.stroke}
                       strokeWidth={action.strokeWidth}
@@ -826,36 +966,36 @@ export default function GameScreen() {
         </Button>
         {characterToggle && (
           <Box
-          sx={{
-            margin: 1,
-            backgroundColor: "primary.dark",
-            "&:hover": {
-              backgroundColor: "primary.main",
-              opacity: [0.9, 0.8, 0.7],
-            },
-            borderRadius: 5,
-            border: 3,
-            color: "black",
-          }}
-        >
-          <ImageList
-            sx={{ width: "95%" }}
-            cols={3}
-            style={{ maxHeight: 200, overflow: "auto" }}
+            sx={{
+              margin: 1,
+              backgroundColor: "primary.dark",
+              "&:hover": {
+                backgroundColor: "primary.main",
+                opacity: [0.9, 0.8, 0.7],
+              },
+              borderRadius: 5,
+              border: 3,
+              color: "black",
+            }}
           >
-            {characters.map((picture) => (
-              <ImageListItem key={picture}>
-                <img
-                  src={picture}
-                  draggable="true"
-                  onDragStart={(e) => {
-                    dragUrl.current = e.target.src;
-                  }}
-                />
-              </ImageListItem>
-            ))}
-          </ImageList>
-        </Box>
+            <ImageList
+              sx={{ width: "95%" }}
+              cols={3}
+              style={{ maxHeight: 200, overflow: "auto" }}
+            >
+              {characters.map((picture) => (
+                <ImageListItem key={picture}>
+                  <img
+                    src={picture}
+                    draggable="true"
+                    onDragStart={(e) => {
+                      dragUrl.current = e.target.src;
+                    }}
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList>
+          </Box>
         )}
         <Button
           sx={{

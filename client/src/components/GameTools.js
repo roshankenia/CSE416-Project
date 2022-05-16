@@ -1,9 +1,12 @@
 import CircleIcon from "@mui/icons-material/Circle";
 import CropSquareIcon from "@mui/icons-material/CropSquare";
+import ChangeHistoryIcon from "@mui/icons-material/ChangeHistory";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import RedoIcon from "@mui/icons-material/Redo";
 import SquareIcon from "@mui/icons-material/Square";
+import PentagonIcon from "@mui/icons-material/Pentagon";
+import HexagonIcon from "@mui/icons-material/Hexagon";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import UndoIcon from "@mui/icons-material/Undo";
 import VignetteRoundedIcon from "@mui/icons-material/VignetteRounded";
@@ -385,7 +388,12 @@ export default function GameTools(props) {
           ></TextField>
         </Box>
       )}
-      {(tool == "rectangle" || tool == "circle" || tool == "ellipse") && (
+      {(tool == "rectangle" ||
+        tool == "circle" ||
+        tool == "ellipse" ||
+        tool == "triangle" ||
+        tool == "pentagon" ||
+        tool == "hexagon") && (
         <Box
           sx={{
             margin: 1,
@@ -808,6 +816,39 @@ export default function GameTools(props) {
               }}
             >
               <VignetteRoundedIcon fontSize="large" />
+            </Button>
+            <Button
+              sx={buttonCSS}
+              onClick={(e) => {
+                setBubbleToggle(false);
+                setCharacterToggle(false);
+                setThemeToggle(false);
+                setTool("triangle");
+              }}
+            >
+              <ChangeHistoryIcon fontSize="large" />
+            </Button>
+            <Button
+              sx={buttonCSS}
+              onClick={(e) => {
+                setBubbleToggle(false);
+                setCharacterToggle(false);
+                setThemeToggle(false);
+                setTool("pentagon");
+              }}
+            >
+              <PentagonIcon fontSize="large" />
+            </Button>
+            <Button
+              sx={buttonCSS}
+              onClick={(e) => {
+                setBubbleToggle(false);
+                setCharacterToggle(false);
+                setThemeToggle(false);
+                setTool("hexagon");
+              }}
+            >
+              <HexagonIcon fontSize="large" />
             </Button>
             <Button
               sx={buttonCSS}
