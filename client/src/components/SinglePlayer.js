@@ -246,14 +246,17 @@ export default function GameScreen() {
     let newPanels = panels;
     newPanels[index] = storyText;
     const currTurn = game.turn;
-    if (currTurn + 1 == panels.length) {
-      console.log("inside go to voting");
-      game.enterVoting(storyText, postID);
-    }
+    console.log(newPanels);
+    console.log(storyText);
+    console.log(postID);
+    game.enterVoting(newPanels, postID);
+    // if (currTurn + 1 == panels.length) {
+    //   console.log("inside go to voting");
+    //   game.enterVoting(storyText, postID);
+    // }
     // history.push("/");
     // api.updateStoryById(csID, author, newPanels);
-    game.enterVoting();
-    history.push("/");
+    // history.push("/");
   };
 
   const handleLeave = (event) => {

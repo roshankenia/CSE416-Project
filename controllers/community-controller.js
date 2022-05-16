@@ -230,6 +230,7 @@ getStoryById = async (req, res) => {
 
 updateStoryById = async (req, res) => {
   const body = req.body;
+  console.log(req.body)
   if (!body) {
     return res.status(400).json({
       errorMessage: "Improperly formatted request",

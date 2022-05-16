@@ -1557,7 +1557,6 @@ function GlobalCommunityContextProvider(props) {
         let comicresponse = await api.getComicById(comicID);
         if (comicresponse.status === 200) {
           let comic = comicresponse.data.comic;
-          console.log(comic);
           let authors = comic.authors;
           let response = await api.updateComicById(
             comicID,
@@ -1574,9 +1573,10 @@ function GlobalCommunityContextProvider(props) {
         let storyresponse = await api.getStoryById(storyID);
         if (storyresponse.status === 200) {
           let story = storyresponse.data.story;
+          let authors = story.authors;
           let response = await api.updateStoryById(
             storyID,
-            story.authors,
+            authors,
             game.panels
           );
           if (response.status === 200) {

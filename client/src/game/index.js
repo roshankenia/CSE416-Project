@@ -861,22 +861,29 @@ function GameContextProvider(props) {
 
   game.enterVoting = async function (lastPanel, postID = null) {
     try {
-      const id = game.lobby;
-      // if (game.host != auth.user.username) {
-      // game.exitVoting();
-      // } else {
-      let panels = game.panels;
-      panels.push(lastPanel);
-      gameReducer({
-        type: GameActionType.ENTER_VOTING,
-        payload: {
-          panels: panels,
-          postID: postID,
-        },
-      });
-      history.push("/game/" + id);
-      // }
-      //}
+      if (game.gamemode == "comic"){
+        const id = game.lobby;
+        let panels = game.panels;
+        panels.push(lastPanel);
+        gameReducer({
+          type: GameActionType.ENTER_VOTING,
+          payload: {
+            panels: panels,
+            postID: postID,
+          },
+        });
+        history.push("/game/" + id);
+      } else if (game.gamemode == "story"){
+        const id = game.lobby;
+        gameReducer({
+          type: GameActionType.ENTER_VOTING,
+          payload: {
+            panels: lastPanel,
+            postID: postID,
+          },
+        });
+        history.push("/game/" + id);
+      }
     } catch {
       console.log("error buddy");
     }
