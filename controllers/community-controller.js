@@ -248,7 +248,7 @@ updateStoryById = async (req, res) => {
         });
       }
       story.authors = req.body.authors;
-      story.panels = req.body.panels;
+      story.panels = req.body.panels[0];
 
       story.save().then(() => {
         return res.status(200).json({
