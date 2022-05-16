@@ -5,7 +5,7 @@ import ImageListItem from "@mui/material/ImageListItem";
 import { styled } from "@mui/material/styles";
 // import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 //#endregion imports
 //#region konva import
 import { Circle, Ellipse, Layer, Line, Rect, Stage, Text, RegularPolygon } from "react-konva";
@@ -131,6 +131,8 @@ export default function GameScreen() {
     getPost();
   }, []);
 
+  
+
   const { auth } = useContext(AuthContext);
 
   //#region css
@@ -244,14 +246,17 @@ export default function GameScreen() {
     let newPanels = panels;
     newPanels[index] = storyText;
     const currTurn = game.turn;
-    if (currTurn + 1 == panels.length) {
-      console.log("inside go to voting");
-      game.enterVoting(storyText, postID);
-    }
+    console.log(newPanels);
+    console.log(storyText);
+    console.log(postID);
+    game.enterVoting(newPanels, postID);
+    // if (currTurn + 1 == panels.length) {
+    //   console.log("inside go to voting");
+    //   game.enterVoting(storyText, postID);
+    // }
     // history.push("/");
     // api.updateStoryById(csID, author, newPanels);
-    game.enterVoting();
-    history.push("/");
+    // history.push("/");
   };
 
   const handleLeave = (event) => {
@@ -349,8 +354,46 @@ export default function GameScreen() {
     setColor(color);
   };
 
+  const handleUndoRedoKey = useCallback((event) => {
+    if (event.keyCode == 90 && event.ctrlKey){ 
+      handleUndo()
+    }else if(event.keyCode == 89 && event.ctrlKey){ 
+      handleRedo()
+    }
+  },[actions,redos]);
+
+  useEffect(()=>{
+    document.addEventListener('keydown', handleUndoRedoKey);
+    return () => {
+      console.log('removed')
+      document.removeEventListener('keydown', handleUndoRedoKey);
+    }
+  },[handleUndoRedoKey])
+
+  
+  
+  // useCallback((event) => {
+  //   if (event.keyCode == 90 && event.ctrlKey){ 
+  //     console.log(actions.length)
+  //     console.log(panels)
+  //     // if (actions.length) {
+  //     //   let redo = actions.pop();
+  //     //   setActions(actions);
+  //     //   setRedos([...redos, redo]);
+  //     // }
+  //   }else if(event.keyCode == 89 && event.ctrlKey){ 
+  //     console.log(actions.length)
+  //     // if (redos.length) {
+  //     //   let action = redos.pop();
+  //     //   setActions([...actions, action]);
+  //     //   setRedos(redos);
+  //     // }
+  //   }
+  // }, []);
+
+  
+
   const handleMouseDown = (e) => {
-    console.log(panels);
     isDrawing.current = true;
     if (tool == "pen" || tool == "eraser") {
       const pos = e.target.getStage().getPointerPosition();

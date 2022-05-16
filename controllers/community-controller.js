@@ -230,6 +230,8 @@ getStoryById = async (req, res) => {
 
 updateStoryById = async (req, res) => {
   const body = req.body;
+  console.log("INSIDE UPDATESTORYBYID METHOD IN COMM CONTROLLER******************")
+  console.log(req.body)
   if (!body) {
     return res.status(400).json({
       errorMessage: "Improperly formatted request",
@@ -246,7 +248,7 @@ updateStoryById = async (req, res) => {
         });
       }
       story.authors = req.body.authors;
-      story.panels = req.body.panels;
+      story.panels = req.body.panels[0];
 
       story.save().then(() => {
         return res.status(200).json({

@@ -5,7 +5,7 @@ import ImageListItem from "@mui/material/ImageListItem";
 import { styled } from "@mui/material/styles";
 // import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 //#endregion imports
 //#region konva import
 import {
@@ -134,6 +134,9 @@ export default function GameScreen() {
     alignItems: "center",
     justifyContent: "center",
   };
+
+  
+
   //TODO Alan update to useState(game.players[game.currentPlayer])
   // const [currentPlayer, setCurrentPlayer] = useState(game.players[0]);
 
@@ -208,6 +211,22 @@ export default function GameScreen() {
       setRedos(redos);
     }
   };
+
+  const handleUndoRedoKey = useCallback((event) => {
+    if (event.keyCode == 90 && event.ctrlKey){ 
+      handleUndo()
+    }else if(event.keyCode == 89 && event.ctrlKey){ 
+      handleRedo()
+    }
+  },[actions,redos]);
+
+  useEffect(()=>{
+    document.addEventListener('keydown', handleUndoRedoKey);
+    return () => {
+      console.log('removed')
+      document.removeEventListener('keydown', handleUndoRedoKey);
+    }
+  },[handleUndoRedoKey])
 
   const handleClear = () => {
     setActions([]);

@@ -988,6 +988,8 @@ function GlobalCommunityContextProvider(props) {
             post.dateAndTime,
             post.communityName
           );
+          console.log(response.data.post)
+          community.doLiveUpdate(response.data.post);
         } else {
           response = await api.updatePost(
             post._id,
@@ -1002,6 +1004,8 @@ function GlobalCommunityContextProvider(props) {
             post.dateAndTime,
             post.communityName
           );
+          console.log(response.data.post)
+          community.doLiveUpdate(response.data.post);
         }
         if (response.status === 200) {
           console.log("update post as comm");
@@ -1024,6 +1028,8 @@ function GlobalCommunityContextProvider(props) {
             post.dateAndTime,
             post.communityName
           );
+          console.log(response.data.post)
+          community.doLiveUpdate(response.data.post);
         } else {
           response = await api.updatePost(
             post._id,
@@ -1038,6 +1044,8 @@ function GlobalCommunityContextProvider(props) {
             post.dateAndTime,
             post.communityName
           );
+          console.log(response.data.post)
+          community.doLiveUpdate(response.data.post);
         }
         if (response.status === 200) {
           console.log("update post as commdis");
@@ -1457,6 +1465,7 @@ function GlobalCommunityContextProvider(props) {
       }
     } catch {
       console.log("API FAILED TO CREATE A NEW COMMUNITY");
+      return true
     }
   };
 
@@ -1563,7 +1572,6 @@ function GlobalCommunityContextProvider(props) {
         let comicresponse = await api.getComicById(comicID);
         if (comicresponse.status === 200) {
           let comic = comicresponse.data.comic;
-          console.log(comic);
           let authors = comic.authors;
           let response = await api.updateComicById(
             comicID,
@@ -1580,9 +1588,10 @@ function GlobalCommunityContextProvider(props) {
         let storyresponse = await api.getStoryById(storyID);
         if (storyresponse.status === 200) {
           let story = storyresponse.data.story;
+          let authors = story.authors;
           let response = await api.updateStoryById(
             storyID,
-            story.authors,
+            authors,
             game.panels
           );
           if (response.status === 200) {
@@ -1604,24 +1613,22 @@ function GlobalCommunityContextProvider(props) {
   ) {
     if (game.postID != null) {
       if (voteVal == "save") {
-        community.updateSinglePlayerCS(game, title);
+        await community.updateSinglePlayerCS(game, title);
       } else if (voteVal == "comm") {
-        community.updateSinglePlayerCS(game);
+        await community.updateSinglePlayerCS(game);
         let response = await api.getPostById(game.postID);
         if (response.status === 200) {
           let post = response.data.post;
           let postID = post._id;
-          community.updatePost("comm", post, title, null);
-          community.doLiveUpdate(post);
+          await community.updatePost("comm", post, title, null);
         }
       } else if (voteVal == "commdis") {
-        community.updateSinglePlayerCS(game);
+        await community.updateSinglePlayerCS(game);
         let response = await api.getPostById(game.postID);
         if (response.status === 200) {
           let post = response.data.post;
           let postID = post._id;
-          community.updatePost("commdis", post, title, null);
-          community.doLiveUpdate(post);
+          await community.updatePost("commdis", post, title, null);
         }
       }
     } else {

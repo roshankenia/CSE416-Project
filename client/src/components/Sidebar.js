@@ -6,18 +6,19 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import AuthContext from "../auth";
 import { GlobalCommunityContext } from "../community";
 import { GameContext } from "../game";
+import Snackbar from "@mui/material/Snackbar";
 
 export default function Sidebar() {
   const { game } = useContext(GameContext);
   const { auth } = useContext(AuthContext);
   const { community } = useContext(GlobalCommunityContext);
-
-  const [open, setOpen] = React.useState(false);
+  const [message, setMessage] = React.useState(false);
   const [gameInviteOpen, setGameInviteOpen] = React.useState(false);
+  const [openInvite, setOpen] = React.useState(false);
 
   const handleClick = () => {
     setOpen(true);
@@ -30,11 +31,24 @@ export default function Sidebar() {
     setOpen(false);
   };
 
-  const handleAddFriend = (event) => {
+  const handleAddFriend = async (event) => {
     event.preventDefault();
-    console.log("handleAddFriend");
+    console.log("handleAddFriend here");
     const data = new FormData(event.currentTarget);
-    auth.sendFriendRequest(auth.user.email, data.get("email"));
+    console.log("here")
+
+    let friendResponse = await auth.sendFriendRequest(auth.user.email, data.get("email").toLowerCase());
+    
+    console.log("The friend response is ", friendResponse)
+    
+    if(friendResponse){
+      setOpen(true)
+      setMessage("Send Friend Request")
+    }
+    else{
+      setOpen(true)
+      setMessage("Invalid Email")
+    }
   };
 
   const handleLobbyJoin = (event) => {
@@ -47,12 +61,15 @@ export default function Sidebar() {
     game.joinLobby(lobbyID);
   };
 
-  const handleCreateCommunity = (event) => {
+  const [comError, setComError] = useState(false)
+
+  async function handleCreateCommunity(event){
     event.preventDefault();
     console.log("create new community");
     const data = new FormData(event.currentTarget);
     let communityName = data.get("communityName");
-    community.createNewCommunity(communityName);
+    let value = community.createNewCommunity(communityName);
+    setComError(value)
   };
 
   const action = (
@@ -261,6 +278,8 @@ export default function Sidebar() {
               }}
             >
               <TextField
+                error={comError}
+                helperText = {comError && 'Community Already Created'}
                 align="center"
                 id="communityName"
                 name="communityName"
@@ -303,80 +322,12 @@ export default function Sidebar() {
           </Box>
         </Box>
       </ListItem>
-      {/* <ListItem key="invites">
-        <Box
-          justifyContent="center"
-          alignItems="center"
-          style={{
-            border: "3px solid",
-            borderColor: "black",
-            color: "black",
-            backgroundColor: "#E39090",
-            fontSize: "20px",
-            outline: "none",
-            borderRadius: 20,
-            width: "75%",
-          }}
-        >
-          <Typography align="center" style={{ fontSize: "32px" }}>
-            {" "}
-            Your Game Invites
-          </Typography>
-          <Box textAlign="center">
-            <Typography
-              align="center"
-              display="inline"
-              style={{ fontSize: "28px" }}
-            >
-              {"u/Roshan"}
-            </Typography>
-            <Button
-              variant="contained"
-              color="success"
-              size="small"
-              style={{
-                fontWeight: 600,
-                border: "3px solid",
-                borderColor: "black",
-                backgroundColor: "#46EC2B",
-                color: "black",
-                fontSize: "20px",
-                borderRadius: 20,
-              }}
-              sx={{ ml: 2, mb: 0.5, width: "25%" }}
-            >
-              Join
-            </Button>
-            <Button
-              variant="contained"
-              color="success"
-              size="small"
-              style={{
-                fontWeight: 600,
-                border: "3px solid",
-                borderColor: "black",
-                backgroundColor: "red",
-                color: "black",
-                fontSize: "20px",
-                borderRadius: 20,
-              }}
-              sx={{ ml: 2, mb: 0.5, width: "25%" }}
-            >
-              Reject
-            </Button>
-          </Box>
-        </Box>
-      </ListItem> */}
-      {/* <div>
-        <Button onClick={handleClick}>Sample Invite</Button>
-        <Snackbar
-          open={open}
-          autoHideDuration={6000}
-          onClose={handleClose}
-          message="u/Roshan has invited you to the game"
-          action={action}
-        />
-      </div> */}
+      <Snackbar
+        open={openInvite}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message={message}
+      />
     </List>
   );
 }
