@@ -696,8 +696,8 @@ deleteAccount = async (req, res) => {
 // @Jeff Hu - user does not know current password and needs to recover account by resetting password
 resetPassword = async (req, res) => {
   try {
-    const { email } = req.body;
-
+    let { email } = req.body;
+    email = email.toLowerCase();
     const existingUser = await User.findOne({ email: email });
     if (!existingUser) {
       //we don't want to give out this info to potential attacker
